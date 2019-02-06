@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani menu utama dari aplikasi.
 class C_Main extends CI_Controller{
 	//Method untuk menampilkan tampilan dashboard setelah pengguna melakukan login ke dalam aplikasi.
-	//Return : View Dashboard.
+	//Return : View V_Dashboard.php.
 	function loadDashboard(){
 		if($this->session->userdata('logged_in')){
 			$data['title'] = 'Dashboard | SI Akademik Lab. Komputasi TIF UNPAR';
@@ -23,7 +23,7 @@ class C_Main extends CI_Controller{
 	}
 
 	//Method untuk melakukan load halaman periode akademik.
-	//Return : View Periode Akademik
+	//Return : View V_PeriodeAkademik.php
 	function loadPeriodeAkademik(){
 		if($this->session->userdata('logged_in')){
 			if($this->session->userdata('id_role') == 1){
@@ -38,6 +38,37 @@ class C_Main extends CI_Controller{
 				$this->load->view('template/Topbar');
 				$this->load->view('template/Notification');
 				$this->load->view('pages_user/V_PeriodeAkademik', $data);
+				$this->load->view('template/Footer');
+			}
+			else{
+				redirect('/dashboard');
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
+
+	//Method untuk melakukan load halaman inisiasi & administrasi mata kuliah.
+	//Return : View V_InisiasisMatkul.php
+	function loadViewAdministrasiMatkul(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') == 1){
+				$data['title'] = 'Inisiasi & Administrasi Mata Kuliah | SI Akademik Lab. Komputasi TIF UNPAR';
+				$data['inisiasi_matkul'] = true;
+
+				$this->load->model('Mata_kuliah');
+				$this->load->model('Periode_akademik');
+				$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+				$id_periode =  $this->Periode_akademik->getIDPeriodeAktif();
+
+				$data['matkul'] = $this->Mata_kuliah->getMatkul($id_periode);
+				
+				$this->load->view('template/Header', $data);
+				$this->load->view('template/Sidebar', $data);
+				$this->load->view('template/Topbar');
+				$this->load->view('template/Notification');
+				$this->load->view('pages_user/V_InisiasiMatkul', $data);
 				$this->load->view('template/Footer');
 			}
 			else{

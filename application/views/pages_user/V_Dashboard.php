@@ -4,7 +4,7 @@
                         <div class="col-lg-6">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
-                                    <h2>Semester Aktif : 
+                                    <h2>Periode Aktif : 
                                         <?php
                                         if($periode_aktif){
                                             ?>

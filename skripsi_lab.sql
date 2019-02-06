@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 05, 2019 at 04:51 PM
--- Server version: 10.1.36-MariaDB
--- PHP Version: 5.6.38
+-- Generation Time: Feb 06, 2019 at 02:41 PM
+-- Server version: 10.1.37-MariaDB
+-- PHP Version: 5.6.39
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -21,6 +21,28 @@ SET time_zone = "+00:00";
 --
 -- Database: `skripsi_lab`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mata_kuliah`
+--
+
+CREATE TABLE `mata_kuliah` (
+  `ID` int(11) NOT NULL,
+  `ID_PERIODE` int(11) NOT NULL,
+  `KD_MATKUL` varchar(128) NOT NULL,
+  `NAMA_MATKUL` varchar(128) NOT NULL,
+  `TANGGAL_UTS` varchar(32) DEFAULT NULL,
+  `TANGGAL_UAS` varchar(32) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `mata_kuliah`
+--
+
+INSERT INTO `mata_kuliah` (`ID`, `ID_PERIODE`, `KD_MATKUL`, `NAMA_MATKUL`, `TANGGAL_UTS`, `TANGGAL_UAS`) VALUES
+(2, 2, 'AIF183346', 'Topik Khusus Sistem Informasi 2', '03/05/2019', '03/27/2019');
 
 -- --------------------------------------------------------
 
@@ -41,7 +63,8 @@ CREATE TABLE `periode_akademik` (
 --
 
 INSERT INTO `periode_akademik` (`ID`, `NAMA`, `STATUS`, `CREATED_ON`, `CREATED_BY`) VALUES
-(1, 'Semester Genap 2018/2019', 0, '2019-02-05 15:25:53', 1);
+(1, 'Semester Genap 2018/2019', 0, '2019-02-05 15:25:53', 1),
+(2, 'Semester Genap 2018/2019', 1, '2019-02-06 07:00:20', 1);
 
 -- --------------------------------------------------------
 
@@ -105,6 +128,13 @@ INSERT INTO `user_role` (`ID`, `NAMA_ROLE`) VALUES
 --
 
 --
+-- Indexes for table `mata_kuliah`
+--
+ALTER TABLE `mata_kuliah`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `ID_PERIODE` (`ID_PERIODE`);
+
+--
 -- Indexes for table `periode_akademik`
 --
 ALTER TABLE `periode_akademik`
@@ -136,10 +166,16 @@ ALTER TABLE `user_role`
 --
 
 --
+-- AUTO_INCREMENT for table `mata_kuliah`
+--
+ALTER TABLE `mata_kuliah`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `periode_akademik`
 --
 ALTER TABLE `periode_akademik`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -162,6 +198,12 @@ ALTER TABLE `user_role`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `mata_kuliah`
+--
+ALTER TABLE `mata_kuliah`
+  ADD CONSTRAINT `mata_kuliah_ibfk_1` FOREIGN KEY (`ID_PERIODE`) REFERENCES `periode_akademik` (`ID`);
 
 --
 -- Constraints for table `periode_akademik`

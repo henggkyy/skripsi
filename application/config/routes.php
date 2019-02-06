@@ -61,3 +61,7 @@ $route['periode_akademik'] = 'C_Main/loadPeriodeAkademik';
 
 $route['periode_akademik/aktifasi'] = 'C_PeriodeAkademik/aktifkanPeriodeAkademik';
 $route['periode_akademik/nonaktif'] = 'C_PeriodeAkademik/nonaktifkanPeriode';
+
+$route['inisiasi_administrasi_matkul'] = 'C_Main/loadViewAdministrasiMatkul';
+$route['inisiasi_administrasi_matkul/tambah'] = 'C_Matkul/addMatkul';
+$route['inisiasi_administrasi_matkul/set_jadwal'] = 'C_Matkul/insertUjian';

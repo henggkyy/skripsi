@@ -35,6 +35,21 @@ class Periode_akademik extends CI_Model{
 		}
 	}
 
+	//Method untuk mendapatkan ID dari Periode akademik yang sedang aktif.
+	function getIDPeriodeAktif(){
+		$this->db->select('ID');
+		$item = "ID";
+		$this->db->where('STATUS', 1);
+		$this->db->from('periode_akademik');
+		$result = $this->db->get();
+		if($result->num_rows() == 1){
+			return $result->row(0)->$item;
+		} 
+		else {
+			return false;
+		}
+	}
+
 	//Method untuk melakukan pengecekan apakah terdapat periode aktif atau tidak.
 	//Apabila terdapat periode aktif, maka akan kembalikan nama periode yang sedang aktif.
 	function checkPeriodeAktif(){
