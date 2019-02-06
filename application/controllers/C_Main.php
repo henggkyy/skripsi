@@ -2,6 +2,33 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani menu utama dari aplikasi.
 class C_Main extends CI_Controller{
+	//Method untuk menampilkan tampilan administrasi user.
+	//Return : View V_User.php
+	function loadMenuUser(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') == 1){
+				$data['title'] = 'Administrasi User | SI Akademik Lab. Komputasi TIF UNPAR';
+				$data['user'] = true;
+				$this->load->model('Users');
+				$this->load->model('User_role');
+				$data['role'] = $this->User_role->getUserRole();
+				$data['data_user'] = $this->Users->getUser();
+				$this->load->view('template/Header', $data);
+				$this->load->view('template/Sidebar', $data);
+				$this->load->view('template/Topbar');
+				$this->load->view('template/Notification');
+				$this->load->view('pages_user/V_User', $data);
+				$this->load->view('template/Footer');
+			}
+			else{
+				redirect('/dashboard');
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
+
 	//Method untuk menampilkan tampilan dashboard setelah pengguna melakukan login ke dalam aplikasi.
 	//Return : View V_Dashboard.php.
 	function loadDashboard(){

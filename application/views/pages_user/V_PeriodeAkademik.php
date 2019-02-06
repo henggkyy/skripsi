@@ -57,7 +57,7 @@
                                                     <?php echo form_open('/periode_akademik/aktifasi'); ?>
                                                     <div class="panel-body">
                                                             <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                                <label class="col-sm-2 col-form-label">Nama Periode Akademik :</label>
+                                                                <label class="col-sm-2 col-form-label">Nama Periode Akademik <span style="color: red">*</span> :</label>
                                                                 <div class="col-sm-10">
                                                                     <input type="text" required name="nama_periode" placeholder="Contoh : Semester Genap 2018/2019" class="form-control">
                                                                     <?php
@@ -71,6 +71,7 @@
                                                             </div>
                                                     </div>
                                                     <div class="panel-footer">
+                                                        <p style="color: red;">* Required Field</p>
                                                         <button type="submit" class="btn btn-w-m btn-success">Aktifkan Periode</button>
                                                             
                                                     </div>

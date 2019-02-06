@@ -25,14 +25,9 @@
                         if($periode_aktif){
                             ?>
                         <div class="col-lg-12">
-                            <div class="ibox float-e-margins collapsed">
-                                <div class="ibox-title collapse-link">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
                                     <h5>Daftar Mata Kuliah</h5>
-                                    <div class="ibox-tools">
-                                        <a class="collapse-link">
-                                            <i class="fa fa-chevron-up"></i>
-                                        </a>
-                                    </div>
                                 </div>
                                 <div class="ibox-content">
                                     <table class="table table-bordered">
@@ -43,6 +38,7 @@
                                             <th>Nama Mata Kuliah</th>
                                             <th>Tanggal UTS</th>
                                             <th>Tanggal UAS</th>
+                                            <th>Dosen Koordinator</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -57,6 +53,7 @@
                                                     <td><?php echo $mtk['NAMA_MATKUL'];?></td>
                                                     <td><?php echo $mtk['TANGGAL_UTS'];?></td>
                                                     <td><?php echo $mtk['TANGGAL_UAS'];?></td>
+                                                    <td><?php echo $mtk['NAMA_DOSEN'];?></td>
                                                 </tr>
                                                 <?php
                                                 $iterator++;
@@ -91,7 +88,7 @@
                                                 <?php echo form_open('/inisiasi_administrasi_matkul/tambah'); ?>
                                                 <div class="panel-body">
                                                     <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                        <label class="col-sm-2 col-form-label">Kode Mata Kuliah :</label>
+                                                        <label class="col-sm-2 col-form-label">Kode Mata Kuliah <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-10">
                                                             <input type="text" required name="kode_matkul" placeholder="Contoh : AIF - 183012" class="form-control">
                                                             <?php
@@ -104,7 +101,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                        <label class="col-sm-2 col-form-label">Nama Mata Kuliah :</label>
+                                                        <label class="col-sm-2 col-form-label">Nama Mata Kuliah <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-10">
                                                             <input type="text" required name="nama_matkul" placeholder="Contoh : Algoritma Data" class="form-control">
                                                             <?php
@@ -118,6 +115,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="panel-footer">
+                                                    <p style="color: red;">* Required Field</p>
                                                     <button type="submit" class="btn btn-w-m btn-success">Add</button>     
                                                 </div>
                                                 </form>
@@ -147,7 +145,7 @@
                                                 <?php echo form_open('/inisiasi_administrasi_matkul/set_jadwal'); ?>
                                                 <div class="panel-body">
                                                     <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>" id="data_tgl">
-                                                        <label class="col-sm-2 col-form-label">Pilih Mata Kuliah :</label>
+                                                        <label class="col-sm-2 col-form-label">Pilih Mata Kuliah <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-10">
                                                             <?php
                                                             if(isset($matkul) && $matkul){
@@ -172,20 +170,21 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>" id="data_1">
-                                                        <label class="col-sm-2 col-form-label">Tanggal UTS :</label>
+                                                        <label class="col-sm-2 col-form-label">Tanggal UTS <span style="color: red">*</span> :</label>
                                                         <div class="input-group date col-sm-10">
                                                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input name="tgl_uts" type="text" class="form-control" required>
                                                         </div>
 
                                                     </div>
                                                     <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>" id="data_1">
-                                                        <label class="col-sm-2 col-form-label">Tanggal UAS :</label>
+                                                        <label class="col-sm-2 col-form-label">Tanggal UAS <span style="color: red">*</span> :</label>
                                                         <div class="input-group date">
                                                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input name="tgl_uas" type="text" class="form-control" required>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="panel-footer">
+                                                    <p style="color: red;">* Required Field</p>
                                                     <button type="submit" class="btn btn-w-m btn-success">Set Jadwal</button>     
                                                 </div>
                                                 </form>
