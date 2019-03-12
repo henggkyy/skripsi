@@ -2,6 +2,30 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Data_file_sop extends CI_Model{
 
+	function getPathFile($id){
+		$this->db->select('PATH_FILE');
+		$item = "PATH_FILE";
+		$this->db->where('ID', $id);
+		$this->db->from('data_file_sop');
+		$result = $this->db->get();
+		if($result->num_rows() == 1){
+			return $result->row(0)->$item;
+		} 
+		else {
+			return false;
+		}
+	}
+	function deleteDokumenSop($id){
+		$this->db->where('ID', $id);
+		$res = $this->db->delete('data_file_sop');
+		if($res){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
 	function checkHash($hash){
 		$this->db->select('PATH_FILE');
 		$this->db->where('PATH_FILE', $hash);

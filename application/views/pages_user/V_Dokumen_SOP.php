@@ -129,7 +129,7 @@
                                                     ?>
                                                     <tr>
                                                         <td><?php echo $iterator;?></td>
-                                                        <td><a target="_blank" href="<?php echo $sop['path'];?>"><?php echo $sop['judul'];?></a></td>
+                                                        <td><a target="_blank" href="<?php echo base_url();?>uploads/sop/<?php echo $sop['path'];?>"><?php echo $sop['judul'];?></a></td>
                                                         <td><?php echo $sop['nama_kategori'];?></td>
                                                         <td><?php if($sop['visibility'] == 1) {
                                                                 echo "Public";
@@ -137,9 +137,16 @@
                                                             else{
                                                                 echo "Private";
                                                             }?></td>
-                                                        <td></td>
+                                                        <td align="center">
+                                                            <a class="btn btn-primary btn-sm" href=""><i class="fas fa-pen"></i> Update</a>
+                                                            <?php echo form_open('dokumen_sop/delete');?>
+                                                            <input type="hidden" name="id_sop" value="<?php echo $sop['ID'];?>" required>
+                                                            <button class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus dokumen ini?')" type="submit"><i class="far fa-trash-alt"></i> Delete</button>
+                                                            </form>
+                                                        </td>
                                                     </tr>
                                                     <?php
+                                                    $iterator++;
                                                 }
                                             }
                                             else{

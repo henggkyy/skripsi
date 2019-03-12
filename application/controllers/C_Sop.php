@@ -2,6 +2,44 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani proses input, update, dan delete mengenai dokumen SOP
 class C_Sop extends CI_Controller {
+
+	//Method untuk menghapus dokumen SOP
+	function deleteSop(){
+		if($this->session->userdata('logged_in')){
+			$id_sop = $this->input->post('id_sop');
+			if($id_sop == ""){
+				$this->session->set_flashdata('error', 'Missing ID SOP!');
+				redirect('/dokumen_sop');
+			}
+			$this->load->model('Data_file_sop');
+			$path_file = $this->Data_file_sop->getPathFile($id_sop);
+
+			$path_to_file = "./uploads/sop/$path_file";
+
+			$res_delete = unlink($path_to_file);
+			// // print_r($res_delete);
+			// // return;
+			// $res = true;
+			$res = $this->Data_file_sop->deleteDokumenSop($id_sop);
+			if($res && $res_delete){
+				$this->session->set_flashdata('success', 'Berhasil menghapus dokumen SOP!');
+				redirect('/dokumen_sop');
+			}
+			else{
+				if(!$res_delete){
+					$this->session->set_flashdata('error', 'Gagal menghapus dokumen SOP dari server!');
+					redirect('/dokumen_sop');
+				}
+				else{
+					$this->session->set_flashdata('error', 'Gagal menghapus dokumen SOP dari database!');
+					redirect('/dokumen_sop');
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
 	//Method untuk menangani input dokumen SOP
 	function inputDokumenSop(){
 		if($this->session->userdata('logged_in')){
@@ -28,8 +66,11 @@ class C_Sop extends CI_Controller {
 					$namaFileHash = $this->generateHash(20);
 					$exists = $this->Data_file_sop->checkHash($namaFileHash);
 				}
+
 				$res_upload = $this->uploadFile($namaFileHash);
-				$res_db = $this->Data_file_sop->inputDokumenSop($judul_sop, $kategori_sop, $visibility, $namaFileHash);
+				// print_r($res_upload);
+				// return;
+				$res_db = $this->Data_file_sop->inputDokumenSop($judul_sop, $kategori_sop, $visibility, $res_upload);
 				if(($res_upload==true) && $res_db){
 					$this->session->set_flashdata('success', 'Berhasil menambahkan dokumen SOP!');
 					redirect('/dokumen_sop');
@@ -38,7 +79,7 @@ class C_Sop extends CI_Controller {
 					print_r($res_upload);
 					return;
 					if(!$res_upload){
-						$this->session->set_flashdata('error', "$res_upload");
+						$this->session->set_flashdata('error', "$Gagal upload dokumen SOP");
 						redirect('/dokumen_sop');
 					}
 					else{
@@ -65,10 +106,10 @@ class C_Sop extends CI_Controller {
 				
 		if ( ! $this->upload->do_upload('dokumen')){
 			$error = array('error' => $this->upload->display_errors());
-			return $error;
+			return false;
 		}
 		else{
-			return true;
+			return $sNewFileName. ".pdf";
 		}
 	}
 	private function generateHash($jmlh_char){

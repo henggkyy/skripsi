@@ -72,3 +72,4 @@ $route['user/change_status'] = 'C_User/changeStatus';
 
 $route['dokumen_sop'] = 'C_Main/loadMenuSOP';
 $route['dokumen_sop/add'] = 'C_Sop/inputDokumenSop';
+$route['dokumen_sop/delete'] = 'C_Sop/deleteSop';
