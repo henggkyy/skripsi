@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 06, 2019 at 02:41 PM
+-- Generation Time: Mar 12, 2019 at 10:12 AM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 5.6.39
 
@@ -25,6 +25,58 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `data_buku_saku`
+--
+
+CREATE TABLE `data_buku_saku` (
+  `ID` int(11) NOT NULL,
+  `JUDUL` varchar(512) NOT NULL,
+  `PATH_FILE` varchar(512) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `data_file_sop`
+--
+
+CREATE TABLE `data_file_sop` (
+  `ID` int(11) NOT NULL,
+  `JUDUL` varchar(512) NOT NULL,
+  `PATH_FILE` varchar(512) NOT NULL,
+  `VISIBILITY` int(11) NOT NULL COMMENT '1 : public, 0: private',
+  `ID_KATEGORI` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `data_file_sop`
+--
+
+INSERT INTO `data_file_sop` (`ID`, `JUDUL`, `PATH_FILE`, `VISIBILITY`, `ID_KATEGORI`) VALUES
+(1, 'SOP Perkuliahan Lab', '61536386758542035555', 0, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kategori_sop`
+--
+
+CREATE TABLE `kategori_sop` (
+  `ID` int(11) NOT NULL,
+  `NAMA_KATEGORI` varchar(128) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `kategori_sop`
+--
+
+INSERT INTO `kategori_sop` (`ID`, `NAMA_KATEGORI`) VALUES
+(1, 'Perkuliahan'),
+(2, 'Ujian');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `mata_kuliah`
 --
 
@@ -34,15 +86,16 @@ CREATE TABLE `mata_kuliah` (
   `KD_MATKUL` varchar(128) NOT NULL,
   `NAMA_MATKUL` varchar(128) NOT NULL,
   `TANGGAL_UTS` varchar(32) DEFAULT NULL,
-  `TANGGAL_UAS` varchar(32) DEFAULT NULL
+  `TANGGAL_UAS` varchar(32) DEFAULT NULL,
+  `ID_DOSEN` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `mata_kuliah`
 --
 
-INSERT INTO `mata_kuliah` (`ID`, `ID_PERIODE`, `KD_MATKUL`, `NAMA_MATKUL`, `TANGGAL_UTS`, `TANGGAL_UAS`) VALUES
-(2, 2, 'AIF183346', 'Topik Khusus Sistem Informasi 2', '03/05/2019', '03/27/2019');
+INSERT INTO `mata_kuliah` (`ID`, `ID_PERIODE`, `KD_MATKUL`, `NAMA_MATKUL`, `TANGGAL_UTS`, `TANGGAL_UAS`, `ID_DOSEN`) VALUES
+(2, 2, 'AIF183346', 'Topik Khusus Sistem Informasi 2', '03/05/2019', '03/27/2019', NULL);
 
 -- --------------------------------------------------------
 
@@ -128,11 +181,31 @@ INSERT INTO `user_role` (`ID`, `NAMA_ROLE`) VALUES
 --
 
 --
+-- Indexes for table `data_buku_saku`
+--
+ALTER TABLE `data_buku_saku`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `data_file_sop`
+--
+ALTER TABLE `data_file_sop`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `ID_KATEGORI` (`ID_KATEGORI`);
+
+--
+-- Indexes for table `kategori_sop`
+--
+ALTER TABLE `kategori_sop`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Indexes for table `mata_kuliah`
 --
 ALTER TABLE `mata_kuliah`
   ADD PRIMARY KEY (`ID`),
-  ADD KEY `ID_PERIODE` (`ID_PERIODE`);
+  ADD KEY `ID_PERIODE` (`ID_PERIODE`),
+  ADD KEY `ID_DOSEN` (`ID_DOSEN`);
 
 --
 -- Indexes for table `periode_akademik`
@@ -164,6 +237,24 @@ ALTER TABLE `user_role`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `data_buku_saku`
+--
+ALTER TABLE `data_buku_saku`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `data_file_sop`
+--
+ALTER TABLE `data_file_sop`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `kategori_sop`
+--
+ALTER TABLE `kategori_sop`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `mata_kuliah`
@@ -200,10 +291,17 @@ ALTER TABLE `user_role`
 --
 
 --
+-- Constraints for table `data_file_sop`
+--
+ALTER TABLE `data_file_sop`
+  ADD CONSTRAINT `data_file_sop_ibfk_1` FOREIGN KEY (`ID_KATEGORI`) REFERENCES `kategori_sop` (`ID`);
+
+--
 -- Constraints for table `mata_kuliah`
 --
 ALTER TABLE `mata_kuliah`
-  ADD CONSTRAINT `mata_kuliah_ibfk_1` FOREIGN KEY (`ID_PERIODE`) REFERENCES `periode_akademik` (`ID`);
+  ADD CONSTRAINT `mata_kuliah_ibfk_1` FOREIGN KEY (`ID_PERIODE`) REFERENCES `periode_akademik` (`ID`),
+  ADD CONSTRAINT `mata_kuliah_ibfk_2` FOREIGN KEY (`ID_DOSEN`) REFERENCES `users` (`ID`);
 
 --
 -- Constraints for table `periode_akademik`

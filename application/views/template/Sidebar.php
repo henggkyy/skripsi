@@ -18,6 +18,18 @@
                 <li <?php if(isset($dashboard)){ echo 'class='. '"active"';}?>>
                     <a href="<?php echo base_url();?>dashboard"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a>
                 </li>
+                <li>
+                	<a href="#"><i class="fa fa-envelope-open"></i> <span class="nav-label">Dokumen </span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li <?php if(isset($dokumen_sop)){ echo 'class='. '"active"';}?>>
+                                <a href="<?php echo base_url();?>dokumen_sop">Standard Operational Procedure (SOP)</a>
+                            </li>
+                            <li <?php if(isset($dokumen_saku)){ echo 'class='. '"active"';}?>>
+                                <a href="<?php echo base_url();?>dokumen_saku">Buku Saku</a>
+                            </li>
+
+                        </ul>
+                </li>
                 <?php
                 if($this->session->userdata('id_role') == 1){
                 ?>
@@ -50,7 +62,7 @@
                             </li>
 
                         </ul>
-                    </li>
+                   </li>
                 <?php  
                 }
                 ?>

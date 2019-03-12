@@ -69,3 +69,6 @@ $route['inisiasi_administrasi_matkul/set_jadwal'] = 'C_Matkul/insertUjian';
 $route['user'] = 'C_Main/loadMenuUser';
 $route['user/tambah_user'] = 'C_User/addUser';
 $route['user/change_status'] = 'C_User/changeStatus';
+
+$route['dokumen_sop'] = 'C_Main/loadMenuSOP';
+$route['dokumen_sop/add'] = 'C_Sop/inputDokumenSop';
