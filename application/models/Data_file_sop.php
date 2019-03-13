@@ -1,7 +1,31 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Data_file_sop extends CI_Model{
-
+	function updateSop($id,$judul, $path_file, $visibility, $kategori){
+		if($path_file != NULL){
+			$data = array(
+			    'JUDUL' => $judul,
+			    'PATH_FILE' => $path_file,
+			    'VISIBILITY' => $visibility,
+			    'ID_KATEGORI' => $kategori
+			);
+		}
+		else{
+			$data = array(
+			    'JUDUL' => $judul,
+			    'VISIBILITY' => $visibility,
+			    'ID_KATEGORI' => $kategori
+			);
+		}
+		$this->db->where('ID', $id);
+		$res = $this->db->update('data_file_sop', $data);
+		if($res){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 	function getPathFile($id){
 		$this->db->select('PATH_FILE');
 		$item = "PATH_FILE";

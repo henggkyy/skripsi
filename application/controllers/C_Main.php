@@ -3,13 +3,32 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani menu utama dari aplikasi.
 class C_Main extends CI_Controller{
 
+	function loadMenuBukuSaku(){
+		if($this->session->userdata('logged_in')){
+			$data['title'] = 'Dokumen Buku Saku | SI Akademik Lab. Komputasi TIF UNPAR';
+			$data['dokumen_saku'] = true;
+			$this->load->model('Periode_akademik');
+			$this->load->model('Data_buku_saku');
+			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+			$data['file_saku'] = $this->Data_buku_saku->getAllBukuSaku();
+			$this->load->view('template/Header', $data);
+			$this->load->view('template/Sidebar', $data);
+			$this->load->view('template/Topbar');
+			$this->load->view('template/Notification');
+			$this->load->view('pages_user/V_Dokumen_Buku_Saku', $data);
+			$this->load->view('template/Footer');
+		}
+		else{
+			redirect('/');
+		}
+	}
+
 	//Method untuk menampilkan halaman utama dokumen SOP
 	function loadMenuSOP(){
 		if($this->session->userdata('logged_in')){
 			$data['title'] = 'Dokumen SOP | SI Akademik Lab. Komputasi TIF UNPAR';
 			$data['dokumen_sop'] = true;
 			$this->load->model('Periode_akademik');
-			$this->load->model('Kategori_sop');
 			$this->load->model('Data_file_sop');
 			$data['file_sop'] = $this->Data_file_sop->getAllSOP();
 			$data['kategori_sop'] = $this->Kategori_sop->getAllKategori();

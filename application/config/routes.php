@@ -73,3 +73,9 @@ $route['user/change_status'] = 'C_User/changeStatus';
 $route['dokumen_sop'] = 'C_Main/loadMenuSOP';
 $route['dokumen_sop/add'] = 'C_Sop/inputDokumenSop';
 $route['dokumen_sop/delete'] = 'C_Sop/deleteSop';
+$route['dokumen_sop/update'] = 'C_Sop/updateSop';
+
+$route['dokumen_saku'] = 'C_Main/loadMenuBukuSaku';
+$route['dokumen_saku/add'] = 'C_BukuSaku/inputBukuSaku';
+$route['dokumen_saku/delete'] = 'C_BukuSaku/deleteBukuSaku';
+$route['dokumen_saku/update'] = 'C_BukuSaku/updateBukuSaku';

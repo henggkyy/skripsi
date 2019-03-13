@@ -24,7 +24,7 @@
                         <div class="col-lg-12">
                             <div class="ibox float-e-margins collapsed">
                                 <div class="ibox-title collapse-link">
-                                    <h5>Tambah Dokumen SOP</h5>
+                                    <h5>Tambah Dokumen Buku Saku</h5>
                                     <div class="ibox-tools">
                                         <a class="collapse-link">
                                             <i class="fa fa-chevron-up"></i>
@@ -36,29 +36,12 @@
                                         <div class="col-lg-12">
                                            <div class="panel panel-success">
                                                 <div class="panel-heading ">
-                                                    <p>Tambah Dokumen SOP</p>
+                                                    <p>Tambah Dokumen Buku Saku</p>
                                                 </div>
-                                                <?php echo form_open_multipart('/dokumen_sop/add'); ?>
+                                                <?php echo form_open_multipart('/dokumen_saku/add'); ?>
                                                 <div class="panel-body">
                                                     <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                        <label class="col-sm-4 col-form-label">Kategori Dokumen SOP<span style="color: red">*</span> :</label>
-                                                        <div class="col-sm-8">
-                                                            <select required class="form-control" name="kategori_sop">
-                                                                <option disabled selected> -- Please Select One --</option>
-                                                                <?php
-                                                                if(isset($kategori_sop) && $kategori_sop){
-                                                                    foreach ($kategori_sop as $kategori ) {
-                                                                        ?>
-                                                                        <option value="<?php echo $kategori['ID'];?>"><?php echo $kategori['NAMA_KATEGORI'];?></option>
-                                                                        <?php
-                                                                    }
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                        <label class="col-sm-4 col-form-label">Visibility Dokumen SOP : <span style="color: red">*</span> :</label>
+                                                        <label class="col-sm-4 col-form-label">Visibility Dokumen Buku Saku : <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
                                                             <select required class="form-control" name="visibility">
                                                                 <option disabled selected> -- Please Select One --</option>
@@ -68,9 +51,9 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                        <label class="col-sm-4 col-form-label">Judul Dokumen SOP <span style="color: red">*</span> :</label>
+                                                        <label class="col-sm-4 col-form-label">Judul Dokumen Buku Saku <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" required name="judul_sop" placeholder="Contoh : SOP Pengadaan Ujian" class="form-control">
+                                                            <input type="text" required name="judul_saku" placeholder="Contoh : Buku Saku Mahasiswa" class="form-control">
                                                             <?php
                                                                 if(isset($error_form) && $error_form){
                                                                         ?>
@@ -81,7 +64,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                        <label class="col-sm-4 col-form-label">Dokumen SOP (.pdf maks. 4MB) <span style="color: red">*</span> :</label>
+                                                        <label class="col-sm-4 col-form-label">Dokumen Buku Saku (.pdf maks. 4MB) <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
                                                             <input type="file" required name="dokumen" class="form-control">
                                                             <?php
@@ -108,81 +91,62 @@
                         <div class="col-lg-12">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
-                                    <h5>Daftar Dokumen SOP</h5>
+                                    <h5>Daftar Dokumen Buku Saku</h5>
                                 </div>
                                 <div class="ibox-content">
                                     <table class="table table-bordered">
                                         <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Dokumen SOP</th>
-                                            <th>Kategori</th>
+                                            <th>Dokumen Buku Saku</th>
                                             <th>Visibility</th>
                                             <th>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                             <?php
-                                            if(isset($file_sop) && $file_sop){
+                                            if(isset($file_saku) && $file_saku){
                                                 $iterator = 1;
-                                                foreach ($file_sop as $sop) {
+                                                foreach ($file_saku as $saku) {
                                                     ?>
                                                     <tr>
                                                         <td><?php echo $iterator;?></td>
-                                                        <td><a target="_blank" href="<?php echo base_url();?>uploads/sop/<?php echo $sop['path'];?>"><?php echo $sop['judul'];?></a></td>
-                                                        <td><?php echo $sop['nama_kategori'];?></td>
-                                                        <td><?php if($sop['visibility'] == 1) {
+                                                        <td><a target="_blank" href="<?php echo base_url();?>uploads/buku_saku/<?php echo $saku['path'];?>"><?php echo $saku['judul'];?></a></td>
+                                                        <td><?php if($saku['visibility'] == 1) {
                                                                 echo "Public";
                                                             }
                                                             else{
                                                                 echo "Private";
                                                             }?></td>
                                                         <td align="center">
-                                                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalUpdate<?php echo $sop['ID'];?>"><i class="fas fa-pen"></i> Update</button>
+                                                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalUpdate<?php echo $saku['ID'];?>"><i class="fas fa-pen"></i> Update</button>
 
 
                                                             <!--Modal Update-->
-                                                            <div class="modal inmodal" id="modalUpdate<?php echo $sop['ID'];?>" tabindex="-1" role="dialog"  aria-hidden="true">
+                                                            <div class="modal inmodal" id="modalUpdate<?php echo $saku['ID'];?>" tabindex="-1" role="dialog"  aria-hidden="true">
                                                                 <div class="modal-dialog">
                                                                     <div class="modal-content animated fadeIn">
                                                                         <div class="modal-header">
                                                                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                                            <h4 class="modal-title">Update Dokumen SOP</h4>
+                                                                            <h4 class="modal-title">Update Dokumen Buku Saku</h4>
                                                                         </div>
-                                                                        <?php echo form_open_multipart('dokumen_sop/update');?>
+                                                                        <?php echo form_open_multipart('dokumen_saku/update');?>
                                                                         <div class="modal-body">
                                                                             
                                                                             <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                                                <label class="col-sm-3 col-form-label">Kategori Dokumen SOP <span style="color: red">*</span> :</label>
-                                                                                <div class="col-sm-8">
-                                                                                    <select required class="form-control" name="kategori_sop">
-                                                                                        
-                                                                                        <?php
-                                                                                        if(isset($kategori_sop) && $kategori_sop){
-                                                                                            foreach ($kategori_sop as $kategori ) {
-                                                                                                ?>
-                                                                                                <option <?php if($kategori['ID'] == $sop['id_kategori']){ echo 'selected';}?> value="<?php echo $kategori['ID'];?>"><?php echo $kategori['NAMA_KATEGORI'];?></option>
-                                                                                                <?php
-                                                                                            }
-                                                                                        }
-                                                                                        ?>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                                                <label class="col-sm-3 col-form-label">Visibility Dokumen SOP <span style="color: red">*</span> :</label>
+                                                                                <label class="col-sm-3 col-form-label">Visibility Dokumen Buku Saku <span style="color: red">*</span> :</label>
                                                                                 <div class="col-sm-8">
                                                                                     <select required class="form-control" name="visibility">
                                                                                         
-                                                                                        <option <?php if($sop['visibility'] == 1){ echo 'selected';}?> value="1">Public</option>
-                                                                                        <option <?php if($sop['visibility'] == 0){ echo 'selected';}?> value="0">Private</option>
+                                                                                        <option <?php if($saku['visibility'] == 1){ echo 'selected';}?> value="1">Public</option>
+                                                                                        <option <?php if($saku['visibility'] == 0){ echo 'selected';}?> value="0">Private</option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                                                <label class="col-sm-3 col-form-label">Judul Dokumen SOP <span style="color: red">*</span> :</label>
+                                                                                <label class="col-sm-3 col-form-label">Judul Dokumen Buku Saku <span style="color: red">*</span> :</label>
                                                                                 <div class="col-sm-8">
-                                                                                    <input type="text" value="<?php echo $sop['judul'];?>" required name="judul_sop" placeholder="Contoh : SOP Pengadaan Ujian" class="form-control">
+                                                                                    <input type="text" value="<?php echo $saku['judul'];?>" required name="judul_saku" placeholder="Contoh : SOP Pengadaan Ujian" class="form-control">
                                                                                     <?php
                                                                                         if(isset($error_form) && $error_form){
                                                                                                 ?>
@@ -194,9 +158,9 @@
                                                                             </div>
                                                                             
                                                                             <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                                                <label class="col-sm-3 col-form-label">Dokumen SOP (.pdf maks. 4MB) :</label>
+                                                                                <label class="col-sm-3 col-form-label">Dokumen Buku Saku (.pdf maks. 4MB) :</label>
                                                                                 <div class="col-sm-8">
-                                                                                    <p align="left">Dokumen SOP saat ini : <a target="_blank" href="<?php echo base_url();?>uploads/sop/<?php echo $sop['path'];?>"><?php echo $sop['judul'];?></a></p>
+                                                                                    <p align="left">Dokumen Buku Saku saat ini : <a target="_blank" href="<?php echo base_url();?>uploads/buku_saku/<?php echo $saku['path'];?>"><?php echo $saku['judul'];?></a></p>
                                                                                     <p align="left" style="color: red; font-size: 10px;">Apabila ingin update dokumen pdf, silahkan upload kembali. Jika tidak terdapat update pada dokumen pdf, maka kosongkan input file</p>
                                                                                     <input type="file" name="dokumen" class="form-control">
                                                                                     <?php
@@ -208,7 +172,7 @@
                                                                                     ?>
                                                                                 </div>
                                                                             </div>
-                                                                            <input type="hidden" name="id_sop" value="<?php echo $sop['ID'];?>" required>
+                                                                            <input type="hidden" name="id_saku" value="<?php echo $saku['ID'];?>" required>
                                                                         </div>
                                                                         
                                                                         <div class="modal-footer">
@@ -221,8 +185,8 @@
                                                             </div>
 
                                                             <!--Link Delete Dokumen SOP -->
-                                                            <?php echo form_open('dokumen_sop/delete');?>
-                                                            <input type="hidden" name="id_sop" value="<?php echo $sop['ID'];?>" required>
+                                                            <?php echo form_open('dokumen_saku/delete');?>
+                                                            <input type="hidden" name="id_saku" value="<?php echo $saku['ID'];?>" required>
                                                             <button class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus dokumen ini?')" type="submit"><i class="far fa-trash-alt"></i> Delete</button>
                                                             </form>
                                                             <!--End Delete SOP -->
@@ -233,7 +197,7 @@
                                                 }
                                             }
                                             else{
-                                                echo "<tr><td colspan='5'>Belum ada dokumen SOP</td></tr>";
+                                                echo "<tr><td colspan='5'>Belum ada dokumen Buku Saku</td></tr>";
                                             }
                                             ?>
                                         </tbody>
