@@ -54,7 +54,7 @@ class Data_file_sop extends CI_Model{
 		}
 	}
 	function getAllSOP(){
-		$this->db->select('data_file_sop.ID as ID, data_file_sop.VISIBILITY as visibility, data_file_sop.JUDUL as judul, data_file_sop.PATH_FILE as path, kategori_sop.NAMA_KATEGORI as nama_kategori');
+		$this->db->select('data_file_sop.ID as ID, data_file_sop.VISIBILITY as visibility, data_file_sop.JUDUL as judul, data_file_sop.PATH_FILE as path, data_file_sop.ID_KATEGORI as id_kategori, kategori_sop.NAMA_KATEGORI as nama_kategori');
 		$this->db->from('data_file_sop');
 		$this->db->join('kategori_sop', 'data_file_sop.ID_KATEGORI = kategori_sop.ID' , 'left outer');
 		$result = $this->db->get();
