@@ -21,15 +21,88 @@
                                 </div>
                             </div>
                         </div> 
-                        <?php
-                        if($periode_aktif){
-                            ?>
+                        
                         <div class="col-lg-12">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
-                                    <h5>Daftar Mata Kuliah</h5>
+                                    <h5>Administrasi Mata Kuliah</h5>
                                 </div>
                                 <div class="ibox-content">
+                                    <?php
+                                    if($periode_aktif){
+                                    ?>
+                                    <button type="button" data-toggle="modal" data-target="#modalAddMatkul" class="btn btn-w-m btn-success"><i class="fas fa-plus"></i> Tambah Mata Kuliah</button>
+                                    <!--Modal Add Matkul-->
+                                    <div class="modal inmodal" id="modalAddMatkul" tabindex="-1" role="dialog"  aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content animated fadeIn">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                    <h4 class="modal-title">Tambah Mata Kuliah</h4>
+                                                </div>
+                                                <?php echo form_open('/administrasi_matkul/tambah'); ?>
+                                                <div class="modal-body">
+                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
+                                                        <label class="col-sm-4 col-form-label">Kode Mata Kuliah <span style="color: red">*</span> :</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" required name="kode_matkul" placeholder="Contoh : AIF - 183012" class="form-control">
+                                                            <?php
+                                                                if(isset($error_form) && $error_form){
+                                                                        ?>
+                                                                    <span class="form-text m-b-none" style="color: red;"><?php echo $error_form;?></span>
+                                                                        <?php
+                                                                }
+                                                            ?>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
+                                                        <label class="col-sm-4 col-form-label">Nama Mata Kuliah <span style="color: red">*</span> :</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" required name="nama_matkul" placeholder="Contoh : Algoritma Data" class="form-control">
+                                                            <?php
+                                                                if(isset($error_form) && $error_form){
+                                                                        ?>
+                                                                    <span class="form-text m-b-none" style="color: red;"><?php echo $error_form;?></span>
+                                                                        <?php
+                                                                }
+                                                            ?>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
+                                                        <label class="col-sm-4 col-form-label">Dosen Koordinator <span style="color: red">*</span> :</label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" name="dosen_koor" required>
+                                                                <option selected disabled value="">-- Please Select One --</option>
+                                                                <?php
+                                                                if(isset($data_dosen) && $data_dosen){
+                                                                    foreach ($data_dosen as $dosen) {
+                                                                        ?>
+                                                                        <option value="<?php echo $dosen['ID'];?>"><?php echo $dosen['NAMA'];?> (<?php echo $dosen['NIK'];?>)</option>
+                                                                        <?php
+                                                                    }
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <p style="color: red;" align="center">* Wajib Diisi</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    
+                                                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Tambah Mata Kuliah</button>
+                                                </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--END MODAL ADD Matkul-->
+                                    <?php
+                                    }
+                                    ?>
+                                    <hr>
+                                    <h3>Daftar Mata Kuliah</h3>
+                                    
                                     <table class="table table-bordered">
                                         <thead>
                                         <tr>
@@ -67,137 +140,7 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>      
-                        <div class="col-lg-12">
-                            <div class="ibox float-e-margins collapsed">
-                                <div class="ibox-title collapse-link">
-                                    <h5>Tambah Mata Kuliah</h5>
-                                    <div class="ibox-tools">
-                                        <a class="collapse-link">
-                                            <i class="fa fa-chevron-up"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="ibox-content">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                           <div class="panel panel-success">
-                                                <div class="panel-heading ">
-                                                    <p>Tambah Mata Kuliah</p>
-                                                </div>
-                                                <?php echo form_open('/inisiasi_administrasi_matkul/tambah'); ?>
-                                                <div class="panel-body">
-                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                        <label class="col-sm-2 col-form-label">Kode Mata Kuliah <span style="color: red">*</span> :</label>
-                                                        <div class="col-sm-10">
-                                                            <input type="text" required name="kode_matkul" placeholder="Contoh : AIF - 183012" class="form-control">
-                                                            <?php
-                                                                if(isset($error_form) && $error_form){
-                                                                        ?>
-                                                                    <span class="form-text m-b-none" style="color: red;"><?php echo $error_form;?></span>
-                                                                        <?php
-                                                                }
-                                                            ?>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                        <label class="col-sm-2 col-form-label">Nama Mata Kuliah <span style="color: red">*</span> :</label>
-                                                        <div class="col-sm-10">
-                                                            <input type="text" required name="nama_matkul" placeholder="Contoh : Algoritma Data" class="form-control">
-                                                            <?php
-                                                                if(isset($error_form) && $error_form){
-                                                                        ?>
-                                                                    <span class="form-text m-b-none" style="color: red;"><?php echo $error_form;?></span>
-                                                                        <?php
-                                                                }
-                                                            ?>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="panel-footer">
-                                                    <p style="color: red;">* Required Field</p>
-                                                    <button type="submit" class="btn btn-w-m btn-success">Add</button>     
-                                                </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-                        <div class="col-lg-12">
-                            <div class="ibox float-e-margins collapsed">
-                                <div class="ibox-title collapse-link">
-                                    <h5>Set Jadwal UTS dan Jadwal UAS</h5>
-                                    <div class="ibox-tools">
-                                        <a class="collapse-link">
-                                            <i class="fa fa-chevron-up"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="ibox-content">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                           <div class="panel panel-info">
-                                                <div class="panel-heading ">
-                                                    <p>Set Jadwal UTS dan Jadwal UAS</p>
-                                                </div>
-                                                <?php echo form_open('/inisiasi_administrasi_matkul/set_jadwal'); ?>
-                                                <div class="panel-body">
-                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>" id="data_tgl">
-                                                        <label class="col-sm-2 col-form-label">Pilih Mata Kuliah <span style="color: red">*</span> :</label>
-                                                        <div class="col-sm-10">
-                                                            <?php
-                                                            if(isset($matkul) && $matkul){
-                                                                ?>
-                                                                <select name="nama_matkul" class="form-control" required>
-                                                                    <option disabled selected>-- Please Select One --</option>
-                                                                    <?php
-                                                                    foreach ($matkul as $mtk) {
-                                                                        ?>
-                                                                        <option value="<?php echo $mtk['ID'];?>"><?php echo $mtk['KD_MATKUL'];?> : <?php echo $mtk['NAMA_MATKUL'];?></option>
-                                                                        <?php
-                                                                    }
-                                                                    ?>
-                                                                </select>
-                                                                <?php
-                                                            }
-                                                            else{
-                                                                echo 'Belum ada mata kuliah!';
-                                                            }
-                                                            ?>
-                                                            
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>" id="data_1">
-                                                        <label class="col-sm-2 col-form-label">Tanggal UTS <span style="color: red">*</span> :</label>
-                                                        <div class="input-group date col-sm-10">
-                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input name="tgl_uts" type="text" class="form-control" required>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>" id="data_1">
-                                                        <label class="col-sm-2 col-form-label">Tanggal UAS <span style="color: red">*</span> :</label>
-                                                        <div class="input-group date">
-                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input name="tgl_uas" type="text" class="form-control" required>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="panel-footer">
-                                                    <p style="color: red;">* Required Field</p>
-                                                    <button type="submit" class="btn btn-w-m btn-success">Set Jadwal</button>     
-                                                </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-                            <?php
-                        }
-                        ?>
-                                          
+                        </div>            
                     </div>
                 </div>
             </div>

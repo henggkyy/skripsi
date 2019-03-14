@@ -1,6 +1,36 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Users extends CI_Model{
+
+	//Method untuk mendapatkan data dosen yang sedang aktif
+	function getDosenAktif(){
+		$this->db->select('users.ID as ID, NAMA, NIK');
+		$this->db->from('users');
+		$this->db->where('STATUS', 1);
+		$result = $this->db->get();
+		if($result->num_rows() > 0){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
+
+	//Method untuk mendapatkan data dosen
+	function getAllDosen(){
+		$this->db->select('users.ID as ID, NAMA,NIK, EMAIL, STATUS');
+		$this->db->from('users');
+		$this->db->where('ID_ROLE =', 2);
+		$this->db->or_where('IS_DOSEN =', 1);
+		$result = $this->db->get();
+		if($result->num_rows() > 0){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
+
 	//Method untuk mengubah status user.
 	function changeStatus($id_user, $status){
 		$data = array(
@@ -33,12 +63,14 @@ class Users extends CI_Model{
 	}
 
 	//Method untuk menambahkan user baru.
-	function addUser($id_role, $nama_user, $email_user){
+	function addUser($id_role, $nama_user, $email_user, $nik, $is_dosen){
 		$data = array(
 		    'ID_ROLE' => $id_role,
 		    'NAMA' => $nama_user,
 		    'EMAIL' => $email_user,
-		    'STATUS' => 1
+		    'NIK' => $nik,
+		    'STATUS' => 1,
+		    'IS_DOSEN' => $is_dosen
 		);
 		$res = $this->db->insert('users', $data);
 		if($res){
@@ -57,6 +89,19 @@ class Users extends CI_Model{
 		$result = $this->db->get();
 		if($result->num_rows() > 0){
 			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
+	//Method untuk pengencekan NIK ketika mendaftarkan pengguna baru.
+	function checkNik($nik){
+		$this->db->select('NIK');
+		$this->db->where('NIK', $nik);
+		$this->db->from('users');
+		$result = $this->db->get();
+		if($result->num_rows() > 0){
+			return true;
 		} 
 		else {
 			return false;

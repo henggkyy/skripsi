@@ -34,11 +34,12 @@ class Mata_kuliah extends CI_Model{
 	}
 
 	//Method untuk memasukkan mata kuliah ke dalam database.
-	function insertMatkul($id_periode, $kd_matkul, $nama_matkul){
+	function insertMatkul($id_periode, $kd_matkul, $nama_matkul, $dosen_koor){
 		$data = array(
 		    'KD_MATKUL' => $kd_matkul,
 		    'NAMA_MATKUL' => $nama_matkul,
-		    'ID_PERIODE' => $id_periode
+		    'ID_PERIODE' => $id_periode,
+		    'ID_DOSEN' => $dosen_koor
 		);
 		$res = $this->db->insert('mata_kuliah', $data);
 		if($res){

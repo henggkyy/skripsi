@@ -11,7 +11,7 @@ class C_Matkul extends CI_Controller{
 			$this->form_validation->set_rules('tgl_uas', 'Tanggal UAS', 'required');
 			if ($this->form_validation->run() == FALSE){
 				$this->session->set_flashdata('error', 'Nama Mata Kuliah/Tanggal UTS/Tanggal UAS tidak ditemukan!');
-				redirect('/inisiasi_administrasi_matkul');
+				redirect('/administrasi_matkul');
 			}
 			else{
 				$id_matkul = $this->input->post('nama_matkul');
@@ -21,11 +21,11 @@ class C_Matkul extends CI_Controller{
 				$res = $this->Mata_kuliah->insertTanggalUjian($id_matkul, $tgl_uts, $tgl_uas);
 				if($res){
 					$this->session->set_flashdata('success', 'Berhasil menambahkan tanggal ujian mata kuliah!');
-					redirect('/inisiasi_administrasi_matkul');
+					redirect('/administrasi_matkul');
 				}
 				else{
 					$this->session->set_flashdata('error', 'Gagal menambahkan tanggal ujian mata kuliah!');
-					redirect('/inisiasi_administrasi_matkul');
+					redirect('/administrasi_matkul');
 				}
 			}	
 		}
@@ -40,30 +40,32 @@ class C_Matkul extends CI_Controller{
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('kode_matkul', 'Kode Mata Kuliah', 'required');
 			$this->form_validation->set_rules('nama_matkul', 'Nama Mata Kuliah', 'required');
+			$this->form_validation->set_rules('dosen_koor', 'Dosen Koordinator', 'required');
 			if ($this->form_validation->run() == FALSE){
-				$this->session->set_flashdata('error', 'Kode & Nama Mata Kuliah tidak ditemukan!');
-				redirect('/inisiasi_administrasi_matkul');
+				$this->session->set_flashdata('error', 'Kode & Nama Mata Kuliah & Dosen Koordinator tidak ditemukan!');
+				redirect('/administrasi_matkul');
 			}
 			else{
 				$kode_matkul = $this->input->post('kode_matkul');
 				$nama_matkul = $this->input->post('nama_matkul');
+				$dosen_koor = $this->input->post('dosen_koor');
 				$this->load->model('Periode_akademik');
 				$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
 				if($id_periode){
 					$this->load->model('Mata_kuliah');
-					$res = $this->Mata_kuliah->insertMatkul($id_periode, $kode_matkul, $nama_matkul);
+					$res = $this->Mata_kuliah->insertMatkul($id_periode, $kode_matkul, $nama_matkul, $dosen_koor);
 					if($res){
 						$this->session->set_flashdata('success', 'Berhasil menambahkan mata kuliah!');
-						redirect('/inisiasi_administrasi_matkul');
+						redirect('/administrasi_matkul');
 					}
 					else{
 						$this->session->set_flashdata('error', 'Gagal menambahkan mata kuliah!');
-						redirect('/inisiasi_administrasi_matkul');
+						redirect('/administrasi_matkul');
 					}
 				}
 				else{
 					$this->session->set_flashdata('error', 'Tidak ada Periode Akademik yang sedang aktif!');
-					redirect('/inisiasi_administrasi_matkul');
+					redirect('/administrasi_matkul');
 				}
 			}
 		}

@@ -79,3 +79,8 @@ $route['dokumen_saku'] = 'C_Main/loadMenuBukuSaku';
 $route['dokumen_saku/add'] = 'C_BukuSaku/inputBukuSaku';
 $route['dokumen_saku/delete'] = 'C_BukuSaku/deleteBukuSaku';
 $route['dokumen_saku/update'] = 'C_BukuSaku/updateBukuSaku';
+
+$route['dosen'] = 'C_Main/loadMenuDosen';
+$route['dosen/add'] = 'C_Dosen/addDosen';
+$route['dosen/nonactivate'] = 'C_Dosen/nonactivateDosen';
+$route['dosen/activate'] = 'C_Dosen/activateDosen';

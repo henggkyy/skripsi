@@ -21,38 +21,38 @@
                 <li <?php if(isset($dokumen_sop) || isset($dokumen_saku)){ echo 'class='. '"active"';}?>>
                 	<a href="#"><i class="fa fa-envelope-open"></i> <span class="nav-label">Dokumen </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
-                            <li>
+                            <li <?php if(isset($dokumen_sop)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>dokumen_sop">Standard Operational Procedure (SOP)</a>
                             </li>
-                            <li>
+                            <li <?php if(isset($dokumen_saku)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>dokumen_saku">Buku Saku</a>
                             </li>
 
                         </ul>
                 </li>
-                <li <?php if(isset($admin_perkuliahan)){ echo 'class='. '"active"';}?>>
+                <li <?php if(isset($periode) || isset($matkul)){ echo 'class='. '"active"';}?>>
                     <a href="#"><i class="fas fa-book"></i> <span class="nav-label">Administrasi Perkuliahan </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
-                            <li>
+                            <li <?php if(isset($periode)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>periode_akademik">Periode Akademik</a>
                             </li>
-                            <li>
+                            <li <?php if(isset($matkul)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>administrasi_matkul">Mata Kuliah</a>
                             </li>
 
                         </ul>
                 </li>
-                <li <?php if(isset($admin_pengguna)){ echo 'class='. '"active"';}?>>
+                <li <?php if(isset($admin_dosen) || isset($admin_lab) || isset($admin_tu)){ echo 'class='. '"active"';}?>>
                     <a href="#"><i class="fas fa-group"></i> <span class="nav-label">Administrasi User </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="<?php echo base_url();?>periode_akademik">Administrasi Dosen</a>
+                            <li <?php if(isset($admin_dosen)){ echo 'class='. '"active"';}?>>
+                                <a href="<?php echo base_url();?>dosen">Administrasi Dosen</a>
                             </li>
                             <li>
-                                <a href="<?php echo base_url();?>administrasi_matkul">Administrasi Admin Laboratorium</a>
+                                <a href="<?php echo base_url();?>admin_lab">Administrasi Admin Laboratorium</a>
                             </li>
                             <li>
-                                <a href="<?php echo base_url();?>administrasi_matkul">Administrasi Tata Usaha</a>
+                                <a href="<?php echo base_url();?>tata_usaha">Administrasi Tata Usaha</a>
                             </li>
                         </ul>
                 </li>

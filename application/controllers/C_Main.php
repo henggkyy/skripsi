@@ -3,6 +3,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani menu utama dari aplikasi.
 class C_Main extends CI_Controller{
 
+	//Method untuk menampilkan halaman utama administrasi dosen.
+	function loadMenuDosen(){
+		if($this->session->userdata('logged_in')){
+			$data['title'] = 'Administrasi Dosen | SI Akademik Lab. Komputasi TIF UNPAR';
+			$data['admin_dosen'] = true;
+			$this->load->model('Periode_akademik');
+			$this->load->model('Users');
+			$data['data_dosen'] = $this->Users->getAllDosen();
+			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+			$this->load->view('template/Header', $data);
+			$this->load->view('template/Sidebar', $data);
+			$this->load->view('template/Topbar');
+			$this->load->view('template/Notification');
+			$this->load->view('pages_user/V_Dosen', $data);
+			$this->load->view('template/Footer');
+		}
+		else{
+			redirect('/');
+		}
+	}
+
+	//Method untuk menampilkan halaman utama dari buku saku
 	function loadMenuBukuSaku(){
 		if($this->session->userdata('logged_in')){
 			$data['title'] = 'Dokumen Buku Saku | SI Akademik Lab. Komputasi TIF UNPAR';
@@ -99,7 +121,7 @@ class C_Main extends CI_Controller{
 		if($this->session->userdata('logged_in')){
 			if($this->session->userdata('id_role') == 1){
 				$data['title'] = 'Periode Akademik | SI Akademik Lab. Komputasi TIF UNPAR';
-				$data['admin_perkuliahan'] = true;
+				$data['periode'] = true;
 
 				$this->load->model('Periode_akademik');
 				$data['info_periode'] = $this->Periode_akademik->getPeriodeAktif();
@@ -127,13 +149,14 @@ class C_Main extends CI_Controller{
 			if($this->session->userdata('id_role') == 1){
 				$data['admin_perkuliahan'] = true;
 				$data['title'] = 'Inisiasi & Administrasi Mata Kuliah | SI Akademik Lab. Komputasi TIF UNPAR';
-				$data['inisiasi_matkul'] = true;
+				$data['matkul'] = true;
 
 				$this->load->model('Mata_kuliah');
 				$this->load->model('Periode_akademik');
+				$this->load->model('Users');
 				$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 				$id_periode =  $this->Periode_akademik->getIDPeriodeAktif();
-
+				$data['data_dosen'] = $this->Users->getDosenAktif();
 				$data['matkul'] = $this->Mata_kuliah->getMatkul($id_periode);
 				
 				$this->load->view('template/Header', $data);
