@@ -11,7 +11,7 @@
                 </li>
                 <li>
                     <a href="<?php echo base_url();?>logout">
-                        <i class="fa fa-sign-out"></i> Log out
+                        <i class="fas fa-sign-out-alt"></i> Log out
                     </a>
                 </li>
             </ul>

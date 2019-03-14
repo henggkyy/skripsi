@@ -18,53 +18,43 @@
                 <li <?php if(isset($dashboard)){ echo 'class='. '"active"';}?>>
                     <a href="<?php echo base_url();?>dashboard"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a>
                 </li>
-                <li>
+                <li <?php if(isset($dokumen_sop) || isset($dokumen_saku)){ echo 'class='. '"active"';}?>>
                 	<a href="#"><i class="fa fa-envelope-open"></i> <span class="nav-label">Dokumen </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
-                            <li <?php if(isset($dokumen_sop)){ echo 'class='. '"active"';}?>>
+                            <li>
                                 <a href="<?php echo base_url();?>dokumen_sop">Standard Operational Procedure (SOP)</a>
                             </li>
-                            <li <?php if(isset($dokumen_saku)){ echo 'class='. '"active"';}?>>
+                            <li>
                                 <a href="<?php echo base_url();?>dokumen_saku">Buku Saku</a>
                             </li>
 
                         </ul>
                 </li>
-                <?php
-                if($this->session->userdata('id_role') == 1){
-                ?>
-                <li <?php if(isset($user)){ echo 'class='. '"active"';}?>>
-                    <a href="<?php echo base_url();?>user"><i class="fa fa-group"></i> <span class="nav-label">Administrasi User</span></a>
-                </li>
-                <?php  
-                }
-                ?>
-                <?php
-                if($this->session->userdata('id_role') == 1){
-                ?>
-                <li <?php if(isset($periode_akademik)){ echo 'class='. '"active"';}?>>
-                    <a href="<?php echo base_url();?>periode_akademik"><i class="fa fa-institution"></i> <span class="nav-label">Periode Akademik</span></a>
-                </li>
-                <?php  
-                }
-                ?>
-                <?php
-                if($this->session->userdata('id_role') == 1){
-                ?>
-                <li>
-                    <a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Dosen & Mata Kuliah </span><span class="fa arrow"></span></a>
+                <li <?php if(isset($admin_perkuliahan)){ echo 'class='. '"active"';}?>>
+                    <a href="#"><i class="fas fa-book"></i> <span class="nav-label">Administrasi Perkuliahan </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
-                            <li <?php if(isset($inisiasi_matkul)){ echo 'class='. '"active"';}?>>
-                                <a href="<?php echo base_url();?>inisiasi_administrasi_matkul">Inisiasi & Administrasi Mata Kuliah</a>
+                            <li>
+                                <a href="<?php echo base_url();?>periode_akademik">Periode Akademik</a>
                             </li>
-                            <li <?php if(isset($inisiasi_dosen)){ echo 'class='. '"active"';}?>>
-                                <a href="<?php echo base_url();?>inisiasi_dosen">Inisiasi Dosen</a>
+                            <li>
+                                <a href="<?php echo base_url();?>administrasi_matkul">Mata Kuliah</a>
                             </li>
 
                         </ul>
-                   </li>
-                <?php  
-                }
-                ?>
+                </li>
+                <li <?php if(isset($admin_pengguna)){ echo 'class='. '"active"';}?>>
+                    <a href="#"><i class="fas fa-group"></i> <span class="nav-label">Administrasi User </span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li>
+                                <a href="<?php echo base_url();?>periode_akademik">Administrasi Dosen</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo base_url();?>administrasi_matkul">Administrasi Admin Laboratorium</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo base_url();?>administrasi_matkul">Administrasi Tata Usaha</a>
+                            </li>
+                        </ul>
+                </li>
         </div>
     </nav>

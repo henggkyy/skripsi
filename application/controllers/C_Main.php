@@ -30,6 +30,7 @@ class C_Main extends CI_Controller{
 			$data['dokumen_sop'] = true;
 			$this->load->model('Periode_akademik');
 			$this->load->model('Data_file_sop');
+			$this->load->model('Kategori_sop');
 			$data['file_sop'] = $this->Data_file_sop->getAllSOP();
 			$data['kategori_sop'] = $this->Kategori_sop->getAllKategori();
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
@@ -98,11 +99,11 @@ class C_Main extends CI_Controller{
 		if($this->session->userdata('logged_in')){
 			if($this->session->userdata('id_role') == 1){
 				$data['title'] = 'Periode Akademik | SI Akademik Lab. Komputasi TIF UNPAR';
-				$data['periode_akademik'] = true;
+				$data['admin_perkuliahan'] = true;
 
 				$this->load->model('Periode_akademik');
 				$data['info_periode'] = $this->Periode_akademik->getPeriodeAktif();
-
+				$data['data_periode'] = $this->Periode_akademik->getAllPeriode();
 				$this->load->view('template/Header', $data);
 				$this->load->view('template/Sidebar', $data);
 				$this->load->view('template/Topbar');
@@ -124,6 +125,7 @@ class C_Main extends CI_Controller{
 	function loadViewAdministrasiMatkul(){
 		if($this->session->userdata('logged_in')){
 			if($this->session->userdata('id_role') == 1){
+				$data['admin_perkuliahan'] = true;
 				$data['title'] = 'Inisiasi & Administrasi Mata Kuliah | SI Akademik Lab. Komputasi TIF UNPAR';
 				$data['inisiasi_matkul'] = true;
 

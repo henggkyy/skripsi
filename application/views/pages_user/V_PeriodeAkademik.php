@@ -81,6 +81,48 @@
                                                 ?>
                                             </div>
                                         </div>
+                                        <div class="col-lg-12">
+                                            <h3>Histori Periode Akademik</h3>
+                                            <hr>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered table-hover <?php
+                                                        if(isset($data_periode) && $data_periode){ echo 'mainDataTable';}?>">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Nama Periode</th>
+                                                            <th>Status</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php
+                                                            if(isset($data_periode) && $data_periode){
+                                                                $iterator = 1;
+                                                                foreach ($data_periode as $per) {
+                                                                    ?>
+                                                                    <tr>
+                                                                        <td><?php echo $iterator;?></td>
+                                                                        <td><?php echo $per['NAMA'];?></td>
+                                                                        <td><?php if($per['STATUS'] == 1) {
+                                                                                echo "Sedang Berlangsung";
+                                                                            }
+                                                                            else{
+                                                                                echo "Selesai";
+                                                                            }?></td>
+                                                                        
+                                                                    </tr>
+                                                                    <?php
+                                                                    $iterator++;
+                                                                }
+                                                            }
+                                                            else{
+                                                                echo "<tr><td colspan='5'>Belum ada dokumen Periode Akademik</td></tr>";
+                                                            }
+                                                            ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

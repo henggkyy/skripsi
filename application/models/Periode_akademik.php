@@ -66,6 +66,18 @@ class Periode_akademik extends CI_Model{
 		}
 	}
 
+	//Method untuk mendapatkan seluruh periode akademik
+	function getAllPeriode(){
+		$this->db->select('NAMA, ID, STATUS');
+		$this->db->from('periode_akademik');
+		$result = $this->db->get();
+		if($result->num_rows() > 0){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk mendapatkan item periode aktif.
 	//Apabila terdapat periode aktif, maka akan kembalikan nama periode dan ID yang sedang aktif.
 	function getPeriodeAktif(){

@@ -27,7 +27,7 @@
 	<script src="<?php echo base_url();?>assets/js/plugins/dataTables/datatables.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$('.dataTables-example').DataTable({
+			$('.mainDataTable').DataTable({
 				pageLength: 25,
 				responsive: true
 
