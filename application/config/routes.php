@@ -65,6 +65,9 @@ $route['periode_akademik/nonaktif'] = 'C_PeriodeAkademik/nonaktifkanPeriode';
 $route['administrasi_matkul'] = 'C_Main/loadViewAdministrasiMatkul';
 $route['administrasi_matkul/tambah'] = 'C_Matkul/addMatkul';
 $route['administrasi_matkul/set_jadwal'] = 'C_Matkul/insertUjian';
+$route['administrasi_matkul_detail'] = 'C_Matkul/getDetailMataKuliah';
+$route['administrasi_matkul/set_uts'] = 'C_Matkul/insertTanggalUTS';
+$route['administrasi_matkul/set_uas'] = 'C_Matkul/insertTanggalUAS';
 
 $route['user'] = 'C_Main/loadMenuUser';
 $route['user/tambah_user'] = 'C_User/addUser';

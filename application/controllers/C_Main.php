@@ -147,7 +147,6 @@ class C_Main extends CI_Controller{
 	function loadViewAdministrasiMatkul(){
 		if($this->session->userdata('logged_in')){
 			if($this->session->userdata('id_role') == 1){
-				$data['admin_perkuliahan'] = true;
 				$data['title'] = 'Inisiasi & Administrasi Mata Kuliah | SI Akademik Lab. Komputasi TIF UNPAR';
 				$data['matkul'] = true;
 

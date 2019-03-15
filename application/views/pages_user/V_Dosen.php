@@ -107,14 +107,14 @@
                                                                 <?php if($dosen['STATUS'] == 1){
                                                                     echo form_open('dosen/nonactivate');?>
                                                                     <input type="hidden" name="id_dosen" value="<?php echo $dosen['ID'];?>" required>
-                                                                    <button onclick="return confirm('Apakah Anda yakin ingin menonaktifkan dosen ini?')" class="btn-danger btn-sm" type="submit">Nonaktifkan</button>
+                                                                    <button onclick="return confirm('Apakah Anda yakin ingin menonaktifkan dosen ini?')" class="btn btn-danger btn-sm" type="submit">Nonaktifkan</button>
                                                                     </form>
                                                                     <?php
                                                                 }
                                                                 else{
                                                                     echo form_open('dosen/activate');?>
                                                                     <input type="hidden" name="id_dosen" value="<?php echo $dosen['ID'];?>" required>
-                                                                    <button onclick="return confirm('Apakah Anda yakin ingin mengaktifkan kembali dosen ini?')" class="btn-primary btn-sm" type="submit">Aktifkan</button>
+                                                                    <button onclick="return confirm('Apakah Anda yakin ingin mengaktifkan kembali dosen ini?')" class="btn btn-primary btn-sm" type="submit">Aktifkan</button>
                                                                     </form>
                                                                     <?php
                                                                 }

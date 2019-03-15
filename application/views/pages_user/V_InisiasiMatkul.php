@@ -112,6 +112,7 @@
                                             <th>Tanggal UTS</th>
                                             <th>Tanggal UAS</th>
                                             <th>Dosen Koordinator</th>
+                                            <th>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -127,6 +128,7 @@
                                                     <td><?php echo $mtk['TANGGAL_UTS'];?></td>
                                                     <td><?php echo $mtk['TANGGAL_UAS'];?></td>
                                                     <td><?php echo $mtk['NAMA_DOSEN'];?></td>
+                                                    <td><a href="<?php echo base_url().'administrasi_matkul_detail?id='.$mtk['ID'];?>" class="btn btn-primary btn-sm"><i class="fas fa-info"></i> Detail</button></a>
                                                 </tr>
                                                 <?php
                                                 $iterator++;

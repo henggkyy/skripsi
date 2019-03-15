@@ -2,38 +2,96 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani Inisiasi dan Administrasi Mata Kuliah.
 class C_Matkul extends CI_Controller{
-	//Method ini digunakan untuk memasukkan tanggal ujian UTS dan UAS mata kuliah.
-	function insertUjian(){
+
+	function getDetailMataKuliah(){
 		if($this->session->userdata('logged_in')){
-			$this->load->library('form_validation');
-			$this->form_validation->set_rules('nama_matkul', 'Nama Mata Kuliah', 'required');
-			$this->form_validation->set_rules('tgl_uts', 'Tanggal UTS', 'required');
-			$this->form_validation->set_rules('tgl_uas', 'Tanggal UAS', 'required');
-			if ($this->form_validation->run() == FALSE){
-				$this->session->set_flashdata('error', 'Nama Mata Kuliah/Tanggal UTS/Tanggal UAS tidak ditemukan!');
+			$this->load->model('Mata_kuliah');
+			$this->load->model('Periode_akademik');
+			$id_matkul = $_GET['id'];
+			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+			$data['title'] = 'Detail Mata Kuliah | SI Akademik Lab. Komputasi TIF UNPAR';
+			$nama_matkul = $this->Mata_kuliah->getIndividualItem($id_matkul, "NAMA_MATKUL");
+			if(!$nama_matkul){
+				$this->session->set_flashdata('error', 'Mata Kuliah tidak tersedia!');
 				redirect('/administrasi_matkul');
 			}
-			else{
-				$id_matkul = $this->input->post('nama_matkul');
-				$tgl_uts = $this->input->post('tgl_uts');
-				$tgl_uas = $this->input->post('tgl_uas');
-				$this->load->model('Mata_kuliah');
-				$res = $this->Mata_kuliah->insertTanggalUjian($id_matkul, $tgl_uts, $tgl_uas);
-				if($res){
-					$this->session->set_flashdata('success', 'Berhasil menambahkan tanggal ujian mata kuliah!');
-					redirect('/administrasi_matkul');
-				}
-				else{
-					$this->session->set_flashdata('error', 'Gagal menambahkan tanggal ujian mata kuliah!');
-					redirect('/administrasi_matkul');
-				}
-			}	
+			$data['nama_matkul'] = $nama_matkul;
+			$data['info_matkul'] = $this->Mata_kuliah->getInformasiBasicMatkul($id_matkul);
+			$data['set_uts'] = $this->Mata_kuliah->cekJadwalUjian($id_matkul, "TANGGAL_UTS");
+			$data['set_uas'] = $this->Mata_kuliah->cekJadwalUjian($id_matkul, "TANGGAL_UAS");
+			//$data['matkul'] = true;
+			$this->load->view('template/Header', $data);
+			$this->load->view('template/Sidebar', $data);
+			$this->load->view('template/Topbar');
+			$this->load->view('template/Notification');
+			$this->load->view('pages_user/V_Detail_Matkul', $data);
+			$this->load->view('template/Footer');
 		}
 		else{
 			redirect('/');
 		}
 	}
 
+	//Method untuk memasukkan tanggal UTS
+	function insertTanggalUTS(){
+		if($this->session->userdata('logged_in')){
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
+			$this->form_validation->set_rules('tgl_uts', 'Tanggal UTS', 'required');
+			if ($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing Required Fields');
+				redirect('/administrasi_matkul');
+			}
+			else{
+				$id_matkul = $this->input->post('id_matkul');
+				$tgl_uts = $this->input->post('tgl_uts');
+				$this->load->model('Mata_kuliah');
+				$res = $this->Mata_kuliah->insertTanggalUjian($id_matkul, "TANGGAL_UTS", $tgl_uts);
+				if($res){
+					$this->session->set_flashdata('success', 'Berhasil menambahkan tanggal UTS mata kuliah!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				else{
+					$this->session->set_flashdata('error', 'Gagal menambahkan tanggal UTS mata kuliah!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
+
+	//Method untuk memasukkan tanggal UAS
+	function insertTanggalUAS(){
+		if($this->session->userdata('logged_in')){
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
+			$this->form_validation->set_rules('tgl_uas', 'Tanggal UAS', 'required');
+			if ($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing Required Fields');
+				redirect('/administrasi_matkul');
+			}
+			else{
+				$id_matkul = $this->input->post('id_matkul');
+				$tgl_uas = $this->input->post('tgl_uas');
+				$this->load->model('Mata_kuliah');
+				$res = $this->Mata_kuliah->insertTanggalUjian($id_matkul, "TANGGAL_UAS", $tgl_uas);
+				if($res){
+					$this->session->set_flashdata('success', 'Berhasil menambahkan tanggal UAS mata kuliah!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				else{
+					$this->session->set_flashdata('error', 'Gagal menambahkan tanggal UAS mata kuliah!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
+	
 	//Method ini digunakan untuk memasukkan mata kuliah.
 	function addMatkul(){
 		if($this->session->userdata('logged_in')){
