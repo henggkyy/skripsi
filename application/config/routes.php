@@ -68,6 +68,7 @@ $route['administrasi_matkul/set_jadwal'] = 'C_Matkul/insertUjian';
 $route['administrasi_matkul_detail'] = 'C_Matkul/getDetailMataKuliah';
 $route['administrasi_matkul/set_uts'] = 'C_Matkul/insertTanggalUTS';
 $route['administrasi_matkul/set_uas'] = 'C_Matkul/insertTanggalUAS';
+$route['administrasi_matkul/insert_mhs'] = 'C_Matkul/insertMahasiswa';
 
 $route['user'] = 'C_Main/loadMenuUser';
 $route['user/tambah_user'] = 'C_User/addUser';
@@ -87,3 +88,5 @@ $route['dosen'] = 'C_Main/loadMenuDosen';
 $route['dosen/add'] = 'C_Dosen/addDosen';
 $route['dosen/nonactivate'] = 'C_Dosen/nonactivateDosen';
 $route['dosen/activate'] = 'C_Dosen/activateDosen';
+
+$route['download/template_insertMhs'] = 'C_Download/downloadTemplateInsertMhs';

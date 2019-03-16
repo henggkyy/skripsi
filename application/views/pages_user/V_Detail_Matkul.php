@@ -142,6 +142,73 @@
                                                 </li>
                                                 <li>
                                                     <span style="font-weight: bold;">Peserta Mata Kuliah : </span>
+                                                    <?php if(!$set_peserta){
+                                                        ?>
+                                                        <button data-toggle="modal" data-target="#insertMhs" class="btn btn-primary btn-sm" type="submit"><i class="fas fa-group"></i> Insert Mahasiswa Peserta Kuliah</button>
+                                                        <!--Modal Set Peserta Matkul-->
+                                                        <div class="modal inmodal" id="insertMhs" tabindex="-1" role="dialog"  aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content animated fadeIn">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                                        <h3 class="modal-title">Insert Peserta Mata Kuliah - <?php echo $nama_matkul;?></h3>
+                                                                    </div>
+                                                                    <?php echo form_open_multipart('administrasi_matkul/insert_mhs');?>
+                                                                    <div class="modal-body">
+                                                                        <a class="btn btn-success" target="_blank" href="<?php echo base_url();?>download/template_insertMhs"><i class="fas fa-download"></i> Download Template </a>
+                                                                        <br>
+                                                                        <div class="form-group  row" id="data_1">
+                                                                            <label class="col-sm-4 col-form-label">Upload Excel Mhs <span style="color: red">*</span> :</label>
+                                                                            <div class="col-sm-8">
+                                                                                <input class="form-control" type="file" name="excel_mhs">
+                                                                            </div>
+                                                                            <input type="hidden" name="id_matkul" value="<?php echo $_GET['id'];?>" required>
+                                                                        </div>
+                                                                        <p style="color: red;" align="center">* Wajib Diisi</p>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        
+                                                                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                                                                        <button type="submit" class="btn btn-primary">Save Changes </button>
+                                                                    </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--END MODAL Set Peserta Matkul-->
+                                                        <?php
+                                                    }
+                                                    else{
+                                                        ?>
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-bordered table-hover">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>NPM Mahasiswa</th>
+                                                                        <th>Nama Mahasiswa</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <?php
+                                                                    $iterator = 1;
+                                                                    foreach ($set_peserta as $peserta ) {
+                                                                        ?>
+                                                                        <tr>
+                                                                            <td><?php echo $iterator;?></td>
+                                                                            <td><?php echo $peserta['NPM_MHS'];?></td>
+                                                                            <td><?php echo $peserta['NAMA_MHS'];?></td>
+                                                                        </tr>
+                                                                        <?php
+                                                                        $iterator++;
+                                                                    }
+                                                                    ?>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <?php
+                                                    } ?>
+                                                    
                                                 </li>
                                                 <li>
                                                     <span style="font-weight: bold;">Kebutuhan Perangkat Lunak : </span>

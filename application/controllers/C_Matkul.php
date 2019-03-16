@@ -3,10 +3,73 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani Inisiasi dan Administrasi Mata Kuliah.
 class C_Matkul extends CI_Controller{
 
+	//Method untuk memasukkan mahasiswa peserta suatu mata kuliah
+	//Dalam method ini akan dilakukan pembacaan data mahasiswa dari file excel menggunakan PHPSpreadSheet
+	function insertMahasiswa(){
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
+		if ($this->form_validation->run() == FALSE){
+			$this->session->set_flashdata('error', 'Missing Required Fields');
+			redirect('/administrasi_matkul');
+		}
+		else{
+			$id_matkul = $this->input->post('id_matkul');
+			if(empty($_FILES['excel_mhs']['name'])){
+				$this->session->set_flashdata('error', 'Missing Required Fields');
+				redirect("/administrasi_matkul_detail?id=$id_matkul");
+			}
+
+			$this->load->model('Mata_kuliah');
+			$this->load->model('Periode_akademik');
+			$this->load->model('Mhs_peserta');
+
+			$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
+			$checkPeriodeAktif = $this->Periode_akademik->checkIdAktif($id_periode);
+			if($checkPeriodeAktif){
+				$this->load->library('MyReadFilter');
+				$filterSubset = new MyReadFilter();
+				$inputFileType = 'Xlsx';
+				$reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
+				$reader->setReadDataOnly(true);
+				$reader->setReadFilter($filterSubset);
+				$spreadsheet = $reader->load($_FILES['excel_mhs']['tmp_name']);
+	     
+			    $sheetData = $spreadsheet->getActiveSheet()->toArray();
+			    
+			    $data_mhs_arr = array();
+			    $iterator = 0;
+			    foreach ($sheetData as $data_mhs) {
+			    	if($data_mhs[0] != ""){
+			    		$data_mhs_arr[$iterator]['NPM_MHS'] = $data_mhs[0]; 
+			    		$data_mhs_arr[$iterator]['NAMA_MHS'] = $data_mhs[1]; 
+			    		$data_mhs_arr[$iterator]['ID_MATKUL'] = $id_matkul; 
+			    		$iterator++;
+			    	}
+			    }
+
+			    $res_upload_db = $this->Mhs_peserta->insertMhs($data_mhs_arr);
+			    if($res_upload_db){
+			    	$this->session->set_flashdata('success', 'Berhasil memasukkan peserta mata kuliah!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+			    }
+			    else{
+			    	$this->session->set_flashdata('error', 'Gagal memasukkan peserta mata kuliah!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+			    }
+			    
+			}
+			else{
+				$this->session->set_flashdata('error', 'Tidak dapat memasukkan peserta mata kuliah karena periode akademik mata kuliah sudah selesai!');
+				redirect("/administrasi_matkul_detail?id=$id_matkul");
+			}
+		}
+	}
+
 	function getDetailMataKuliah(){
 		if($this->session->userdata('logged_in')){
 			$this->load->model('Mata_kuliah');
 			$this->load->model('Periode_akademik');
+			$this->load->model('Mhs_peserta');
 			$id_matkul = $_GET['id'];
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$data['title'] = 'Detail Mata Kuliah | SI Akademik Lab. Komputasi TIF UNPAR';
@@ -19,6 +82,7 @@ class C_Matkul extends CI_Controller{
 			$data['info_matkul'] = $this->Mata_kuliah->getInformasiBasicMatkul($id_matkul);
 			$data['set_uts'] = $this->Mata_kuliah->cekJadwalUjian($id_matkul, "TANGGAL_UTS");
 			$data['set_uas'] = $this->Mata_kuliah->cekJadwalUjian($id_matkul, "TANGGAL_UAS");
+			$data['set_peserta'] = $this->Mhs_peserta->checkMhs($id_matkul);
 			//$data['matkul'] = true;
 			$this->load->view('template/Header', $data);
 			$this->load->view('template/Sidebar', $data);

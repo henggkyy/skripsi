@@ -2,6 +2,20 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Periode_akademik extends CI_Model{
 
+	//Method untuk melakukan pengecekan id periode akademik apakah sedang aktif atau tidak
+	function checkIdAktif($id_periode){
+		$this->db->select('ID');
+		$this->db->where('STATUS', 1);
+		$this->db->where('ID', $id_periode);
+		$this->db->from('periode_akademik');
+		$result = $this->db->get();
+		if($result->num_rows() == 1){
+			return true;
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk menambahkan periode akademik baru ke dalam database
 	function insertPeriode($nama){
 		$data = array(

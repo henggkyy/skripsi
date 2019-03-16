@@ -109,9 +109,8 @@
                                             <th>#</th>
                                             <th>Kode Mata Kuliah</th>
                                             <th>Nama Mata Kuliah</th>
-                                            <th>Tanggal UTS</th>
-                                            <th>Tanggal UAS</th>
                                             <th>Dosen Koordinator</th>
+                                            <th>Periode Akademik</th>
                                             <th>Action</th>
                                         </tr>
                                         </thead>
@@ -125,9 +124,8 @@
                                                     <td><?php echo $iterator;?></td>
                                                     <td><?php echo $mtk['KD_MATKUL'];?></td>
                                                     <td><?php echo $mtk['NAMA_MATKUL'];?></td>
-                                                    <td><?php echo $mtk['TANGGAL_UTS'];?></td>
-                                                    <td><?php echo $mtk['TANGGAL_UAS'];?></td>
                                                     <td><?php echo $mtk['NAMA_DOSEN'];?></td>
+                                                    <td><?php echo $mtk['NAMA_PERIODE'];?></td>
                                                     <td><a href="<?php echo base_url().'administrasi_matkul_detail?id='.$mtk['ID'];?>" class="btn btn-primary btn-sm"><i class="fas fa-info"></i> Detail</button></a>
                                                 </tr>
                                                 <?php
