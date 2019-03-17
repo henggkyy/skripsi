@@ -2,6 +2,20 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Users extends CI_Model{
 
+	//Method untuk mendapatkan data user berdasarkan role
+	function getAllUserByRole($id_role){
+		$this->db->select('users.ID as ID, NAMA,NIK, EMAIL, STATUS');
+		$this->db->from('users');
+		$this->db->where('ID_ROLE', $id_role);
+		$result = $this->db->get();
+		if($result->num_rows() > 0){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
+
 	//Method untuk mendapatkan data dosen yang sedang aktif
 	function getDosenAktif(){
 		$this->db->select('users.ID as ID, NAMA, NIK');
@@ -72,9 +86,10 @@ class Users extends CI_Model{
 		    'STATUS' => 1,
 		    'IS_DOSEN' => $is_dosen
 		);
-		$res = $this->db->insert('users', $data);
-		if($res){
-			return true;
+		$this->db->insert('users', $data);
+		$insert_id = $this->db->insert_id();
+		if($insert_id){
+			return $insert_id;
 		}
 		else{
 			return false;

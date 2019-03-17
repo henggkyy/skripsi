@@ -48,7 +48,7 @@
                             <li <?php if(isset($admin_dosen)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>dosen">Administrasi Dosen</a>
                             </li>
-                            <li>
+                            <li <?php if(isset($admin_lab)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>admin_lab">Administrasi Admin Laboratorium</a>
                             </li>
                             <li>

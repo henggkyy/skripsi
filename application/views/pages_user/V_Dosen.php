@@ -114,7 +114,7 @@
                                                                 else{
                                                                     echo form_open('dosen/activate');?>
                                                                     <input type="hidden" name="id_dosen" value="<?php echo $dosen['ID'];?>" required>
-                                                                    <button onclick="return confirm('Apakah Anda yakin ingin mengaktifkan kembali dosen ini?')" class="btn btn-primary btn-sm" type="submit">Aktifkan</button>
+                                                                    <button onclick="return confirm('Apakah Anda yakin ingin mengaktifkan kembali dosen ini?')" class="btn btn-success btn-sm" type="submit">Aktifkan</button>
                                                                     </form>
                                                                     <?php
                                                                 }

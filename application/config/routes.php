@@ -89,4 +89,9 @@ $route['dosen/add'] = 'C_Dosen/addDosen';
 $route['dosen/nonactivate'] = 'C_Dosen/nonactivateDosen';
 $route['dosen/activate'] = 'C_Dosen/activateDosen';
 
+$route['admin_lab'] = 'C_Main/loadMenuAdmin';
+$route['admin_lab/add'] = 'C_Admin/insertAdmin';
+$route['admin_lab/nonactivate'] = 'C_Admin/nonactivateAdmin';
+$route['admin_lab/activate'] = 'C_Admin/activateAdmin';
+
 $route['download/template_insertMhs'] = 'C_Download/downloadTemplateInsertMhs';

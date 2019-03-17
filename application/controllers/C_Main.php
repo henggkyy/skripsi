@@ -3,6 +3,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani menu utama dari aplikasi.
 class C_Main extends CI_Controller{
 
+	//Method untuk menampilkan halaman utama dari administrasi admin laboratorium
+	function loadMenuAdmin(){
+		if($this->session->userdata('logged_in')){
+			$data['title'] = 'Administrasi Admin Laboratorium | SI Akademik Lab. Komputasi TIF UNPAR';
+			$this->load->model('Periode_akademik');
+			$this->load->model('Users');
+			$data['admin_lab'] = true;
+			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+			$data['data_admin'] = $this->Users->getAllUserByRole(4);
+			$this->load->view('template/Header', $data);
+			$this->load->view('template/Sidebar', $data);
+			$this->load->view('template/Topbar');
+			$this->load->view('template/Notification');
+			$this->load->view('pages_user/V_Admin', $data);
+			$this->load->view('template/Footer');
+		}
+		else{
+			redirect('/');
+		}
+	}
 	//Method untuk menampilkan halaman utama administrasi dosen.
 	function loadMenuDosen(){
 		if($this->session->userdata('logged_in')){
