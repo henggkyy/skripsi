@@ -101,9 +101,11 @@ $route['alat_lab/add'] = 'C_Alat/insertAlat';
 $route['alat_lab/delete'] = 'C_Alat/deleteAlat';
 
 $route['peminjaman'] = 'C_Peminjaman/loadHomePeminjaman';
-$route['peminjaman_lab'] = 'C_Peminjaman/loadViewPeminjamanLab';
-$route['peminjaman_lab/add'] = 'C_Peminjaman/insertPeminjaman';
-$route['peminjaman_lab/tindakan'] = 'C_Peminjaman/tindaklanjutiPinjamanLab';
-$route['data_peminjaman_lab'] = 'C_Main/loadDaftarPeminjamanLaboratorium';
+$route['peminjaman/add'] = 'C_Peminjaman/insertPeminjaman';
+$route['peminjaman/tindakan'] = 'C_Peminjaman/tindaklanjutiPinjaman';
+
+$route['peminjaman_lab'] = 'C_Main/loadDaftarPeminjamanLaboratorium';
+
+$route['peminjaman_alat'] = 'C_Main/loadDaftarPeminjamanAlat';
 
 $route['download/template_insertMhs'] = 'C_Download/downloadTemplateInsertMhs';

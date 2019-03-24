@@ -63,7 +63,7 @@
                                 <a href="<?php echo base_url();?>alat_lab">Daftar Alat</a>
                             </li>
                             <li <?php if(isset($peminjaman_lab)){ echo 'class='. '"active"';}?>>
-                                <a href="<?php echo base_url();?>data_peminjaman_lab">Peminjaman Laboratorium</a>
+                                <a href="<?php echo base_url();?>peminjaman_lab">Peminjaman Laboratorium</a>
                             </li>
                             <li <?php if(isset($peminjaman_alat)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>peminjaman_alat">Peminjaman Alat</a>

@@ -24,7 +24,7 @@
                         <div class="col-lg-12">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
-                                    <h5>Daftar Peminjaman Laboratorium</h5>
+                                    <h5>Daftar Peminjaman Alat Laboratorium</h5>
                                 </div>
                                 <div class="ibox-content">
                                     <div class="table-responsive">
@@ -35,7 +35,7 @@
                                                 <th>#</th>
                                                 <th>Tanggal Rekam</th>
                                                 <th>User Peminjam</th>
-                                                <th>Laboratorium</th>
+                                                <th>Alat</th>
                                                 <th>Tanggal Pinjam</th>
                                                 <th>Waktu</th>
                                                 <th>Keterangan Peminjam</th>
@@ -53,7 +53,7 @@
                                                             <td><?php echo $iterator;?></td>
                                                             <td><?php echo $peminjam['TANGGAL_REKAM'];?></td>
                                                             <td><?php echo $peminjam['USER_PEMINJAM'];?></td>
-                                                            <td><?php echo $peminjam['NAMA_LAB'].' ('.$peminjam['LOKASI']. ')';?></td>
+                                                            <td><?php echo $peminjam['NAMA_ALAT'];?></td>
                                                             <td><?php echo $peminjam['TANGGAL_PINJAM'];?></td>
                                                             <td><?php echo $peminjam['JAM_MULAI'].' - '.  $peminjam['JAM_SELESAI'];?></td>
                                                             <td><?php echo $peminjam['KETERANGAN_PEMINJAM'];?></td>
@@ -78,7 +78,7 @@
                                             <div class="modal-content animated fadeIn">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                    <h4 class="modal-title">Tindaklanjuti Permintaan Peminjaman Laboratorium</h4>
+                                                    <h4 class="modal-title">Tindaklanjuti Permintaan Peminjaman Alat</h4>
                                                 </div>
                                                 <?php echo form_open('/peminjaman/tindakan'); ?>
                                                 <div class="modal-body">
@@ -124,7 +124,7 @@
                                                     }
                                                 }
                                                 else{
-                                                    echo "<tr><td colspan='5'>Belum ada permintaan Peminjaman Laboratorium</td></tr>";
+                                                    echo "<tr><td colspan='5'>Belum ada permintaan Peminjaman Alat</td></tr>";
                                                 }
                                                 ?>
                                             </tbody>

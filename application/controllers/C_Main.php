@@ -3,6 +3,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani menu utama dari aplikasi.
 class C_Main extends CI_Controller{
 
+	//Method untuk menampilkan halaman daftar peminjaman alat laboratorium
+	function loadDaftarPeminjamanAlat(){
+		if($this->session->userdata('logged_in')){
+			$data['title'] = 'Daftar Peminjaman Alat | SI Akademik Lab. Komputasi TIF UNPAR';
+			$this->load->model('Periode_akademik');
+			$this->load->model('Peminjaman_lab');
+			$data['peminjaman_alat'] = true;
+			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+			$data['daftar_peminjaman'] = $this->Peminjaman_lab->getAllDataPeminjamanAlat();
+			$this->load->view('template/Header', $data);
+			$this->load->view('template/Sidebar', $data);
+			$this->load->view('template/Topbar');
+			$this->load->view('template/Notification');
+			$this->load->view('pages_user/V_Daftar_Peminjaman_Alat', $data);
+			$this->load->view('template/Footer');
+		}
+		else{
+			redirect('/');
+		}
+	}
+
 	//Method untuk menampilkan halaman daftar peminjaman laboratorium
 	function loadDaftarPeminjamanLaboratorium(){
 		if($this->session->userdata('logged_in')){
@@ -11,7 +32,7 @@ class C_Main extends CI_Controller{
 			$this->load->model('Peminjaman_lab');
 			$data['peminjaman_lab'] = true;
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
-			$data['daftar_peminjaman'] = $this->Peminjaman_lab->getAllDataPeminjaman();
+			$data['daftar_peminjaman'] = $this->Peminjaman_lab->getAllDataPeminjamanLab();
 			$this->load->view('template/Header', $data);
 			$this->load->view('template/Sidebar', $data);
 			$this->load->view('template/Topbar');
