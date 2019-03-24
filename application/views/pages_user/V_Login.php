@@ -13,7 +13,7 @@
 
     <link href="<?php echo base_url();?>assets/css/animate.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/css/style.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 </head>
 
 <body class="gray-bg">
@@ -46,6 +46,13 @@
                         <?php
                     }
                     ?>
+                    <hr>
+                    <div align="center">
+                        <a class="btn btn-primary" href="<?php echo base_url();?>peminjaman"><i class="fas fa-building"></i> Peminjaman Lab & Alat</a>
+                        <a style="margin-top:5px;" class="btn btn-warning" href="<?php echo base_url();?>dokumen"><i class="fas fa-file"></i> Dokumen SOP & Buku Saku</a>
+                        <a style="margin-top:5px;" class="btn btn-success" href="<?php echo base_url();?>jadwal"><i class="far fa-clock"></i> Jadwal Laboratorium & Jadwal Admin</a>
+                    </div>
+                    
                 </div>
             </div>
         </div>

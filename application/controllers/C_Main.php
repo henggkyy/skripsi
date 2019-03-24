@@ -3,6 +3,46 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani menu utama dari aplikasi.
 class C_Main extends CI_Controller{
 
+	//Method untuk menampilkan halaman daftar peminjaman laboratorium
+	function loadDaftarPeminjamanLaboratorium(){
+		if($this->session->userdata('logged_in')){
+			$data['title'] = 'Daftar Peminjaman Laboratorium | SI Akademik Lab. Komputasi TIF UNPAR';
+			$this->load->model('Periode_akademik');
+			$this->load->model('Peminjaman_lab');
+			$data['peminjaman_lab'] = true;
+			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+			$data['daftar_peminjaman'] = $this->Peminjaman_lab->getAllDataPeminjaman();
+			$this->load->view('template/Header', $data);
+			$this->load->view('template/Sidebar', $data);
+			$this->load->view('template/Topbar');
+			$this->load->view('template/Notification');
+			$this->load->view('pages_user/V_Daftar_Peminjaman_Laboratorium', $data);
+			$this->load->view('template/Footer');
+		}
+		else{
+			redirect('/');
+		}
+	}
+	//Method untuk menampilkan halaman utama mengenai daftar alat laboratorium
+	function loadMenuAlatLab(){
+		if($this->session->userdata('logged_in')){
+			$data['title'] = 'Alat Laboratorium | SI Akademik Lab. Komputasi TIF UNPAR';
+			$this->load->model('Periode_akademik');
+			$this->load->model('Alat_lab');
+			$data['alat_lab'] = true;
+			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+			$data['data_alat'] = $this->Alat_lab->getAllAlat();
+			$this->load->view('template/Header', $data);
+			$this->load->view('template/Sidebar', $data);
+			$this->load->view('template/Topbar');
+			$this->load->view('template/Notification');
+			$this->load->view('pages_user/V_Alat_Lab', $data);
+			$this->load->view('template/Footer');
+		}
+		else{
+			redirect('/');
+		}
+	}
 	//Method untuk menampilkan halaman utama dari administrasi admin laboratorium
 	function loadMenuAdmin(){
 		if($this->session->userdata('logged_in')){

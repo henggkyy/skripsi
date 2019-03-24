@@ -74,6 +74,8 @@ $route['user'] = 'C_Main/loadMenuUser';
 $route['user/tambah_user'] = 'C_User/addUser';
 $route['user/change_status'] = 'C_User/changeStatus';
 
+$route['dokumen'] = 'C_Public/loadViewDokumen';
+
 $route['dokumen_sop'] = 'C_Main/loadMenuSOP';
 $route['dokumen_sop/add'] = 'C_Sop/inputDokumenSop';
 $route['dokumen_sop/delete'] = 'C_Sop/deleteSop';
@@ -93,5 +95,15 @@ $route['admin_lab'] = 'C_Main/loadMenuAdmin';
 $route['admin_lab/add'] = 'C_Admin/insertAdmin';
 $route['admin_lab/nonactivate'] = 'C_Admin/nonactivateAdmin';
 $route['admin_lab/activate'] = 'C_Admin/activateAdmin';
+
+$route['alat_lab'] = 'C_Main/loadMenuAlatLab';
+$route['alat_lab/add'] = 'C_Alat/insertAlat';
+$route['alat_lab/delete'] = 'C_Alat/deleteAlat';
+
+$route['peminjaman'] = 'C_Peminjaman/loadHomePeminjaman';
+$route['peminjaman_lab'] = 'C_Peminjaman/loadViewPeminjamanLab';
+$route['peminjaman_lab/add'] = 'C_Peminjaman/insertPeminjaman';
+$route['peminjaman_lab/tindakan'] = 'C_Peminjaman/tindaklanjutiPinjamanLab';
+$route['data_peminjaman_lab'] = 'C_Main/loadDaftarPeminjamanLaboratorium';
 
 $route['download/template_insertMhs'] = 'C_Download/downloadTemplateInsertMhs';

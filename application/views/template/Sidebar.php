@@ -56,5 +56,19 @@
                             </li>
                         </ul>
                 </li>
+                <li <?php if(isset($alat_lab) || isset($peminjaman_lab) || isset($peminjaman_alat)){ echo 'class='. '"active"';}?>>
+                    <a href="#"><i class="fas fa-building"></i> <span class="nav-label">Peminjaman Lab & Alat </span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li <?php if(isset($alat_lab)){ echo 'class='. '"active"';}?>>
+                                <a href="<?php echo base_url();?>alat_lab">Daftar Alat</a>
+                            </li>
+                            <li <?php if(isset($peminjaman_lab)){ echo 'class='. '"active"';}?>>
+                                <a href="<?php echo base_url();?>data_peminjaman_lab">Peminjaman Laboratorium</a>
+                            </li>
+                            <li <?php if(isset($peminjaman_alat)){ echo 'class='. '"active"';}?>>
+                                <a href="<?php echo base_url();?>peminjaman_alat">Peminjaman Alat</a>
+                            </li>
+                        </ul>
+                </li>
         </div>
     </nav>
