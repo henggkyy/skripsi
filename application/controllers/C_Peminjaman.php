@@ -2,8 +2,30 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani aksi mengenai proses Peminjaman
 class C_Peminjaman extends CI_Controller{
+	//Constructor Controller
+	function __construct() {
+        parent::__construct();
+        $this->load->library('google');
+    }
 	//Method untuk melakukan load halaman pilihan apakah ingin meminjam laboratorium atau alat lab
 	function loadHomePeminjaman(){
+		if(!$this->session->userdata('logged_in')){
+			$google_data = $this->google->validate();
+			$session_data=array(
+				'name' => $google_data['name'],
+				'email' => $google_data['email'],
+				'logged_in'=> true,
+				'google_login' => true
+			);
+			$email = $google_data['email'];    
+			$email_domain = substr($email, strpos($email, "@") + 1);
+			if($email_domain == 'student.unpar.ac.id' || $email_domain == 'unpar.ac.id'){
+				$this->session->set_userdata($session_data);
+			}
+			else{
+				redirect('/');
+			}
+		}
 		$data['title'] = "Form Peminjaman Alat / Ruangan Laboratorium | SI Akademik Lab. Komputasi TIF";
 		$this->load->model('Alat_lab');
 		$data['daftar_alat'] = $this->Alat_lab->getAllAlat();

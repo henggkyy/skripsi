@@ -27,9 +27,12 @@
                 <h4 class="font-bold">Lab. Komputasi TIF UNPAR</h4>
                 <div class="ibox-content">
                     <h4>Form Peminjaman Alat/ Ruangan Laboratorium</h4>
+
                     <hr>
                     <?php echo form_open('peminjaman/add');?>
                     <?php $this->load->view('template/Notification');?>
+                    <h5>Nama : <?php echo $this->session->userdata('name'); ?></h5>
+                    <h5>Email : <?php echo $this->session->userdata('email'); ?>.  <a href="<?php echo base_url()?>logout">Logout</a></h5>
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label">Pilih Tipe Peminjaman <span style="color: red">*</span> :</label>
                         <div class="col-sm-6">

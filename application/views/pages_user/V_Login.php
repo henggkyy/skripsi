@@ -28,30 +28,23 @@
             </div>
             <div class="col-md-6">
                 <div class="ibox-content">
-                    <?php 
-                    $attributes = array('class' => 'm-t', 'role' => 'form');
-                    echo form_open('/proses_login', $attributes);?>
-                        <div class="form-group">
-                            <input type="email" class="form-control" name="email" placeholder="Username" required="">
-                        </div>
-                        <div class="form-group">
-                            <input type="password" class="form-control" name="password" placeholder="Password" required="">
-                        </div>
-                        <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
-                    </form>
-                    <?php
-                    if($this->session->flashdata('error')){
-                        ?>
-                        <h4 align="center" style="color: red"><?php echo $this->session->flashdata('error'); ?></h4>
-                        <?php
-                    }
-                    ?>
+                        
+                        <a href="<?php echo $google_login_url;?>" class="btn btn-lg btn-danger block full-width m-b"><i class="fab fa-google"></i> Login With Google</a>
                     <hr>
                     <div align="center">
-                        <a class="btn btn-primary" href="<?php echo base_url();?>peminjaman"><i class="fas fa-building"></i> Peminjaman Lab & Alat</a>
+                        <a class="btn btn-primary" href="<?php echo $google_login_url;?>"><i class="fas fa-building"></i> Peminjaman Lab & Alat</a>
                         <a style="margin-top:5px;" class="btn btn-warning" href="<?php echo base_url();?>dokumen"><i class="fas fa-file"></i> Dokumen SOP & Buku Saku</a>
                         <a style="margin-top:5px;" class="btn btn-success" href="<?php echo base_url();?>jadwal"><i class="far fa-clock"></i> Jadwal Laboratorium & Jadwal Admin</a>
                     </div>
+                    <?php
+                    if($this->session->flashdata('message')){
+                        ?>
+                        <div align="center" style="margin-top:10px;">
+                            <p style="color: red; font-weight: bold;"><?php echo $this->session->flashdata('message');?></p>
+                        </div>
+                        <?php
+                    }
+                    ?>
                     
                 </div>
             </div>

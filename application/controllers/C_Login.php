@@ -3,12 +3,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani proses login dari pengguna
 //Dalam class ini juga dibuat method untuk menangani logout pengguna dari aplikasi.
 class C_Login extends CI_Controller {
+	//Constructor Controller
+	function __construct() {
+        parent::__construct();
+        $this->load->library('google');
+    }
 	//Method ini digunakan untuk melakukan load tampilan untuk login.
 	//Apabila pengguna telah login ke dalam aplikasi, maka pengguna tidak akan perlu login kembali
 	//dan tidak akan menampilkan halaman untuk login
 	function loadLoginPage(){
 		if(!$this->session->userdata('logged_in')){
-			$this->load->view('pages_user/V_Login');
+			$data['google_login_url']=$this->google->get_login_url();
+			$this->load->view('pages_user/V_Login', $data);
 		}
 		else{
 			redirect('/dashboard');
@@ -54,6 +60,8 @@ class C_Login extends CI_Controller {
 	//Method untuk melakukan logout dari aplikasi website
 	function logout(){
 		if($this->session->userdata('logged_in')){
+			$this->session->flashdata('message', 'Berhasil Logout!');
+			$this->google->revokeToken();
 			$this->session->unset_userdata('logged_in');
 			$this->session->unset_userdata('id');
 			$this->session->unset_userdata('id_role');
