@@ -9,29 +9,17 @@ class C_Peminjaman extends CI_Controller{
     }
 	//Method untuk melakukan load halaman pilihan apakah ingin meminjam laboratorium atau alat lab
 	function loadHomePeminjaman(){
-		if(!$this->session->userdata('logged_in')){
-			$google_data = $this->google->validate();
-			$session_data=array(
-				'name' => $google_data['name'],
-				'email' => $google_data['email'],
-				'logged_in'=> true,
-				'google_login' => true
-			);
-			$email = $google_data['email'];    
-			$email_domain = substr($email, strpos($email, "@") + 1);
-			if($email_domain == 'student.unpar.ac.id' || $email_domain == 'unpar.ac.id'){
-				$this->session->set_userdata($session_data);
-			}
-			else{
-				redirect('/');
-			}
+		if($this->session->userdata('logged_in_public')){
+			$data['title'] = "Form Peminjaman Alat / Ruangan Laboratorium | SI Akademik Lab. Komputasi TIF";
+			$this->load->model('Alat_lab');
+			$data['daftar_alat'] = $this->Alat_lab->getAllAlat();
+			$this->load->model('Daftar_lab');
+			$data['daftar_lab'] = $this->Daftar_lab->getListLab();
+			$this->load->view('pages_user/V_Home_Peminjaman', $data);
 		}
-		$data['title'] = "Form Peminjaman Alat / Ruangan Laboratorium | SI Akademik Lab. Komputasi TIF";
-		$this->load->model('Alat_lab');
-		$data['daftar_alat'] = $this->Alat_lab->getAllAlat();
-		$this->load->model('Daftar_lab');
-		$data['daftar_lab'] = $this->Daftar_lab->getListLab();
-		$this->load->view('pages_user/V_Home_Peminjaman', $data);
+		else{
+			redirect('/');
+		}
 	}
 
 	//Method untuk menindaklanjuti permintaan peminjaman laboratorium
