@@ -9,6 +9,7 @@ class C_Peminjaman extends CI_Controller{
     }
 	//Method untuk melakukan load halaman pilihan apakah ingin meminjam laboratorium atau alat lab
 	function loadHomePeminjaman(){
+
 		if($this->session->userdata('logged_in_public')){
 			$data['title'] = "Form Peminjaman Alat / Ruangan Laboratorium | SI Akademik Lab. Komputasi TIF";
 			$this->load->model('Alat_lab');

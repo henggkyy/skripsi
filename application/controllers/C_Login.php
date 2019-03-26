@@ -24,39 +24,30 @@ class C_Login extends CI_Controller {
 	//Method untuk menangani email dan password yang diinput oleh pengguna
 	//Method ini akan melakukan pengecekan terhadap pengguna yang telah terdaftar di database.
 	function prosesLogin(){
-		$tipe_login = $_GET['s'];
-		if($tipe_login == 'login_admin' || $tipe_login == 'peminjaman'){
 			$google_data = $this->google->validate();
-			
 			$email = $google_data['email'];    
 			$email_domain = substr($email, strpos($email, "@") + 1);
 			if($email_domain == 'student.unpar.ac.id' || $email_domain == 'unpar.ac.id'){
-				if($tipe_login == 'login_admin'){
-					$this->load->model('Users');
-					$data_login = $this->Users->checkUser($email);
-					if($data_login){
-						foreach ($data_login as $data) {
-							$id = $data['ID'];
-							$id_role = $data['ID_ROLE'];
-							$email = $data['EMAIL'];
-							$nama = $data['NAMA'];
-							$nama_role = $data['NAMA_ROLE'];
-						}
-						$userdata = array(
-							'logged_in' => true,
-							'id' => $id,
-							'id_role' => $id_role,
-							'email' => $email,
-							'nama' => $nama,
-							'nama_role' => $nama_role
-						);
-						$this->session->set_userdata($userdata);
-						redirect('/dashboard');
+				$this->load->model('Users');
+				$data_login = $this->Users->checkUser($email);
+				if($data_login){
+					foreach ($data_login as $data) {
+						$id = $data['ID'];
+						$id_role = $data['ID_ROLE'];
+						$email = $data['EMAIL'];
+						$nama = $data['NAMA'];
+						$nama_role = $data['NAMA_ROLE'];
 					}
-					else{
-						$this->session->set_flashdata('message', "Email tidak terdaftar!");
-						redirect('/');
-					}
+					$userdata = array(
+						'logged_in' => true,
+						'id' => $id,
+						'id_role' => $id_role,
+						'email' => $email,
+						'nama' => $nama,
+						'nama_role' => $nama_role
+					);
+					$this->session->set_userdata($userdata);
+					redirect('/dashboard');
 				}
 				else{
 					$userdata = array(
@@ -73,13 +64,6 @@ class C_Login extends CI_Controller {
 				$this->google->revokeToken();
 				redirect('/');
 			}
-			
-		}
-		else{
-			$this->google->revokeToken();
-			$this->session->set_flashdata('message', 'Missing login type!');
-			redirect('/');
-		}
 	}
 
 	//Method untuk melakukan logout dari aplikasi website
@@ -88,6 +72,7 @@ class C_Login extends CI_Controller {
 			$this->session->set_flashdata('message', 'Berhasil Logout!');
 			$this->google->revokeToken();
 			$this->session->unset_userdata('logged_in');
+			$this->session->unset_userdata('logged_in_public');
 			$this->session->unset_userdata('id');
 			$this->session->unset_userdata('id_role');
 			$this->session->unset_userdata('email');
