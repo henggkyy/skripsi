@@ -67,57 +67,64 @@
                                                                     echo "Ditolak";
                                                                 }?></td>
                                                             <td align="center">
-                                                                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalUpdate<?php echo $peminjam['ID'];?>"><i class="fas fa-pen"></i> Tindakan</button>
-
-
-                                                                
-
-                                                            </td>
-                                                            <div class="modal inmodal" id="modalUpdate<?php echo $peminjam['ID'];?>" tabindex="-1" role="dialog"  aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content animated fadeIn">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                    <h4 class="modal-title">Tindaklanjuti Permintaan Peminjaman Laboratorium</h4>
-                                                </div>
-                                                <?php echo form_open('/peminjaman/tindakan'); ?>
-                                                <div class="modal-body">
-                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                        <label class="col-sm-4 col-form-label">Tindakan <span style="color: red">*</span> :</label>
-                                                        <div class="col-sm-8">
-                                                            <select name="tindakan" class="form-control" required>
-                                                                <option value="" selected disabled>-- Please Choose One --</option>
-                                                                <option value="1">Setujui Permintaan</option>
-                                                                <option value="2">Tolak Permintaan</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                        <label class="col-sm-4 col-form-label">Keterangan <span style="color: red">*</span> :</label>
-                                                        <div class="col-sm-8">
-                                                            <textarea style="height: 100px;" required name="keterangan" placeholder="Dapat diisi dengan alasan penolakan, langkah-langkah setelah disetujui, dsb." class="form-control"></textarea>
-                                                            <?php
-                                                                if(isset($error_form) && $error_form){
-                                                                        ?>
-                                                                    <span class="form-text m-b-none" style="color: red;"><?php echo $error_form;?></span>
-                                                                        <?php
+                                                                <?php
+                                                                if($peminjam['STATUS'] == 0){
+                                                                    ?>
+                                                                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalUpdate<?php echo $peminjam['ID'];?>"><i class="fas fa-pen"></i> Tindakan</button>
+                                                                 <!--START MODAL ADD Tindakan-->
+                                                                <div class="modal inmodal" id="modalUpdate<?php echo $peminjam['ID'];?>" tabindex="-1" role="dialog"  aria-hidden="true">
+                                                                    <div class="modal-dialog">
+                                                                        <div class="modal-content animated fadeIn">
+                                                                            <div class="modal-header">
+                                                                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                                                <h4 class="modal-title">Tindaklanjuti Permintaan Peminjaman Laboratorium</h4>
+                                                                            </div>
+                                                                            <?php echo form_open('/peminjaman/tindakan'); ?>
+                                                                            <div class="modal-body">
+                                                                                <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
+                                                                                    <label class="col-sm-4 col-form-label">Tindakan <span style="color: red">*</span> :</label>
+                                                                                    <div class="col-sm-8">
+                                                                                        <select name="tindakan" class="form-control" required>
+                                                                                            <option value="" selected disabled>-- Please Choose One --</option>
+                                                                                            <option value="1">Setujui Permintaan</option>
+                                                                                            <option value="2">Tolak Permintaan</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
+                                                                                    <label class="col-sm-4 col-form-label">Keterangan <span style="color: red">*</span> :</label>
+                                                                                    <div class="col-sm-8">
+                                                                                        <textarea style="height: 100px;" required name="keterangan" placeholder="Dapat diisi dengan alasan penolakan, langkah-langkah setelah disetujui, dsb." class="form-control"></textarea>
+                                                                                        <?php
+                                                                                            if(isset($error_form) && $error_form){
+                                                                                                    ?>
+                                                                                                <span class="form-text m-b-none" style="color: red;"><?php echo $error_form;?></span>
+                                                                                                    <?php
+                                                                                            }
+                                                                                        ?>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <input type="hidden" name="id_pinjaman" value="<?php echo $peminjam['ID'];?>" required>
+                                                                                <p style="color: red;" align="center">* Wajib Diisi</p>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                
+                                                                                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                                                                                <button type="submit" class="btn btn-primary">Save Change</button>
+                                                                            </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!--END MODAL ADD Tindakan-->
+                                                                    <?php
                                                                 }
-                                                            ?>
-                                                        </div>
-                                                    </div>
-                                                    <input type="hidden" name="id_pinjaman" value="<?php echo $peminjam['ID'];?>" required>
-                                                    <p style="color: red;" align="center">* Wajib Diisi</p>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    
-                                                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-primary">Save Change</button>
-                                                </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--END MODAL ADD Tindakan-->
+                                                                else{
+                                                                    echo 'Sudah Ditindaklanjuti';
+                                                                }
+                                                                ?>
+                                                            </td>
+
                                                         </tr>
                                                         <?php
                                                         $iterator++;

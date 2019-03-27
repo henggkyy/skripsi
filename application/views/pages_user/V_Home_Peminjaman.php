@@ -77,6 +77,12 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Acara/Keperluan <span style="color: red">*</span> :</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" required name="keperluan">
+                        </div>
+                    </div>
                     <div class="form-group row" id="data_1">
                         <label class="col-sm-4 col-form-label">Tanggal Pinjam <span style="color: red">*</span> :</label>
                         <div class="col-sm-6">

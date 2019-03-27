@@ -39,12 +39,38 @@ class C_Peminjaman extends CI_Controller{
 				$tindakan = $this->input->post('tindakan');
 				$keterangan = $this->input->post('keterangan');
 				$this->load->model('Peminjaman_lab');
+				$id_tindakan = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, "TINDAKAN");
+				if($id_tindakan != 0){
+					$this->session->set_flashdata('error', 'Permintaan tersebut telah ditindaklanjuti!');
+					redirect('/peminjaman_lab');
+				}
 				$id_alat = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, "ID_ALAT");
 				$res = $this->Peminjaman_lab->tindaklanjutiPermintaanLab($id_pinjaman, $tindakan, $keterangan);
 				if($res){
 					if($id_alat == NULL){
-						$this->session->set_flashdata('success', 'Berhasil menindaklanjuti permintaan peminjaman ruangan laboratorium');
-						redirect("/peminjaman_lab");
+						if($tindakan == 1){
+							$this->load->model('Jadwal_lab');
+							$event = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, 'KEPERLUAN');
+							$tanggal = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, 'TANGGAL_PINJAM');
+							$jam_mulai = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, 'JAM_MULAI');
+							$jam_selesai = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, 'JAM_SELESAI');
+							$id_lab = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, 'LAB');
+							$start = $tanggal. " ".$jam_mulai;
+							$end = $tanggal. " ".$jam_selesai;
+							$res_insert_jadwal = $this->Jadwal_lab->insertJadwalPemakaian($event, $id_lab, $start, $end);
+							if($res_insert_jadwal){
+								$this->session->set_flashdata('success', 'Berhasil menindaklanjuti permintaan peminjaman ruangan laboratorium');
+								redirect("/peminjaman_lab");
+							}
+							else{
+								$this->session->set_flashdata('error', 'Gagal memasukkan data peminjaman ke dalam database jadwal laboratorium');
+								redirect("/peminjaman_lab");
+							}
+						}
+						else{
+							$this->session->set_flashdata('success', 'Berhasil menindaklanjuti permintaan peminjaman ruangan laboratorium');
+							redirect("/peminjaman_lab");
+						}
 					}
 					else{
 						$this->session->set_flashdata('success', 'Berhasil menindaklanjuti permintaan peminjaman alat');
@@ -53,11 +79,11 @@ class C_Peminjaman extends CI_Controller{
 				}
 				else{
 					if($id_alat == NULL){
-						$this->session->set_flashdata('success', 'Gagal menindaklanjuti permintaan peminjaman ruangan laboratorium');
+						$this->session->set_flashdata('error', 'Gagal menindaklanjuti permintaan peminjaman ruangan laboratorium');
 						redirect("/peminjaman_lab");
 					}
 					else{
-						$this->session->set_flashdata('success', 'Gagal menindaklanjuti permintaan peminjaman alat');
+						$this->session->set_flashdata('error', 'Gagal menindaklanjuti permintaan peminjaman alat');
 						redirect("/peminjaman_alat");
 					}
 				}
@@ -74,6 +100,7 @@ class C_Peminjaman extends CI_Controller{
 		$this->form_validation->set_rules('jam_mulai', 'Jam Mulai', 'required');
 		$this->form_validation->set_rules('jam_selesai', 'Jam Selesai', 'required');
 		$this->form_validation->set_rules('keterangan', 'Keterangan', 'required');
+		$this->form_validation->set_rules('keperluan', 'Keperluan', 'required');
 		$this->form_validation->set_rules('choice', 'Mode', 'required');
 		$mode = $this->input->post('choice');
 		if($mode == 'lab'){
@@ -95,9 +122,9 @@ class C_Peminjaman extends CI_Controller{
 			$jam_mulai = $this->input->post('jam_mulai');
 			$jam_selesai = $this->input->post('jam_selesai');
 			$keterangan = $this->input->post('keterangan');
-
+			$keperluan = $this->input->post('keperluan');
 			$this->load->model('Peminjaman_lab');
-			$res = $this->Peminjaman_lab->addPeminjaman($user_peminjam, $tipe_lab, $alat, $tgl_pinjam, $jam_mulai, $jam_selesai, $keterangan);
+			$res = $this->Peminjaman_lab->addPeminjaman($user_peminjam, $tipe_lab, $alat, $tgl_pinjam, $jam_mulai, $jam_selesai, $keterangan, $keperluan);
 			if($res){
 				$this->session->set_flashdata('success', 'Berhasil melakukan permintaan peminjaman alat/ruangan laboratorium. Silahkan tunggu notifikasi selanjutnya pada Email UNPAR Anda');
 				redirect("/peminjaman");

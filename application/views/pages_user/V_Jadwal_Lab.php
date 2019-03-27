@@ -31,6 +31,23 @@
                                    <div id="calendar"></div>
                                 </div>
                             </div>
+                            <div class="modal inmodal" id="modal_event" tabindex="-1" role="dialog"  aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content animated fadeIn"> 
+                                        <div class="modal-body">
+                                            <h2 id="judul_event" align="center"></h2>
+                                            <hr>
+                                            <h3>Nama Event : <span style="font-weight: normal;" id="event"></span></h3>
+                                            <h3>Waktu Mulai : <span style="font-weight: normal;" id="start"></span></h3>
+                                            <h3>Waktu Selesai : <span style="font-weight: normal;" id="end"></span></h3>
+                                            <h3>Lokasi : <span style="font-weight: normal;" id="lokasi_event"></span></h3>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>            
                     </div>
                 </div>

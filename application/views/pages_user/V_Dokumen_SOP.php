@@ -83,7 +83,7 @@
                                                     <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
                                                         <label class="col-sm-4 col-form-label">Dokumen SOP (.pdf maks. 4MB) <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
-                                                            <input type="file" required name="dokumen" class="form-control">
+                                                            <input class="input_pdf" type="file" required name="dokumen" class="form-control">
                                                             <?php
                                                                 if(isset($error_form) && $error_form){
                                                                         ?>

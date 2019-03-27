@@ -34,48 +34,52 @@
 				responsive: true
 
 			});
-			
-			/* initialize the calendar
-	         -----------------------------------------------------------------*/
-	        var date = new Date();
-	        var d = date.getDate();
-	        var m = date.getMonth();
-	        var y = date.getFullYear();
+			<?php if(isset($jadwal) && $jadwal){
+				?>
+				$('#calendar').fullCalendar({
+		            header: {
+		                left: 'prev,next today',
+		                center: 'title',
+		                right: 'month,agendaWeek,agendaDay'
+		            },
+		            events: <?php echo $jadwal;?>,
+		            eventClick: function(event, jsEvent, view) {
 
-	        $('#calendar').fullCalendar({
-	            header: {
-	                left: 'prev,next today',
-	                center: 'title',
-	                right: 'month,agendaWeek,agendaDay'
-	            },
-	            events: <?php echo $jadwal;?>,
-	            eventClick: function(event, jsEvent, view) {
-
-				    $('#modal_event').modal('show');
-				    $('#judul_event').text(event.title);
-				    $('#lokasi_event').text(event.nama_lab);
-				  }
-	        });
+					    $('#modal_event').modal('show');
+					    $('#judul_event').text(event.title);
+					    $('#event').text(event.title);
+					    $('#start').text(event.start);
+					    $('#end').text(event.end);
+					    $('#lokasi_event').text(event.nama_lab);
+					  }
+		        });
+				<?php
+			}
+			?>
+	        
 
 		});
-
+		$(".input_pdf").change(function(e){
+			var file = e.target.files[0]
+			var filesize = e.target.files[0].size;
+			var name = e.target.files[0].name;
+			var extension = name.substr( (name.lastIndexOf('.') +1) );
+			switch(extension) {
+				case 'pdf':
+				break;
+				default:
+				$( this ).val('');
+				   	alert('Ektensi file tidak sesuai! Ekstensi harus .pdf');
+				    return false;
+				}
+				if (filesize > 4142880) {
+				    $( this ).val('');
+					alert('Ukuran File '+ name +' tidak boleh melebihi 5 MB. File ini berukuran ' + filesize/1024/1024+' MB');
+				    return false;
+				}
+		});
 	</script>
-	<div class="modal inmodal" id="modal_event" tabindex="-1" role="dialog"  aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content animated fadeIn">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="judul_event"></h4>
-                </div>
-                <div class="modal-body">
-                    <h4>Lokasi : <span id="lokasi_event"></span></h4>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
-                </div>
-            </div>
-        </div>
-    </div>
+	
 
 	<!-- Flot -->
 	<script src="<?php echo base_url();?>assets/js/plugins/flot/jquery.flot.js"></script>

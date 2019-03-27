@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 27, 2019 at 01:43 PM
--- Server version: 10.1.37-MariaDB
--- PHP Version: 5.6.39
+-- Generation Time: Mar 27, 2019 at 04:36 PM
+-- Server version: 10.1.36-MariaDB
+-- PHP Version: 5.6.38
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -50,16 +50,17 @@ CREATE TABLE `daftar_lab` (
   `ID` int(11) NOT NULL,
   `NAMA_LAB` varchar(128) NOT NULL,
   `LOKASI` varchar(128) NOT NULL,
-  `KAPASITAS` int(11) NOT NULL
+  `KAPASITAS` int(11) NOT NULL,
+  `BG_COLOR` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `daftar_lab`
 --
 
-INSERT INTO `daftar_lab` (`ID`, `NAMA_LAB`, `LOKASI`, `KAPASITAS`) VALUES
-(1, '9017', 'SB Gedung 9', 40),
-(2, '9018', 'SB Gedung 9', 40);
+INSERT INTO `daftar_lab` (`ID`, `NAMA_LAB`, `LOKASI`, `KAPASITAS`, `BG_COLOR`) VALUES
+(1, '9017', 'SB Gedung 9', 40, 'green'),
+(2, '9018', 'SB Gedung 9', 40, 'red');
 
 -- --------------------------------------------------------
 
@@ -127,17 +128,17 @@ CREATE TABLE `jadwal_lab` (
   `ID_LAB` int(11) NOT NULL,
   `TITLE` varchar(128) NOT NULL,
   `START_EVENT` varchar(64) NOT NULL,
-  `END_EVENT` varchar(64) NOT NULL,
-  `BG_COLOR` varchar(128) NOT NULL
+  `END_EVENT` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `jadwal_lab`
 --
 
-INSERT INTO `jadwal_lab` (`ID`, `ID_LAB`, `TITLE`, `START_EVENT`, `END_EVENT`, `BG_COLOR`) VALUES
-(1, 1, 'Perkuliahan ASD', '2019-03-28 11:00:00', '2019-03-28 13:00:00', 'green'),
-(2, 2, 'Perkuliahan DAA', '2019-03-28 11:00:00', '2019-03-28 14:00:00', 'red');
+INSERT INTO `jadwal_lab` (`ID`, `ID_LAB`, `TITLE`, `START_EVENT`, `END_EVENT`) VALUES
+(1, 1, 'Perkuliahan ASD', '2019-03-28 11:00:00', '2019-03-28 13:00:00'),
+(2, 2, 'Perkuliahan DAA', '2019-03-28 11:00:00', '2019-03-28 14:00:00'),
+(3, 1, 'Acara Index[1]', '2019-03-22 09:30', '2019-03-22 09:40');
 
 -- --------------------------------------------------------
 
@@ -215,6 +216,7 @@ CREATE TABLE `peminjaman_lab` (
   `ID` int(11) NOT NULL,
   `DATE_SUBMITTED` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `USER_PEMINJAM` varchar(256) DEFAULT NULL,
+  `KEPERLUAN` varchar(256) NOT NULL,
   `LAB` int(11) DEFAULT NULL,
   `ID_ALAT` int(11) DEFAULT NULL,
   `TANGGAL_PINJAM` varchar(128) NOT NULL,
@@ -229,10 +231,10 @@ CREATE TABLE `peminjaman_lab` (
 -- Dumping data for table `peminjaman_lab`
 --
 
-INSERT INTO `peminjaman_lab` (`ID`, `DATE_SUBMITTED`, `USER_PEMINJAM`, `LAB`, `ID_ALAT`, `TANGGAL_PINJAM`, `JAM_MULAI`, `JAM_SELESAI`, `KETERANGAN_PEMINJAM`, `DISETUJUI`, `KETERANGAN_KALAB`) VALUES
-(1, '2019-03-24 11:03:19', NULL, 1, NULL, '2019-03-24', '09:30', '11:30', 'Untuk les', 2, 'Tidak dapat disetujui karena dipakai kelas.'),
-(2, '2019-03-24 14:38:01', '7315051@student.unpar.ac.id', 1, NULL, '2019-03-22', '09:30', '09:40', '00', 0, ''),
-(3, '2019-03-24 14:47:27', '7315051@student.unpar.ac.id', NULL, 1, '2019-03-20', '09:30', '09:30', 'pinjem aja iseng', 1, 'ff');
+INSERT INTO `peminjaman_lab` (`ID`, `DATE_SUBMITTED`, `USER_PEMINJAM`, `KEPERLUAN`, `LAB`, `ID_ALAT`, `TANGGAL_PINJAM`, `JAM_MULAI`, `JAM_SELESAI`, `KETERANGAN_PEMINJAM`, `DISETUJUI`, `KETERANGAN_KALAB`) VALUES
+(1, '2019-03-24 11:03:19', NULL, '', 1, NULL, '2019-03-24', '09:30', '11:30', 'Untuk les', 2, 'Tidak dapat disetujui karena dipakai kelas.'),
+(2, '2019-03-24 14:38:01', '7315051@student.unpar.ac.id', 'Acara Index[1]', 1, NULL, '2019-03-22', '09:30', '09:40', '00', 1, 'Mantap'),
+(3, '2019-03-24 14:47:27', '7315051@student.unpar.ac.id', '', NULL, 1, '2019-03-20', '09:30', '09:30', 'pinjem aja iseng', 1, 'ff');
 
 -- --------------------------------------------------------
 
@@ -453,7 +455,7 @@ ALTER TABLE `detail_user`
 -- AUTO_INCREMENT for table `jadwal_lab`
 --
 ALTER TABLE `jadwal_lab`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `kategori_sop`
