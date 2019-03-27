@@ -70,5 +70,8 @@
                             </li>
                         </ul>
                 </li>
+                <li <?php if(isset($jadwal_lab)){ echo 'class='. '"active"';}?>>
+                    <a href="<?php echo base_url();?>jadwal_lab"><i class="fas fa-clock"></i> <span class="nav-label">Jadwal Laboratorium </span></a>
+                </li>
         </div>
     </nav>

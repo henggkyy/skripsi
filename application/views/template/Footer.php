@@ -15,6 +15,8 @@
 	<script src="<?php echo base_url();?>assets/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+	<script src="<?php echo base_url();?>assets/js/plugins/fullcalendar/moment.min.js"></script>
+	<script src="<?php echo base_url();?>assets/js/plugins/fullcalendar/fullcalendar.min.js"></script>
 	<script type="text/javascript">
 		var mem = $('#data_1 .input-group.date').datepicker({
 			todayBtn: "linked",
@@ -33,10 +35,48 @@
 
 			});
 			
-	
+			/* initialize the calendar
+	         -----------------------------------------------------------------*/
+	        var date = new Date();
+	        var d = date.getDate();
+	        var m = date.getMonth();
+	        var y = date.getFullYear();
+
+	        $('#calendar').fullCalendar({
+	            header: {
+	                left: 'prev,next today',
+	                center: 'title',
+	                right: 'month,agendaWeek,agendaDay'
+	            },
+	            events: <?php echo $jadwal;?>,
+	            eventClick: function(event, jsEvent, view) {
+
+				    $('#modal_event').modal('show');
+				    $('#judul_event').text(event.title);
+				    $('#lokasi_event').text(event.nama_lab);
+				  }
+	        });
+
 		});
 
 	</script>
+	<div class="modal inmodal" id="modal_event" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated fadeIn">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="judul_event"></h4>
+                </div>
+                <div class="modal-body">
+                    <h4>Lokasi : <span id="lokasi_event"></span></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 	<!-- Flot -->
 	<script src="<?php echo base_url();?>assets/js/plugins/flot/jquery.flot.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/flot/jquery.flot.tooltip.min.js"></script>

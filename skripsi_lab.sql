@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 26, 2019 at 03:15 AM
--- Server version: 10.1.36-MariaDB
--- PHP Version: 5.6.38
+-- Generation Time: Mar 27, 2019 at 01:43 PM
+-- Server version: 10.1.37-MariaDB
+-- PHP Version: 5.6.39
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -115,6 +115,29 @@ CREATE TABLE `detail_user` (
 
 INSERT INTO `detail_user` (`ID`, `ID_USER`, `ANGKATAN`, `AWAL_KONTRAK`, `AKHIR_KONTRAK`) VALUES
 (1, 3, 2015, '02/28/2019', '04/16/2019');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `jadwal_lab`
+--
+
+CREATE TABLE `jadwal_lab` (
+  `ID` int(11) NOT NULL,
+  `ID_LAB` int(11) NOT NULL,
+  `TITLE` varchar(128) NOT NULL,
+  `START_EVENT` varchar(64) NOT NULL,
+  `END_EVENT` varchar(64) NOT NULL,
+  `BG_COLOR` varchar(128) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `jadwal_lab`
+--
+
+INSERT INTO `jadwal_lab` (`ID`, `ID_LAB`, `TITLE`, `START_EVENT`, `END_EVENT`, `BG_COLOR`) VALUES
+(1, 1, 'Perkuliahan ASD', '2019-03-28 11:00:00', '2019-03-28 13:00:00', 'green'),
+(2, 2, 'Perkuliahan DAA', '2019-03-28 11:00:00', '2019-03-28 14:00:00', 'red');
 
 -- --------------------------------------------------------
 
@@ -330,6 +353,13 @@ ALTER TABLE `detail_user`
   ADD KEY `ID_USER` (`ID_USER`);
 
 --
+-- Indexes for table `jadwal_lab`
+--
+ALTER TABLE `jadwal_lab`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `ID_LAB` (`ID_LAB`);
+
+--
 -- Indexes for table `kategori_sop`
 --
 ALTER TABLE `kategori_sop`
@@ -420,6 +450,12 @@ ALTER TABLE `detail_user`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `jadwal_lab`
+--
+ALTER TABLE `jadwal_lab`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `kategori_sop`
 --
 ALTER TABLE `kategori_sop`
@@ -482,6 +518,12 @@ ALTER TABLE `data_file_sop`
 --
 ALTER TABLE `detail_user`
   ADD CONSTRAINT `detail_user_ibfk_1` FOREIGN KEY (`ID_USER`) REFERENCES `users` (`ID`);
+
+--
+-- Constraints for table `jadwal_lab`
+--
+ALTER TABLE `jadwal_lab`
+  ADD CONSTRAINT `jadwal_lab_ibfk_1` FOREIGN KEY (`ID_LAB`) REFERENCES `daftar_lab` (`ID`);
 
 --
 -- Constraints for table `mata_kuliah`

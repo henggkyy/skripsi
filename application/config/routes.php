@@ -108,4 +108,6 @@ $route['peminjaman_lab'] = 'C_Main/loadDaftarPeminjamanLaboratorium';
 
 $route['peminjaman_alat'] = 'C_Main/loadDaftarPeminjamanAlat';
 
+$route['jadwal_lab'] = 'C_Main/loadJadwalPemakaianLaboratorium';
+
 $route['download/template_insertMhs'] = 'C_Download/downloadTemplateInsertMhs';

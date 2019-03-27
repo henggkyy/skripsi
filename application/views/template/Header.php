@@ -14,4 +14,7 @@
     <link href="<?php echo base_url();?>assets/css/animate.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/css/style.css" rel="stylesheet">
     <script src="<?php echo base_url();?>assets/js/jquery-3.1.1.min.js"></script>
+    <link href="<?php echo base_url();?>assets/css/plugins/fullcalendar/fullcalendar.css" rel="stylesheet">
+    <link href="<?php echo base_url();?>assets/css/plugins/fullcalendar/fullcalendar.print.css" rel='stylesheet' media='print'>
+
 </head>
