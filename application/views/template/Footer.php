@@ -14,6 +14,7 @@
 	<script src="<?php echo base_url();?>assets/js/bootstrap.min.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="<?php echo base_url();?>assets/js/plugins/clockpicker/clockpicker.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/datapicker/bootstrap-datepicker.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/fullcalendar/moment.min.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/fullcalendar/fullcalendar.min.js"></script>
@@ -27,40 +28,37 @@
 			autoclose: true
 		});
 		function addFields(){
-		    // Number of inputs to create
-		    var number = document.getElementById("jml_pertemuan").value;
-		    // Container <div> where dynamic content will be placed
+		    var number = $("#jml_pertemuan").val();
+		    
+		    var field_select = '<select name="hari[]" class="form-control col-md-8" required><option value="" selected disabled>-- Please Select One --</option><option value="0">Senin</option><option value="1" >Selasa</option><option value="2" >Rabu</option><option value="3" >Kamis</option><option value="4" >Jumat</option><option value="5" >Sabtu</option></select>';
+		    var jam_mulai_html = '<div class="col-sm-8 input-group clockpicker" data-autoclose="true"><label>Jam Mulai :</label> <input type="text" name="jam_mulai[]" class="form-control" value="09:30" required></div>';
+		    var jam_selesai_html = '<div class="col-sm-8 input-group clockpicker" data-autoclose="true"><label>Jam Selesai :</label> <input type="text" name="jam_selesai[]" class="form-control" value="09:30" required></div>';
+		    
 		    var container = document.getElementById("container");
-		    // Clear previous contents of the container
 		    while (container.hasChildNodes()) {
 		        container.removeChild(container.lastChild);
 		    }
+
+		    var container = $("#container");
 		    for (i=0;i<number;i++){
-		        // Append a node with a random text
-		        container.appendChild(document.createTextNode("Pertemuan ke- " + (i+1)));
-		        // Create an <input> element, set its type and name attributes
-		        var input = document.createElement("input");
-		        input.type = "text";
-		        input.name = "hari[]";
-		        input.placeholder = "Hari";
-		        input.id = 'hari'+i;
-		        input.className = "form-control col-md-8 npm";
-		        input.setAttribute('required', 'true');
-		        var input2 = document.createElement("input");
-		        input2.type = "text";
-		        input2.id = "jam_mulai"+i;
-		        input2.name = "jam_mulai[]";
-		        input2.placeholder = "Jam Mulai";
-		        input2.className = "form-control col-md-3";
-		        input2.setAttribute('required', 'true');
-		        input.setAttribute("target", input2.id);
-		        // input.onchange = function(){getData(input.value,input2.id);};
-		        container.appendChild(input);
-		        container.appendChild(input2);
-		        // Append a line break 
-		        container.appendChild(document.createElement("br"));
+		        container.append(document.createTextNode("Pertemuan ke- " + (i+1)));
+
+		        container.append(field_select);
+		        container.append(jam_mulai_html);
+		        container.append(jam_selesai_html);
+		        container.append(document.createElement("br"));
+		        $('.clockpicker').clockpicker();
 		    }
 		}
+		$('#btn_insert_jadwal').click(function () {
+			if($('#container_jadwal').css('display') == 'none'){
+				$('#container_jadwal').show(); 
+	        	$('.clockpicker').clockpicker();
+			}
+			else{
+				$('#container_jadwal').hide();
+			}
+	    });
 	</script>
 	<script src="<?php echo base_url();?>assets/js/plugins/dataTables/datatables.min.js"></script>
 	<script type="text/javascript">
@@ -70,6 +68,7 @@
 				responsive: true
 
 			});
+
 			$('#range_periode .input-daterange').datepicker({
                 keyboardNavigation: false,
                 forceParse: false,
@@ -120,6 +119,7 @@
 				    return false;
 				}
 		});
+		
 	</script>
 	
 
