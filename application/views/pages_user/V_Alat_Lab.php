@@ -84,7 +84,8 @@
                                                             </form>
                                                         </td>
                                                     </tr>
-                                                    <?php    
+                                                    <?php  
+                                                    $iterator++;  
                                                     }
                                                 }
                                                 else{

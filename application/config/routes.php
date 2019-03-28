@@ -69,6 +69,7 @@ $route['administrasi_matkul_detail'] = 'C_Matkul/getDetailMataKuliah';
 $route['administrasi_matkul/set_uts'] = 'C_Matkul/insertTanggalUTS';
 $route['administrasi_matkul/set_uas'] = 'C_Matkul/insertTanggalUAS';
 $route['administrasi_matkul/insert_mhs'] = 'C_Matkul/insertMahasiswa';
+$route['administrasi_matkul/insert_jadwal'] = 'C_Matkul/insertJadwalPerkuliahan';
 
 $route['user'] = 'C_Main/loadMenuUser';
 $route['user/tambah_user'] = 'C_User/addUser';
