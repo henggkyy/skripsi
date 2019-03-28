@@ -133,7 +133,7 @@
                                             }
                                         }   
                                         else{
-                                            echo "<tr><td colspan='5'>Belum ada mata kuliah</td></tr>";
+                                            echo "<tr><td colspan='6'>Belum ada mata kuliah</td></tr>";
                                         }
                                         ?>
                                         </tbody>

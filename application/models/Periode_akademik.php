@@ -17,9 +17,15 @@ class Periode_akademik extends CI_Model{
 		}
 	}
 	//Method untuk menambahkan periode akademik baru ke dalam database
-	function insertPeriode($nama){
+	function insertPeriode($nama, $start_periode, $end_periode, $start_uts, $end_uts, $start_uas, $end_uas){
 		$data = array(
 		    'NAMA' => $nama,
+		    'START_PERIODE' => $start_periode,
+		    'END_PERIODE' => $end_periode,
+		    'START_UTS' => $start_uts,
+		    'END_UTS' => $end_uts,
+		    'START_UAS' => $start_uas,
+		    'END_UAS' => $end_uas,
 		    'STATUS' => 1,
 		    'CREATED_BY' => $this->session->userdata('id')
 		);
@@ -82,7 +88,7 @@ class Periode_akademik extends CI_Model{
 
 	//Method untuk mendapatkan seluruh periode akademik
 	function getAllPeriode(){
-		$this->db->select('NAMA, ID, STATUS');
+		$this->db->select('NAMA, ID, START_PERIODE, END_PERIODE, START_UTS, END_UTS, START_UAS, END_UAS, STATUS');
 		$this->db->from('periode_akademik');
 		$result = $this->db->get();
 		if($result->num_rows() > 0){
@@ -95,7 +101,7 @@ class Periode_akademik extends CI_Model{
 	//Method untuk mendapatkan item periode aktif.
 	//Apabila terdapat periode aktif, maka akan kembalikan nama periode dan ID yang sedang aktif.
 	function getPeriodeAktif(){
-		$this->db->select('NAMA, ID');
+		$this->db->select('NAMA, ID, START_PERIODE, END_PERIODE, START_UTS, END_UTS, START_UAS, END_UAS');
 		$this->db->where('STATUS', 1);
 		$this->db->from('periode_akademik');
 		$result = $this->db->get();

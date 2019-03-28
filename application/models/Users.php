@@ -20,6 +20,7 @@ class Users extends CI_Model{
 	function getDosenAktif(){
 		$this->db->select('users.ID as ID, NAMA, NIK');
 		$this->db->from('users');
+		$this->db->where('IS_DOSEN', 1);
 		$this->db->where('STATUS', 1);
 		$result = $this->db->get();
 		if($result->num_rows() > 0){

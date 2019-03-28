@@ -17,6 +17,7 @@
 	<script src="<?php echo base_url();?>assets/js/plugins/datapicker/bootstrap-datepicker.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/fullcalendar/moment.min.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/fullcalendar/fullcalendar.min.js"></script>
+	<script src="<?php echo base_url();?>assets/js/plugins/jasny/jasny-bootstrap.min.js"></script>
 	<script type="text/javascript">
 		var mem = $('#data_1 .input-group.date').datepicker({
 			todayBtn: "linked",
@@ -25,6 +26,41 @@
 			calendarWeeks: true,
 			autoclose: true
 		});
+		function addFields(){
+		    // Number of inputs to create
+		    var number = document.getElementById("jml_pertemuan").value;
+		    // Container <div> where dynamic content will be placed
+		    var container = document.getElementById("container");
+		    // Clear previous contents of the container
+		    while (container.hasChildNodes()) {
+		        container.removeChild(container.lastChild);
+		    }
+		    for (i=0;i<number;i++){
+		        // Append a node with a random text
+		        container.appendChild(document.createTextNode("Pertemuan ke- " + (i+1)));
+		        // Create an <input> element, set its type and name attributes
+		        var input = document.createElement("input");
+		        input.type = "text";
+		        input.name = "hari[]";
+		        input.placeholder = "Hari";
+		        input.id = 'hari'+i;
+		        input.className = "form-control col-md-8 npm";
+		        input.setAttribute('required', 'true');
+		        var input2 = document.createElement("input");
+		        input2.type = "text";
+		        input2.id = "jam_mulai"+i;
+		        input2.name = "jam_mulai[]";
+		        input2.placeholder = "Jam Mulai";
+		        input2.className = "form-control col-md-3";
+		        input2.setAttribute('required', 'true');
+		        input.setAttribute("target", input2.id);
+		        // input.onchange = function(){getData(input.value,input2.id);};
+		        container.appendChild(input);
+		        container.appendChild(input2);
+		        // Append a line break 
+		        container.appendChild(document.createElement("br"));
+		    }
+		}
 	</script>
 	<script src="<?php echo base_url();?>assets/js/plugins/dataTables/datatables.min.js"></script>
 	<script type="text/javascript">
@@ -34,6 +70,12 @@
 				responsive: true
 
 			});
+			$('#range_periode .input-daterange').datepicker({
+                keyboardNavigation: false,
+                forceParse: false,
+                autoclose: true
+            });
+
 			<?php if(isset($jadwal) && $jadwal){
 				?>
 				$('#calendar').fullCalendar({

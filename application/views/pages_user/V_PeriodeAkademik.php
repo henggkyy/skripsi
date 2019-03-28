@@ -69,6 +69,30 @@
                                                                     ?>
                                                                 </div>
                                                             </div>
+                                                            <div class="form-group row" id="range_periode">
+                                                                <label class="col-sm-2 col-form-label">Tanggal Periode Akademik <span style="color: red">*</span> :</label>
+                                                                <div class="input-daterange input-group col-sm-6" id="datepicker">
+                                                                    <input type="text" class="form-control-sm form-control" name="start_periode" placeholder="mm/dd/yyyy" data-mask="99/99/9999" required/>
+                                                                    <span class="input-group-addon">s/d</span>
+                                                                    <input type="text" class="form-control-sm form-control" name="end_periode" placeholder="mm/dd/yyyy" data-mask="99/99/9999"  required />
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row" id="range_periode">
+                                                                <label class="col-sm-2 col-form-label">Periode UTS <span style="color: red">*</span> :</label>
+                                                                <div class="input-daterange input-group col-sm-6" id="datepicker">
+                                                                    <input type="text" class="form-control-sm form-control" name="start_uts" placeholder="mm/dd/yyyy" data-mask="99/99/9999" required/>
+                                                                    <span class="input-group-addon">s/d</span>
+                                                                    <input type="text" class="form-control-sm form-control" name="end_uts" placeholder="mm/dd/yyyy" data-mask="99/99/9999" required />
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row" id="range_periode">
+                                                                <label class="col-sm-2 col-form-label">Periode UAS <span style="color: red">*</span> :</label>
+                                                                <div class="input-daterange input-group col-sm-6" id="datepicker">
+                                                                    <input type="text" class="form-control-sm form-control" name="start_uas" placeholder="mm/dd/yyyy" data-mask="99/99/9999" required/>
+                                                                    <span class="input-group-addon">s/d</span>
+                                                                    <input type="text" class="form-control-sm form-control" name="end_uas" placeholder="mm/dd/yyyy" data-mask="99/99/9999" required />
+                                                                </div>
+                                                            </div>
                                                     </div>
                                                     <div class="panel-footer">
                                                         <p style="color: red;">* Required Field</p>
@@ -91,6 +115,9 @@
                                                         <tr>
                                                             <th>#</th>
                                                             <th>Nama Periode</th>
+                                                            <th>Periode Akademik</th>
+                                                            <th>Periode UTS</th>
+                                                            <th>Periode UAS</th>
                                                             <th>Status</th>
                                                         </tr>
                                                         </thead>
@@ -103,6 +130,9 @@
                                                                     <tr>
                                                                         <td><?php echo $iterator;?></td>
                                                                         <td><?php echo $per['NAMA'];?></td>
+                                                                        <td><?php echo $per['START_PERIODE'].' s/d '.$per['END_PERIODE'];?></td>
+                                                                        <td><?php echo $per['START_UTS'].' s/d '.$per['END_UTS'];?></td>
+                                                                        <td><?php echo $per['START_UAS'].' s/d '.$per['END_UAS'];?></td>
                                                                         <td><?php if($per['STATUS'] == 1) {
                                                                                 echo "Sedang Berlangsung";
                                                                             }

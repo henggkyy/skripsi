@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 27, 2019 at 04:36 PM
--- Server version: 10.1.36-MariaDB
--- PHP Version: 5.6.38
+-- Generation Time: Mar 28, 2019 at 11:19 AM
+-- Server version: 10.1.37-MariaDB
+-- PHP Version: 5.6.39
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -143,6 +143,21 @@ INSERT INTO `jadwal_lab` (`ID`, `ID_LAB`, `TITLE`, `START_EVENT`, `END_EVENT`) V
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `jadwal_matkul`
+--
+
+CREATE TABLE `jadwal_matkul` (
+  `ID` int(11) NOT NULL,
+  `ID_MATKUL` int(11) NOT NULL,
+  `HARI` varchar(64) NOT NULL,
+  `JAM_MULAI` varchar(64) NOT NULL,
+  `JAM_SELESAI` varchar(64) NOT NULL,
+  `KODE_KELAS` varchar(64) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `kategori_sop`
 --
 
@@ -181,7 +196,8 @@ CREATE TABLE `mata_kuliah` (
 
 INSERT INTO `mata_kuliah` (`ID`, `ID_PERIODE`, `KD_MATKUL`, `NAMA_MATKUL`, `TANGGAL_UTS`, `TANGGAL_UAS`, `ID_DOSEN`) VALUES
 (2, 2, 'AIF183346', 'Topik Khusus Sistem Informasi 2', '03/05/2019', '03/27/2019', 1),
-(3, 2, 'AIF - 111', 'Tester', '03/06/2019', NULL, 2);
+(3, 2, 'AIF - 111', 'Tester', '03/06/2019', '2019-04-25', 2),
+(4, 4, 'AIF183346', 'Algoritma Data', NULL, NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -245,6 +261,12 @@ INSERT INTO `peminjaman_lab` (`ID`, `DATE_SUBMITTED`, `USER_PEMINJAM`, `KEPERLUA
 CREATE TABLE `periode_akademik` (
   `ID` int(11) NOT NULL,
   `NAMA` varchar(128) NOT NULL COMMENT 'Cth : Genap 2018/2019',
+  `START_PERIODE` varchar(64) NOT NULL,
+  `END_PERIODE` varchar(64) NOT NULL,
+  `START_UTS` varchar(64) NOT NULL,
+  `END_UTS` varchar(64) NOT NULL,
+  `START_UAS` varchar(64) NOT NULL,
+  `END_UAS` varchar(64) NOT NULL,
   `STATUS` int(11) NOT NULL COMMENT '1: Aktif. 0 : Nonaktif',
   `CREATED_ON` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `CREATED_BY` int(11) NOT NULL
@@ -254,9 +276,10 @@ CREATE TABLE `periode_akademik` (
 -- Dumping data for table `periode_akademik`
 --
 
-INSERT INTO `periode_akademik` (`ID`, `NAMA`, `STATUS`, `CREATED_ON`, `CREATED_BY`) VALUES
-(1, 'Semester Genap 2018/2019', 0, '2019-02-05 15:25:53', 1),
-(2, 'Semester Genap 2018/2019', 1, '2019-02-06 07:00:20', 1);
+INSERT INTO `periode_akademik` (`ID`, `NAMA`, `START_PERIODE`, `END_PERIODE`, `START_UTS`, `END_UTS`, `START_UAS`, `END_UAS`, `STATUS`, `CREATED_ON`, `CREATED_BY`) VALUES
+(1, 'Semester Genap 2018/2019', '', '', '', '', '', '', 0, '2019-02-05 15:25:53', 1),
+(2, 'Semester Genap 2018/2019', '', '', '', '', '', '', 0, '2019-02-06 07:00:20', 1),
+(4, 'Semester Ganjil 2019/2020', '2019-08-12', '2019-12-23', '2019-10-14', '2019-10-28', '2019-12-02', '2019-12-16', 1, '2019-03-28 07:20:27', 1);
 
 -- --------------------------------------------------------
 
@@ -362,6 +385,12 @@ ALTER TABLE `jadwal_lab`
   ADD KEY `ID_LAB` (`ID_LAB`);
 
 --
+-- Indexes for table `jadwal_matkul`
+--
+ALTER TABLE `jadwal_matkul`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Indexes for table `kategori_sop`
 --
 ALTER TABLE `kategori_sop`
@@ -458,6 +487,12 @@ ALTER TABLE `jadwal_lab`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `jadwal_matkul`
+--
+ALTER TABLE `jadwal_matkul`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `kategori_sop`
 --
 ALTER TABLE `kategori_sop`
@@ -467,7 +502,7 @@ ALTER TABLE `kategori_sop`
 -- AUTO_INCREMENT for table `mata_kuliah`
 --
 ALTER TABLE `mata_kuliah`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `mhs_peserta`
@@ -485,7 +520,7 @@ ALTER TABLE `peminjaman_lab`
 -- AUTO_INCREMENT for table `periode_akademik`
 --
 ALTER TABLE `periode_akademik`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
