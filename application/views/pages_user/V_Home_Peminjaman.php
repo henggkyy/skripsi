@@ -33,6 +33,7 @@
                     <?php $this->load->view('template/Notification');?>
                     <h5>Nama : <?php echo $this->session->userdata('name'); ?></h5>
                     <h5>Email : <?php echo $this->session->userdata('email'); ?>.  <a href="<?php echo base_url()?>logout">Logout</a></h5>
+                    <hr>
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label">Pilih Tipe Peminjaman <span style="color: red">*</span> :</label>
                         <div class="col-sm-6">
@@ -43,22 +44,45 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Acara/Keperluan <span style="color: red">*</span> :</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" required name="keperluan">
+                        </div>
+                    </div>
+                    <div class="form-group row " id="data_1">
+                        <label class="col-sm-4 col-form-label">Tanggal Pinjam <span style="color: red">*</span> :</label>
+                        <div class="col-sm-6 input-group date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" id="tgl_pinjam" name="tgl_pinjam" class="form-control" value="<?php echo set_value('tgl_pinjam'); ?>" placeholder="mm/dd/yyyy" data-mask="99/99/9999" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label id="label_jam_mulai" class="col-sm-4 col-form-label">Jam Mulai <span style="color: red">*</span> :</label>
+                        <div class="col-sm-6 input-group clockpicker" data-autoclose="true">
+                            <input type="text" id="jam_mulai" name="jam_mulai" class="form-control" placeholder="09:30" data-mask="99:99">
+                            <span class="input-group-addon">
+                                <span class="fa fa-clock-o"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label id="label_jam_selesai" class="col-sm-4 col-form-label">Jam Selesai <span style="color: red">*</span> :</label>
+                        <div class="col-sm-6 input-group clockpicker" data-autoclose="true">
+                            <input type="text" id="jam_selesai" name="jam_selesai" class="form-control" placeholder="09:30" data-mask="99:99">
+                            <span class="input-group-addon">
+                                <span class="fa fa-clock-o"></span>
+                            </span>
+                        </div>
+                    </div>
                     <div class="form-group row" style="display: none;" id="div_lab">
                         <label class="col-sm-4 col-form-label">Pilih Ruangan Laboratorium <span style="color: red">*</span> :</label>
-                        <div class="col-sm-6">
-                            <select id="choice_lab" name="lab" required class="form-control"> 
-                                <option selected disabled value="">-- Please Select One --</option>
-                                <?php
-                                if(isset($daftar_lab) && $daftar_lab){
-                                    foreach ($daftar_lab as $lab) {
-                                        ?>
-                                        <option value="<?php echo $lab['ID'];?>"><?php echo $lab['NAMA_LAB'];?> (<?php echo $lab['LOKASI'];?>)</option>
-                                        <?php
-                                    }
-                                }
-                                ?>
-                            </select>
+                        <div class="col-sm-6" >
+                            <div id="select_lab">
+                                
+                            </div>
+                            <button id="btn_cek_ruangan" class="btn btn-sm btn-primary">Cek Ketersediaan Ruangan</button>
                         </div>
+
                     </div>
                     <div class="form-group row" style="display: none;" id="div_alat">
                         <label class="col-sm-4 col-form-label">Pilih Alat <span style="color: red">*</span> :</label>
@@ -75,36 +99,6 @@
                                 }
                                 ?>
                             </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-4 col-form-label">Acara/Keperluan <span style="color: red">*</span> :</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" required name="keperluan">
-                        </div>
-                    </div>
-                    <div class="form-group row" id="data_1">
-                        <label class="col-sm-4 col-form-label">Tanggal Pinjam <span style="color: red">*</span> :</label>
-                        <div class="col-sm-6">
-                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="date" name="tgl_pinjam" class="form-control" value="<?php echo set_value('tgl_pinjam'); ?>" required>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label id="label_jam_mulai" class="col-sm-4 col-form-label">Jam Mulai <span style="color: red">*</span> :</label>
-                        <div class="col-sm-6 input-group clockpicker" data-autoclose="true">
-                            <input type="text" name="jam_mulai" class="form-control" value="09:30" >
-                            <span class="input-group-addon">
-                                <span class="fa fa-clock-o"></span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label id="label_jam_selesai" class="col-sm-4 col-form-label">Jam Selesai <span style="color: red">*</span> :</label>
-                        <div class="col-sm-6 input-group clockpicker" data-autoclose="true">
-                            <input type="text" name="jam_selesai" class="form-control" value="09:30" >
-                            <span class="input-group-addon">
-                                <span class="fa fa-clock-o"></span>
-                            </span>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -133,8 +127,29 @@
     </div>
 <script src="<?php echo base_url();?>assets/js/jquery-3.1.1.min.js"></script>
 <script src="<?php echo base_url();?>assets/js/plugins/clockpicker/clockpicker.js"></script>
+<script src="<?php echo base_url();?>assets/js/plugins/jasny/jasny-bootstrap.min.js"></script>
 <script src="<?php echo base_url();?>assets/js/plugins/datapicker/bootstrap-datepicker.js"></script>
 <script type="text/javascript">
+    $( document ).ready(function() {
+        var tanggal_data = $("#tanggal_pinjam").val();
+        var jam_mulai_data = $("#jam_mulai").val();
+        var jam_selesai_data = $("#jam_selesai").val();
+        $("#btn_cek_ruangan").click(function(e){
+            
+
+            e.preventDefault();
+            
+            $.ajax({
+                //Ganti URL nanti kl udah dipindah server
+                url: "<?php echo base_url();?>" + "ketersediaan_lab",
+                method: "POST",
+                data: {tanggal : tanggal_data, jam_mulai : jam_mulai_data, jam_selesai : jam_selesai_data},
+                success: function(data) { 
+                    $("#select_lab").html(data);
+                }
+                });
+            });
+    });
     $("#choice").change(function(e){
         if($("#choice").val() == 'lab'){
             $("#div_alat").hide();

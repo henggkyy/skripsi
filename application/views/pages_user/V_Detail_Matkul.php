@@ -210,6 +210,8 @@
                                                     } ?>
                                                     
                                                 </li>
+
+                                                <!--MENU JADWAL KELAS-->
                                                 <li>
                                                     <span style="font-weight: bold;">Jadwal Kelas : </span>
                                                     <button id="btn_insert_jadwal" class="btn btn-success btn-sm" type="submit"><i class="fas fa-group"></i> Insert Jadwal Kelas</button>
@@ -224,7 +226,7 @@
                                                                 <label class="col-sm-4 col-form-label">Jadwal Kelas <span style="color: red">*</span> :</label>
                                                                 <div class="col-sm-8"> 
                                                                     <h5>Pertemuan Ke - 1</h5>       
-                                                                    <label>Hari :</label><select name="hari[]" class="form-control col-md-4" required><option value="" selected disabled>-- Please Select One --</option><option value="0">Senin</option><option value="1" >Selasa</option><option value="2" >Rabu</option><option value="3" >Kamis</option><option value="4" >Jumat</option><option value="5" >Sabtu</option></select>  
+                                                                    <label>Hari :</label><select name="hari[]" class="form-control col-md-4" required><option value="" selected disabled>-- Please Select One --</option><option value="Monday">Senin</option><option value="Tuesday" >Selasa</option><option value="Wednesday" >Rabu</option><option value="Thursday" >Kamis</option><option value="Friday" >Jumat</option><option value="Saturday" >Sabtu</option></select>  
                                                                     <div class="col-sm-4 input-group clockpicker" data-autoclose="true"><label>Jam Mulai :</label> <input type="text" name="jam_mulai[]" class="form-control" value="" data-mask="99:99" required></div>
                                                                     <div class="col-sm-4 input-group clockpicker" data-autoclose="true"><label>Jam Selesai :</label> <input type="text" name="jam_selesai[]" class="form-control" value="" data-mask="99:99" required></div>
                                                                     <br>    

@@ -2,6 +2,20 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Periode_akademik extends CI_Model{
 
+	//Method untuk mendapatkan individual item dari periode akademik
+	//Method untuk mendapatkan item matakuliah
+	function getIndividualItem($id_periode, $item){
+		$this->db->select($item);
+		$this->db->where('ID', $id_periode);
+		$this->db->from('periode_akademik');
+		$result = $this->db->get();
+		if($result->num_rows() == 1){
+			return $result->row(0)->$item;
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk melakukan pengecekan id periode akademik apakah sedang aktif atau tidak
 	function checkIdAktif($id_periode){
 		$this->db->select('ID');

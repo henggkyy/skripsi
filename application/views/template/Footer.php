@@ -42,7 +42,7 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			var header = '<h5>Pertemuan Ke - </h5>'; 
-			var field_select = '<select name="hari[]" class="form-control col-md-8" required><option value="" selected disabled>-- Please Select One --</option><option value="0">Senin</option><option value="1" >Selasa</option><option value="2" >Rabu</option><option value="3" >Kamis</option><option value="4" >Jumat</option><option value="5" >Sabtu</option></select>';
+			var field_select = '<select name="hari[]" class="form-control col-md-8" required><option value="" selected disabled>-- Please Select One --</option><option value="Monday">Senin</option><option value="Tuesday" >Selasa</option><option value="Wednesday" >Rabu</option><option value="Thursday" >Kamis</option><option value="Friday" >Jumat</option><option value="Saturday" >Sabtu</option></select>';
 		    var jam_mulai_html = '<div class="col-sm-8 input-group clockpicker" data-autoclose="true"><label>Jam Mulai :</label> <input type="text" name="jam_mulai[]" class="form-control" value="" data-mask="99:99" required></div>';
 		    var jam_selesai_html = '<div class="col-sm-8 input-group clockpicker" data-autoclose="true"><label>Jam Selesai :</label> <input type="text" name="jam_selesai[]" class="form-control" value="" data-mask="99:99" required></div><br>';
 		    
@@ -59,7 +59,9 @@
 		            $(wrapper).append(field_select);
 		            $(wrapper).append(jam_mulai_html);
 		            $(wrapper).append(jam_selesai_html); //Add field html
+		            $('.clockpicker').clockpicker();
 		        }
+
 		    });
 		    $(wrapper).on('click', '.remove_button', function(e){
 		        e.preventDefault();
