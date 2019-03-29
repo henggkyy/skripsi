@@ -219,15 +219,20 @@
                                                         </div>
                                                         <div class="panel-body">
                                                             <?php echo form_open_multipart('administrasi_matkul/insert_kelas');?>
-                                                            <div class="form-group  row">
-                                                                <label class="col-sm-4 col-form-label">Jumlah Pertemuan <span style="color: red">*</span> :</label>
-                                                                <div class="col-sm-8">
-                                                                    <input class="form-control" type="number" name="jml_pertemuan" min="0" onchange="addFields()" id="jml_pertemuan">
-                                                                </div>              
-                                                            </div>
+                                                            
                                                             <div class="form-group  row">
                                                                 <label class="col-sm-4 col-form-label">Jadwal Kelas <span style="color: red">*</span> :</label>
-                                                                <div class="col-sm-8" id="container">                
+                                                                <div class="col-sm-8"> 
+                                                                    <h5>Pertemuan Ke - 1</h5>       
+                                                                    <label>Hari :</label><select name="hari[]" class="form-control col-md-4" required><option value="" selected disabled>-- Please Select One --</option><option value="0">Senin</option><option value="1" >Selasa</option><option value="2" >Rabu</option><option value="3" >Kamis</option><option value="4" >Jumat</option><option value="5" >Sabtu</option></select>  
+                                                                    <div class="col-sm-4 input-group clockpicker" data-autoclose="true"><label>Jam Mulai :</label> <input type="text" name="jam_mulai[]" class="form-control" value="" data-mask="99:99" required></div>
+                                                                    <div class="col-sm-4 input-group clockpicker" data-autoclose="true"><label>Jam Selesai :</label> <input type="text" name="jam_selesai[]" class="form-control" value="" data-mask="99:99" required></div>
+                                                                    <br>    
+                                                                    <div id="container">
+                                                                        
+                                                                    </div>
+                                                                    <a href="javascript:void(0)" class="btn btn-sm btn-primary">Cek Ketersediaan Laboratorium</a>
+                                                                    <a href="javascript:void(0)" class="btn btn-sm add_button_pertemuan">Add Pertemuan</a>  
                                                                 </div>
                                                                                 
                                                             </div>

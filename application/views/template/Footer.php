@@ -27,29 +27,7 @@
 			calendarWeeks: true,
 			autoclose: true
 		});
-		function addFields(){
-		    var number = $("#jml_pertemuan").val();
-		    
-		    var field_select = '<select name="hari[]" class="form-control col-md-8" required><option value="" selected disabled>-- Please Select One --</option><option value="0">Senin</option><option value="1" >Selasa</option><option value="2" >Rabu</option><option value="3" >Kamis</option><option value="4" >Jumat</option><option value="5" >Sabtu</option></select>';
-		    var jam_mulai_html = '<div class="col-sm-8 input-group clockpicker" data-autoclose="true"><label>Jam Mulai :</label> <input type="text" name="jam_mulai[]" class="form-control" value="09:30" required></div>';
-		    var jam_selesai_html = '<div class="col-sm-8 input-group clockpicker" data-autoclose="true"><label>Jam Selesai :</label> <input type="text" name="jam_selesai[]" class="form-control" value="09:30" required></div>';
-		    
-		    var container = document.getElementById("container");
-		    while (container.hasChildNodes()) {
-		        container.removeChild(container.lastChild);
-		    }
-
-		    var container = $("#container");
-		    for (i=0;i<number;i++){
-		        container.append(document.createTextNode("Pertemuan ke- " + (i+1)));
-
-		        container.append(field_select);
-		        container.append(jam_mulai_html);
-		        container.append(jam_selesai_html);
-		        container.append(document.createElement("br"));
-		        $('.clockpicker').clockpicker();
-		    }
-		}
+		
 		$('#btn_insert_jadwal').click(function () {
 			if($('#container_jadwal').css('display') == 'none'){
 				$('#container_jadwal').show(); 
@@ -63,6 +41,31 @@
 	<script src="<?php echo base_url();?>assets/js/plugins/dataTables/datatables.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
+			var header = '<h5>Pertemuan Ke - </h5>'; 
+			var field_select = '<select name="hari[]" class="form-control col-md-8" required><option value="" selected disabled>-- Please Select One --</option><option value="0">Senin</option><option value="1" >Selasa</option><option value="2" >Rabu</option><option value="3" >Kamis</option><option value="4" >Jumat</option><option value="5" >Sabtu</option></select>';
+		    var jam_mulai_html = '<div class="col-sm-8 input-group clockpicker" data-autoclose="true"><label>Jam Mulai :</label> <input type="text" name="jam_mulai[]" class="form-control" value="" data-mask="99:99" required></div>';
+		    var jam_selesai_html = '<div class="col-sm-8 input-group clockpicker" data-autoclose="true"><label>Jam Selesai :</label> <input type="text" name="jam_selesai[]" class="form-control" value="" data-mask="99:99" required></div><br>';
+		    
+		    var maxField = 6; //Input fields increment limitation
+		    var addButton = $('.add_button_pertemuan'); //Add button selector
+		    var wrapper = $('#container'); //Input field wrapper
+		    var x = 1; //Initial field counter is 1
+		    $(addButton).click(function(e){
+		    	console.log('asd');
+		        //Check maximum number of input fields
+		        if(x < maxField){ 
+		            x++; //Increment field counter
+		            $(wrapper).append('<h5>Pertemuan Ke - ' + x+'</h5>');
+		            $(wrapper).append(field_select);
+		            $(wrapper).append(jam_mulai_html);
+		            $(wrapper).append(jam_selesai_html); //Add field html
+		        }
+		    });
+		    $(wrapper).on('click', '.remove_button', function(e){
+		        e.preventDefault();
+		        $(this).parent('div').remove(); //Remove field html
+		        x--; //Decrement field counter
+		    });
 			$('.mainDataTable').DataTable({
 				pageLength: 25,
 				responsive: true
