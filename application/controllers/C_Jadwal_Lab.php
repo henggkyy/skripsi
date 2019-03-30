@@ -9,6 +9,19 @@ class C_Jadwal_Lab extends CI_Controller{
 		$jam_mulai = date("H:i:s", strtotime($this->input->post('jam_mulai')));
 		$jam_selesai = date("H:i:s", strtotime($this->input->post('jam_selesai')));
 
+		if(isset($tanggal) && $tanggal == ""){
+			echo '<span style="red">Tanggal peminjaman harus diisi!</span>';
+			return;
+		}
+		if(isset($jam_mulai)  && $jam_mulai == ""){
+			echo '<span style="red">Jam mulai peminjaman harus diisi!</span>';
+			return;
+		}
+		if(isset($jam_selesai)  && $jam_selesai == ""){
+			echo '<span style="red">Jam selesai peminjaman harus diisi!</span>';
+			return;
+		}
+
 		$start_event = $tanggal." ".$jam_mulai;
 		$end_event  = $tanggal. " ".$jam_selesai;
 

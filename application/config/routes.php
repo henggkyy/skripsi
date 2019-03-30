@@ -71,6 +71,7 @@ $route['administrasi_matkul/set_uas'] = 'C_Matkul/insertTanggalUAS';
 $route['administrasi_matkul/insert_mhs'] = 'C_Matkul/insertMahasiswa';
 $route['administrasi_matkul/insert_jadwal'] = 'C_Matkul/insertJadwalPerkuliahan';
 $route['administrasi_matkul/insert_kelas'] = 'C_Jadwal_Lab/checkKetersediaan';
+$route['administrasi_matkul/checker'] = 'C_Matkul/loadPageCekPL';
 
 $route['user'] = 'C_Main/loadMenuUser';
 $route['user/tambah_user'] = 'C_User/addUser';
@@ -113,5 +114,6 @@ $route['peminjaman_alat'] = 'C_Main/loadDaftarPeminjamanAlat';
 $route['jadwal_lab'] = 'C_Main/loadJadwalPemakaianLaboratorium';
 
 $route['download/template_insertMhs'] = 'C_Download/downloadTemplateInsertMhs';
+$route['download/checker'] = 'C_Download/downloadChecker';
 
 $route['ketersediaan_lab'] = 'C_Jadwal_Lab/checkKetersediaanPeminjaman';

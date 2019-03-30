@@ -32,6 +32,7 @@
                                     if($periode_aktif){
                                     ?>
                                     <button type="button" data-toggle="modal" data-target="#modalAddMatkul" class="btn btn-w-m btn-success"><i class="fas fa-plus"></i> Tambah Mata Kuliah</button>
+                                    <a href="<?php echo base_url();?>download/checker" class="btn btn-w-m btn-warning"><i class="fas fa-check"></i> Cek Kebutuhan Perangkat Lunak Mata Kuliah</a>
                                     <!--Modal Add Matkul-->
                                     <div class="modal inmodal" id="modalAddMatkul" tabindex="-1" role="dialog"  aria-hidden="true">
                                         <div class="modal-dialog">

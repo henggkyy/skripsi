@@ -53,13 +53,13 @@
                     <div class="form-group row " id="data_1">
                         <label class="col-sm-4 col-form-label">Tanggal Pinjam <span style="color: red">*</span> :</label>
                         <div class="col-sm-6 input-group date">
-                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" id="tgl_pinjam" name="tgl_pinjam" class="form-control" value="<?php echo set_value('tgl_pinjam'); ?>" placeholder="mm/dd/yyyy" data-mask="99/99/9999" required>
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" id="tgl_pinjam" name="tgl_pinjam" class="form-control" placeholder="mm/dd/yyyy" data-mask="99/99/9999" value="" required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label id="label_jam_mulai" class="col-sm-4 col-form-label">Jam Mulai <span style="color: red">*</span> :</label>
                         <div class="col-sm-6 input-group clockpicker" data-autoclose="true">
-                            <input type="text" id="jam_mulai" name="jam_mulai" class="form-control" placeholder="09:30" data-mask="99:99">
+                            <input type="text" id="jam_awal" name="jam_mulai" class="form-control" placeholder="09:30" data-mask="99:99" value="">
                             <span class="input-group-addon">
                                 <span class="fa fa-clock-o"></span>
                             </span>
@@ -68,7 +68,7 @@
                     <div class="form-group row">
                         <label id="label_jam_selesai" class="col-sm-4 col-form-label">Jam Selesai <span style="color: red">*</span> :</label>
                         <div class="col-sm-6 input-group clockpicker" data-autoclose="true">
-                            <input type="text" id="jam_selesai" name="jam_selesai" class="form-control" placeholder="09:30" data-mask="99:99">
+                            <input type="text" id="jam_berakhir" name="jam_selesai" class="form-control" placeholder="09:30" data-mask="99:99" value="">
                             <span class="input-group-addon">
                                 <span class="fa fa-clock-o"></span>
                             </span>
@@ -80,6 +80,7 @@
                             <div id="select_lab">
                                 
                             </div>
+                            <br>
                             <button id="btn_cek_ruangan" class="btn btn-sm btn-primary">Cek Ketersediaan Ruangan</button>
                         </div>
 
@@ -130,13 +131,15 @@
 <script src="<?php echo base_url();?>assets/js/plugins/jasny/jasny-bootstrap.min.js"></script>
 <script src="<?php echo base_url();?>assets/js/plugins/datapicker/bootstrap-datepicker.js"></script>
 <script type="text/javascript">
-    $( document ).ready(function() {
-        var tanggal_data = $("#tanggal_pinjam").val();
-        var jam_mulai_data = $("#jam_mulai").val();
-        var jam_selesai_data = $("#jam_selesai").val();
+    $( window ).on('load', function() {
+        
         $("#btn_cek_ruangan").click(function(e){
-            
-
+            var tanggal_data = $("#tgl_pinjam").val();
+            var jam_mulai_data = $("#jam_awal").val();
+            var jam_selesai_data = $("#jam_berakhir").val();
+            console.log(tanggal_data);
+            console.log(jam_mulai_data);
+            console.log(jam_selesai_data);
             e.preventDefault();
             
             $.ajax({
@@ -146,9 +149,10 @@
                 data: {tanggal : tanggal_data, jam_mulai : jam_mulai_data, jam_selesai : jam_selesai_data},
                 success: function(data) { 
                     $("#select_lab").html(data);
+                    //$("#btn_cek_ruangan").hide();
                 }
-                });
             });
+        });
     });
     $("#choice").change(function(e){
         if($("#choice").val() == 'lab'){

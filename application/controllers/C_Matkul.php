@@ -2,6 +2,35 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani Inisiasi dan Administrasi Mata Kuliah.
 class C_Matkul extends CI_Controller{
+
+	//Method untuk menampilkan halaman pilihan mata kuliah yang akan dicek kebutuhan perangkat lunak-nya
+	function loadPageCekPL(){
+		if($this->session->userdata('logged_in')){
+			$data['title'] = 'Periksa Kebutuhan Perangkat Lunak | SI Akademik Lab. Komputasi TIF UNPAR';
+			$this->load->model('Periode_akademik');
+			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+			$id_periode_aktif = $this->Periode_akademik->getIDPeriodeAktif();
+			if($id_periode_aktif){
+
+				$this->load->model('Mata_kuliah');
+				$data['list_matkul'] = $this->Mata_kuliah->getMatkul($id_periode_aktif);
+				$this->load->view('template/Header', $data);
+				$this->load->view('template/Sidebar', $data);
+				$this->load->view('template/Topbar');
+				$this->load->view('template/Notification');
+				$this->load->view('pages_user/V_Kebutuhan_PL', $data);
+				$this->load->view('template/Footer');
+			}
+			else{
+				$this->session->set_flashdata('error', 'Tidak dapat melakukan pemeriksaan kebutuhan perangkat lunak karena tidak ada periode akademik yg sedang aktif!');
+				redirect('/administrasi_matkul');
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
+
 	//Method untuk memasukkan jadwal perkuliahan ke dalam tabel jadwal pemakaian laboratorium
 	function insertJadwalPerkuliahan(){
 		if($this->session->userdata('logged_in')){
