@@ -3,15 +3,141 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani Inisiasi dan Administrasi Mata Kuliah.
 class C_Matkul extends CI_Controller{
 
+	//Method untuk menangani proses pengecekan perangkat lunak yang sudah terpasang 
+	//Method ini dipanggil menggunakan Jquery AJAX pada Footer.php
+	function periksaPL(){
+		// if($this->session->userdata('logged_in')){
+			// $this->load->library('form_validation');
+			// $this->form_validation->set_rules('data_software', 'Data Perangkat Lunak', 'required');
+			// $this->form_validation->set_rules('id_matkul_cek', 'ID Mata Kuliah', 'required');
+			// if ($this->form_validation->run() == FALSE){
+			// 	echo $this->input->post('data_software');
+			// 	echo $this->input->post('id_matkul_cek');
+			// 	return;
+			// }
+			// else{
+				$data_sofware = $this->input->get('data_software');
+				$id_matkul = $this->input->get('id_matkul_cek');
+				date_default_timezone_set("Asia/Jakarta");
+				$tanggal_checked = date("Y-m-d h:i:sa");
+				$this->load->model('Kebutuhan_pl');
+				$this->load->model('Mata_kuliah');
+				$data_pl = $this->Kebutuhan_pl->getPL($id_matkul);
+				$arr_res = array();
+				$data['nama_matkul'] = $this->Mata_kuliah->getIndividualItem($id_matkul, 'NAMA_MATKUL');
+				if(isset($data_pl) && $data_pl){
+					foreach ($data_pl as $pl) {
+						$tanggal_checked = date("Y-m-d h:i:sa");
+						$arr_res_ind = array();
+						if(strpos($data_sofware, $pl['NAMA_PL']) !== false){
+							array_push($arr_res_ind, 1);
+							array_push($arr_res_ind, $pl['NAMA_PL']);
+							$this->Kebutuhan_pl->updateStatusPL($pl['ID'], 1, $tanggal_checked);
+				            array_push($arr_res, $arr_res_ind);
+				        }
+				        else{
+				        	array_push($arr_res_ind, 2);
+				        	array_push($arr_res_ind, $pl['NAMA_PL']);
+				        	$this->Kebutuhan_pl->updateStatusPL($pl['ID'], 2, $tanggal_checked);
+				            array_push($arr_res, $arr_res_ind);
+				        }
+					}
+				}
+
+				$data['hasil_checker'] = $arr_res;
+				$string =  $this->load->view('pages_user/V_Hasil_Checker_PL', $data, TRUE);
+				echo $string;
+				return;
+			// }
+		// }
+		// else{
+		// 	redirect('/');
+		// }
+	}
+
+	//Method untuk menghapus kebutuhan perangkat lunak
+	function deletePL(){
+		if($this->session->userdata('logged_in')){
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('id_pl', 'ID Perangkat Lunak', 'required');
+			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
+			if ($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing Required Fields');
+				redirect("/administrasi_matkul_detail?id=$id_matkul");
+			}
+			else{
+				$id_pl = $this->input->post('id_pl');
+				$id_matkul = $this->input->post('id_matkul');
+				$this->load->model('Kebutuhan_pl');
+				$res_delete = $this->Kebutuhan_pl->removePL($id_pl);
+
+				if($res_delete){
+					$this->session->set_flashdata('success', 'Berhasil menghapus kebutuhan perangkat lunak');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				else{
+					$this->session->set_flashdata('error', 'Gagal menghapus kebutuhan perangkat lunak');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
+
+	//Method untuk memasukkan informasi kebutuhan perangkat lunak suatu mata kuliah
+	function insertPL(){
+		if($this->session->userdata('logged_in')){
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
+			$this->form_validation->set_rules('nama_pl', 'Nama Perangkat Lunak', 'required');
+
+			if ($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing Required Fields');
+				redirect("/administrasi_matkul_detail?id=$id_matkul");
+			}
+			else{
+				$id_matkul = $this->input->post('id_matkul');
+				$nama_pl = $this->input->post('nama_pl');
+				$this->load->model('Kebutuhan_pl');
+				$res = $this->Kebutuhan_pl->insertPL($id_matkul, $nama_pl);
+				if($res){
+					$this->session->set_flashdata('success', 'Berhasil memasukkan kebutuhan perangkat lunak');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				else{
+					$this->session->set_flashdata('error', 'Gagal memasukkan kebutuhan perangkat lunak');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
+
 	//Method untuk menampilkan halaman pilihan mata kuliah yang akan dicek kebutuhan perangkat lunak-nya
 	function loadPageCekPL(){
 		if($this->session->userdata('logged_in')){
 			$data['title'] = 'Periksa Kebutuhan Perangkat Lunak | SI Akademik Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+
 			$id_periode_aktif = $this->Periode_akademik->getIDPeriodeAktif();
 			if($id_periode_aktif){
-
+				$data['data_software_cek'] = $this->input->get('data_software');
+				// print_r($this->input->get('data_software'));
+				// return;
+				$data['data_software_cek'] = str_replace("-","",$data['data_software_cek']);
+				$data['data_software_cek'] = str_replace(".","",$data['data_software_cek']);
+				$data['data_software_cek'] = str_replace("(","",$data['data_software_cek']);
+				$data['data_software_cek'] = str_replace(")","",$data['data_software_cek']);
+				$data['data_software_cek'] = str_replace(" ","",$data['data_software_cek']);
+				$data['data_software_cek'] = str_replace(",","",$data['data_software_cek']);
+				$data['data_software_cek'] = str_replace("+","",$data['data_software_cek']);
+				$data['data_software_cek'] = str_replace("/","",$data['data_software_cek']);
+				$data['data_software_cek'] = htmlspecialchars($data['data_software_cek']);
 				$this->load->model('Mata_kuliah');
 				$data['list_matkul'] = $this->Mata_kuliah->getMatkul($id_periode_aktif);
 				$this->load->view('template/Header', $data);
@@ -111,11 +237,13 @@ class C_Matkul extends CI_Controller{
 		}
 	}
 
+	//Method untuk melakukan load halaman detail mata kuliah
 	function getDetailMataKuliah(){
 		if($this->session->userdata('logged_in')){
 			$this->load->model('Mata_kuliah');
 			$this->load->model('Periode_akademik');
 			$this->load->model('Mhs_peserta');
+			$this->load->model('Kebutuhan_pl');
 			$id_matkul = $_GET['id'];
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$data['title'] = 'Detail Mata Kuliah | SI Akademik Lab. Komputasi TIF UNPAR';
@@ -129,6 +257,7 @@ class C_Matkul extends CI_Controller{
 			$data['set_uts'] = $this->Mata_kuliah->cekJadwalUjian($id_matkul, "TANGGAL_UTS");
 			$data['set_uas'] = $this->Mata_kuliah->cekJadwalUjian($id_matkul, "TANGGAL_UAS");
 			$data['set_peserta'] = $this->Mhs_peserta->checkMhs($id_matkul);
+			$data['daftar_pl'] = $this->Kebutuhan_pl->getPL($id_matkul);
 			//$data['matkul'] = true;
 			$this->load->view('template/Header', $data);
 			$this->load->view('template/Sidebar', $data);

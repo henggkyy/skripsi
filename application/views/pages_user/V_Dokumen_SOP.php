@@ -120,6 +120,7 @@
                                                 <th>Dokumen SOP</th>
                                                 <th>Kategori</th>
                                                 <th>Visibility</th>
+                                                <th>Last Update</th>
                                                 <th>Action</th>
                                             </tr>
                                             </thead>
@@ -139,6 +140,7 @@
                                                                 else{
                                                                     echo "Private";
                                                                 }?></td>
+                                                            <td><?php echo $sop['LAST_UPDATE']; ?></td>
                                                             <td align="center">
                                                                 <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalUpdate<?php echo $sop['ID'];?>"><i class="fas fa-pen"></i> Update</button>
 
@@ -235,7 +237,7 @@
                                                     }
                                                 }
                                                 else{
-                                                    echo "<tr><td colspan='5'>Belum ada dokumen SOP</td></tr>";
+                                                    echo "<tr><td colspan='6'>Belum ada dokumen SOP</td></tr>";
                                                 }
                                                 ?>
                                             </tbody>

@@ -41,6 +41,14 @@
 	<script src="<?php echo base_url();?>assets/js/plugins/dataTables/datatables.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
+			
+			var input_text_pl = '<input class="form-control" type="text" required name="nama_pl" placeholder="Contoh: netbeans, spotify, googlechrome"></input>'
+			var button_add_pl = $('#button_add_pl');
+			$(button_add_pl).click(function(e){
+		        $('#input_pl').html(input_text_pl);
+
+		    });
+
 			var header = '<h5>Pertemuan Ke - </h5>'; 
 			var field_select = '<select name="hari[]" class="form-control col-md-8" required><option value="" selected disabled>-- Please Select One --</option><option value="Monday">Senin</option><option value="Tuesday" >Selasa</option><option value="Wednesday" >Rabu</option><option value="Thursday" >Kamis</option><option value="Friday" >Jumat</option><option value="Saturday" >Sabtu</option></select>';
 		    var jam_mulai_html = '<div class="col-sm-8 input-group clockpicker" data-autoclose="true"><label>Jam Mulai :</label> <input type="text" name="jam_mulai[]" class="form-control" value="" data-mask="99:99" required></div>';
@@ -105,6 +113,26 @@
 	        
 
 		});
+		<?php
+			if(isset($data_software_cek) && $data_software_cek){
+				?>
+				function periksaSoftware(id_matkul){
+					var data_software_res = '<?php echo $data_software_cek;?>';
+					console.log(id_matkul);
+					 $.ajax({
+	                    //Ganti URL nanti kl udah dipindah server
+		                url: "<?php echo base_url();?>" + "administrasi_matkul/perangkat_lunak/checker",
+		                method: "GET",
+		                data: {data_software : data_software_res , id_matkul_cek : id_matkul},
+		                success: function(data) { 
+		                    $('#modal_checker').html(data);
+		                    $('#modal_checker').modal('show');
+		                }
+		            }); 
+				}
+				<?php
+			}
+			?>
 		$(".input_pdf").change(function(e){
 			var file = e.target.files[0]
 			var filesize = e.target.files[0].size;

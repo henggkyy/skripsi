@@ -2,19 +2,23 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Data_file_sop extends CI_Model{
 	function updateSop($id,$judul, $path_file, $visibility, $kategori){
+		date_default_timezone_set('Asia/Jakarta');
+		$date_time = date("Y-m-d h:i:sa");
 		if($path_file != NULL){
 			$data = array(
 			    'JUDUL' => $judul,
 			    'PATH_FILE' => $path_file,
 			    'VISIBILITY' => $visibility,
-			    'ID_KATEGORI' => $kategori
+			    'ID_KATEGORI' => $kategori,
+			    'LAST_UPDATE' => $date_time
 			);
 		}
 		else{
 			$data = array(
 			    'JUDUL' => $judul,
 			    'VISIBILITY' => $visibility,
-			    'ID_KATEGORI' => $kategori
+			    'ID_KATEGORI' => $kategori,
+			    'LAST_UPDATE' => $date_time
 			);
 		}
 		$this->db->where('ID', $id);
@@ -63,11 +67,14 @@ class Data_file_sop extends CI_Model{
 		}
 	}
 	function inputDokumenSop($judul, $kategori, $visibility, $path){
+		date_default_timezone_set('Asia/Jakarta');
+		$date_time = date("Y-m-d h:i:sa");
 		$data = array(
 		    'JUDUL' => $judul,
 		    'PATH_FILE' => $path,
 		    'VISIBILITY' => $visibility,
-		    'ID_KATEGORI' => $kategori
+		    'ID_KATEGORI' => $kategori,
+		    'LAST_UPDATE' => $date_time
 		);
 		$res = $this->db->insert('data_file_sop', $data);
 		if($res){
@@ -78,7 +85,7 @@ class Data_file_sop extends CI_Model{
 		}
 	}
 	function getAllSOP(){
-		$this->db->select('data_file_sop.ID as ID, data_file_sop.VISIBILITY as visibility, data_file_sop.JUDUL as judul, data_file_sop.PATH_FILE as path, data_file_sop.ID_KATEGORI as id_kategori, kategori_sop.NAMA_KATEGORI as nama_kategori');
+		$this->db->select('data_file_sop.ID as ID, data_file_sop.VISIBILITY as visibility, data_file_sop.JUDUL as judul, data_file_sop.PATH_FILE as path, data_file_sop.ID_KATEGORI as id_kategori, kategori_sop.NAMA_KATEGORI as nama_kategori, data_file_sop.LAST_UPDATE as LAST_UPDATE');
 		$this->db->from('data_file_sop');
 		$this->db->join('kategori_sop', 'data_file_sop.ID_KATEGORI = kategori_sop.ID' , 'left outer');
 		$result = $this->db->get();

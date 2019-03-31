@@ -2,17 +2,21 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Data_buku_saku extends CI_Model{
 	function updateBukuSaku($id,$judul, $path_file, $visibility){
+		date_default_timezone_set('Asia/Jakarta');
+		$date_time = date("Y-m-d h:i:sa");
 		if($path_file != NULL){
 			$data = array(
 			    'JUDUL' => $judul,
 			    'PATH_FILE' => $path_file,
-			    'VISIBILITY' => $visibility
+			    'VISIBILITY' => $visibility,
+			    'LAST_UPDATE' => $date_time
 			);
 		}
 		else{
 			$data = array(
 			    'JUDUL' => $judul,
-			    'VISIBILITY' => $visibility
+			    'VISIBILITY' => $visibility,
+			    'LAST_UPDATE' => $date_time
 			);
 		}
 		$this->db->where('ID', $id);
@@ -48,7 +52,7 @@ class Data_buku_saku extends CI_Model{
 		}
 	}
 	function getAllBukuSaku(){
-		$this->db->select('data_buku_saku.ID as ID, data_buku_saku.VISIBILITY as visibility, data_buku_saku.JUDUL as judul, data_buku_saku.PATH_FILE as path');
+		$this->db->select('data_buku_saku.ID as ID, data_buku_saku.VISIBILITY as visibility, data_buku_saku.JUDUL as judul, data_buku_saku.PATH_FILE as path, data_buku_saku.LAST_UPDATE as LAST_UPDATE');
 		$this->db->from('data_buku_saku');
 		$result = $this->db->get();
 		if($result->num_rows() > 0 ){
@@ -71,10 +75,13 @@ class Data_buku_saku extends CI_Model{
 		}
 	}
 	function inputDokumenSaku($judul, $visibility, $path){
+		date_default_timezone_set('Asia/Jakarta');
+		$date_time = date("Y-m-d h:i:sa");
 		$data = array(
 		    'JUDUL' => $judul,
 		    'PATH_FILE' => $path,
-		    'VISIBILITY' => $visibility
+		    'VISIBILITY' => $visibility,
+		    'LAST_UPDATE' => $date_time
 		);
 		$res = $this->db->insert('data_buku_saku', $data);
 		if($res){

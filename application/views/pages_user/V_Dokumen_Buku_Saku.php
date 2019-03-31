@@ -102,6 +102,7 @@
                                                 <th>#</th>
                                                 <th>Dokumen Buku Saku</th>
                                                 <th>Visibility</th>
+                                                <th>Last Update</th>
                                                 <th>Action</th>
                                             </tr>
                                             </thead>
@@ -120,6 +121,7 @@
                                                                 else{
                                                                     echo "Private";
                                                                 }?></td>
+                                                            <td><?php echo $saku['LAST_UPDATE']; ?></td>
                                                             <td align="center">
                                                                 <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalUpdate<?php echo $saku['ID'];?>"><i class="fas fa-pen"></i> Update</button>
 
@@ -136,7 +138,7 @@
                                                                             <div class="modal-body">
                                                                                 
                                                                                 <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                                                    <label class="col-sm-3 col-form-label">Visibility Dokumen Buku Saku <span style="color: red">*</span> :</label>
+                                                                                    <label class="col-sm-4 col-form-label">Visibility Dokumen Buku Saku <span style="color: red">*</span> :</label>
                                                                                     <div class="col-sm-8">
                                                                                         <select required class="form-control" name="visibility">
                                                                                             
@@ -146,7 +148,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                                                    <label class="col-sm-3 col-form-label">Judul Dokumen Buku Saku <span style="color: red">*</span> :</label>
+                                                                                    <label class="col-sm-4 col-form-label">Judul Dokumen Buku Saku <span style="color: red">*</span> :</label>
                                                                                     <div class="col-sm-8">
                                                                                         <input type="text" value="<?php echo $saku['judul'];?>" required name="judul_saku" placeholder="Contoh : SOP Pengadaan Ujian" class="form-control">
                                                                                         <?php
@@ -160,7 +162,7 @@
                                                                                 </div>
                                                                                 
                                                                                 <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                                                    <label class="col-sm-3 col-form-label">Dokumen Buku Saku (.pdf maks. 4MB) :</label>
+                                                                                    <label class="col-sm-4 col-form-label">Dokumen Buku Saku (.pdf maks. 4MB) :</label>
                                                                                     <div class="col-sm-8">
                                                                                         <p align="left">Dokumen Buku Saku saat ini : <a target="_blank" href="<?php echo base_url();?>uploads/buku_saku/<?php echo $saku['path'];?>"><?php echo $saku['judul'];?></a></p>
                                                                                         <p align="left" style="color: red; font-size: 10px;">Apabila ingin update dokumen pdf, silahkan upload kembali. Jika tidak terdapat update pada dokumen pdf, maka kosongkan input file</p>
@@ -199,7 +201,7 @@
                                                     }
                                                 }
                                                 else{
-                                                    echo "<tr><td colspan='5'>Belum ada dokumen Buku Saku</td></tr>";
+                                                    echo "<tr><td colspan='6'>Belum ada dokumen Buku Saku</td></tr>";
                                                 }
                                                 ?>
                                             </tbody>

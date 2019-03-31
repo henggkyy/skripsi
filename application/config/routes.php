@@ -72,6 +72,9 @@ $route['administrasi_matkul/insert_mhs'] = 'C_Matkul/insertMahasiswa';
 $route['administrasi_matkul/insert_jadwal'] = 'C_Matkul/insertJadwalPerkuliahan';
 $route['administrasi_matkul/insert_kelas'] = 'C_Jadwal_Lab/checkKetersediaan';
 $route['administrasi_matkul/checker'] = 'C_Matkul/loadPageCekPL';
+$route['administrasi_matkul/perangkat_lunak/add'] = 'C_Matkul/insertPL';
+$route['administrasi_matkul/perangkat_lunak/delete'] = 'C_Matkul/deletePL';
+$route['administrasi_matkul/perangkat_lunak/checker'] = 'C_Matkul/periksaPL';
 
 $route['user'] = 'C_Main/loadMenuUser';
 $route['user/tambah_user'] = 'C_User/addUser';

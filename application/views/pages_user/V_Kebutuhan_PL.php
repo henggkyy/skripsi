@@ -20,8 +20,7 @@
                                     </h2>
                                 </div>
                             </div>
-                        </div> 
-                        
+                        </div>
                         <div class="col-lg-12">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
@@ -31,11 +30,13 @@
                                    <div class="table-responsive">
                                         <table class="table table-striped table-bordered table-hover <?php
                                             if(isset($list_matkul) && $list_matkul){ echo 'mainDataTable';}?>">
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Nama Mata Kuliah</th>
-                                                <th>Action</th>
-                                            </tr>
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Nama Mata Kuliah</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
                                             <tbody>
                                                 <?php
                                                 if(isset($list_matkul) && $list_matkul){
@@ -46,8 +47,7 @@
                                                             <td><?php echo $iterator;?></td>
                                                             <td><?php echo $matkul['NAMA_MATKUL'];?></td>
                                                             <td>
-                                                                <input type="hidden" id="id_matkul" value="<?php echo $matkul['ID']; ?>" name="id_matkul" required>
-                                                                <button class="btn btn-sm btn-success" id="button_cek">Periksa</button>
+                                                                <button class="btn btn-sm btn-success" onclick="periksaSoftware(<?php echo $matkul['ID'];?>);"><i class="fas fa-check"></i> Periksa</button>
                                                             </td>
                                                         </tr>
                                                         <?php
@@ -55,7 +55,7 @@
                                                     }
                                                 }
                                                 else{
-
+                                                    echo '<tr><td colspan="3">Tidak ada mata kuliah yang aktif pada periode akademik!</td></tr>';
                                                 }
                                                 ?>
                                             </tbody>
@@ -66,4 +66,7 @@
                         </div>            
                     </div>
                 </div>
+            </div>
+            <div class="modal inmodal" id="modal_checker" tabindex="-1" role="dialog"  aria-hidden="true">
+                                
             </div>

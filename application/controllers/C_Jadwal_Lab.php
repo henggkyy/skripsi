@@ -4,24 +4,31 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class C_Jadwal_Lab extends CI_Controller{
 	//Method untuk melakukan pengecekan ketersediaan peminjaman laboratorium
 	function checkKetersediaanPeminjaman(){
-		$daftar_lab = $this->getAllListLab();
-		$tanggal = date("Y-m-d", strtotime($this->input->post('tanggal')));
+		
+		$tanggal = $this->input->post('tanggal');
+		$jam_mulai = $this->input->post('jam_mulai');
+		$jam_selesai = $this->input->post('jam_selesai');
+		
+
+		if(!isset($tanggal) || $tanggal == ""){
+			echo '<span style="color:red;">Tanggal peminjaman harus diisi!</span>';
+			return;
+		}
+		if(!isset($jam_mulai)  || $jam_mulai == ""){
+			echo '<span style="color:red;">Jam mulai peminjaman harus diisi!</span>';
+			return;
+		}
+		if(!isset($jam_selesai)  || $jam_selesai == ""){
+			echo '<span style="color:red;">Jam selesai peminjaman harus diisi!</span>';
+			return;
+		}
+	 	
+
+	 	$tanggal = date("Y-m-d", strtotime($this->input->post('tanggal')));
 		$jam_mulai = date("H:i:s", strtotime($this->input->post('jam_mulai')));
 		$jam_selesai = date("H:i:s", strtotime($this->input->post('jam_selesai')));
 
-		if(isset($tanggal) && $tanggal == ""){
-			echo '<span style="red">Tanggal peminjaman harus diisi!</span>';
-			return;
-		}
-		if(isset($jam_mulai)  && $jam_mulai == ""){
-			echo '<span style="red">Jam mulai peminjaman harus diisi!</span>';
-			return;
-		}
-		if(isset($jam_selesai)  && $jam_selesai == ""){
-			echo '<span style="red">Jam selesai peminjaman harus diisi!</span>';
-			return;
-		}
-
+		$daftar_lab = $this->getAllListLab();
 		$start_event = $tanggal." ".$jam_mulai;
 		$end_event  = $tanggal. " ".$jam_selesai;
 
@@ -58,7 +65,7 @@ class C_Jadwal_Lab extends CI_Controller{
 			echo $string;
 		}
 		else{
-			echo '<span style="red">Tidak ada Ruangan Laboratorium yang tersedia pada tanggal dan waktu diatas!</span>';
+			echo '<span style="color:red;">Tidak ada Ruangan Laboratorium yang tersedia pada tanggal dan waktu diatas!</span>';
 		}
 	}
 

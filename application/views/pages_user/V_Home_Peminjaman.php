@@ -47,19 +47,19 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label">Acara/Keperluan <span style="color: red">*</span> :</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" required name="keperluan">
+                            <input type="text" class="form-control" placeholder="Contoh : Tutorial Power Point" required name="keperluan">
                         </div>
                     </div>
                     <div class="form-group row " id="data_1">
                         <label class="col-sm-4 col-form-label">Tanggal Pinjam <span style="color: red">*</span> :</label>
                         <div class="col-sm-6 input-group date">
-                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" id="tgl_pinjam" name="tgl_pinjam" class="form-control" placeholder="mm/dd/yyyy" data-mask="99/99/9999" value="" required>
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" id="tgl_pinjam" name="tgl_pinjam" class="form-control" placeholder="mm/dd/yyyy" data-mask="99/99/9999" onchange="checkLab();" required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label id="label_jam_mulai" class="col-sm-4 col-form-label">Jam Mulai <span style="color: red">*</span> :</label>
                         <div class="col-sm-6 input-group clockpicker" data-autoclose="true">
-                            <input type="text" id="jam_awal" name="jam_mulai" class="form-control" placeholder="09:30" data-mask="99:99" value="">
+                            <input type="text" id="jam_awal" name="jam_mulai" class="form-control" placeholder="09:30" data-mask="99:99" onchange="checkLab();" required>
                             <span class="input-group-addon">
                                 <span class="fa fa-clock-o"></span>
                             </span>
@@ -68,7 +68,7 @@
                     <div class="form-group row">
                         <label id="label_jam_selesai" class="col-sm-4 col-form-label">Jam Selesai <span style="color: red">*</span> :</label>
                         <div class="col-sm-6 input-group clockpicker" data-autoclose="true">
-                            <input type="text" id="jam_berakhir" name="jam_selesai" class="form-control" placeholder="09:30" data-mask="99:99" value="">
+                            <input type="text" id="jam_berakhir" name="jam_selesai" class="form-control" placeholder="09:30" data-mask="99:99" onchange="checkLab();" required>
                             <span class="input-group-addon">
                                 <span class="fa fa-clock-o"></span>
                             </span>
@@ -78,10 +78,9 @@
                         <label class="col-sm-4 col-form-label">Pilih Ruangan Laboratorium <span style="color: red">*</span> :</label>
                         <div class="col-sm-6" >
                             <div id="select_lab">
-                                
+                                <span style="color: red;">Silahkan isi tanggal, jam mulai, dan jam selesai peminjaman terlebih dahulu</span>
                             </div>
-                            <br>
-                            <button id="btn_cek_ruangan" class="btn btn-sm btn-primary">Cek Ketersediaan Ruangan</button>
+                            
                         </div>
 
                     </div>
@@ -105,7 +104,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label">Keterangan <span style="color: red">*</span> :</label>
                         <div class="col-sm-6">
-                            <textarea style="height: 80px;" placeholder="Dapat diisi dengan keperluan peminjaman lab, kebutuhan, dsb." name="keterangan" class="form-control"></textarea>
+                            <textarea style="height: 80px;" placeholder="Dapat diisi dengan keperluan peminjaman lab, kebutuhan, dsb." name="keterangan" class="form-control" required></textarea>
                         </div>
                     </div>
                     <p style="color: red;" align="center">* Wajib Diisi</p>
@@ -131,41 +130,61 @@
 <script src="<?php echo base_url();?>assets/js/plugins/jasny/jasny-bootstrap.min.js"></script>
 <script src="<?php echo base_url();?>assets/js/plugins/datapicker/bootstrap-datepicker.js"></script>
 <script type="text/javascript">
-    $( window ).on('load', function() {
-        
-        $("#btn_cek_ruangan").click(function(e){
+    function checkLab(){
+        if($("#choice").val() == 'lab'){
             var tanggal_data = $("#tgl_pinjam").val();
             var jam_mulai_data = $("#jam_awal").val();
             var jam_selesai_data = $("#jam_berakhir").val();
+            
+            if(tanggal_data == "" || jam_mulai_data == "" || jam_selesai_data == ""){
+                if(tanggal_data == ""){
+                    $("#select_lab").html('<span style="color:red;">Tanggal peminjaman harus diisi terlebih dahulu!</span>');
+                }
+                else if(jam_mulai_data == ""){
+                    $("#select_lab").html('<span style="color:red;">Jam mulai peminjaman harus diisi terlebih dahulu!</span>');
+                }
+                else{
+                    $("#select_lab").html('<span style="color:red;">Jam selesai peminjaman harus diisi terlebih dahulu!</span>');
+                }
+                    
+                return;
+            }   
+            if(jam_selesai_data < jam_mulai_data){
+                $("#select_lab").html('<span style="color:red;">Jam mulai tidak boleh melebihi jam selesai!</span>');
+                return;
+            }
             console.log(tanggal_data);
             console.log(jam_mulai_data);
             console.log(jam_selesai_data);
-            e.preventDefault();
-            
+               
+                
             $.ajax({
-                //Ganti URL nanti kl udah dipindah server
+                    //Ganti URL nanti kl udah dipindah server
                 url: "<?php echo base_url();?>" + "ketersediaan_lab",
                 method: "POST",
                 data: {tanggal : tanggal_data, jam_mulai : jam_mulai_data, jam_selesai : jam_selesai_data},
                 success: function(data) { 
-                    $("#select_lab").html(data);
-                    //$("#btn_cek_ruangan").hide();
+                     $("#select_lab").html(data);
+                    $('#button_submit').prop('disabled', false);
                 }
-            });
-        });
-    });
+            }); 
+        }
+    }
     $("#choice").change(function(e){
         if($("#choice").val() == 'lab'){
+            $('#button_submit').prop('disabled', true);
             $("#div_alat").hide();
             $("#choice_alat").prop('required',false);
             $("#div_lab").show();
             $("#choice_lab").prop('required',true);
+
         }
         else{
             $("#div_alat").show();
             $("#choice_alat").prop('required',true);
             $("#div_lab").hide();
             $("#choice_lab").prop('required',false);
+            $('#button_submit').prop('disabled', false);
         }
     });
     var mem = $('#data_1 .input-group.date').datepicker({
