@@ -25,10 +25,12 @@ class C_Sop extends CI_Controller {
 				// return;
 				if(!empty($_FILES['dokumen']['name'])){
 					$namePathOld = $this->Data_file_sop->getPathFile($id_sop);
-					$namaFileHash = $this->generateHash(20);
+					$nama_file_real = $_FILES['dokumen']['name'];
+					$ext = pathinfo($nama_file_real, PATHINFO_EXTENSION);
+					$namaFileHash = $this->generateHash(20).'.'.$ext;
 					$exists = $this->Data_file_sop->checkHash($namaFileHash);
 					while ($exists) {
-						$namaFileHash = $this->generateHash(20);
+						$namaFileHash = $this->generateHash(20).'.'.$ext;
 						$exists = $this->Data_file_sop->checkHash($namaFileHash);
 					}
 					$path_to_file = "./uploads/sop/$namePathOld";
@@ -125,11 +127,13 @@ class C_Sop extends CI_Controller {
 				$kategori_sop = htmlentities($this->input->post('kategori_sop'));
 				$visibility = htmlentities($this->input->post('visibility'));
 				$judul_sop = htmlentities($this->input->post('judul_sop'));
-				$namaFileHash = $this->generateHash(20);
+				$nama_file_real = $_FILES['dokumen']['name'];
+				$ext = pathinfo($nama_file_real, PATHINFO_EXTENSION);
+				$namaFileHash = $this->generateHash(20).'.'.$ext;
 				$this->load->model('Data_file_sop');
 				$exists = $this->Data_file_sop->checkHash($namaFileHash);
 				while ($exists) {
-					$namaFileHash = $this->generateHash(20);
+					$namaFileHash = $this->generateHash(20).'.'.$ext;
 					$exists = $this->Data_file_sop->checkHash($namaFileHash);
 				}
 
@@ -175,7 +179,7 @@ class C_Sop extends CI_Controller {
 			return false;
 		}
 		else{
-			return $sNewFileName. ".pdf";
+			return $sNewFileName;
 		}
 	}
 	private function generateHash($jmlh_char){

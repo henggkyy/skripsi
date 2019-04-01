@@ -74,6 +74,10 @@
                             </tbody>
                         </table>
                     </div>
+                    <div>
+                        <br>
+                        <a href="<?php echo base_url();?>" class="btn btn-white btn-lg"> < Back</a>
+                    </div>
                 </div>
             </div>
         </div>

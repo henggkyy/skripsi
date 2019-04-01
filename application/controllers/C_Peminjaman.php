@@ -135,7 +135,7 @@ class C_Peminjaman extends CI_Controller{
 					//Cek ketersediaan laboratorium yang dipilih
 					//If tidak tersedia, return ke home peminjaman
 					if(!in_array($tipe_lab, $arr_lab_tersedia)){
-						$this->session->set_flashdata('success', 'Ruangan laboratorium yang dipilih tidak dapat digunakan pada tanggal dan rentang waktu yang diinginkan!');
+						$this->session->set_flashdata('error', 'Ruangan laboratorium yang dipilih tidak dapat digunakan pada tanggal dan rentang waktu yang diinginkan!');
 						redirect("/peminjaman");
 					}
 				}
@@ -150,7 +150,7 @@ class C_Peminjaman extends CI_Controller{
 					redirect("/peminjaman");
 				}
 				else{
-					$this->session->set_flashdata('success', 'Terjadi kesalahan dalam melakukan permintaan peminjaman alat/ruangan laboratorium.');
+					$this->session->set_flashdata('error', 'Terjadi kesalahan dalam melakukan permintaan peminjaman alat/ruangan laboratorium.');
 					redirect("/peminjaman");
 				}
 			}

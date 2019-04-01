@@ -354,6 +354,107 @@
                                                         </table>
                                                     </div>
                                                 </li>
+                                                <!-- START MENU FILE BANTUAN UJIAN-->
+                                                <li>
+                                                    <h4 style="font-weight: bold;">File Bantuan Ujian : </h4>
+                                                    <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#insertFileBantuan"><i class="fas fa-file-upload"></i> Upload File Bantuan</button>
+                                                    <!--Modal ADD FILE BANTUAN-->
+                                                        <div class="modal inmodal" id="insertFileBantuan" tabindex="-1" role="dialog"  aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content animated fadeIn">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                                        <h3 class="modal-title">Upload File Bantuan Ujian - <?php echo $nama_matkul;?></h3>
+                                                                    </div>
+                                                                    <?php echo form_open_multipart('administrasi_matkul/insert_file_bantuan');?>
+                                                                    <div class="modal-body">
+                                                                        <div class="form-group  row">
+                                                                            <label class="col-sm-4 col-form-label">Tipe Ujian <span style="color: red">*</span> :</label>
+                                                                            <div class="col-sm-8">
+                                                                                <select required class="form-control" name="tipe_ujian">
+                                                                                    <option value="" selected disabled>-- Please Select One --</option>
+                                                                                    <option value="0">Ujian Tengah Semester (UTS)</option>
+                                                                                    <option value="1">Ujian Akhir Semester (UAS)</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group  row">
+                                                                            <label class="col-sm-4 col-form-label">Nama/Keterangan File <span style="color: red">*</span> :</label>
+                                                                            <div class="col-sm-8">
+                                                                                <input type="text" name="nama_keterangan" class="form-control">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group  row">
+                                                                            <label class="col-sm-4 col-form-label">Upload File (.zip, .pdf, .docx. Max 2MB) <span style="color: red">*</span> :</label>
+                                                                            <div class="col-sm-8">
+                                                                                <input class="form-control" type="file" name="file_bantuan">
+                                                                            </div>
+                                                                        </div>
+                                                                        <input type="hidden" name="id_matkul" value="<?php echo $_GET['id'];?>" required>
+                                                                        <p style="color: red;" align="center">* Wajib Diisi</p>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        
+                                                                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                                                                        <button type="submit" class="btn btn-primary">Upload </button>
+                                                                    </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--END MODAL ADD FILE BANTUAN-->
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped table-bordered table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>Nama/Keterangan File</th>
+                                                                    <th>Tipe Ujian</th>
+                                                                    <th>Waktu Upload</th>
+                                                                    <th>Uploader</th>
+                                                                    <th>Aksi</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php
+                                                                if (isset($file_bantuan) && $file_bantuan) {
+                                                                    $iterator = 1;
+                                                                    foreach ($file_bantuan as $file) {
+                                                                        ?>
+                                                                    <tr>
+                                                                        <td><?php echo $iterator;?></td>
+                                                                        <td><?php echo $file['NAMA_KETERANGAN'];?></td>
+                                                                        <td><?php
+                                                                        if($file['TIPE_UJIAN'] == 0){
+                                                                            echo 'UTS';
+                                                                        }else{
+                                                                            echo 'UAS';
+                                                                        }
+                                                                        ?></td>
+                                                                        <td><?php echo $file['LAST_UPDATE'];?></td>
+                                                                        <td><?php echo $file['USER_UPLOAD'];?></td>
+                                                                        <td align="center">
+                                                                            <a class="btn btn-sm btn-success" target="_blank" href="<?php echo base_url();?>download/file_bantuan/<?php echo $file['PATH_FILE'];?>"><i class="fas fa-download"></i> Download</a>
+                                                                            <?php echo form_open('administrasi_matkul/file_bantuan/remove');?>
+                                                                            <input type="hidden" name="id_matkul" value="<?php echo $_GET['id'];?>" required>
+                                                                            <input type="hidden" name="id_file_bantuan" value="<?php echo $file['ID'];?>" required>
+                                                                            <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus file bantuan ini?')" class="btn btn-sm btn-danger" href=""><i class="fas fa-trash"></i> Hapus</button>
+                                                                            </form>
+                                                                        </td>
+                                                                    </tr>
+                                                                        <?php
+                                                                        $iterator++;
+                                                                    }
+                                                                }
+                                                                else{
+                                                                    echo '<tr><td colspan="5">Belum ada file bantuan!</td></tr>';
+                                                                }
+                                                                ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </li>
+                                                <!-- END MENU FILE BANTUAN UJIAN-->
                                                 <li>
                                                     <h4 style="font-weight: bold;">Cetak Absensi Ujian : </h4>
                                                 </li>

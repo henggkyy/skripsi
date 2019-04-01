@@ -8,7 +8,7 @@ class C_Admin extends CI_Controller {
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_admin', 'ID Admin', 'required');
 			if($this->form_validation->run() == FALSE){
-				$this->session->set_flashdata('error_message', 'Missing required Field!');
+				$this->session->set_flashdata('error', 'Missing required Field!');
 	            redirect('/admin_lab');
 			}
 			else{
@@ -36,7 +36,7 @@ class C_Admin extends CI_Controller {
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_admin', 'ID Admin', 'required');
 			if($this->form_validation->run() == FALSE){
-				$this->session->set_flashdata('error_message', 'Missing required Field!');
+				$this->session->set_flashdata('error', 'Missing required Field!');
 	            redirect('/admin_lab');
 			}
 			else{

@@ -2,6 +2,26 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani menu utama dari aplikasi.
 class C_Main extends CI_Controller{
+	//Method untuk menampilkan daftar pengguna Tata Usaha
+	function loadDaftarTU(){
+		if($this->session->userdata('logged_in')){
+			$data['title'] = 'Daftar Pengguna Tata Usaha | SI Akademik Lab. Komputasi TIF UNPAR';
+			$this->load->model('Periode_akademik');
+			$this->load->model('Users');
+			$data['tata_usaha'] = true;
+			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+			$data['data_tu'] = $this->Users->getAllUserByRole(3);
+			$this->load->view('template/Header', $data);
+			$this->load->view('template/Sidebar', $data);
+			$this->load->view('template/Topbar');
+			$this->load->view('template/Notification');
+			$this->load->view('pages_user/V_Daftar_TU', $data);
+			$this->load->view('template/Footer');
+		}
+		else{
+			redirect('/');
+		}
+	}
 	//Method untuk menampilkan jadwal pemakaian laboratorium dengan menggunakan library FullCalendar
 	function loadJadwalPemakaianLaboratorium(){
 		if($this->session->userdata('logged_in')){

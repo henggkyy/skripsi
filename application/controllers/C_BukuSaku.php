@@ -23,10 +23,12 @@ class C_BukuSaku extends CI_Controller {
 				// return;
 				if(!empty($_FILES['dokumen']['name'])){
 					$namePathOld = $this->Data_buku_saku->getPathFile($id_saku);
-					$namaFileHash = $this->generateHash(20);
+					$nama_file_real = $_FILES['dokumen']['name'];
+					$ext = pathinfo($nama_file_real, PATHINFO_EXTENSION);
+					$namaFileHash = $this->generateHash(20).'.'.$ext;
 					$exists = $this->Data_buku_saku->checkHash($namaFileHash);
 					while ($exists) {
-						$namaFileHash = $this->generateHash(20);
+						$namaFileHash = $this->generateHash(20).'.'.$ext;
 						$exists = $this->Data_buku_saku->checkHash($namaFileHash);
 					}
 					$path_to_file = "./uploads/buku_saku/$namePathOld";
@@ -122,11 +124,15 @@ class C_BukuSaku extends CI_Controller {
 			else{
 				$visibility = htmlentities($this->input->post('visibility'));
 				$judul_saku = htmlentities($this->input->post('judul_saku'));
-				$namaFileHash = $this->generateHash(20);
+				
+				
 				$this->load->model('Data_buku_saku');
+				$nama_file_real = $_FILES['dokumen']['name'];
+				$ext = pathinfo($nama_file_real, PATHINFO_EXTENSION);
+				$namaFileHash = $this->generateHash(20).'.'.$ext;
 				$exists = $this->Data_buku_saku->checkHash($namaFileHash);
 				while ($exists) {
-					$namaFileHash = $this->generateHash(20);
+					$namaFileHash = $this->generateHash(20).'.'.$ext;
 					$exists = $this->Data_buku_saku->checkHash($namaFileHash);
 				}
 
@@ -139,10 +145,9 @@ class C_BukuSaku extends CI_Controller {
 					redirect('/dokumen_saku');
 				}
 				else{
-					print_r($res_upload);
-					return;
+					
 					if(!$res_upload){
-						$this->session->set_flashdata('error', "$Gagal upload dokumen SOP");
+						$this->session->set_flashdata('error', "Gagal upload dokumen SOP");
 						redirect('/dokumen_saku');
 					}
 					else{
@@ -173,7 +178,7 @@ class C_BukuSaku extends CI_Controller {
 			return false;
 		}
 		else{
-			return $sNewFileName. ".pdf";
+			return $sNewFileName;
 		}
 	}
 	private function generateHash($jmlh_char){

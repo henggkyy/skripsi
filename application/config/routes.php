@@ -75,6 +75,8 @@ $route['administrasi_matkul/checker'] = 'C_Matkul/loadPageCekPL';
 $route['administrasi_matkul/perangkat_lunak/add'] = 'C_Matkul/insertPL';
 $route['administrasi_matkul/perangkat_lunak/delete'] = 'C_Matkul/deletePL';
 $route['administrasi_matkul/perangkat_lunak/checker'] = 'C_Matkul/periksaPL';
+$route['administrasi_matkul/insert_file_bantuan'] = 'C_Matkul/insertFileBantuan';
+$route['administrasi_matkul/file_bantuan/remove'] = 'C_Matkul/deleteFileBantuan';
 
 $route['user'] = 'C_Main/loadMenuUser';
 $route['user/tambah_user'] = 'C_User/addUser';
@@ -92,6 +94,12 @@ $route['dokumen_saku'] = 'C_Main/loadMenuBukuSaku';
 $route['dokumen_saku/add'] = 'C_BukuSaku/inputBukuSaku';
 $route['dokumen_saku/delete'] = 'C_BukuSaku/deleteBukuSaku';
 $route['dokumen_saku/update'] = 'C_BukuSaku/updateBukuSaku';
+
+$route['tata_usaha'] = 'C_Main/loadDaftarTU';
+$route['tata_usaha/add'] = 'C_TataUsaha/addTataUsaha';
+$route['tata_usaha/nonactivate'] = 'C_TataUsaha/nonactivateTU';
+$route['tata_usaha/activate'] = 'C_TataUsaha/activateTU';
+
 
 $route['dosen'] = 'C_Main/loadMenuDosen';
 $route['dosen/add'] = 'C_Dosen/addDosen';
@@ -119,5 +127,6 @@ $route['jadwal_lab'] = 'C_Main/loadJadwalPemakaianLaboratorium';
 
 $route['download/template_insertMhs'] = 'C_Download/downloadTemplateInsertMhs';
 $route['download/checker'] = 'C_Download/downloadChecker';
+$route['download/file_bantuan/(:any)'] = 'C_Download/downloadFileBantuan/$1';
 
 $route['ketersediaan_lab'] = 'C_Jadwal_Lab/checkKetersediaanPeminjaman';

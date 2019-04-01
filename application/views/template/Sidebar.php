@@ -42,7 +42,7 @@
 
                         </ul>
                 </li>
-                <li <?php if(isset($admin_dosen) || isset($admin_lab) || isset($admin_tu)){ echo 'class='. '"active"';}?>>
+                <li <?php if(isset($admin_dosen) || isset($admin_lab) || isset($tata_usaha)){ echo 'class='. '"active"';}?>>
                     <a href="#"><i class="fas fa-group"></i> <span class="nav-label">Administrasi User </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li <?php if(isset($admin_dosen)){ echo 'class='. '"active"';}?>>
@@ -51,7 +51,7 @@
                             <li <?php if(isset($admin_lab)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>admin_lab">Administrasi Admin Laboratorium</a>
                             </li>
-                            <li>
+                            <li <?php if(isset($tata_usaha)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>tata_usaha">Administrasi Tata Usaha</a>
                             </li>
                         </ul>

@@ -2,6 +2,117 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani Inisiasi dan Administrasi Mata Kuliah.
 class C_Matkul extends CI_Controller{
+	//Method untuk menghapus file-file bantuan ujian
+	function deleteFileBantuan(){
+		if($this->session->userdata('logged_in')){
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('id_file_bantuan', 'ID File Bantuan', 'required');
+			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
+			$id_matkul = $this->input->post('id_matkul');
+			if ($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing Required Fields');
+				redirect("/administrasi_matkul_detail?id=$id_matkul");
+			}
+			else{
+				$id_file_bantuan = $this->input->post('id_file_bantuan');
+
+				$this->load->model('File_bantuan_ujian');
+				$path_file = $this->File_bantuan_ujian->getPathFile($id_file_bantuan);
+
+				$path_to_file = "./uploads/file_bantuan/$path_file";
+				$res_delete = unlink($path_to_file);
+				$res = $this->File_bantuan_ujian->deleteFileBantuan($id_file_bantuan);
+				if($res && $res_delete){
+					$this->session->set_flashdata('success', 'Berhasil menghapus  file bantuan ujian!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				else{
+					if(!$res_delete){
+						$this->session->set_flashdata('error', 'Gagal menghapus file bantuan ujian dari server!');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
+					else{
+						$this->session->set_flashdata('error', 'Gagal menghapus file bantuan ujian dari database!');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
+	//Method untuk memasukkan file-file bantuan ujian
+	function insertFileBantuan(){
+		if($this->session->userdata('logged_in')){
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('tipe_ujian', 'Tipe Ujian', 'required');
+			$this->form_validation->set_rules('nama_keterangan', 'Nama/Keterangan File Bantuan', 'required');
+			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
+			$id_matkul = $this->input->post('id_matkul');
+			if(empty($_FILES['file_bantuan']['name'])){
+				$this->session->set_flashdata('error_message', 'File bantuan ujian harus dilampirkan!');
+	            redirect("/administrasi_matkul_detail?id=$id_matkul");
+			}
+			if ($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing Required Fields');
+				redirect("/administrasi_matkul_detail?id=$id_matkul");
+			}
+			else{
+				$tipe_ujian = $this->input->post('tipe_ujian');
+				if($tipe_ujian == 0 || $tipe_ujian == 1){
+					$nama_keterangan = htmlentities($this->input->post('nama_keterangan'));
+					$id_matkul = $this->input->post('id_matkul');
+					$this->load->model('File_bantuan_ujian');
+
+					$nama_file_real = $_FILES['file_bantuan']['name'];
+					$ext = pathinfo($nama_file_real, PATHINFO_EXTENSION);
+
+					$namaFileHash = $this->generateHash(20).'.'.$ext;
+					$exists = $this->File_bantuan_ujian->checkFileName($namaFileHash);
+					while ($exists) {
+						$namaFileHash = $this->generateHash(20).'.'.$ext;
+						$exists = $this->File_bantuan_ujian->checkFileName($namaFileHash);
+					}
+
+					$res_upload = $this->uploadFile($namaFileHash);
+					date_default_timezone_set("Asia/Jakarta");
+					$tanggal_insert = date("Y-m-d h:i:sa");
+					$data = array(
+						'NAMA_FILE_USER' => $nama_keterangan,
+						'PATH_FILE' => $namaFileHash,
+						'TIPE_UJIAN' => $tipe_ujian,
+						'ID_MATKUL' => $id_matkul,
+						'LAST_UPDATE'=> $tanggal_insert
+					);
+					$res_db = $this->File_bantuan_ujian->insertFileBantuan($data);
+
+					if(($res_upload==true) && $res_db){
+						$this->session->set_flashdata('success', 'Berhasil melakukan upload file bantuan ujian!');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
+					else{
+						
+						if(!$res_upload){
+							$this->session->set_flashdata('error', "Gagal melakukan upload file bantuan ujian ke server!");
+							redirect("/administrasi_matkul_detail?id=$id_matkul");
+						}
+						else{
+							$this->session->set_flashdata('error', 'Gagal memasukkan data file bantuan ke dalam database!');
+							redirect("/administrasi_matkul_detail?id=$id_matkul");
+						}
+					}
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'Kesalahan value tipe ujian!');
+	            redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
 
 	//Method untuk menangani proses pengecekan perangkat lunak yang sudah terpasang 
 	//Method ini dipanggil menggunakan Jquery AJAX pada Footer.php
@@ -244,6 +355,7 @@ class C_Matkul extends CI_Controller{
 			$this->load->model('Periode_akademik');
 			$this->load->model('Mhs_peserta');
 			$this->load->model('Kebutuhan_pl');
+			$this->load->model('File_bantuan_ujian');
 			$id_matkul = $_GET['id'];
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$data['title'] = 'Detail Mata Kuliah | SI Akademik Lab. Komputasi TIF UNPAR';
@@ -258,6 +370,7 @@ class C_Matkul extends CI_Controller{
 			$data['set_uas'] = $this->Mata_kuliah->cekJadwalUjian($id_matkul, "TANGGAL_UAS");
 			$data['set_peserta'] = $this->Mhs_peserta->checkMhs($id_matkul);
 			$data['daftar_pl'] = $this->Kebutuhan_pl->getPL($id_matkul);
+			$data['file_bantuan'] = $this->File_bantuan_ujian->getFileBantuan($id_matkul);
 			//$data['matkul'] = true;
 			$this->load->view('template/Header', $data);
 			$this->load->view('template/Sidebar', $data);
@@ -384,6 +497,33 @@ class C_Matkul extends CI_Controller{
 	        $date_start_time = strtotime('+1 day', $date_start_time);
 	    }
 	    return $dates;
+	}
+	private function uploadFile($fileName){
+		$sNewFileName 				= $fileName;
+		$config['file_name'] 			= $sNewFileName;
+		$config['upload_path']          = './uploads/file_bantuan/';
+		$config['allowed_types']        = 'pdf|docx|zip';
+		$config['detect_mime']        	= 'TRUE';
+		$config['max_size']             = 2048;
+		$this->load->library('upload', $config);
+		$this->upload->initialize($config);
+				
+		if ( ! $this->upload->do_upload('file_bantuan')){
+			$error = array('error' => $this->upload->display_errors());
+			return false;
+		}
+		else{
+			return $sNewFileName;
+		}
+	}
+	private function generateHash($jmlh_char){
+		$sListKarakter = "12345678901234567890123456";
+ 		$sPanjangKarakter = strlen($sListKarakter);
+  		$number = "";
+  		for($i=0;$i<$jmlh_char;$i++){
+    		$number .= $sListKarakter[rand(0,$sPanjangKarakter-1)];
+  		}
+  		return "$number";
 	}
 }
 ?>
