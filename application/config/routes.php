@@ -81,6 +81,7 @@ $route['user/tambah_user'] = 'C_User/addUser';
 $route['user/change_status'] = 'C_User/changeStatus';
 
 $route['dokumen'] = 'C_Public/loadViewDokumen';
+$route['get_dokumen'] = 'C_Public/getSelectedDokumen';
 
 $route['dokumen_sop'] = 'C_Main/loadMenuSOP';
 $route['dokumen_sop/add'] = 'C_Sop/inputDokumenSop';

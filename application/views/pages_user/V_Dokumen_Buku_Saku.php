@@ -124,9 +124,14 @@
                                                             <td><?php echo $saku['LAST_UPDATE']; ?></td>
                                                             <td align="center">
                                                                 <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalUpdate<?php echo $saku['ID'];?>"><i class="fas fa-pen"></i> Update</button>
-
-
-                                                                <!--Modal Update-->
+                                                                <!--Link Delete Dokumen SOP -->
+                                                                <?php echo form_open('dokumen_saku/delete');?>
+                                                                <input type="hidden" name="id_saku" value="<?php echo $saku['ID'];?>" required>
+                                                                <button class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus dokumen ini?')" type="submit"><i class="far fa-trash-alt"></i> Delete</button>
+                                                                </form>
+                                                                <!--End Delete SOP -->
+                                                            </td>
+                                                             <!--Modal Update-->
                                                                 <div class="modal inmodal" id="modalUpdate<?php echo $saku['ID'];?>" tabindex="-1" role="dialog"  aria-hidden="true">
                                                                     <div class="modal-dialog">
                                                                         <div class="modal-content animated fadeIn">
@@ -187,14 +192,6 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
-                                                                <!--Link Delete Dokumen SOP -->
-                                                                <?php echo form_open('dokumen_saku/delete');?>
-                                                                <input type="hidden" name="id_saku" value="<?php echo $saku['ID'];?>" required>
-                                                                <button class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus dokumen ini?')" type="submit"><i class="far fa-trash-alt"></i> Delete</button>
-                                                                </form>
-                                                                <!--End Delete SOP -->
-                                                            </td>
                                                         </tr>
                                                         <?php
                                                         $iterator++;

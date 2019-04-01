@@ -71,7 +71,15 @@
                                                                 if($peminjam['STATUS'] == 0){
                                                                     ?>
                                                                     <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalUpdate<?php echo $peminjam['ID'];?>"><i class="fas fa-pen"></i> Tindakan</button>
-                                                                 <!--START MODAL ADD Tindakan-->
+                                                                 
+                                                                    <?php
+                                                                }
+                                                                else{
+                                                                    echo 'Sudah Ditindaklanjuti';
+                                                                }
+                                                                ?>
+                                                            </td>
+                                                            <!--START MODAL ADD Tindakan-->
                                                                 <div class="modal inmodal" id="modalUpdate<?php echo $peminjam['ID'];?>" tabindex="-1" role="dialog"  aria-hidden="true">
                                                                     <div class="modal-dialog">
                                                                         <div class="modal-content animated fadeIn">
@@ -117,14 +125,6 @@
                                                                     </div>
                                                                 </div>
                                                                 <!--END MODAL ADD Tindakan-->
-                                                                    <?php
-                                                                }
-                                                                else{
-                                                                    echo 'Sudah Ditindaklanjuti';
-                                                                }
-                                                                ?>
-                                                            </td>
-
                                                         </tr>
                                                         <?php
                                                         $iterator++;

@@ -84,6 +84,20 @@ class Data_file_sop extends CI_Model{
 			return false;
 		}
 	}
+
+	function getSopPublic(){
+		$this->db->select('data_file_sop.JUDUL as judul, data_file_sop.PATH_FILE as path, kategori_sop.NAMA_KATEGORI as nama_kategori, data_file_sop.LAST_UPDATE as LAST_UPDATE');
+		$this->db->from('data_file_sop');
+		$this->db->join('kategori_sop', 'data_file_sop.ID_KATEGORI = kategori_sop.ID' , 'left outer');
+		$this->db->where('VISIBILITY', 1);
+		$result = $this->db->get();
+		if($result->num_rows() > 0 ){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
 	function getAllSOP(){
 		$this->db->select('data_file_sop.ID as ID, data_file_sop.VISIBILITY as visibility, data_file_sop.JUDUL as judul, data_file_sop.PATH_FILE as path, data_file_sop.ID_KATEGORI as id_kategori, kategori_sop.NAMA_KATEGORI as nama_kategori, data_file_sop.LAST_UPDATE as LAST_UPDATE');
 		$this->db->from('data_file_sop');

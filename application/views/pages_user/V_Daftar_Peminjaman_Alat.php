@@ -52,7 +52,7 @@
                                                         <tr>
                                                             <td><?php echo $iterator;?></td>
                                                             <td><?php echo $peminjam['TANGGAL_REKAM'];?></td>
-                                                            <td><?php echo $peminjam['USER_PEMINJAM'];?></td>
+                                                            <td><?php echo $peminjam['NAMA_PEMINJAM']. " (". $peminjam['EMAIL_PEMINJAM']. ')';?></td>
                                                             <td><?php echo $peminjam['NAMA_ALAT'];?></td>
                                                             <td><?php echo $peminjam['TANGGAL_PINJAM'];?></td>
                                                             <td><?php echo $peminjam['JAM_MULAI'].' - '.  $peminjam['JAM_SELESAI'];?></td>
