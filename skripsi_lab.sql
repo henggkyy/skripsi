@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 31, 2019 at 05:03 PM
+-- Generation Time: Apr 02, 2019 at 04:57 AM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 5.6.38
 
@@ -81,7 +81,7 @@ CREATE TABLE `data_buku_saku` (
 --
 
 INSERT INTO `data_buku_saku` (`ID`, `JUDUL`, `PATH_FILE`, `VISIBILITY`, `LAST_UPDATE`) VALUES
-(1, 'Buku Saku Mahasiswa', '0', 1, '2019-03-31 09:55:37pm');
+(3, 'Buku Saku Mahasiswa', '95202458253341975615.pdf', 1, '2019-04-01 09:51:03pm');
 
 -- --------------------------------------------------------
 
@@ -125,6 +125,30 @@ CREATE TABLE `detail_user` (
 
 INSERT INTO `detail_user` (`ID`, `ID_USER`, `ANGKATAN`, `AWAL_KONTRAK`, `AKHIR_KONTRAK`) VALUES
 (1, 3, 2015, '02/28/2019', '04/16/2019');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `file_bantuan_ujian`
+--
+
+CREATE TABLE `file_bantuan_ujian` (
+  `ID` int(11) NOT NULL,
+  `PATH_FILE` varchar(256) NOT NULL,
+  `NAMA_FILE_USER` varchar(256) NOT NULL,
+  `TIPE_UJIAN` int(11) NOT NULL COMMENT '0 : UTS, 1: UAS',
+  `ID_MATKUL` int(11) NOT NULL,
+  `LAST_UPDATE` varchar(64) NOT NULL,
+  `USER_UPLOAD` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `file_bantuan_ujian`
+--
+
+INSERT INTO `file_bantuan_ujian` (`ID`, `PATH_FILE`, `NAMA_FILE_USER`, `TIPE_UJIAN`, `ID_MATKUL`, `LAST_UPDATE`, `USER_UPLOAD`) VALUES
+(2, '09733464363070198342.pdf', 'File Bantuan UTS 1', 0, 4, '2019-04-01 10:32:43pm', 1),
+(3, '43665355064154905214.pdf', 'File Bantuan UTS 2', 0, 4, '2019-04-01 10:32:54pm', 1);
 
 -- --------------------------------------------------------
 
@@ -338,7 +362,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`ID`, `ID_ROLE`, `NAMA`, `EMAIL`, `NIK`, `STATUS`, `IS_DOSEN`) VALUES
 (1, 1, 'Hengky Surya', '7315051@student.unpar.ac.id', 0, 1, 1),
 (2, 2, 'Pascal Alfadian', 'pascal@unpar.ac.id', 20180014, 1, 1),
-(3, 4, 'Adrian Stefanus', '7315014@student.unpar.ac.id', 2018000, 1, 0);
+(3, 4, 'Adrian Stefanus', '7315014@student.unpar.ac.id', 2018000, 1, 0),
+(4, 3, 'Pranyoto', 'pranyoto@unpar.ac.id', 2018012, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -410,6 +435,14 @@ ALTER TABLE `data_file_sop`
 ALTER TABLE `detail_user`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `ID_USER` (`ID_USER`);
+
+--
+-- Indexes for table `file_bantuan_ujian`
+--
+ALTER TABLE `file_bantuan_ujian`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `ID_MATKUL` (`ID_MATKUL`),
+  ADD KEY `USER_UPLOAD` (`USER_UPLOAD`);
 
 --
 -- Indexes for table `jadwal_lab`
@@ -507,7 +540,7 @@ ALTER TABLE `daftar_lab`
 -- AUTO_INCREMENT for table `data_buku_saku`
 --
 ALTER TABLE `data_buku_saku`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `data_file_sop`
@@ -520,6 +553,12 @@ ALTER TABLE `data_file_sop`
 --
 ALTER TABLE `detail_user`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `file_bantuan_ujian`
+--
+ALTER TABLE `file_bantuan_ujian`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `jadwal_lab`
@@ -573,7 +612,7 @@ ALTER TABLE `periode_akademik`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user_permission`
@@ -602,6 +641,13 @@ ALTER TABLE `data_file_sop`
 --
 ALTER TABLE `detail_user`
   ADD CONSTRAINT `detail_user_ibfk_1` FOREIGN KEY (`ID_USER`) REFERENCES `users` (`ID`);
+
+--
+-- Constraints for table `file_bantuan_ujian`
+--
+ALTER TABLE `file_bantuan_ujian`
+  ADD CONSTRAINT `file_bantuan_ujian_ibfk_1` FOREIGN KEY (`ID_MATKUL`) REFERENCES `mata_kuliah` (`ID`),
+  ADD CONSTRAINT `file_bantuan_ujian_ibfk_2` FOREIGN KEY (`USER_UPLOAD`) REFERENCES `users` (`ID`);
 
 --
 -- Constraints for table `jadwal_lab`
