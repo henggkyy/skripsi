@@ -2,6 +2,38 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani proses administrasi admin mulai dari proses input, jadwal, dsb.
 class C_Admin extends CI_Controller {
+	//Method untuk load halaman detail admin
+	function loadDetailAdmin(){
+		if($this->session->userdata('logged_in')){
+			$id_admin = $this->input->get('id_admin');
+			if($id_admin != ""){
+				$this->load->model('Detail_user');
+				$this->load->model('Users');
+				$is_admin = $this->Users->checkUserRole($id_admin, 4);
+				if(!$is_admin){
+					$this->session->set_flashdata('error', 'Data admin tidak ditemukan!');
+					redirect('/admin_lab');
+				}
+				$data['title'] = 'Detail Admin Laboratorium | SI Akademik Lab. Komputasi TIF UNPAR';
+				$this->load->model('Periode_akademik');
+				$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+				$data['data_admin'] = $this->Detail_user->getDataAdmin($id_admin);
+				$data['nama_admin'] = $this->Users->getIndividualItem($id_admin, 'NAMA');
+				$this->load->view('template/Header', $data);
+				$this->load->view('template/Sidebar', $data);
+				$this->load->view('template/Topbar');
+				$this->load->view('template/Notification');
+				$this->load->view('pages_user/V_Detail_Admin', $data);
+				$this->load->view('template/Footer');
+			}
+			else{
+				redirect('/admin_lab');
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
 	//Method untuk mengaktifkan kembali admin
 	function activateAdmin(){
 		if($this->session->userdata('logged_in')){

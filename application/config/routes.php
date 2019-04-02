@@ -110,6 +110,7 @@ $route['admin_lab'] = 'C_Main/loadMenuAdmin';
 $route['admin_lab/add'] = 'C_Admin/insertAdmin';
 $route['admin_lab/nonactivate'] = 'C_Admin/nonactivateAdmin';
 $route['admin_lab/activate'] = 'C_Admin/activateAdmin';
+$route['admin_lab/detail'] = 'C_Admin/loadDetailAdmin';
 
 $route['alat_lab'] = 'C_Main/loadMenuAlatLab';
 $route['alat_lab/add'] = 'C_Alat/insertAlat';

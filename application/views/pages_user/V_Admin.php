@@ -109,7 +109,7 @@
                                                         ?>
                                                         </td>
                                                         <td align="center">
-                                                            <a href="<?php echo base_url().'admin_lab_detail?id_admin='.$admin['ID'];?>" class="btn btn-primary btn-sm"><i class="fas fa-info"></i> Detail</button></a>
+                                                            <a href="<?php echo base_url().'admin_lab/detail?id_admin='.$admin['ID'];?>" class="btn btn-primary btn-sm"><i class="fas fa-info"></i> Detail</button></a>
                                                             <?php if($admin['STATUS'] == 1){
                                                                 echo form_open('admin_lab/nonactivate');?>
                                                                 <input type="hidden" name="id_admin" value="<?php echo $admin['ID'];?>" required>

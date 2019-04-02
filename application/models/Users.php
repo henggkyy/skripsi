@@ -1,7 +1,33 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Users extends CI_Model{
+	function checkUserRole($id_user, $role){
+		$this->db->select('users.ID');
+		$this->db->where('ID', $id_user);
+		$this->db->where('ID_ROLE', $role);
+		$this->db->from('users');
+		$result = $this->db->get();
+		if($result->num_rows() == 1){
+			return true;
+		} 
+		else {
+			return false;
+		}
+	}
 
+	//Method untuk mendapatkan individual item
+	function getIndividualItem($id_user, $item){
+		$this->db->select($item);
+		$this->db->where('ID', $id_user);
+		$this->db->from('users');
+		$result = $this->db->get();
+		if($result->num_rows() == 1){
+			return $result->row(0)->$item;
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk mendapatkan data user berdasarkan role
 	function getAllUserByRole($id_role){
 		$this->db->select('users.ID as ID, NAMA,NIK, EMAIL, STATUS');

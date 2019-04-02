@@ -4,20 +4,7 @@
                         <div class="col-lg-12">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
-                                    <h2>Periode Aktif : 
-                                        <?php
-                                        if($periode_aktif){
-                                            ?>
-                                            <span><?php echo $periode_aktif;?></span>
-                                            <?php
-                                        }
-                                        else{
-                                            ?>
-                                            <span style="color: red;"> <br>Belum ada periode semester aktif!</span>
-                                            <?php
-                                        }
-                                        ?>
-                                    </h2>
+                                    <?php $this->load->view('pages_user/V_Template_Periode_Aktif');?>
                                 </div>
                             </div>
                         </div> 
@@ -31,7 +18,7 @@
                                     <h3 align="center"><?php echo $nama_matkul;?></h3>
                                     <hr>
                                     <ul class="unstyled">
-                                        <li><h4>Informasi</h4>
+                                        <li><h3>Informasi</h3>
                                             <ul>
                                                 <?php
                                                 if(isset($info_matkul) && $info_matkul){
