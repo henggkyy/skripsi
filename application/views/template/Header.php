@@ -18,4 +18,9 @@
     <link href="<?php echo base_url();?>assets/css/plugins/fullcalendar/fullcalendar.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/css/plugins/fullcalendar/fullcalendar.print.css" rel='stylesheet' media='print'>
     <link href="<?php echo base_url();?>assets/css/plugins/clockpicker/clockpicker.css" rel="stylesheet">
+    <style type="text/css">
+        .clockpicker-popover {
+            z-index: 999999 !important;
+        }
+    </style>
 </head>

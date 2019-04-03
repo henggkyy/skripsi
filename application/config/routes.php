@@ -111,6 +111,9 @@ $route['admin_lab/add'] = 'C_Admin/insertAdmin';
 $route['admin_lab/nonactivate'] = 'C_Admin/nonactivateAdmin';
 $route['admin_lab/activate'] = 'C_Admin/activateAdmin';
 $route['admin_lab/detail'] = 'C_Admin/loadDetailAdmin';
+$route['admin_lab/update_kontrak'] = 'C_Admin/updateMasaKontrak';
+$route['admin_lab/insert_jadwal_manual'] = 'C_Admin/insertJadwalBertugasManual';
+$route['admin_lab/insert_jadwal_auto'] = 'C_Admin/insertJadwalBertugasAuto';
 
 $route['alat_lab'] = 'C_Main/loadMenuAlatLab';
 $route['alat_lab/add'] = 'C_Alat/insertAlat';

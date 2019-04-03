@@ -28,7 +28,7 @@
                                                     <div class="form-group  row">
                                                         <label class="col-sm-4 col-form-label">NIK Admin <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" name="nik" class="form-control" required>
+                                                            <input type="text" name="nik" class="form-control" data-mask="99999999" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group  row">
@@ -46,19 +46,19 @@
                                                     <div class="form-group  row">
                                                         <label class="col-sm-4 col-form-label">Angkatan <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" name="angkatan" class="form-control" required>
+                                                            <input type="text" name="angkatan" class="form-control" data-mask="9999" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row" id="data_1">
                                                         <label class="col-sm-4 col-form-label">Mulai Kontrak <span style="color: red">*</span> :</label>
                                                         <div class="input-group date col-sm-8">
-                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" name="awal_kontrak" required>
+                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" placeholder="mm/dd/yyyy" data-mask="99/99/9999" name="awal_kontrak" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row" id="data_1">
                                                         <label class="col-sm-4 col-form-label">Akhir Kontrak <span style="color: red">*</span> :</label>
                                                         <div class="input-group date col-sm-8">
-                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" name="akhir_kontrak" required>
+                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" placeholder="mm/dd/yyyy" data-mask="99/99/9999" name="akhir_kontrak" required>
                                                         </div>
                                                     </div>
                                                     <p style="color: red;" align="center">* Wajib Diisi</p>

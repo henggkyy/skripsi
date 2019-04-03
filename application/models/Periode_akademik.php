@@ -1,7 +1,19 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Periode_akademik extends CI_Model{
-
+	//Method untuk mendapatkan tanggal periode akademik, tanggal uts, dan tanggal uas
+	function getTanggalAkademik($id_periode){
+		$this->db->select('START_PERIODE, END_PERIODE, START_UTS, END_UTS, START_UAS, END_UAS');
+		$this->db->where('ID', $id_periode);
+		$this->db->from('periode_akademik');
+		$result = $this->db->get();
+		if($result->num_rows() == 1){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk mendapatkan individual item dari periode akademik
 	//Method untuk mendapatkan item matakuliah
 	function getIndividualItem($id_periode, $item){

@@ -54,7 +54,7 @@
 		var id = ++idCounter + '';
 		return prefix ? prefix + id : id;
 	}
-
+	//resolved Clock appearing behind bootstrap modal var parentsZindex = []; element.parents().each(function(){ var itemZIndex = $(this).css('z-index'); if (itemZIndex !== 'auto' && itemZIndex !== 0) parentsZindex.push(parseInt(itemZIndex)); }); var zIndex = Math.max.apply(Math, parentsZindex) + 1; popover.css({ zIndex: zIndex })
 	// Clock size
 	var dialRadius = 100,
 		outerRadius = 80,

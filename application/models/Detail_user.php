@@ -2,6 +2,23 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Method menangani koneksi antara aplikasi dengan tabel detail_user
 class Detail_user extends CI_Model{
+	//Method untuk update periode kontrak admin
+	function updateKontrakAdmin($id_user, $tgl_awal, $tgl_akhir){
+		$data = array(
+		    'AWAL_KONTRAK' => $tgl_awal,
+		    'AKHIR_KONTRAK' => $tgl_akhir
+		);
+
+		$this->db->where('ID_USER', $id_user);
+		$res = $this->db->update('detail_user', $data);
+		if($res){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
 	//Method untuk mendapatkan data admin
 	function getDataAdmin($id_user){
 		$this->db->select('detail_user.ANGKATAN as ANGKATAN, detail_user.AWAL_KONTRAK as AWAL_KONTRAK, detail_user.AKHIR_KONTRAK as AKHIR_KONTRAK, users.NAMA as NAMA, users.EMAIL as EMAIL, users.NIK as NIK');

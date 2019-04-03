@@ -10,7 +10,6 @@
     <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js'></script>
 	<link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.24/themes/start/jquery-ui.css" type="text/css" />
 	<script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.24/jquery-ui.min.js" type="text/javascript"></script>
-	<script src="https://github.com/pipwerks/PDFObject/blob/master/pdfobject.min.js"></script>
 	<script src="<?php echo base_url();?>assets/js/bootstrap.min.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
@@ -27,11 +26,59 @@
 			calendarWeeks: true,
 			autoclose: true
 		});
+		//Jquery untuk form input pada detail admin
+		//Form terdiri dari update masa kontrak, insert jadwal bertugas baik secara auto maupun manual
+		//Menggunakan library clockpicker
+		//Ada pengecekan apabila input jam selesai lebih kecil daripada jam mulai
+		//If Button Add Hari on click, maka akan menambah form.
+		<?php
+		if(isset($detail_admin) && $detail_admin){
+			?>
+		$('document').ready(function(){
+			var form = '<div class="form-group row"><label class="col-sm-6 col-form-label">Hari Bertugas <span style="color: red">*</span> :</label><div class="col-sm-6"><select name="hari_bertugas[]" class="form-control" required><option value="" selected disabled>-- Please Select One --</option><option value="Monday">Senin</option><option value="Tuesday" >Selasa</option><option value="Wednesday" >Rabu</option><option value="Thursday" >Kamis</option><option value="Friday" >Jumat</option><option value="Saturday" >Sabtu</option></select></div></div><div class="form-group row"><label class="col-sm-6 col-form-label">Jam Mulai Bertugas <span style="color: red">*</span> :</label> <div class="col-sm-6"><input id="waktu_awal" required type="text" placeholder="hh:mm" data-mask="99:99" class="form-control" name="jam_mulai[]"></div></div><div class="form-group row"><label class="col-sm-6 col-form-label">Jam Selesai Bertugas <span style="color: red">*</span> :</label><div class="col-sm-6"><input id="waktu_akhir" required type="text" placeholder="hh:mm" data-mask="99:99" class="form-control" name="jam_selesai[]"></div></div>';
+			
+
+			function bindClockPicker() {
+		        $('#waktu_awal').clockpicker({
+					autoclose: true
+				});
+				$('#waktu_akhir').clockpicker({
+					autoclose: true
+				});
+		    }
+			bindClockPicker();
+			$('#add_day').on('click', function(){
+				$('#form_bertugas_auto').append(form);
+				bindClockPicker();
+			});
+			$('#waktu_awal_2').clockpicker({
+				autoclose: true
+			});
+			$('#waktu_akhir_2').clockpicker({
+				autoclose: true
+			});
+		});
+			<?php
+		}
+		?>
 		
+		$("#tgl_mulai").datepicker({
+			todayBtn: "linked",
+			keyboardNavigation: false,
+			forceParse: false,
+			calendarWeeks: true,
+			autoclose: true
+		});
+		$("#tgl_akhir").datepicker({
+			todayBtn: "linked",
+			keyboardNavigation: false,
+			forceParse: false,
+			calendarWeeks: true,
+			autoclose: true});
+
 		$('#btn_insert_jadwal').click(function () {
 			if($('#container_jadwal').css('display') == 'none'){
-				$('#container_jadwal').show(); 
-	        	$('.clockpicker').clockpicker();
+				$('#container_jadwal').show();
 			}
 			else{
 				$('#container_jadwal').hide();
@@ -40,14 +87,14 @@
 	</script>
 	<script src="<?php echo base_url();?>assets/js/plugins/dataTables/datatables.min.js"></script>
 	<script type="text/javascript">
-		$(document).ready(function(){
-			
+		$('document').ready(function(){
 			var input_text_pl = '<input class="form-control" type="text" required name="nama_pl" placeholder="Contoh: netbeans, spotify, googlechrome"></input>'
 			var button_add_pl = $('#button_add_pl');
 			$(button_add_pl).click(function(e){
 		        $('#input_pl').html(input_text_pl);
 
 		    });
+			
 
 			var header = '<h5>Pertemuan Ke - </h5>'; 
 			var field_select = '<select name="hari[]" class="form-control col-md-8" required><option value="" selected disabled>-- Please Select One --</option><option value="Monday">Senin</option><option value="Tuesday" >Selasa</option><option value="Wednesday" >Rabu</option><option value="Thursday" >Kamis</option><option value="Friday" >Jumat</option><option value="Saturday" >Sabtu</option></select>';
@@ -110,7 +157,28 @@
 				<?php
 			}
 			?>
-	        
+	        <?php if(isset($jadwal_admin) && $jadwal_admin){
+				?>
+				$('#calendar').fullCalendar({
+		            header: {
+		                left: 'prev,next today',
+		                center: 'title',
+		                right: 'month,agendaWeek,agendaDay'
+		            },
+		            events: <?php echo $jadwal_json;?>
+		     //        eventClick: function(event, jsEvent, view) {
+
+					  //   $('#modal_event').modal('show');
+					  //   $('#judul_event').text(event.title);
+					  //   $('#event').text(event.title);
+					  //   $('#start').text(event.start);
+					  //   $('#end').text(event.end);
+					  //   $('#lokasi_event').text(event.nama_lab);
+					  // }
+		        });
+				<?php
+			}
+			?>
 
 		});
 		<?php
