@@ -45,6 +45,9 @@
                                                         echo $set_uts;
                                                     }
                                                     else{
+                                                        if($flag){
+
+                                                        
                                                         ?>
                                                         <button data-toggle="modal" data-target="#modalUTS" class="btn btn-primary btn-sm" type="submit"><i class="fas fa-clock"></i> Set Tanggal UTS</button>
                                                     <!--Modal Set UTS-->
@@ -60,7 +63,7 @@
                                                                     <div class="form-group  row" id="data_1">
                                                                         <label class="col-sm-4 col-form-label">Tanggal UTS <span style="color: red">*</span> :</label>
                                                                         <div class="input-group date">
-                                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" name="tgl_uts">
+                                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text"placeholder="mm/dd/yyyy" data-mask="99/99/9999"class="form-control" name="tgl_uts">
                                                                         </div>
 
                                                                     </div>
@@ -78,6 +81,7 @@
                                                     </div>
                                                     <!--END MODAL Set UTS-->
                                                         <?php
+                                                        }
                                                     }
                                                     ?>
                                                     
@@ -90,7 +94,7 @@
                                                         echo $set_uas;
                                                     }
                                                     else{
-                                                        ?>
+                                                       if($flag){ ?>
                                                         <button data-toggle="modal" data-target="#modalUAS" class="btn btn-primary btn-sm" type="submit"><i class="fas fa-clock"></i> Set Tanggal UAS</button>
                                                     <!--Modal Set UAS-->
                                                     <div class="modal inmodal" id="modalUAS" tabindex="-1" role="dialog"  aria-hidden="true">
@@ -105,7 +109,7 @@
                                                                     <div class="form-group  row" id="data_1">
                                                                         <label class="col-sm-4 col-form-label">Tanggal UAS <span style="color: red">*</span> :</label>
                                                                         <div class="input-group date">
-                                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" name="tgl_uas">
+                                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" placeholder="mm/dd/yyyy" data-mask="99/99/9999" name="tgl_uas">
                                                                         </div>
 
                                                                     </div>
@@ -124,13 +128,14 @@
                                                     <!--END MODAL Set UAS-->
                                                         <?php
                                                     }
+                                                    }
                                                     ?>
                                                     
                                                 </li>
                                                 <li>
                                                     <h4 style="font-weight: bold;">Peserta Mata Kuliah : </h4>
                                                     <?php if(!$set_peserta){
-                                                        ?>
+                                                        if($flag){?>
                                                         <button data-toggle="modal" data-target="#insertMhs" class="btn btn-primary btn-sm" type="submit"><i class="fas fa-group"></i> Insert Mahasiswa Peserta Kuliah</button>
                                                         <!--Modal Set Peserta Matkul-->
                                                         <div class="modal inmodal" id="insertMhs" tabindex="-1" role="dialog"  aria-hidden="true">
@@ -164,6 +169,7 @@
                                                         </div>
                                                         <!--END MODAL Set Peserta Matkul-->
                                                         <?php
+                                                    }
                                                     }
                                                     else{
                                                         ?>
@@ -201,6 +207,9 @@
                                                 <!--MENU JADWAL KELAS-->
                                                 <li>
                                                     <h4 style="font-weight: bold;">Jadwal Kelas : </h4>
+                                                    <?php
+                                                    if($flag){
+                                                        ?>
                                                     <button id="btn_insert_jadwal" class="btn btn-success btn-sm" type="submit"><i class="fas fa-group"></i> Insert Jadwal Kelas</button>
                                                     <div style="display: none;" id="container_jadwal" class="panel panel-warning">
                                                         <div class="panel-heading">
@@ -237,11 +246,16 @@
                                                             </form>
                                                         </div>
                                                     </div>
-                                                      
+                                                    <?php
+                                                    }
+                                                    ?>
                                                 </li>
                                                 <!--Menu Kebutuhan Perangkat Lunak-->
                                                 <li>
                                                     <h4 style="font-weight: bold;">Kebutuhan Perangkat Lunak : </h4>
+                                                    <?php
+                                                    if($flag){
+                                                        ?>
                                                     <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#insertPL">Tambah Perangkat Lunak</button>
                                                     <!--Modal Add Perangkat Lunak-->
                                                         <div class="modal inmodal" id="insertPL" tabindex="-1" role="dialog"  aria-hidden="true">
@@ -283,6 +297,9 @@
                                                             </div>
                                                         </div>
                                                         <!--END MODAL Add Perangkat Lunak-->
+                                                        <?php
+                                                    }
+                                                        ?>
                                                     <div class="table-responsive">
                                                         <table class="table table-striped table-bordered table-hover">
                                                             <thead>
@@ -318,11 +335,22 @@
                                                                             </td>
                                                                             <td><?php echo $pl['LAST_CHECKED'];?></td>
                                                                             <td align="center">
-                                                                                <?php echo form_open('administrasi_matkul/perangkat_lunak/delete');?>
+                                                                                <?php
+                                                                                if($flag){
+
+                                                                                 echo form_open('administrasi_matkul/perangkat_lunak/delete');?>
+                                                                                
                                                                                 <input type="hidden" name="id_matkul" value="<?php echo $_GET['id'];?>" required>
                                                                                 <input type="hidden" name="id_pl" value="<?php echo $pl['ID'];?>" required>
                                                                                 <button class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus kebutuhan perangkat lunak ini?')" type="submit"><i class="far fa-trash-alt"></i> Delete</button>
                                                                                 </form>
+                                                                                <?php
+                                                                            }
+                                                                            else{
+                                                                                echo '-';
+                                                                               } 
+                                                                                ?>
+                                                                            
                                                                             </td>
                                                                         </tr>
                                                                         <?php
@@ -344,6 +372,9 @@
                                                 <!-- START MENU FILE BANTUAN UJIAN-->
                                                 <li>
                                                     <h4 style="font-weight: bold;">File Bantuan Ujian : </h4>
+                                                    <?php
+                                                    if($flag){
+                                                        ?>
                                                     <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#insertFileBantuan"><i class="fas fa-file-upload"></i> Upload File Bantuan</button>
                                                     <!--Modal ADD FILE BANTUAN-->
                                                         <div class="modal inmodal" id="insertFileBantuan" tabindex="-1" role="dialog"  aria-hidden="true">
@@ -390,6 +421,9 @@
                                                             </div>
                                                         </div>
                                                         <!--END MODAL ADD FILE BANTUAN-->
+                                                        <?php
+                                                    }
+                                                        ?>
                                                     <div class="table-responsive">
                                                         <table class="table table-striped table-bordered table-hover">
                                                             <thead>
@@ -422,11 +456,16 @@
                                                                         <td><?php echo $file['USER_UPLOAD'];?></td>
                                                                         <td align="center">
                                                                             <a class="btn btn-sm btn-success" target="_blank" href="<?php echo base_url();?>download/file_bantuan/<?php echo $file['PATH_FILE'];?>"><i class="fas fa-download"></i> Download</a>
-                                                                            <?php echo form_open('administrasi_matkul/file_bantuan/remove');?>
+                                                                            <?php
+                                                                            if($flag){
+                                                                                echo form_open('administrasi_matkul/file_bantuan/remove');?>
                                                                             <input type="hidden" name="id_matkul" value="<?php echo $_GET['id'];?>" required>
                                                                             <input type="hidden" name="id_file_bantuan" value="<?php echo $file['ID'];?>" required>
                                                                             <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus file bantuan ini?')" class="btn btn-sm btn-danger" href=""><i class="fas fa-trash"></i> Hapus</button>
                                                                             </form>
+                                                                            <?php
+                                                                        }
+                                                                            ?>
                                                                         </td>
                                                                     </tr>
                                                                         <?php
@@ -434,7 +473,7 @@
                                                                     }
                                                                 }
                                                                 else{
-                                                                    echo '<tr><td colspan="5">Belum ada file bantuan!</td></tr>';
+                                                                    echo '<tr><td colspan="6">Belum ada file bantuan!</td></tr>';
                                                                 }
                                                                 ?>
                                                             </tbody>
@@ -442,15 +481,7 @@
                                                     </div>
                                                 </li>
                                                 <!-- END MENU FILE BANTUAN UJIAN-->
-                                                <li>
-                                                    <h4 style="font-weight: bold;">Cetak Absensi Ujian : </h4>
-                                                </li>
-                                                <li>
-                                                    <h4 style="font-weight: bold;">Inisiasi Tempat Duduk UTS : </h4>
-                                                </li>
-                                                <li>
-                                                    <h4 style="font-weight: bold;">Inisiasi Tempat Duduk UAS : </h4>
-                                                </li>
+                                                
                                             </ul>
                                         </li>
                                     </ul>

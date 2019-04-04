@@ -102,8 +102,26 @@
                                     }
                                     ?>
                                     <hr>
+                                    <label class="col-sm-4 col-form-label">Periode Akademik:</label>
+                                    <div class="col-sm-8 ">
+                                        <form method="GET" action="<?php echo base_url()."administrasi_matkul";?>">
+                                            
+                                            <select name="id_periode" onchange="this.form.submit()" class="form-control">
+                                                    <?php
+                                                    if(isset($daftar_periode) && $daftar_periode){
+                                                        foreach ($daftar_periode as $list_periode) {
+                                                    ?>
+                                                    <option value="<?php echo $list_periode['ID'];?>" <?php if($list_periode['ID'] == $id_periode_aktif){ echo 'selected';}?>><?php echo $list_periode['NAMA'];?></option>
+                                                    <?php
+                                                        }
+                                                    }
+                                                    ?>
+                                            </select>
+                                        </form>
+                                    </div>
+                                    <br>
+                                    <hr>
                                     <h3>Daftar Mata Kuliah</h3>
-                                    
                                     <table class="table table-bordered">
                                         <thead>
                                         <tr>

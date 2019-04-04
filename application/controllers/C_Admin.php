@@ -496,19 +496,22 @@ class C_Admin extends CI_Controller {
 				$data['nama_admin'] = $this->Users->getIndividualItem($id_admin, 'NAMA');
 				$data['id_admin'] = $this->Users->getIndividualItem($id_admin, 'ID');
 				$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
-				
+				$flag = true;
 				if(isset($_GET['id_periode'])){
 					$id_periode_selected = $_GET['id_periode'];
 					if($id_periode_selected != ""){
 						$data['jadwal_admin'] = $this->Jadwal_bertugas_admin->getJadwalBertugas($data['id_admin'], $id_periode_selected);
 						$data['id_periode_aktif'] = $id_periode_selected;
 					}
+					if($id_periode_selected != $id_periode){
+						$flag = false;
+					}
 				}
 				else{
 					$data['id_periode_aktif'] = $id_periode;
 					$data['jadwal_admin'] = $this->Jadwal_bertugas_admin->getJadwalBertugas($data['id_admin'], $id_periode);
 				}
-				
+				$data['flag'] = $flag; 
 				$data_json = array();
 				if(isset($data['jadwal_admin']) && $data['jadwal_admin']){
 					foreach ($data['jadwal_admin'] as $jadwal) {

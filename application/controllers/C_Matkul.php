@@ -14,6 +14,13 @@ class C_Matkul extends CI_Controller{
 				redirect("/administrasi_matkul_detail?id=$id_matkul");
 			}
 			else{
+				$this->load->model('Periode_akademik');
+				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
+				$checkPeriodeAktif = $this->Periode_akademik->checkIdAktif($id_periode);
+				if(!$checkPeriodeAktif){
+					$this->session->set_flashdata('error', 'Tidak dapat memasukkan file bantuan karena periode akademik mata kuliah sudah selesai!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
 				$id_file_bantuan = $this->input->post('id_file_bantuan');
 
 				$this->load->model('File_bantuan_ujian');
@@ -59,6 +66,13 @@ class C_Matkul extends CI_Controller{
 				redirect("/administrasi_matkul_detail?id=$id_matkul");
 			}
 			else{
+				$this->load->model('Periode_akademik');
+				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
+				$checkPeriodeAktif = $this->Periode_akademik->checkIdAktif($id_periode);
+				if(!$checkPeriodeAktif){
+					$this->session->set_flashdata('error', 'Tidak dapat memasukkan file bantuan karena periode akademik mata kuliah sudah selesai!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
 				$tipe_ujian = $this->input->post('tipe_ujian');
 				if($tipe_ujian == 0 || $tipe_ujian == 1){
 					$nama_keterangan = htmlentities($this->input->post('nama_keterangan'));
@@ -181,14 +195,23 @@ class C_Matkul extends CI_Controller{
 				$id_pl = $this->input->post('id_pl');
 				$id_matkul = $this->input->post('id_matkul');
 				$this->load->model('Kebutuhan_pl');
-				$res_delete = $this->Kebutuhan_pl->removePL($id_pl);
+				$this->load->model('Periode_akademik');
+				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
+				$checkPeriodeAktif = $this->Periode_akademik->checkIdAktif($id_periode);
+				if($checkPeriodeAktif){
+					$res_delete = $this->Kebutuhan_pl->removePL($id_pl);
 
-				if($res_delete){
-					$this->session->set_flashdata('success', 'Berhasil menghapus kebutuhan perangkat lunak');
-					redirect("/administrasi_matkul_detail?id=$id_matkul");
+					if($res_delete){
+						$this->session->set_flashdata('success', 'Berhasil menghapus kebutuhan perangkat lunak');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
+					else{
+						$this->session->set_flashdata('error', 'Gagal menghapus kebutuhan perangkat lunak');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
 				}
 				else{
-					$this->session->set_flashdata('error', 'Gagal menghapus kebutuhan perangkat lunak');
+					$this->session->set_flashdata('error', 'Tidak dapat menghapus kebutuhan perangkat lunak karena periode akademik mata kuliah sudah selesai!');
 					redirect("/administrasi_matkul_detail?id=$id_matkul");
 				}
 			}
@@ -213,13 +236,22 @@ class C_Matkul extends CI_Controller{
 				$id_matkul = $this->input->post('id_matkul');
 				$nama_pl = $this->input->post('nama_pl');
 				$this->load->model('Kebutuhan_pl');
-				$res = $this->Kebutuhan_pl->insertPL($id_matkul, $nama_pl);
-				if($res){
-					$this->session->set_flashdata('success', 'Berhasil memasukkan kebutuhan perangkat lunak');
-					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				$this->load->model('Periode_akademik');
+				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
+				$checkPeriodeAktif = $this->Periode_akademik->checkIdAktif($id_periode);
+				if($checkPeriodeAktif){
+					$res = $this->Kebutuhan_pl->insertPL($id_matkul, $nama_pl);
+					if($res){
+						$this->session->set_flashdata('success', 'Berhasil memasukkan kebutuhan perangkat lunak');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
+					else{
+						$this->session->set_flashdata('error', 'Gagal memasukkan kebutuhan perangkat lunak');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
 				}
 				else{
-					$this->session->set_flashdata('error', 'Gagal memasukkan kebutuhan perangkat lunak');
+					$this->session->set_flashdata('error', 'Tidak dapat memasukkan kebutuhan perangkat lunak karena periode akademik mata kuliah sudah selesai!');
 					redirect("/administrasi_matkul_detail?id=$id_matkul");
 				}
 			}
@@ -358,13 +390,21 @@ class C_Matkul extends CI_Controller{
 			$this->load->model('Kebutuhan_pl');
 			$this->load->model('File_bantuan_ujian');
 			$id_matkul = $_GET['id'];
+
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+			$id_periode_aktif = $this->Periode_akademik->getIDPeriodeAktif();
 			$data['title'] = 'Detail Mata Kuliah | SI Akademik Lab. Komputasi TIF UNPAR';
 			$nama_matkul = $this->Mata_kuliah->getIndividualItem($id_matkul, "NAMA_MATKUL");
 			if(!$nama_matkul){
 				$this->session->set_flashdata('error', 'Mata Kuliah tidak tersedia!');
 				redirect('/administrasi_matkul');
 			}
+			$id_periode_matkul = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
+			$flag = true;
+			if($id_periode_aktif != $id_periode_matkul){
+				$flag = false;
+			}
+			$data['flag'] = $flag;
 			$data['nama_matkul'] = $nama_matkul;
 			$data['info_matkul'] = $this->Mata_kuliah->getInformasiBasicMatkul($id_matkul);
 			$data['set_uts'] = $this->Mata_kuliah->cekJadwalUjian($id_matkul, "TANGGAL_UTS");
@@ -400,13 +440,32 @@ class C_Matkul extends CI_Controller{
 				$tgl_uts = $this->input->post('tgl_uts');
 				$tgl_uts = date("Y-m-d", strtotime($tgl_uts));
 				$this->load->model('Mata_kuliah');
-				$res = $this->Mata_kuliah->insertTanggalUjian($id_matkul, "TANGGAL_UTS", $tgl_uts);
-				if($res){
-					$this->session->set_flashdata('success', 'Berhasil menambahkan tanggal UTS mata kuliah!');
-					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				$this->load->model('Periode_akademik');
+				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
+				$checkPeriodeAktif = $this->Periode_akademik->checkIdAktif($id_periode);
+				if($checkPeriodeAktif){
+					$array_tanggal_akademik = $this->Periode_akademik->getTanggalAkademik($id_periode);
+					$start_uts = $array_tanggal_akademik[0]['START_UTS'];
+					$end_uts = $array_tanggal_akademik[0]['END_UTS'];
+
+					$check_in_range_uts = $this->check_in_range($start_uts, $end_uts, $tgl_uts, 'full');
+					if(!$check_in_range_uts){
+						$this->session->set_flashdata('error', 'Gagal menambahkan tanggal UTS karena tanggal UTS tidak berada dalam masa UTS periode akademik yg sdg berjalan!');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
+
+					$res = $this->Mata_kuliah->insertTanggalUjian($id_matkul, "TANGGAL_UTS", $tgl_uts);
+					if($res){
+						$this->session->set_flashdata('success', 'Berhasil menambahkan tanggal UTS mata kuliah!');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
+					else{
+						$this->session->set_flashdata('error', 'Gagal menambahkan tanggal UTS mata kuliah!');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
 				}
 				else{
-					$this->session->set_flashdata('error', 'Gagal menambahkan tanggal UTS mata kuliah!');
+					$this->session->set_flashdata('error', 'Tidak dapat memasukkan jadwal UTS karena periode akademik mata kuliah sudah selesai!');
 					redirect("/administrasi_matkul_detail?id=$id_matkul");
 				}
 			}
@@ -431,13 +490,32 @@ class C_Matkul extends CI_Controller{
 				$tgl_uas = $this->input->post('tgl_uas');
 				$tgl_uas = date("Y-m-d", strtotime($tgl_uas));
 				$this->load->model('Mata_kuliah');
-				$res = $this->Mata_kuliah->insertTanggalUjian($id_matkul, "TANGGAL_UAS", $tgl_uas);
-				if($res){
-					$this->session->set_flashdata('success', 'Berhasil menambahkan tanggal UAS mata kuliah!');
-					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				$this->load->model('Periode_akademik');
+				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
+				$checkPeriodeAktif = $this->Periode_akademik->checkIdAktif($id_periode);
+				if($checkPeriodeAktif){
+					$array_tanggal_akademik = $this->Periode_akademik->getTanggalAkademik($id_periode);
+					$start_uas = $array_tanggal_akademik[0]['START_UAS'];
+					$end_uas = $array_tanggal_akademik[0]['END_UAS'];
+
+					$check_in_range_uas = $this->check_in_range($start_uas, $end_uas, $tgl_uas, 'full');
+					if(!$check_in_range_uas){
+						$this->session->set_flashdata('error', 'Gagal menambahkan tanggal UAS karena tanggal UAS tidak berada dalam masa UAS periode akademik yg sdg berjalan!');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
+
+					$res = $this->Mata_kuliah->insertTanggalUjian($id_matkul, "TANGGAL_UAS", $tgl_uas);
+					if($res){
+						$this->session->set_flashdata('success', 'Berhasil menambahkan tanggal UAS mata kuliah!');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
+					else{
+						$this->session->set_flashdata('error', 'Gagal menambahkan tanggal UAS mata kuliah!');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
 				}
 				else{
-					$this->session->set_flashdata('error', 'Gagal menambahkan tanggal UAS mata kuliah!');
+					$this->session->set_flashdata('error', 'Tidak dapat memasukkan jadwal UAS karena periode akademik mata kuliah sudah selesai!');
 					redirect("/administrasi_matkul_detail?id=$id_matkul");
 				}
 			}
@@ -486,7 +564,27 @@ class C_Matkul extends CI_Controller{
 			redirect('/');
 		}
 	}
+	//Method untuk melakukan pengecekan range tanggal yang dipilih user berada dalam periode uts/uas/kuliah
+	private function check_in_range($start_date, $end_date, $date_from_user, $tipe){
+		
+		$start_ts = strtotime($start_date);
+		$end_ts = strtotime($end_date);
+		$user_ts = strtotime($date_from_user);
 
+		if($tipe == 'full_kiri'){
+			return (($user_ts >= $start_ts) && ($user_ts < $end_ts));
+		}
+		else if($tipe == 'full_kanan'){
+			return (($user_ts > $start_ts) && ($user_ts <= $end_ts));
+		}
+		else if($tipe == 'full_outer'){
+			return (($user_ts > $start_ts) && ($user_ts < $end_ts));
+		}
+		else{
+			return (($user_ts >= $start_ts) && ($user_ts <= $end_ts));
+		}
+	}
+	//Method untuk mendapatkan seluruh tanggal berdasarkan tanggal mulai, tanggal akhir dan hari yang dipilih
 	private function getAllDate($date_start, $date_end, $day){
 		$date_start_time = strtotime($date_start);
 	    $date_end_time   = strtotime($date_end);

@@ -90,6 +90,10 @@
                                                                     </div>
                                                                 </div>
                                                                 <!-- END Modal Update Kontrak-->
+                                    <?php
+                                    if($periode_aktif){
+
+                                    ?>
                                     <button data-toggle="modal" data-target="#modalJadwalAuto" class="btn btn-md btn-success"><i class="far fa-calendar-alt"></i> Add Jadwal Bertugas (Auto)</button>
                                     <!--Modal Jadwal (Auto)-->
                                                                 <div class="modal inmodal" id="modalJadwalAuto" tabindex="-1" role="dialog"  aria-hidden="true">
@@ -182,6 +186,9 @@
                                                                     </div>
                                                                 </div>
                                                                 <!-- END Modal Jadwal (Manual)-->
+                                        <?php
+                                        }
+                                    ?>
                                 </div>
                             </div>
                         </div> 
@@ -241,12 +248,21 @@
                                                         <td><?php echo $jadwal['TIPE_BERTUGAS'];?></td>
                                                         <td><?php echo $jadwal['INSERT_DATE'];?></td>
                                                         <td align="center">
+                                                            <?php
+                                                            if($flag){
+                                                                ?>
                                                             <button class="btn btn-primary btn-sm" data-toggle="modal" onclick="getJadwal(<?php echo $jadwal['ID'];?>,<?php echo $id_admin;?>);" data-target="#modalUpdateJadwal"><i class="fas fa-pen"></i> Update</button>
                                                             <?php echo form_open('admin_lab/delete_jadwal');?>
                                                             <input type="hidden" name="id_bertugas" required value="<?php echo $jadwal['ID'];?>">
                                                             <input type="hidden" name="id_admin" required value="<?php echo $id_admin;?>">
                                                             <button class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')" type="submit"><i class="far fa-trash-alt"></i> Delete</button>
                                                             </form>
+                                                                <?php
+                                                            }
+                                                            else{
+                                                                echo '-';
+                                                            }
+                                                            ?>
                                                         </td>
                                                     </tr>
                                                     <?php

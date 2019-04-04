@@ -277,10 +277,22 @@ class C_Main extends CI_Controller{
 				$this->load->model('Periode_akademik');
 				$this->load->model('Users');
 				$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+				$data['daftar_periode'] = $this->Periode_akademik->getAllPeriode();
 				$id_periode =  $this->Periode_akademik->getIDPeriodeAktif();
 				$data['data_dosen'] = $this->Users->getDosenAktif();
-				$data['matkul'] = $this->Mata_kuliah->getMatkul($id_periode);
 				
+				$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
+				if(isset($_GET['id_periode'])){
+					$id_periode = $_GET['id_periode'];
+					if($id_periode != ""){
+						$data['id_periode_aktif'] = $id_periode;
+					}
+				}
+				else{
+					$data['id_periode_aktif'] = $id_periode;
+				}
+				$data['matkul'] = $this->Mata_kuliah->getMatkul($id_periode);
+				$data['id_periode_aktif'] = $id_periode;
 				$this->load->view('template/Header', $data);
 				$this->load->view('template/Sidebar', $data);
 				$this->load->view('template/Topbar');

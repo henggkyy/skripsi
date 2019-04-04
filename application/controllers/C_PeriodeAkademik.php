@@ -63,12 +63,38 @@ class C_PeriodeAkademik extends CI_Controller{
 
 						$start_periode = date("Y-m-d", strtotime($this->input->post('start_periode')));
 						$end_periode = date("Y-m-d", strtotime($this->input->post('end_periode')));
+						if(strtotime($start_periode) > strtotime($end_periode)){
+							$this->session->set_flashdata('error', 'Error! Tanggal mulai periode akademik lebih besar dibandingkan dengan tanggal selesai!');
+							redirect('/periode_akademik');
+						}
 
 						$start_uts = date("Y-m-d", strtotime($this->input->post('start_uts')));
 						$end_uts = date("Y-m-d", strtotime($this->input->post('end_uts')));
+						if(strtotime($start_uts) > strtotime($end_uts)){
+							$this->session->set_flashdata('error', 'Error! Tanggal mulai periode UTS lebih besar dibandingkan dengan tanggal selesai!');
+							redirect('/periode_akademik');
+						}
+
+						$check_start_uts = $this->check_in_range($start_periode, $end_periode, $start_uts, 'full');
+						$check_end_uts = $this->check_in_range($start_periode, $end_periode, $end_uts, 'full');
+						if(!$check_start_uts || !$check_end_uts){
+							$this->session->set_flashdata('error', 'Error! Tanggal periode UTS tidak berada dalam tanggal periode akademik!');
+							redirect('/periode_akademik');
+						}
 
 						$start_uas = date("Y-m-d", strtotime($this->input->post('start_uas')));
 						$end_uas = date("Y-m-d", strtotime($this->input->post('end_uas')));
+						if(strtotime($start_uas) > strtotime($end_uas)){
+							$this->session->set_flashdata('error', 'Error! Tanggal mulai periode UAS lebih besar dibandingkan dengan tanggal selesai!');
+							redirect('/periode_akademik');
+						}
+
+						$check_start_uas = $this->check_in_range($start_periode, $end_periode, $start_uas, 'full');
+						$check_end_uas = $this->check_in_range($start_periode, $end_periode, $end_uas, 'full');
+						if(!$check_start_uas || !$check_end_uas){
+							$this->session->set_flashdata('error', 'Error! Tanggal periode UAS tidak berada dalam tanggal periode akademik!');
+							redirect('/periode_akademik');
+						}
 
 						$res = $this->Periode_akademik->insertPeriode($nama_periode, $start_periode, $end_periode, $start_uts, $end_uts, $start_uas, $end_uas);
 						if($res){
@@ -88,6 +114,26 @@ class C_PeriodeAkademik extends CI_Controller{
 		}
 		else{
 			redirect('/');
+		}
+	}
+	//Method untuk melakukan pengecekan range tanggal yang dipilih user apakah berada dalam periode akademik yg dipilih atau tidak.
+	private function check_in_range($start_date, $end_date, $date_from_user, $tipe){
+		
+		$start_ts = strtotime($start_date);
+		$end_ts = strtotime($end_date);
+		$user_ts = strtotime($date_from_user);
+
+		if($tipe == 'full_kiri'){
+			return (($user_ts >= $start_ts) && ($user_ts < $end_ts));
+		}
+		else if($tipe == 'full_kanan'){
+			return (($user_ts > $start_ts) && ($user_ts <= $end_ts));
+		}
+		else if($tipe == 'full_outer'){
+			return (($user_ts > $start_ts) && ($user_ts < $end_ts));
+		}
+		else{
+			return (($user_ts >= $start_ts) && ($user_ts <= $end_ts));
 		}
 	}
 }

@@ -72,31 +72,32 @@
                                                             <div class="form-group row" id="range_periode">
                                                                 <label class="col-sm-2 col-form-label">Tanggal Periode Akademik <span style="color: red">*</span> :</label>
                                                                 <div class="input-daterange input-group col-sm-6" id="datepicker">
-                                                                    <input type="text" class="form-control-sm form-control" name="start_periode" placeholder="mm/dd/yyyy" data-mask="99/99/9999" required/>
+                                                                    <input type="text" class="form-control-sm form-control" id="start_periode" name="start_periode" placeholder="mm/dd/yyyy" data-mask="99/99/9999" required/>
                                                                     <span class="input-group-addon">s/d</span>
-                                                                    <input type="text" class="form-control-sm form-control" name="end_periode" placeholder="mm/dd/yyyy" data-mask="99/99/9999"  required />
+                                                                    <input type="text" class="form-control-sm form-control" id="end_periode" name="end_periode" placeholder="mm/dd/yyyy" data-mask="99/99/9999"  required />
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row" id="range_periode">
                                                                 <label class="col-sm-2 col-form-label">Periode UTS <span style="color: red">*</span> :</label>
                                                                 <div class="input-daterange input-group col-sm-6" id="datepicker">
-                                                                    <input type="text" class="form-control-sm form-control" name="start_uts" placeholder="mm/dd/yyyy" data-mask="99/99/9999" required/>
+                                                                    <input type="text" id="start_uts" class="form-control-sm form-control" name="start_uts" placeholder="mm/dd/yyyy" data-mask="99/99/9999" required/>
                                                                     <span class="input-group-addon">s/d</span>
-                                                                    <input type="text" class="form-control-sm form-control" name="end_uts" placeholder="mm/dd/yyyy" data-mask="99/99/9999" required />
+                                                                    <input type="text" id="end_uts" class="form-control-sm form-control" name="end_uts" placeholder="mm/dd/yyyy" data-mask="99/99/9999" required />
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row" id="range_periode">
                                                                 <label class="col-sm-2 col-form-label">Periode UAS <span style="color: red">*</span> :</label>
                                                                 <div class="input-daterange input-group col-sm-6" id="datepicker">
-                                                                    <input type="text" class="form-control-sm form-control" name="start_uas" placeholder="mm/dd/yyyy" data-mask="99/99/9999" required/>
+                                                                    <input type="text" id="start_uas" class="form-control-sm form-control" name="start_uas" placeholder="mm/dd/yyyy" data-mask="99/99/9999" required/>
                                                                     <span class="input-group-addon">s/d</span>
-                                                                    <input type="text" class="form-control-sm form-control" name="end_uas" placeholder="mm/dd/yyyy" data-mask="99/99/9999" required />
+                                                                    <input type="text" id="end_uas" class="form-control-sm form-control" name="end_uas" placeholder="mm/dd/yyyy" data-mask="99/99/9999" required />
                                                                 </div>
                                                             </div>
                                                     </div>
                                                     <div class="panel-footer">
                                                         <p style="color: red;">* Required Field</p>
-                                                        <button type="submit" class="btn btn-w-m btn-success">Aktifkan Periode</button>
+                                                        <p id="error" style="font-weight: bold; color: red;"></p>
+                                                        <button id="submit_btn" type="submit" class="btn btn-w-m btn-success">Aktifkan Periode</button>
                                                             
                                                     </div>
                                                     </form>
