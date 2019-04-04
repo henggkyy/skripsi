@@ -188,21 +188,33 @@
                         <div class="col-lg-12">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
-                                    <h3>Jadwal Bertugas Admin (Calendar View)</h3>
+                                    <h3>Jadwal Bertugas Admin</h3>
                                 </div>
                                 <div class="ibox-content">
+                                    <label class="col-sm-4 col-form-label">Periode Akademik:</label>
+                                    <div class="col-sm-8 ">
+                                        <form method="GET" action="<?php echo base_url()."admin_lab/detail?id_admin=".$id_admin;?>">
+                                            <input type="hidden" name="id_admin" required value="<?php echo $id_admin;?>">
+                                            <select name="id_periode" onchange="this.form.submit()" class="form-control">
+                                                <?php
+                                                if(isset($daftar_periode) && $daftar_periode){
+                                                    foreach ($daftar_periode as $list_periode) {
+                                                ?>
+                                                <option value="<?php echo $list_periode['ID'];?>" <?php if($list_periode['ID'] == $id_periode_aktif){ echo 'selected';}?>><?php echo $list_periode['NAMA'];?></option>
+                                                <?php
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+                                        </form>
+                                    </div>
+                                    <hr>
+                                    <h4>Calendar View</h4>
                                     <div id="calendar">
                                         
                                     </div>
-                                </div>
-                            </div>
-                        </div>   
-                        <div class="col-lg-12">
-                            <div class="ibox float-e-margins">
-                                <div class="ibox-title">
-                                    <h3>Jadwal Bertugas Admin (Datatables)</h3>
-                                </div>
-                                <div class="ibox-content">
+                                    <hr>
+                                    <h4>Datatables</h4>
                                     <div class="table-responsive">
                                         <table class="table table-striped table-bordered table-hover <?php
                                                 if(isset($jadwal_admin) && $jadwal_admin){ echo 'mainDataTable';}?>">
@@ -228,22 +240,44 @@
                                                         <td><?php echo $jadwal['JAM_MULAI']. ' s/d '. $jadwal['JAM_SELESAI'];?></td>
                                                         <td><?php echo $jadwal['TIPE_BERTUGAS'];?></td>
                                                         <td><?php echo $jadwal['INSERT_DATE'];?></td>
-                                                        <td></td>
+                                                        <td align="center">
+                                                            <button class="btn btn-primary btn-sm" data-toggle="modal" onclick="getJadwal(<?php echo $jadwal['ID'];?>,<?php echo $id_admin;?>);" data-target="#modalUpdateJadwal"><i class="fas fa-pen"></i> Update</button>
+                                                            <?php echo form_open('admin_lab/delete_jadwal');?>
+                                                            <input type="hidden" name="id_bertugas" required value="<?php echo $jadwal['ID'];?>">
+                                                            <input type="hidden" name="id_admin" required value="<?php echo $id_admin;?>">
+                                                            <button class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')" type="submit"><i class="far fa-trash-alt"></i> Delete</button>
+                                                            </form>
+                                                        </td>
                                                     </tr>
                                                     <?php
                                                     $iterator++;
                                                     }
                                                 }
                                                 else{
-                                                    echo "<tr><td colspan='6'>Belum ada dokumen SOP</td></tr>";
+                                                    echo "<tr><td colspan='6'>Belum ada jadwal bertugas admin</td></tr>";
                                                 }
                                                 ?>
                                             </tbody>
                                         </table>
+                                        <!--START MODAL UPDATE JADWAL-->
+                                        <div class="modal inmodal" id="modalUpdateJadwal" tabindex="-1" role="dialog"  aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content animated fadeIn">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                        <h4 class="modal-title">Update Jadwal Bertugas</h4>
+                                                    </div>
+                                                    <div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--END MODAL UPDATE JADWAL-->
                                     </div>
                                 </div>
                             </div>
-                        </div>    
+                        </div>  
                     </div>
                 </div>
             </div>

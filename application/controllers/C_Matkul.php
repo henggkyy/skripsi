@@ -128,6 +128,7 @@ class C_Matkul extends CI_Controller{
 			// }
 			// else{
 				$data_sofware = $this->input->get('data_software');
+				$data_sofware = strtolower($data_sofware);
 				$id_matkul = $this->input->get('id_matkul_cek');
 				date_default_timezone_set("Asia/Jakarta");
 				$tanggal_checked = date("Y-m-d h:i:sa");

@@ -84,6 +84,31 @@
 				$('#container_jadwal').hide();
 			}
 	    });
+
+		        function getJadwal(id_bertugas, id_admin){
+		        	$.ajax({
+		                //Ganti URL nanti kl udah dipindah server
+		                url: "<?php echo base_url();?>" + "admin_lab/get_jadwal_bertugas",
+		                method: "GET",
+		                data: {id_bertugas : id_bertugas, id_admin : id_admin},
+		                success: function(data) { 
+		                    $("#modalUpdateJadwal").html(data);
+		                    $('#waktu_awal_modal').clockpicker({
+								autoclose: true
+							});
+							$('#waktu_akhir_modal').clockpicker({
+								autoclose: true
+							});
+							$('#tanggal_modal').datepicker({
+								todayBtn: "linked",
+								keyboardNavigation: false,
+								forceParse: false,
+								calendarWeeks: true,
+								autoclose: true
+							});
+		                }
+		            }); 
+		        }
 	</script>
 	<script src="<?php echo base_url();?>assets/js/plugins/dataTables/datatables.min.js"></script>
 	<script type="text/javascript">
@@ -176,6 +201,7 @@
 					  //   $('#lokasi_event').text(event.nama_lab);
 					  // }
 		        });
+
 				<?php
 			}
 			?>

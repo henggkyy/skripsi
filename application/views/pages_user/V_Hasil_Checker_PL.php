@@ -13,8 +13,8 @@
                                                         <?php
                                                         if($checker[0] == 1){
                                                             ?>
-                                                            <div class="alert alert-danger">
-                                                                <h4><i class="fas fa-check fa-lg"></i>  <?php echo $checker[1];?> : Belum Terinstall</h4>
+                                                            <div class="alert alert-success">
+                                                                <h4 align="center"><i class="fas fa-check fa-lg"></i>  <?php echo $checker[1];?> : Sudah Terinstall</h4>
                                                             </div>
                                                             <?php
                                                         }
