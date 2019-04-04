@@ -17,12 +17,9 @@ class C_Download extends CI_Controller{
 	function downloadChecker(){
 		if($this->session->userdata('logged_in')){
 			$this->load->helper('download');
-			if(PHP_INT_SIZE == 8){
-				force_download('./assets/checker/checker32.jar', NULL);
-			}
-			else{
-				force_download('./assets/checker/checker64.jar', NULL);
-			}
+			
+				force_download('./assets/checker/checker.jar', NULL);
+			
 		}
 		else{
 			redirect('/');
