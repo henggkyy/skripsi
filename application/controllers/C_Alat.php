@@ -12,6 +12,9 @@ class C_Alat extends CI_Controller{
 	            redirect('/alat_lab');
 			}
 			else{
+				if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+					redirect('/dashboard');
+				}
 				$nama_alat = $this->input->post('nama');
 				$this->load->model('Alat_lab');
 				$res = $this->Alat_lab->inputAlat($nama_alat);
@@ -40,6 +43,9 @@ class C_Alat extends CI_Controller{
 	            redirect('/alat_lab');
 			}
 			else{
+				if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+					redirect('/dashboard');
+				}
 				$id_alat = $this->input->post('id_alat');
 				$this->load->model('Alat_lab');
 				$res = $this->Alat_lab->deleteAlat($id_alat);

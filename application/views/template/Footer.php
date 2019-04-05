@@ -26,6 +26,69 @@
 			calendarWeeks: true,
 			autoclose: true
 		});
+		<?php
+		if(isset($form_peminjaman) && $form_peminjaman){
+			?>
+		function checkLab(){
+			if($("#choice").val() == 'lab'){
+            var tanggal_data = $("#tgl_pinjam").val();
+            var jam_mulai_data = $("#waktu_awal_2").val();
+            var jam_selesai_data = $("#waktu_akhir_2").val();
+            
+            if(tanggal_data == "" || jam_mulai_data == "" || jam_selesai_data == ""){
+                if(tanggal_data == ""){
+                    $("#select_lab").html('<span style="color:red;">Tanggal peminjaman harus diisi terlebih dahulu!</span>');
+                }
+                else if(jam_mulai_data == ""){
+                    $("#select_lab").html('<span style="color:red;">Jam mulai peminjaman harus diisi terlebih dahulu!</span>');
+                }
+                else{
+                    $("#select_lab").html('<span style="color:red;">Jam selesai peminjaman harus diisi terlebih dahulu!</span>');
+                }
+                    
+                return;
+            }   
+            if(jam_selesai_data < jam_mulai_data){
+                $("#select_lab").html('<span style="color:red;">Jam mulai tidak boleh melebihi jam selesai!</span>');
+                return;
+            }
+            console.log(tanggal_data);
+            console.log(jam_mulai_data);
+            console.log(jam_selesai_data);
+               
+                
+            $.ajax({
+                    //Ganti URL nanti kl udah dipindah server
+	                url: "<?php echo base_url();?>" + "ketersediaan_lab",
+	                method: "POST",
+	                data: {tanggal : tanggal_data, jam_mulai : jam_mulai_data, jam_selesai : jam_selesai_data},
+	                success: function(data) { 
+	                    $("#select_lab").html(data);
+	                    $('#button_submit').prop('disabled', false);
+	                }
+            	}); 
+			}	
+		}
+		$("#choice").change(function(e){
+	        if($("#choice").val() == 'lab'){
+	            $('#button_submit').prop('disabled', true);
+	            $("#div_alat").hide();
+	            $("#choice_alat").prop('required',false);
+	            $("#div_lab").show();
+	            $("#choice_lab").prop('required',true);
+
+	        }
+	        else{
+	            $("#div_alat").show();
+	            $("#choice_alat").prop('required',true);
+	            $("#div_lab").hide();
+	            $("#choice_lab").prop('required',false);
+	            $('#button_submit').prop('disabled', false);
+	        }
+	    });
+			<?php
+		}
+		?>
 		//Jquery untuk form input pada detail admin
 		//Form terdiri dari update masa kontrak, insert jadwal bertugas baik secara auto maupun manual
 		//Menggunakan library clockpicker
@@ -51,17 +114,17 @@
 				$('#form_bertugas_auto').append(form);
 				bindClockPicker();
 			});
-			$('#waktu_awal_2').clockpicker({
-				autoclose: true
-			});
-			$('#waktu_akhir_2').clockpicker({
-				autoclose: true
-			});
+			
 		});
 			<?php
 		}
 		?>
-		
+		$('#waktu_awal_2').clockpicker({
+			autoclose: true
+		});
+		$('#waktu_akhir_2').clockpicker({
+			autoclose: true
+		});
 		$("#tgl_mulai").datepicker({
 			todayBtn: "linked",
 			keyboardNavigation: false,

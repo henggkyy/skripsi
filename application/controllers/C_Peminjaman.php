@@ -7,6 +7,26 @@ class C_Peminjaman extends CI_Controller{
         parent::__construct();
         $this->load->library('google');
     }
+    //Method untuk menampilkan form peminjaman pada halaman admin
+    function loadFormPeminjaman(){
+    	if($this->session->userdata('logged_in')){
+    		$data['title'] = "Form Peminjaman Alat / Ruangan Laboratorium | SI Akademik Lab. Komputasi TIF";
+			$this->load->model('Alat_lab');
+			$data['form_peminjaman'] = true;
+			$data['daftar_alat'] = $this->Alat_lab->getAllAlat();
+			$this->load->model('Daftar_lab');
+			$data['daftar_lab'] = $this->Daftar_lab->getListLab();
+			$this->load->view('template/Header', $data);
+			$this->load->view('template/Sidebar', $data);
+			$this->load->view('template/Topbar');
+			$this->load->view('template/Notification');
+			$this->load->view('pages_user/V_Form_Peminjaman', $data);
+			$this->load->view('template/Footer');
+    	}
+    	else{
+    		redirect('/');
+    	}
+    }
 	//Method untuk melakukan load halaman pilihan apakah ingin meminjam laboratorium atau alat lab
 	function loadHomePeminjaman(){
 
@@ -30,6 +50,9 @@ class C_Peminjaman extends CI_Controller{
 			$this->form_validation->set_rules('tindakan', 'Tindakan', 'required');
 			$this->form_validation->set_rules('keterangan', 'Keterangan', 'required');
 			$this->form_validation->set_rules('id_pinjaman', 'ID Pinjaman', 'required');
+			if($this->session->userdata('id_role') != 1){
+				redirect('/dashboard');
+			}
 			if($this->form_validation->run() == FALSE){
 				$this->session->set_flashdata('error_message', 'Missing required Field!');
 		        redirect('/data_peminjaman_lab');

@@ -147,7 +147,7 @@
                                                                 }
                                                             }
                                                             else{
-                                                                echo "<tr><td colspan='5'>Belum ada dokumen Periode Akademik</td></tr>";
+                                                                echo "<tr><td colspan='6'>Belum ada dokumen Periode Akademik</td></tr>";
                                                             }
                                                             ?>
                                                     </tbody>

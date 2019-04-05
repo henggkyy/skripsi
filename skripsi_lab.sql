@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 03, 2019 at 07:22 PM
--- Server version: 10.1.36-MariaDB
--- PHP Version: 5.6.38
+-- Generation Time: Apr 05, 2019 at 11:20 AM
+-- Server version: 10.1.37-MariaDB
+-- PHP Version: 5.6.39
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -174,12 +174,11 @@ CREATE TABLE `jadwal_bertugas_admin` (
 
 INSERT INTO `jadwal_bertugas_admin` (`ID`, `HARI`, `TANGGAL`, `JAM_MULAI`, `JAM_SELESAI`, `TIPE_BERTUGAS`, `ID_PERIODE`, `ID_ADMIN`, `INSERT_DATE`) VALUES
 (1, 'Rabu', '2019-08-21', '12:00', '14:59', 'Masa Perkuliahan', 4, 1, '2019-04-03 08:05:34'),
-(2, 'Senin', '2019-08-12', '07:00', '08:00', 'Masa Perkuliahan', 4, 5, '2019-04-03 06:41:09pm'),
-(3, 'Selasa', '2019-08-13', '12:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-03 06:41:09pm'),
+(3, 'Selasa', '2019-08-13', '13:00', '14:00', 'Masa Perkuliahan', 4, 5, '2019-04-04 04:24:37pm'),
 (4, 'Kamis', '2019-08-15', '18:00', '19:00', 'Masa Perkuliahan', 4, 5, '2019-04-03 06:41:09pm'),
 (5, 'Senin', '2019-08-19', '07:00', '08:00', 'Masa Perkuliahan', 4, 5, '2019-04-03 06:41:09pm'),
 (6, 'Selasa', '2019-08-20', '12:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-03 06:41:09pm'),
-(7, 'Kamis', '2019-08-22', '18:00', '19:00', 'Masa Perkuliahan', 4, 5, '2019-04-03 06:41:09pm'),
+(7, 'Senin', '2019-10-14', '18:00', '21:00', 'Masa UTS', 4, 5, '2019-04-04 04:25:53pm'),
 (8, 'Senin', '2019-08-26', '07:00', '08:00', 'Masa Perkuliahan', 4, 5, '2019-04-03 06:41:09pm'),
 (9, 'Selasa', '2019-08-27', '12:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-03 06:41:09pm'),
 (10, 'Kamis', '2019-08-29', '18:00', '19:00', 'Masa Perkuliahan', 4, 5, '2019-04-03 06:41:09pm'),
@@ -217,7 +216,10 @@ INSERT INTO `jadwal_bertugas_admin` (`ID`, `HARI`, `TANGGAL`, `JAM_MULAI`, `JAM_
 (42, 'Kamis', '2019-11-28', '18:00', '19:00', 'Masa Perkuliahan', 4, 5, '2019-04-03 06:41:09pm'),
 (43, 'Selasa', '2019-12-17', '12:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-03 06:41:09pm'),
 (44, 'Kamis', '2019-12-19', '18:00', '19:00', 'Masa Perkuliahan', 4, 5, '2019-04-03 06:41:09pm'),
-(45, 'Senin', '2019-12-23', '07:00', '08:00', 'Masa Perkuliahan', 4, 5, '2019-04-03 06:41:09pm');
+(45, 'Senin', '2019-12-23', '07:00', '08:00', 'Masa Perkuliahan', 4, 5, '2019-04-03 06:41:09pm'),
+(46, 'Rabu', '2019-09-11', '12:00', '14:00', 'Masa Perkuliahan', 4, 5, '2019-04-04 01:32:39pm'),
+(47, 'Senin', '2019-10-14', '07:00', '08:00', 'Masa UTS', 4, 5, '2019-04-04 01:34:53pm'),
+(48, 'Selasa', '2019-08-20', '08:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-04 04:17:14pm');
 
 -- --------------------------------------------------------
 
@@ -295,8 +297,8 @@ CREATE TABLE `kebutuhan_pl` (
 --
 
 INSERT INTO `kebutuhan_pl` (`ID`, `NAMA_PL`, `ID_MATKUL`, `STATUS`, `LAST_CHECKED`) VALUES
-(1, 'netbeans', 5, 2, '2019-03-31 09:37:43pm'),
-(2, 'bluej', 5, 2, '2019-03-31 09:37:43pm');
+(1, 'netbeans', 5, 2, '2019-04-04 11:44:19am'),
+(2, 'bluej', 5, 2, '2019-04-04 11:44:19am');
 
 -- --------------------------------------------------------
 
@@ -407,6 +409,29 @@ INSERT INTO `periode_akademik` (`ID`, `NAMA`, `START_PERIODE`, `END_PERIODE`, `S
 (1, 'Semester Genap 2018/2019', '', '', '', '', '', '', 0, '2019-02-05 15:25:53', 1),
 (2, 'Semester Genap 2018/2019', '', '', '', '', '', '', 0, '2019-02-06 07:00:20', 1),
 (4, 'Semester Ganjil 2019/2020', '2019-08-12', '2019-12-23', '2019-10-14', '2019-10-28', '2019-12-02', '2019-12-16', 1, '2019-03-28 07:20:27', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `periode_gaji`
+--
+
+CREATE TABLE `periode_gaji` (
+  `ID` int(11) NOT NULL,
+  `START_PERIODE` varchar(64) NOT NULL,
+  `END_PERIODE` varchar(64) NOT NULL,
+  `KETERANGAN` varchar(128) NOT NULL,
+  `STATUS` int(11) NOT NULL COMMENT '1: Aktif. 0 : Nonaktif'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `periode_gaji`
+--
+
+INSERT INTO `periode_gaji` (`ID`, `START_PERIODE`, `END_PERIODE`, `KETERANGAN`, `STATUS`) VALUES
+(1, '2019-04-01', '2019-05-01', 'Periode Bulan April - Mei', 0),
+(2, '2019-05-01', '2019-06-13', 'Periode Bulan Mei - Juni', 0),
+(3, '2019-06-05', '2019-07-26', 'Periode Bulan Juni - Juli', 1);
 
 -- --------------------------------------------------------
 
@@ -578,6 +603,12 @@ ALTER TABLE `periode_akademik`
   ADD KEY `CREATED_BY` (`CREATED_BY`);
 
 --
+-- Indexes for table `periode_gaji`
+--
+ALTER TABLE `periode_gaji`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -605,7 +636,7 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT for table `alat_lab`
 --
 ALTER TABLE `alat_lab`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `daftar_lab`
@@ -641,7 +672,7 @@ ALTER TABLE `file_bantuan_ujian`
 -- AUTO_INCREMENT for table `jadwal_bertugas_admin`
 --
 ALTER TABLE `jadwal_bertugas_admin`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `jadwal_lab`
@@ -690,6 +721,12 @@ ALTER TABLE `peminjaman_lab`
 --
 ALTER TABLE `periode_akademik`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `periode_gaji`
+--
+ALTER TABLE `periode_gaji`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`

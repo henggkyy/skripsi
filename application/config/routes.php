@@ -118,6 +118,10 @@ $route['admin_lab/delete_jadwal'] = 'C_Admin/deleteJadwalAdmin';
 $route['admin_lab/get_jadwal_bertugas'] = 'C_Admin/getIndividualJadwalAdmin';
 $route['admin_lab/update_jadwal'] = 'C_Admin/updateJadwalBertugasAdmin';
 
+$route['laporan_gaji/periode'] = 'C_Gaji_Admin/loadSetPeriode';
+$route['laporan_gaji/periode/add'] = 'C_Gaji_Admin/setPeriodeGaji';
+$route['laporan_gaji/periode/nonactivate'] = 'C_Gaji_Admin/nonaktifkanPeriode';
+
 $route['alat_lab'] = 'C_Main/loadMenuAlatLab';
 $route['alat_lab/add'] = 'C_Alat/insertAlat';
 $route['alat_lab/delete'] = 'C_Alat/deleteAlat';
@@ -125,6 +129,7 @@ $route['alat_lab/delete'] = 'C_Alat/deleteAlat';
 $route['peminjaman'] = 'C_Peminjaman/loadHomePeminjaman';
 $route['peminjaman/add'] = 'C_Peminjaman/insertPeminjaman';
 $route['peminjaman/tindakan'] = 'C_Peminjaman/tindaklanjutiPinjaman';
+$route['peminjaman/form'] = 'C_Peminjaman/loadFormPeminjaman';
 
 $route['peminjaman_lab'] = 'C_Main/loadDaftarPeminjamanLaboratorium';
 

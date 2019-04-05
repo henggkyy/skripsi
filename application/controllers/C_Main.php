@@ -48,6 +48,9 @@ class C_Main extends CI_Controller{
 	//Method untuk menampilkan halaman daftar peminjaman alat laboratorium
 	function loadDaftarPeminjamanAlat(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1){
+				redirect('/dashboard');
+			}
 			$data['title'] = 'Daftar Peminjaman Alat | SI Akademik Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$this->load->model('Peminjaman_lab');
@@ -69,6 +72,9 @@ class C_Main extends CI_Controller{
 	//Method untuk menampilkan halaman daftar peminjaman laboratorium
 	function loadDaftarPeminjamanLaboratorium(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1){
+				redirect('/dashboard');
+			}
 			$data['title'] = 'Daftar Peminjaman Laboratorium | SI Akademik Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$this->load->model('Peminjaman_lab');
@@ -89,6 +95,9 @@ class C_Main extends CI_Controller{
 	//Method untuk menampilkan halaman utama mengenai daftar alat laboratorium
 	function loadMenuAlatLab(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+				redirect('/dashboard');
+			}
 			$data['title'] = 'Alat Laboratorium | SI Akademik Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$this->load->model('Alat_lab');

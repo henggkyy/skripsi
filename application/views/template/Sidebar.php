@@ -56,17 +56,52 @@
                             </li>
                         </ul>
                 </li>
-                <li <?php if(isset($alat_lab) || isset($peminjaman_lab) || isset($peminjaman_alat)){ echo 'class='. '"active"';}?>>
+                <li <?php if(isset($periode_gaji) || isset($input_gaji) || isset($laporan_gaji)){ echo 'class='. '"active"';}?>>
+                    <a href="#"><i class="fas fa-user-clock"></i> <span class="nav-label">Laporan Gaji/Absensi Admin </span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li <?php if(isset($periode_gaji)){ echo 'class='. '"active"';}?>>
+                                <a href="<?php echo base_url();?>laporan_gaji/periode">Set Periode Gaji</a>
+                            </li>
+                            <li <?php if(isset($input_gaji)){ echo 'class='. '"active"';}?>>
+                                <a href="<?php echo base_url();?>laporan_gaji/input">Input Gaji/Absensi Admin</a>
+                            </li>
+                            <li <?php if(isset($laporan_gaji)){ echo 'class='. '"active"';}?>>
+                                <a href="<?php echo base_url();?>laporan_gaji/report">Laporan Gaji/Absensi Admin</a>
+                            </li>
+                        </ul>
+                </li>
+                <li <?php if(isset($alat_lab) || isset($peminjaman_lab) || isset($peminjaman_alat) || isset($form_peminjaman)){ echo 'class='. '"active"';}?>>
                     <a href="#"><i class="fas fa-building"></i> <span class="nav-label">Peminjaman Lab & Alat </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
+                            <?php
+                            if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 4){
+                                ?>
                             <li <?php if(isset($alat_lab)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>alat_lab">Daftar Alat</a>
                             </li>
+                            <?php
+                            }
+                            ?>
+                            <?php
+                            if($this->session->userdata('id_role') == 1){
+                                ?>
                             <li <?php if(isset($peminjaman_lab)){ echo 'class='. '"active"';}?>>
-                                <a href="<?php echo base_url();?>peminjaman_lab">Peminjaman Laboratorium</a>
+                                <a href="<?php echo base_url();?>peminjaman_lab">Daftar Peminjaman Laboratorium</a>
                             </li>
+                            <?php
+                            }
+                            ?>
+                            <?php
+                            if($this->session->userdata('id_role') == 1){
+                                ?>
                             <li <?php if(isset($peminjaman_alat)){ echo 'class='. '"active"';}?>>
-                                <a href="<?php echo base_url();?>peminjaman_alat">Peminjaman Alat</a>
+                                <a href="<?php echo base_url();?>peminjaman_alat">Daftar Peminjaman Alat</a>
+                            </li>
+                                <?php
+                            }
+                            ?>
+                            <li <?php if(isset($form_peminjaman)){ echo 'class='. '"active"';}?>>
+                                <a href="<?php echo base_url();?>peminjaman/form">Form Peminjaman</a>
                             </li>
                         </ul>
                 </li>
