@@ -1,6 +1,46 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Periode_gaji extends CI_Model{
+	//Method untuk mendapatkan id periode terakhir aktif
+	function getLastActiveId(){
+		$this->db->select('ID');
+		$this->db->order_by('ID', 'desc');
+		$this->db->from('periode_gaji', 1);
+		$item = 'ID';
+		$result = $this->db->get();
+		if($result->num_rows() == 1){
+			return $result->row(0)->$item;
+		} 
+		else {
+			return false;
+		}
+	}
+	//Method untuk mendapatkan individual item
+	function getIndividualItem($id, $item){
+		$this->db->select($item);
+		$this->db->where('ID', $id);
+		$this->db->from('periode_gaji');
+		$result = $this->db->get();
+		if($result->num_rows() == 1){
+			return $result->row(0)->$item;
+		} 
+		else {
+			return false;
+		}
+	}
+	//Method untuk mendapatkan data periode yang sedang aktif
+	function getPeriodeAktif(){
+		$this->db->select('ID, START_PERIODE, END_PERIODE, KETERANGAN');
+		$this->db->where('STATUS', 1);
+		$this->db->from('periode_gaji');
+		$result = $this->db->get();
+		if($result->num_rows() == 1){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk melakukan pengecekan apakah id periode sedang aktif atau tidak
 	function checkIDPeriodeAktif($id_periode){
 		$this->db->select('ID');

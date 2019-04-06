@@ -161,7 +161,7 @@
             $.ajax({
                     //Ganti URL nanti kl udah dipindah server
                 url: "<?php echo base_url();?>" + "ketersediaan_lab",
-                method: "POST",
+                method: "GET",
                 data: {tanggal : tanggal_data, jam_mulai : jam_mulai_data, jam_selesai : jam_selesai_data},
                 success: function(data) { 
                      $("#select_lab").html(data);

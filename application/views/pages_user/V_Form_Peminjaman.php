@@ -6,7 +6,9 @@
                                 <h3>Form Peminjaman Ruangan Laboratorium & Alat</h3>
                             </div>
                             <div class="ibox-content">
-                            	<?php echo form_open('peminjaman/ajuan');?>
+                            	<?php
+                            	$attributes = array('id' => 'form_peminjaman');
+                            	echo form_open('peminjaman/ajuan', $attributes);?>
                             	<div class="form-group row">
 			                        <label class="col-sm-4 col-form-label">Pilih Tipe Peminjaman <span style="color: red">*</span> :</label>
 			                        <div class="col-sm-6">
@@ -83,7 +85,6 @@
 			                    <p style="color: red;" align="center">* Wajib Diisi</p>
 			                    <div class="form-group row">
 			                        <div class="col-sm-12">
-			                            <a href="<?php echo base_url();?>" class="btn btn-white btn-lg"> < Back</a>
 			                            <button class="btn btn-primary btn-lg" type="submit" id="button_submit">Ajukan Peminjaman</button>
 			                        </div>
 			                    </div>
@@ -93,3 +94,65 @@
                     </div>
                 </div>
             </div>
+            <script type="text/javascript">
+            	function checkLab(){
+			if($("#choice").val() == 'lab'){
+	            var tanggal_data = $("#tgl_pinjam").val();
+	            var jam_mulai_data = $("#waktu_awal_2").val();
+	            var jam_selesai_data = $("#waktu_akhir_2").val();
+	            
+	            if(tanggal_data == "" || jam_mulai_data == "" || jam_selesai_data == ""){
+	                if(tanggal_data == ""){
+	                    $("#select_lab").html('<span style="color:red;">Tanggal peminjaman harus diisi terlebih dahulu!</span>');
+	                }
+	                else if(jam_mulai_data == ""){
+	                    $("#select_lab").html('<span style="color:red;">Jam mulai peminjaman harus diisi terlebih dahulu!</span>');
+	                }
+	                else{
+	                    $("#select_lab").html('<span style="color:red;">Jam selesai peminjaman harus diisi terlebih dahulu!</span>');
+	                }
+	                    
+	                return;
+	            }   
+	            if(jam_selesai_data < jam_mulai_data){
+	                $("#select_lab").html('<span style="color:red;">Jam mulai tidak boleh melebihi jam selesai!</span>');
+	                return;
+	            }
+	            console.log(tanggal_data);
+	            console.log(jam_mulai_data);
+	            console.log(jam_selesai_data);
+	               
+	                
+	            $.ajax({
+	                    //Ganti URL nanti kl udah dipindah server
+		            url: "<?php echo base_url('ketersediaan_lab'); ?>",
+		            method: "GET",
+		            data: {tanggal : tanggal_data, jam_mulai : jam_mulai_data, jam_selesai : jam_selesai_data},
+		            success: function(data) { 
+		                $("#select_lab").html(data);
+		                $('#button_submit').prop('disabled', false);
+		            },
+			        error: function() {
+			            alert('error!');
+			        }
+	            }); 
+			}	
+		}
+		$("#choice").change(function(e){
+	        if($("#choice").val() == 'lab'){
+	            $('#button_submit').prop('disabled', true);
+	            $("#div_alat").hide();
+	            $("#choice_alat").prop('required',false);
+	            $("#div_lab").show();
+	            $("#choice_lab").prop('required',true);
+
+	        }
+	        else{
+	            $("#div_alat").show();
+	            $("#choice_alat").prop('required',true);
+	            $("#div_lab").hide();
+	            $("#choice_lab").prop('required',false);
+	            $('#button_submit').prop('disabled', false);
+	        }
+	    });
+            </script>

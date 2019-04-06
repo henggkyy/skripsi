@@ -60,7 +60,7 @@
                     <a href="#"><i class="fas fa-user-clock"></i> <span class="nav-label">Laporan Gaji/Absensi Admin </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li <?php if(isset($periode_gaji)){ echo 'class='. '"active"';}?>>
-                                <a href="<?php echo base_url();?>laporan_gaji/periode">Set Periode Gaji</a>
+                                <a href="<?php echo base_url();?>laporan_gaji/periode">Set Periode Gaji & Konfigurasi</a>
                             </li>
                             <li <?php if(isset($input_gaji)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>laporan_gaji/input">Input Gaji/Absensi Admin</a>

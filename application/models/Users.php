@@ -1,6 +1,49 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Users extends CI_Model{
+	//Method untuk mendapatkan data user berdasarkan id 
+	function getUserById($id){
+		$this->db->select('users.ID as ID, ID_ROLE, NAMA, NIK, EMAIL, STATUS');
+		$this->db->where('ID', $id);
+		$this->db->from('users');
+		$result = $this->db->get();
+		if($result->num_rows() > 0){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
+	//Method untuk melakukan validasi apakah id admin sedang aktif atau tidak
+	function checkAdminAktif($id_admin){
+		$this->db->select('users.ID as ID, NAMA,NIK, EMAIL, STATUS');
+		$this->db->from('users');
+		$this->db->where('STATUS', 1);
+		$this->db->where('ID_ROLE', 4);
+		$this->db->where('ID', $id_admin);
+		$result = $this->db->get();
+		if($result->num_rows() > 0){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
+	//Method untuk mendapatkan data admin yang aktif untuk keperluan input laporan absensi/gaji oleh TU
+	function getDataAdminAktif(){
+		$this->db->select('users.ID as ID, NAMA,NIK, EMAIL, STATUS');
+		$this->db->from('users');
+		$this->db->where('STATUS', 1);
+		$this->db->where('ID_ROLE', 4);
+		$result = $this->db->get();
+		if($result->num_rows() > 0){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
+	//Method untuk melakukan pengecekan user role
 	function checkUserRole($id_user, $role){
 		$this->db->select('users.ID');
 		$this->db->where('ID', $id_user);

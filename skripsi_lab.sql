@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 05, 2019 at 11:20 AM
--- Server version: 10.1.37-MariaDB
--- PHP Version: 5.6.39
+-- Generation Time: Apr 06, 2019 at 08:31 AM
+-- Server version: 10.1.36-MariaDB
+-- PHP Version: 5.6.38
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -303,6 +303,54 @@ INSERT INTO `kebutuhan_pl` (`ID`, `NAMA_PL`, `ID_MATKUL`, `STATUS`, `LAST_CHECKE
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `konfigurasi_gaji`
+--
+
+CREATE TABLE `konfigurasi_gaji` (
+  `ID` int(11) NOT NULL,
+  `JAM_MAX` varchar(150) NOT NULL,
+  `TARIF` varchar(9000) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `konfigurasi_gaji`
+--
+
+INSERT INTO `konfigurasi_gaji` (`ID`, `JAM_MAX`, `TARIF`) VALUES
+(1, '150', '9000');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `laporan_gaji_admin`
+--
+
+CREATE TABLE `laporan_gaji_admin` (
+  `ID` int(11) NOT NULL,
+  `UNIQ` varchar(10) NOT NULL,
+  `ID_PERIODE` int(11) NOT NULL,
+  `ID_ADMIN` int(11) NOT NULL,
+  `HARI` varchar(64) NOT NULL,
+  `TANGGAL_MASUK` varchar(32) NOT NULL,
+  `JAM_MASUK` varchar(32) NOT NULL,
+  `JAM_KELUAR` varchar(32) NOT NULL,
+  `TOTAL_JAM` varchar(5) NOT NULL,
+  `ISTIRAHAT` varchar(5) NOT NULL,
+  `WAKTU_REAL` varchar(10) NOT NULL,
+  `BIAYA` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `laporan_gaji_admin`
+--
+
+INSERT INTO `laporan_gaji_admin` (`ID`, `UNIQ`, `ID_PERIODE`, `ID_ADMIN`, `HARI`, `TANGGAL_MASUK`, `JAM_MASUK`, `JAM_KELUAR`, `TOTAL_JAM`, `ISTIRAHAT`, `WAKTU_REAL`, `BIAYA`) VALUES
+(2, '91359842', 3, 5, 'Rabu', '2019-06-19', '12:00', '13:05', '1', '0', '1', '9000'),
+(3, '32737207', 3, 5, 'Rabu', '2019-06-05', '12:00', '15:00', '3', '0', '3', '27000');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `mata_kuliah`
 --
 
@@ -573,6 +621,20 @@ ALTER TABLE `kebutuhan_pl`
   ADD KEY `ID_MATKUL` (`ID_MATKUL`);
 
 --
+-- Indexes for table `konfigurasi_gaji`
+--
+ALTER TABLE `konfigurasi_gaji`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `laporan_gaji_admin`
+--
+ALTER TABLE `laporan_gaji_admin`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `ID_PERIODE` (`ID_PERIODE`),
+  ADD KEY `ID_ADMIN` (`ID_ADMIN`);
+
+--
 -- Indexes for table `mata_kuliah`
 --
 ALTER TABLE `mata_kuliah`
@@ -636,7 +698,7 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT for table `alat_lab`
 --
 ALTER TABLE `alat_lab`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `daftar_lab`
@@ -697,6 +759,18 @@ ALTER TABLE `kategori_sop`
 --
 ALTER TABLE `kebutuhan_pl`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `konfigurasi_gaji`
+--
+ALTER TABLE `konfigurasi_gaji`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `laporan_gaji_admin`
+--
+ALTER TABLE `laporan_gaji_admin`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `mata_kuliah`
@@ -787,6 +861,13 @@ ALTER TABLE `jadwal_lab`
 --
 ALTER TABLE `kebutuhan_pl`
   ADD CONSTRAINT `kebutuhan_pl_ibfk_1` FOREIGN KEY (`ID_MATKUL`) REFERENCES `mata_kuliah` (`ID`);
+
+--
+-- Constraints for table `laporan_gaji_admin`
+--
+ALTER TABLE `laporan_gaji_admin`
+  ADD CONSTRAINT `laporan_gaji_admin_ibfk_1` FOREIGN KEY (`ID_PERIODE`) REFERENCES `periode_gaji` (`ID`),
+  ADD CONSTRAINT `laporan_gaji_admin_ibfk_2` FOREIGN KEY (`ID_ADMIN`) REFERENCES `users` (`ID`);
 
 --
 -- Constraints for table `mata_kuliah`

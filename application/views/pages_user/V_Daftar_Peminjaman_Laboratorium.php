@@ -35,6 +35,7 @@
                                                 <th>#</th>
                                                 <th>Tanggal Rekam</th>
                                                 <th>User Peminjam</th>
+                                                <th>Acara/Keperluan</th>
                                                 <th>Laboratorium</th>
                                                 <th>Tanggal Pinjam</th>
                                                 <th>Waktu</th>
@@ -53,6 +54,7 @@
                                                             <td><?php echo $iterator;?></td>
                                                             <td><?php echo $peminjam['TANGGAL_REKAM'];?></td>
                                                             <td><?php echo $peminjam['NAMA_PEMINJAM']. " (" .$peminjam['EMAIL_PEMINJAM']. ")";?></td>
+                                                            <td><?php echo $peminjam['KEPERLUAN'];?></td>
                                                             <td><?php echo $peminjam['NAMA_LAB'].' ('.$peminjam['LOKASI']. ')';?></td>
                                                             <td><?php echo $peminjam['TANGGAL_PINJAM'];?></td>
                                                             <td><?php echo $peminjam['JAM_MULAI'].' - '.  $peminjam['JAM_SELESAI'];?></td>

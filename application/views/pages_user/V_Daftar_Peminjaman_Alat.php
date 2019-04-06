@@ -35,6 +35,7 @@
                                                 <th>#</th>
                                                 <th>Tanggal Rekam</th>
                                                 <th>User Peminjam</th>
+                                                <th>Acara/Keperluan</th>
                                                 <th>Alat</th>
                                                 <th>Tanggal Pinjam</th>
                                                 <th>Waktu</th>
@@ -53,6 +54,7 @@
                                                             <td><?php echo $iterator;?></td>
                                                             <td><?php echo $peminjam['TANGGAL_REKAM'];?></td>
                                                             <td><?php echo $peminjam['NAMA_PEMINJAM']. " (". $peminjam['EMAIL_PEMINJAM']. ')';?></td>
+                                                            <td><?php echo $peminjam['KEPERLUAN'];?></td>
                                                             <td><?php echo $peminjam['NAMA_ALAT'];?></td>
                                                             <td><?php echo $peminjam['TANGGAL_PINJAM'];?></td>
                                                             <td><?php echo $peminjam['JAM_MULAI'].' - '.  $peminjam['JAM_SELESAI'];?></td>
@@ -67,11 +69,17 @@
                                                                     echo "Ditolak";
                                                                 }?></td>
                                                             <td align="center">
-                                                                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalUpdate<?php echo $peminjam['ID'];?>"><i class="fas fa-pen"></i> Tindakan</button>
-
-
-                                                                
-
+                                                                <?php
+                                                                if($peminjam['STATUS'] == 0){
+                                                                    ?>
+                                                                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalUpdate<?php echo $peminjam['ID'];?>"><i class="fas fa-pen"></i> Tindakan</button>
+                                                                 
+                                                                    <?php
+                                                                }
+                                                                else{
+                                                                    echo 'Sudah Ditindaklanjuti';
+                                                                }
+                                                                ?>
                                                             </td>
                                                             <div class="modal inmodal" id="modalUpdate<?php echo $peminjam['ID'];?>" tabindex="-1" role="dialog"  aria-hidden="true">
                                         <div class="modal-dialog">

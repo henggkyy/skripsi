@@ -5,11 +5,12 @@ class C_Jadwal_Lab extends CI_Controller{
 	//Method untuk melakukan pengecekan ketersediaan peminjaman laboratorium
 	function checkKetersediaanPeminjaman(){
 		
-		$tanggal = $this->input->post('tanggal');
-		$jam_mulai = $this->input->post('jam_mulai');
-		$jam_selesai = $this->input->post('jam_selesai');
+		$tanggal = $this->input->get('tanggal');
+		$jam_mulai = $this->input->get('jam_mulai');
+		$jam_selesai = $this->input->get('jam_selesai');
 		
-
+		// echo $tanggal;
+		// return;
 		if(!isset($tanggal) || $tanggal == ""){
 			echo '<span style="color:red;">Tanggal peminjaman harus diisi!</span>';
 			return;
@@ -22,16 +23,21 @@ class C_Jadwal_Lab extends CI_Controller{
 			echo '<span style="color:red;">Jam selesai peminjaman harus diisi!</span>';
 			return;
 		}
-	 	
 
-	 	$tanggal = date("Y-m-d", strtotime($this->input->post('tanggal')));
-		$jam_mulai = date("H:i:s", strtotime($this->input->post('jam_mulai')));
-		$jam_selesai = date("H:i:s", strtotime($this->input->post('jam_selesai')));
+
+	 	$tanggal = date("Y-m-d", strtotime($this->input->get('tanggal')));
+		$jam_mulai = date("H:i:s", strtotime($this->input->get('jam_mulai')));
+		$jam_selesai = date("H:i:s", strtotime($this->input->get('jam_selesai')));
+
+		
 
 		$daftar_lab = $this->getAllListLab();
 		$start_event = $tanggal." ".$jam_mulai;
 		$end_event  = $tanggal. " ".$jam_selesai;
 
+		// print_r($daftar_lab);
+		// print_r($start_event);
+		// print_r($end_event);
 		$this->load->model('Jadwal_lab');
 		$lab_terpakai = $this->Jadwal_lab->checkPemakaianLab($start_event, $end_event);
 		$arr_lab_tersedia = array();
@@ -57,7 +63,7 @@ class C_Jadwal_Lab extends CI_Controller{
 				array_push($arr_lab_tersedia, $arr_temp);
 			}
 		}
-		// print_r($arr_lab_tersedia);
+		// print_r($lab_terpakai);
 		// return;
 		if($arr_lab_tersedia){
 			$data['daftar_lab'] = $arr_lab_tersedia;

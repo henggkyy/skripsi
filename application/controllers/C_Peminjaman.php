@@ -62,7 +62,7 @@ class C_Peminjaman extends CI_Controller{
 				$tindakan = $this->input->post('tindakan');
 				$keterangan = $this->input->post('keterangan');
 				$this->load->model('Peminjaman_lab');
-				$id_tindakan = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, "TINDAKAN");
+				$id_tindakan = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, "DISETUJUI");
 				if($id_tindakan != 0){
 					$this->session->set_flashdata('error', 'Permintaan tersebut telah ditindaklanjuti!');
 					redirect('/peminjaman_lab');
@@ -109,6 +109,72 @@ class C_Peminjaman extends CI_Controller{
 						$this->session->set_flashdata('error', 'Gagal menindaklanjuti permintaan peminjaman alat');
 						redirect("/peminjaman_alat");
 					}
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
+	//Method untuk memasukkan data peminjaman laboratorium yang dilakukan oleh pengguna yang login ke dalam SI
+	function insertPeminjamanInAdmin(){
+		if($this->session->userdata('logged_in')){
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('tgl_pinjam', 'Tanggal Pinjam', 'required');
+			$this->form_validation->set_rules('jam_mulai', 'Jam Mulai', 'required');
+			$this->form_validation->set_rules('jam_selesai', 'Jam Selesai', 'required');
+			$this->form_validation->set_rules('keterangan', 'Keterangan', 'required');
+			$this->form_validation->set_rules('keperluan', 'Keperluan', 'required');
+			$this->form_validation->set_rules('choice', 'Mode', 'required');
+			$mode = $this->input->post('choice');
+			if($mode == 'lab'){
+				$this->form_validation->set_rules('lab', 'Tipe Laboratorium', 'required');
+			}
+			else{
+				$this->form_validation->set_rules('alat', 'Alat Laboratorium', 'required');
+			}
+
+			if($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing required Field!');
+		        redirect('/peminjaman/form');
+			}
+			else{
+				$email_peminjam = $this->session->userdata('email');
+				$nama_peminjam = $this->session->userdata('nama');
+				$tipe_lab = $this->input->post('lab');
+				$alat =  $this->input->post('alat');
+				$tgl_pinjam = $this->input->post('tgl_pinjam');
+				$jam_mulai = $this->input->post('jam_mulai');
+				$jam_selesai = $this->input->post('jam_selesai');
+				if($jam_mulai > $jam_selesai){
+					$this->session->set_flashdata('success', 'Tidak dapat melakukan permintaan peminjaman. Jam mulai tidak boleh lebih besar dari jam selesai peminjaman!');
+					redirect("/peminjaman/form");
+				}
+				$start_event = $tgl_pinjam. " ". $jam_mulai;
+				$end_event = $tgl_pinjam. " ". $jam_selesai;
+				if($mode == 'lab'){
+					$arr_lab_tersedia = $this->cekKetersediaanLab($start_event, $end_event);
+
+					//Cek ketersediaan laboratorium yang dipilih
+					//If tidak tersedia, return ke home peminjaman
+					if(!in_array($tipe_lab, $arr_lab_tersedia)){
+						$this->session->set_flashdata('error', 'Ruangan laboratorium yang dipilih tidak dapat digunakan pada tanggal dan rentang waktu yang diinginkan!');
+						redirect("/peminjaman/form");
+					}
+				}
+				
+
+				$keterangan = $this->input->post('keterangan');
+				$keperluan = $this->input->post('keperluan');
+				$this->load->model('Peminjaman_lab');
+				$res = $this->Peminjaman_lab->addPeminjaman($email_peminjam, $nama_peminjam, $tipe_lab, $alat, $tgl_pinjam, $jam_mulai, $jam_selesai, $keterangan, $keperluan);
+				if($res){
+					$this->session->set_flashdata('success', 'Berhasil melakukan permintaan peminjaman alat/ruangan laboratorium. Silahkan tunggu notifikasi selanjutnya pada Email UNPAR Anda');
+					redirect("/peminjaman/form");
+				}
+				else{
+					$this->session->set_flashdata('error', 'Terjadi kesalahan dalam melakukan permintaan peminjaman alat/ruangan laboratorium.');
+					redirect("/peminjaman/form");
 				}
 			}
 		}

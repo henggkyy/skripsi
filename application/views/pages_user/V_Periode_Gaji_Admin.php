@@ -60,7 +60,40 @@
                             </div>
                         </div>
                         <div class="col-lg-12">
-                        	<div class="ibox-title">
+                           <div class="ibox float-e-margins">
+                              <div class="ibox-title">
+                                  <h3>Konfigurasi</h3>
+                              </div>
+                              <div class="ibox-content">
+                                  <div class="row">
+                                    <?php
+                                    if(isset($konfigurasi) && $konfigurasi){
+                                      foreach ($konfigurasi as $konf) {
+                                        ?>
+                                          <div class="form-group col-lg-3">
+                                            <label>Maksimal Jam :</label><input class="form-control" type="number" min="0" id="maks_jam" name="maks_jam" value="<?php echo $konf['JAM_MAX'];?>" disabled>
+                                          </div>
+                                          <div class="form-group col-lg-3">
+                                            <label>Tarif per Jam :</label><input class="form-control" type="number" min="0" id="tarif" name="tarif" value="<?php echo $konf['TARIF'];?>" disabled>
+                                          </div>
+                                        <?php
+                                      }
+                                    }
+                                    ?>
+                                   
+                                    <div class="form-group col-lg-6"> 
+                                      <br>
+                                      <button id="edit_btn" class="btn btn-primary btn-md"><i class="far fa-edit"></i> Edit</button>
+                                      <button style="display: none;" id="save_btn" class="btn btn-success btn-md"><i class="fas fa-save"></i> Save</button>
+                                      <h4 style="display: none;" id="notif"></h4>
+                                    </div>
+                                  </div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-lg-12">
+                          <div class="ibox float-e-margins">
+                        	  <div class="ibox-title">
                                	<h3>Histori Periode Gaji</h3>
                             </div>
                             <div class="ibox-content">
@@ -126,7 +159,39 @@
                                     </table>
                             	</div>
                             </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <script type="text/javascript">
+              $( "#edit_btn" ).click(function() {
+                $('#save_btn').show();
+                $('#edit_btn').hide();
+                $('#maks_jam').prop('disabled', false);
+                $('#tarif').prop('disabled', false);
+              });
+              $('#save_btn').click(function(){
+                var jam_maks = $('#maks_jam').val();
+                var tarif = $('#tarif').val();
+                if(jam_maks != "" && tarif != ""){
+                  $.ajax({
+                      //Ganti URL nanti kl udah dipindah server
+                    url: "<?php echo base_url('laporan_gaji/edit_konfigurasi'); ?>",
+                    type: "POST",
+                    data: {tarif : tarif, jam_max : jam_maks},
+                    success: function(data) { 
+                        $("#notif").show();
+                        $("#notif").html(data);
+                        $('#save_btn').hide();
+                        $('#edit_btn').show();
+                        $('#maks_jam').prop('disabled', true);
+                        $('#tarif').prop('disabled', true);
+                    },
+                    error: function() {
+                        alert('error!');
+                    }
+                  }); 
+                }
+              });
+            </script>
