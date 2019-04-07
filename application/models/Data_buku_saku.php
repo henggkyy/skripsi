@@ -9,14 +9,16 @@ class Data_buku_saku extends CI_Model{
 			    'JUDUL' => $judul,
 			    'PATH_FILE' => $path_file,
 			    'VISIBILITY' => $visibility,
-			    'LAST_UPDATE' => $date_time
+			    'LAST_UPDATE' => $date_time,
+			    'USER' => $this->session->userdata('id')
 			);
 		}
 		else{
 			$data = array(
 			    'JUDUL' => $judul,
 			    'VISIBILITY' => $visibility,
-			    'LAST_UPDATE' => $date_time
+			    'LAST_UPDATE' => $date_time,
+			    'USER' => $this->session->userdata('id')
 			);
 		}
 		$this->db->where('ID', $id);
@@ -52,8 +54,9 @@ class Data_buku_saku extends CI_Model{
 		}
 	}
 	function getSakuPublic(){
-		$this->db->select('data_buku_saku.JUDUL as judul, data_buku_saku.PATH_FILE as path,data_buku_saku.LAST_UPDATE as LAST_UPDATE');
+		$this->db->select('data_buku_saku.ID as ID, data_buku_saku.VISIBILITY as visibility, data_buku_saku.JUDUL as judul, data_buku_saku.PATH_FILE as path, data_buku_saku.LAST_UPDATE as LAST_UPDATE, users.EMAIL as USER');
 		$this->db->from('data_buku_saku');
+		$this->db->join('users', 'data_buku_saku.USER = users.ID' , 'left outer');
 		$this->db->where('VISIBILITY', 1);
 		$result = $this->db->get();
 		if($result->num_rows() > 0 ){
@@ -64,8 +67,9 @@ class Data_buku_saku extends CI_Model{
 		}
 	}
 	function getAllBukuSaku(){
-		$this->db->select('data_buku_saku.ID as ID, data_buku_saku.VISIBILITY as visibility, data_buku_saku.JUDUL as judul, data_buku_saku.PATH_FILE as path, data_buku_saku.LAST_UPDATE as LAST_UPDATE');
+		$this->db->select('data_buku_saku.ID as ID, data_buku_saku.VISIBILITY as visibility, data_buku_saku.JUDUL as judul, data_buku_saku.PATH_FILE as path, data_buku_saku.LAST_UPDATE as LAST_UPDATE, users.EMAIL as USER');
 		$this->db->from('data_buku_saku');
+		$this->db->join('users', 'data_buku_saku.USER = users.ID' , 'left outer');
 		$result = $this->db->get();
 		if($result->num_rows() > 0 ){
 			return $result->result_array();
@@ -93,7 +97,8 @@ class Data_buku_saku extends CI_Model{
 		    'JUDUL' => $judul,
 		    'PATH_FILE' => $path,
 		    'VISIBILITY' => $visibility,
-		    'LAST_UPDATE' => $date_time
+		    'LAST_UPDATE' => $date_time,
+			'USER' => $this->session->userdata('id')
 		);
 		$res = $this->db->insert('data_buku_saku', $data);
 		if($res){

@@ -37,6 +37,7 @@
                                                                 <li><h4><span style="font-weight: bold;">NIK : </span><?php echo $admin['NIK'];?></h4></li>
                                                                 <li><h4><span style="font-weight: bold;">Angkatan : </span><?php echo $admin['ANGKATAN'];?></h4></li>
                                                                 <li><h4><span style="font-weight: bold;">Periode Kontrak : </span><?php echo $admin['AWAL_KONTRAK'].' s/d '. $admin['AKHIR_KONTRAK'];?></h4></li>
+                                                                <li><h4><span style="font-weight: bold;">Golongan : </span><?php echo $admin['NAMA_GOLONGAN'].' ('. $admin['TARIF']."/jam)";?></h4></li>
                                                                 <?php
                                                             }
                                                         }
@@ -54,6 +55,58 @@
                                 </div>
                                 <div class="ibox-content">
                                     <button data-toggle="modal" data-target="#modalKontrak" class="btn btn-md btn-primary"><i class="fas fa-user-edit"></i> Perbaharui Masa Kontrak</button>
+                                    <?php
+                                    if(!$flag_gaji && $flag_admin){?>
+                                         <button data-toggle="modal" data-target="#modalGolongan" class="btn btn-md btn-info"><i class="fas fa-user-edit"></i> Perbaharui Golongan Gaji</button>
+                                    <!--Modal Golongan Gaji-->
+                                    <div class="modal inmodal" id="modalGolongan" tabindex="-1" role="dialog"  aria-hidden="true">
+                                         <div class="modal-dialog">
+                                            <div class="modal-content animated fadeIn">
+                                                 <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                    <h4 class="modal-title">Perbaharui Golongan Gaji</h4>
+                                                 </div>
+                                                 <?php echo form_open('admin_lab/update_golongan');?>
+                                                 <div class="modal-body">
+                                                    <div class="form-group row" >
+                                                        <label class="col-sm-6 col-form-label">Golongan Gaji <span style="color: red">*</span> :</label>
+                                                        <div class="col-sm-6">
+                                                            <select class="form-control" name="id_gol" required>
+                                                                <?php
+                                                                if(isset($konfigurasi_gaji) && $konfigurasi_gaji){
+                                                                    foreach ($konfigurasi_gaji as $konf) {
+                                                                        ?>
+                                                                    <option <?php if($id_gol == $konf['ID']){ echo 'selected';}?> value="<?php echo $konf['ID'];?>" ><?php echo $konf['NAMA_GOLONGAN']." (".$konf['TARIF']."/jam)";?></option>
+                                                                        <?php
+                                                                    }
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                        <input type="hidden" name="id_admin" required value="<?php echo $id_admin;?>">
+                                                    </div>
+                                                 </div>
+                                                 <div class="modal-footer">
+                                                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                                                    <button type="submit" id="button_save" class="btn btn-primary">Save changes</button>
+                                                </div>
+                                                </form>
+                                            </div>
+                                         </div>
+                                    </div>
+                                    <?php
+                                    }
+                                    else{
+                                        if(!$flag_admin){
+                                            echo '<h4 style="color: red;">Tidak dapat melakukan edit golongan gaji admin karena admin dalam status nonaktif!</h4>';
+                                        }
+                                        if($flag_gaji){
+                                            echo '<h4 style="color: red;">Tidak dapat melakukan edit golongan gaji admin karena terdapat periode gaji yang sedang berjalan!</h4>';
+                                        }
+                                        
+                                    }
+                                    ?>
+                                   
                                                                 <!--Modal Update Kontrak-->
                                                                 <div class="modal inmodal" id="modalKontrak" tabindex="-1" role="dialog"  aria-hidden="true">
                                                                     <div class="modal-dialog">
@@ -187,6 +240,14 @@
                                                                 </div>
                                                                 <!-- END Modal Jadwal (Manual)-->
                                         <?php
+                                        }
+                                        else{
+                                            if(!$periode_aktif){
+                                                echo '<h4 style="color: red;">Tidak dapat menambahkan jadwal bertugas admin karena tidak ada periode akademik yang sedang berjalan!</h4>';
+                                            }
+                                            if(!$flag_admin){
+                                                echo '<h4 style="color: red;">Tidak dapat menambahkan jadwal bertugas admin karena admin dalam status nonaktif!</h4>';
+                                            }
                                         }
                                     ?>
                                 </div>

@@ -474,6 +474,53 @@ class C_Admin extends CI_Controller {
 			redirect('/');
 		}
 	}
+	//Method untuk melakukan edit konfigurasi golongan gaji
+	function editKonfigurasiGolonganGaji(){
+		if($this->session->userdata('logged_in')){
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('id_admin', 'ID Admin', 'required');
+			$this->form_validation->set_rules('id_gol', 'ID Golongan', 'required');
+			$id_admin = $this->input->post('id_admin');
+			if($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing required Field!');
+	            redirect("admin_lab/detail?id_admin=$id_admin");
+			}
+			else{
+				$id_gol = $this->input->post('id_gol');
+				$this->load->model('Users');
+				$is_admin = $this->Users->checkUserRole($id_admin, 4);
+				if(!$is_admin){
+					$this->session->set_flashdata('error', 'Tidak dapat perbaharui masa kontrak karena ID User bukan Admin!');
+					redirect('/dashboard');
+				}
+
+				$is_aktif = $this->Users->checkAdminAktif($id_admin);
+				if(!$is_aktif){
+					$this->session->set_flashdata('error', 'Tidak dapat perbaharui ID Golongan gaji karena bukan merupakan admin aktif!');
+					redirect("admin_lab/detail?id_admin=$id_admin");
+				}
+				$this->load->model('Periode_gaji');
+				$id_periode_gaji_aktif = $this->Periode_gaji->checkPeriodeAktif();
+				if($id_periode_gaji_aktif){
+					$this->session->set_flashdata('error', 'Tidak dapat perbaharui ID Golongan gaji karena masih terdapat periode gaji yang sedang berjalan!');
+					redirect("admin_lab/detail?id_admin=$id_admin");
+				}
+				$this->load->model('Detail_user');
+				$res = $this->Detail_user->updateGolonganGaji($id_admin, $id_gol);
+				if($res){
+					$this->session->set_flashdata('success', 'Berhasil memperbaharui golongan gaji!');
+	           	 	redirect("admin_lab/detail?id_admin=$id_admin");
+				}
+				else{
+					$this->session->set_flashdata('error', 'Gagal memperbaharui golongan gaji!');
+	           	 	redirect("admin_lab/detail?id_admin=$id_admin");
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
 	//Method untuk load halaman detail admin
 	function loadDetailAdmin(){
 		if($this->session->userdata('logged_in')){
@@ -483,6 +530,13 @@ class C_Admin extends CI_Controller {
 
 				$this->load->model('Detail_user');
 				$this->load->model('Users');
+				$this->load->model('Periode_gaji');
+				$flag_gaji = true;
+				$is_periode_gaji_aktif = $this->Periode_gaji->checkPeriodeAktif();
+				if(!$is_periode_gaji_aktif){
+					$flag_gaji = false;
+				}
+				$data['flag_gaji'] = $flag_gaji;
 				$is_admin = $this->Users->checkUserRole($id_admin, 4);
 				if(!$is_admin){
 					$this->session->set_flashdata('error', 'Data admin tidak ditemukan!');
@@ -491,12 +545,15 @@ class C_Admin extends CI_Controller {
 				$data['title'] = 'Detail Admin Laboratorium | SI Akademik Lab. Komputasi TIF UNPAR';
 				$this->load->model('Periode_akademik');
 				$this->load->model('Jadwal_bertugas_admin');
+				$this->load->model('Konfigurasi_gaji');
 				$data['detail_admin'] = true;
 				$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 				$data['daftar_periode'] = $this->Periode_akademik->getAllPeriode();
 				$data['data_admin'] = $this->Detail_user->getDataAdmin($id_admin);
+				$data['id_gol'] = $data['data_admin'][0]['ID_GOL'];
 				$data['nama_admin'] = $this->Users->getIndividualItem($id_admin, 'NAMA');
 				$data['id_admin'] = $this->Users->getIndividualItem($id_admin, 'ID');
+				$data['konfigurasi_gaji'] = $this->Konfigurasi_gaji->getKonfigurasi();
 				$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
 				$flag = true;
 				$flag_admin = true;

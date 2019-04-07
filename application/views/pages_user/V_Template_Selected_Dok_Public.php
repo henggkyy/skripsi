@@ -19,7 +19,7 @@
                 <td><?php echo $iterator;?></td>
                 <td><a target="_blank" href="<?php echo base_url();?>uploads/sop/<?php echo $file['path'];?>"><?php echo $file['judul'];?></a></td>
                 <td><?php echo $file['nama_kategori'];?></td>
-                <td><?php echo $file['LAST_UPDATE']; ?></td>
+                <td><?php echo $file['LAST_UPDATE']." (".$file['USER'].")"; ?></td>
             </tr>
             <?php
             $iterator++;
@@ -41,7 +41,7 @@
         <thead>
         <tr>
             <th>#</th>
-            <th>Dokumen SOP</th>
+            <th>Dokumen Buku Saku</th>
             <th>Last Update</th>
         </tr>
     </thead>
@@ -54,7 +54,7 @@
             <tr>
                 <td><?php echo $iterator;?></td>
                 <td><a target="_blank" href="<?php echo base_url();?>uploads/buku_saku/<?php echo $file['path'];?>"><?php echo $file['judul'];?></a></td>
-                <td><?php echo $file['LAST_UPDATE']; ?></td>
+                <td><?php echo $file['LAST_UPDATE']." (".$file['USER'].")"; ?></td>
             </tr>
             <?php
             $iterator++;

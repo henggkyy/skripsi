@@ -46,6 +46,15 @@ class C_Login extends CI_Controller {
 						'nama' => $nama,
 						'nama_role' => $nama_role
 					);
+					$this->load->model('Users');
+					date_default_timezone_set('Asia/Jakarta');
+					$date_time = date("Y-m-d h:i:sa");
+					$ip = $this->input->ip_address();
+					$data = array(
+						'LAST_LOGIN' => $date_time,
+						'LAST_IP' => $ip
+					);
+					$res = $this->Users->updateDataLogin($id, $data);
 					$this->session->set_userdata($userdata);
 					redirect('/dashboard');
 				}

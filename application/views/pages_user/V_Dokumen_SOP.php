@@ -140,7 +140,7 @@
                                                                 else{
                                                                     echo "Private";
                                                                 }?></td>
-                                                            <td><?php echo $sop['LAST_UPDATE']; ?></td>
+                                                            <td><?php echo $sop['LAST_UPDATE']." (".$sop['USER'].")"; ?></td>
                                                             <td align="center">
                                                                 <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalUpdate<?php echo $sop['ID'];?>"><i class="fas fa-pen"></i> Update</button>
 

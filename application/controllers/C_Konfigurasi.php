@@ -14,6 +14,12 @@ class C_Konfigurasi extends CI_Controller {
 	            redirect("laporan_gaji/periode");
 			}
 			else{
+				$this->load->model('Periode_gaji');
+				$is_periode_aktif = $this->Periode_gaji->checkPeriodeAktif();
+				if($is_periode_aktif){
+					$this->session->set_flashdata('error', 'Tidak dapat menambah golongan gaji karena terdapat periode gaji yang sedang berjalan!');
+	            	redirect("laporan_gaji/periode");
+				}
 				$nama = $this->input->post('nama');
 				$maks_jam = $this->input->post('maks_jam');
 				$tarif = $this->input->post('tarif');

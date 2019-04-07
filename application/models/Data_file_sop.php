@@ -10,7 +10,8 @@ class Data_file_sop extends CI_Model{
 			    'PATH_FILE' => $path_file,
 			    'VISIBILITY' => $visibility,
 			    'ID_KATEGORI' => $kategori,
-			    'LAST_UPDATE' => $date_time
+			    'LAST_UPDATE' => $date_time,
+			    'USER' => $this->session->userdata('id')
 			);
 		}
 		else{
@@ -18,7 +19,8 @@ class Data_file_sop extends CI_Model{
 			    'JUDUL' => $judul,
 			    'VISIBILITY' => $visibility,
 			    'ID_KATEGORI' => $kategori,
-			    'LAST_UPDATE' => $date_time
+			    'LAST_UPDATE' => $date_time,
+			    'USER' => $this->session->userdata('id')
 			);
 		}
 		$this->db->where('ID', $id);
@@ -74,7 +76,8 @@ class Data_file_sop extends CI_Model{
 		    'PATH_FILE' => $path,
 		    'VISIBILITY' => $visibility,
 		    'ID_KATEGORI' => $kategori,
-		    'LAST_UPDATE' => $date_time
+		    'LAST_UPDATE' => $date_time,
+			'USER' => $this->session->userdata('id')
 		);
 		$res = $this->db->insert('data_file_sop', $data);
 		if($res){
@@ -86,9 +89,10 @@ class Data_file_sop extends CI_Model{
 	}
 
 	function getSopPublic(){
-		$this->db->select('data_file_sop.JUDUL as judul, data_file_sop.PATH_FILE as path, kategori_sop.NAMA_KATEGORI as nama_kategori, data_file_sop.LAST_UPDATE as LAST_UPDATE');
+		$this->db->select('data_file_sop.JUDUL as judul, data_file_sop.PATH_FILE as path, kategori_sop.NAMA_KATEGORI as nama_kategori, data_file_sop.LAST_UPDATE as LAST_UPDATE, users.EMAIL as USER');
 		$this->db->from('data_file_sop');
 		$this->db->join('kategori_sop', 'data_file_sop.ID_KATEGORI = kategori_sop.ID' , 'left outer');
+		$this->db->join('users', 'data_file_sop.USER = users.ID' , 'left outer');
 		$this->db->where('VISIBILITY', 1);
 		$result = $this->db->get();
 		if($result->num_rows() > 0 ){
@@ -99,9 +103,10 @@ class Data_file_sop extends CI_Model{
 		}
 	}
 	function getAllSOP(){
-		$this->db->select('data_file_sop.ID as ID, data_file_sop.VISIBILITY as visibility, data_file_sop.JUDUL as judul, data_file_sop.PATH_FILE as path, data_file_sop.ID_KATEGORI as id_kategori, kategori_sop.NAMA_KATEGORI as nama_kategori, data_file_sop.LAST_UPDATE as LAST_UPDATE');
+		$this->db->select('data_file_sop.ID as ID, data_file_sop.VISIBILITY as visibility, data_file_sop.JUDUL as judul, data_file_sop.PATH_FILE as path, data_file_sop.ID_KATEGORI as id_kategori, kategori_sop.NAMA_KATEGORI as nama_kategori, data_file_sop.LAST_UPDATE as LAST_UPDATE, users.EMAIL as USER');
 		$this->db->from('data_file_sop');
 		$this->db->join('kategori_sop', 'data_file_sop.ID_KATEGORI = kategori_sop.ID' , 'left outer');
+		$this->db->join('users', 'data_file_sop.USER = users.ID' , 'left outer');
 		$result = $this->db->get();
 		if($result->num_rows() > 0 ){
 			return $result->result_array();

@@ -117,6 +117,7 @@ $route['admin_lab/insert_jadwal_auto'] = 'C_Admin/insertJadwalBertugasAuto';
 $route['admin_lab/delete_jadwal'] = 'C_Admin/deleteJadwalAdmin';
 $route['admin_lab/get_jadwal_bertugas'] = 'C_Admin/getIndividualJadwalAdmin';
 $route['admin_lab/update_jadwal'] = 'C_Admin/updateJadwalBertugasAdmin';
+$route['admin_lab/update_golongan'] = 'C_Admin/editKonfigurasiGolonganGaji';
 
 $route['laporan_gaji/periode'] = 'C_Gaji_Admin/loadSetPeriode';
 $route['laporan_gaji/periode/add'] = 'C_Gaji_Admin/setPeriodeGaji';

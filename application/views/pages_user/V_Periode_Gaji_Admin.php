@@ -67,7 +67,8 @@
                               <div class="ibox-content">
                                   <div class="row">
                                     <?php
-                                    if(isset($konfigurasi) && $konfigurasi){
+                                    if(!$is_aktif){
+                                      if(isset($konfigurasi) && $konfigurasi){
                                       $iterator = 0;
                                       foreach ($konfigurasi as $konf) {
                                         ?>
@@ -139,6 +140,12 @@
                                                                 </div>
                                   <!--END MODAL SET PERIODE-->
                                     </div>
+                                      <?php
+                                    }
+                                    else{
+                                      echo '<h4 style="color: red;">Tidak dapat mengatur konfigurasi gaji karena terdapat periode gaji yang sedang berjalan!</h4>';
+                                    }
+                                    ?>
                                   </div>
                               </div>
                            </div>

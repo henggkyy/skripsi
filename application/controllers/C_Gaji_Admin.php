@@ -96,7 +96,9 @@ class C_Gaji_Admin extends CI_Controller {
 				$this->load->model('Konfigurasi_gaji');
 				$this->load->model('Detail_user');
 				$id_golongan = $this->Detail_user->getIndividualItem($id_admin, 'ID_GAJI');
-				$tarif = $this->Konfigurasi_gaji->getIndividualItem($id_golongan,'TARIF');
+				$array_konfigurasi = $this->Konfigurasi_gaji->getDataKonfigurasi($id_golongan);
+				$tarif = $array_konfigurasi[0]['TARIF'];
+				$waktu_maks = $array_konfigurasi[0]['JAM_MAX'];
 				$biaya = $waktu_real * $tarif;
 				$data = array(
 					'HARI' => $hari,
@@ -175,10 +177,9 @@ class C_Gaji_Admin extends CI_Controller {
 				}
 				$data['flag'] = $flag;
 				$data['id_admin'] = $id_admin;
-				$this->load->model('Detail_user');
-				$id_golongan = $this->Detail_user->getIndividualItem($id_admin, 'ID_GAJI');
-				$data['tarif'] = $this->Konfigurasi_gaji->getIndividualItem($id_golongan, 'TARIF');
-				$data['maks_jam'] = $this->Konfigurasi_gaji->getIndividualItem($id_golongan, 'JAM_MAX');
+				$array_data_tarif_jam = $this->Laporan_gaji_admin->getTarifAndJam($id_periode, $id_admin);
+				$data['tarif'] = $array_data_tarif_jam[0]['TARIF_AKTIF'];
+				$data['maks_jam'] = $array_data_tarif_jam[0]['WAKTU_MAKS_AKTIF'];
 				$this->load->view('template/Header', $data);
 				$this->load->view('template/Sidebar', $data);
 				$this->load->view('template/Topbar');
@@ -212,10 +213,9 @@ class C_Gaji_Admin extends CI_Controller {
 				$data['detail_admin'] = $this->Users->getUserById($id_admin);
 				$data['nama_periode'] = $this->Periode_gaji->getIndividualItem($id_periode, 'KETERANGAN');
 				$data['daftar_gaji'] = $this->Laporan_gaji_admin->getDataLaporan($id_periode, $id_admin);
-				$this->load->model('Detail_user');
-				$id_golongan = $this->Detail_user->getIndividualItem($id_admin, 'ID_GAJI');
-				$data['tarif'] = $this->Konfigurasi_gaji->getIndividualItem($id_golongan, 'TARIF');
-				$data['maks_jam'] = $this->Konfigurasi_gaji->getIndividualItem($id_golongan, 'JAM_MAX');
+				$array_data_tarif_jam = $this->Laporan_gaji_admin->getTarifAndJam($id_periode, $id_admin);
+				$data['tarif'] = $array_data_tarif_jam[0]['TARIF_AKTIF'];
+				$data['maks_jam'] = $array_data_tarif_jam[0]['WAKTU_MAKS_AKTIF'];
 				date_default_timezone_set('Asia/Jakarta');
 				$data['now_date'] = date('Y-m-d h:i:sa');
 				$this->load->view('template/Header', $data);
@@ -243,7 +243,6 @@ class C_Gaji_Admin extends CI_Controller {
 				foreach ($array_periode_aktif as $periode) {
 					$data['id_periode_aktif'] = $periode['ID'];
 				}
-
 			}
 			else{
 				$data['id_periode_aktif'] = $this->Periode_gaji->getLastActiveId();
@@ -339,8 +338,9 @@ class C_Gaji_Admin extends CI_Controller {
 				$total_jam = (floor((($total_jam/60)/60)));
 				$waktu_real = $total_jam - $istirahat;
 				$this->load->model('Konfigurasi_gaji');
-				
-				$tarif = $this->Konfigurasi_gaji->getIndividualItem($id_golongan,'TARIF');
+				$array_konfigurasi = $this->Konfigurasi_gaji->getDataKonfigurasi($id_golongan);
+				$tarif = $array_konfigurasi[0]['TARIF'];
+				$waktu_maks = $array_konfigurasi[0]['JAM_MAX'];
 				$biaya = $waktu_real * $tarif;
 				$data = array(
 					'UNIQ' => $hash,
@@ -353,7 +353,9 @@ class C_Gaji_Admin extends CI_Controller {
 					'TOTAL_JAM' => $total_jam,
 					'ISTIRAHAT' => $istirahat,
 					'WAKTU_REAL' => $waktu_real,
-					'BIAYA' => $biaya
+					'BIAYA' => $biaya,
+					'TARIF_AKTIF' => $tarif,
+					'WAKTU_MAKS_AKTIF' => $waktu_maks
 				);
 				$res = $this->Laporan_gaji_admin->insertGaji($data);
 				if($res){
@@ -423,6 +425,12 @@ class C_Gaji_Admin extends CI_Controller {
 			$jam_max = $this->input->post('jam_max');
 			$id = $this->input->post('id');
 			if($tarif != "" && $jam_max != "" && $id != ""){
+				$this->load->model('Periode_gaji');
+				$is_periode_aktif = $this->Periode_gaji->checkPeriodeAktif();
+				if($is_periode_aktif){
+					echo 'Tidak dapat melakukan edit golongan gaji karena terdapat periode gaji yang sedang berjalan!';
+	            	return;
+				}
 				if($tarif <= 0 && $jam_max <= 0){
 					echo "Value tarif dan/atau jam maksimal tidak boleh lebih kecil atau sama dengan 0";
 					return;

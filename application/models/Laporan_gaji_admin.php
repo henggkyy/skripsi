@@ -1,6 +1,20 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Laporan_gaji_admin extends CI_Model{
+	//Method untuk mendapatkan tarif dan jam maksimal dari setiap periode dan user
+	function getTarifAndJam($id_periode, $id_admin){
+		$this->db->distinct();
+		$this->db->select('TARIF_AKTIF, WAKTU_MAKS_AKTIF');
+		$this->db->where('ID_PERIODE', $id_periode);
+		$this->db->where('ID_ADMIN', $id_admin);
+		$result = $this->db->get('laporan_gaji_admin', 1);
+		if($result->num_rows() > 0){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk menghapus laporan gaji admin dari database
 	function deleteLaporanGaji($hash, $id_admin, $id_periode){
 		$this->db->where('UNIQ', $hash);

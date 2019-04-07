@@ -236,6 +236,8 @@ class C_Main extends CI_Controller{
 			$data['title'] = 'Dashboard | SI Akademik Lab. Komputasi TIF UNPAR';
 			$data['dashboard'] = true;
 			$this->load->model('Periode_akademik');
+			$this->load->model('Users');
+			$data['data_login'] = $this->Users->getDataLogin();
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$this->load->view('template/Header', $data);
 			$this->load->view('template/Sidebar', $data);

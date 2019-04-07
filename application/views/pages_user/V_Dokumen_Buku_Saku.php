@@ -121,7 +121,7 @@
                                                                 else{
                                                                     echo "Private";
                                                                 }?></td>
-                                                            <td><?php echo $saku['LAST_UPDATE']; ?></td>
+                                                            <td><?php echo $saku['LAST_UPDATE']." (".$saku['USER'].")"; ?></td>
                                                             <td align="center">
                                                                 <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalUpdate<?php echo $saku['ID'];?>"><i class="fas fa-pen"></i> Update</button>
                                                                 <!--Link Delete Dokumen SOP -->

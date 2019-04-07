@@ -57,7 +57,7 @@
                                         <td><?php echo $iterator;?></td>
                                         <td><a target="_blank" href="<?php echo base_url();?>uploads/sop/<?php echo $file['path'];?>"><?php echo $file['judul'];?></a></td>
                                         <td><?php echo $file['nama_kategori'];?></td>
-                                        <td><?php echo $file['LAST_UPDATE']; ?></td>
+                                        <td><?php echo $file['LAST_UPDATE']." (".$file['USER'].")"; ?></td>
                                     </tr>
                                         <?php
                                         $iterator++;
@@ -108,6 +108,10 @@
             data: {jenis_dokumen : jenis_dokumen},
             success: function(data) { 
                 $("#template_dokumen").html(data);
+                $('.mainDataTable').DataTable({
+                    pageLength: 25,
+                    responsive: true
+                });
             }
         }); 
     }

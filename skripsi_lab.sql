@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 06, 2019 at 08:31 AM
+-- Generation Time: Apr 07, 2019 at 06:57 PM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 5.6.38
 
@@ -73,15 +73,16 @@ CREATE TABLE `data_buku_saku` (
   `JUDUL` varchar(512) NOT NULL,
   `PATH_FILE` varchar(512) NOT NULL,
   `VISIBILITY` int(11) NOT NULL COMMENT '1: Public. 0: Private',
-  `LAST_UPDATE` varchar(64) NOT NULL
+  `LAST_UPDATE` varchar(64) NOT NULL,
+  `USER` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `data_buku_saku`
 --
 
-INSERT INTO `data_buku_saku` (`ID`, `JUDUL`, `PATH_FILE`, `VISIBILITY`, `LAST_UPDATE`) VALUES
-(3, 'Buku Saku Mahasiswa', '95202458253341975615.pdf', 1, '2019-04-01 09:51:03pm');
+INSERT INTO `data_buku_saku` (`ID`, `JUDUL`, `PATH_FILE`, `VISIBILITY`, `LAST_UPDATE`, `USER`) VALUES
+(3, 'Buku Saku Mahasiswa', '95202458253341975615.pdf', 1, '2019-04-01 09:51:03pm', 1);
 
 -- --------------------------------------------------------
 
@@ -95,15 +96,17 @@ CREATE TABLE `data_file_sop` (
   `PATH_FILE` varchar(512) NOT NULL,
   `VISIBILITY` int(11) NOT NULL COMMENT '1 : public, 0: private',
   `ID_KATEGORI` int(11) NOT NULL,
-  `LAST_UPDATE` varchar(64) NOT NULL
+  `LAST_UPDATE` varchar(64) NOT NULL,
+  `USER` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `data_file_sop`
 --
 
-INSERT INTO `data_file_sop` (`ID`, `JUDUL`, `PATH_FILE`, `VISIBILITY`, `ID_KATEGORI`, `LAST_UPDATE`) VALUES
-(3, 'Test Update', '49819919080193132214.pdf', 1, 1, '2019-03-31 09:56:52pm');
+INSERT INTO `data_file_sop` (`ID`, `JUDUL`, `PATH_FILE`, `VISIBILITY`, `ID_KATEGORI`, `LAST_UPDATE`, `USER`) VALUES
+(3, 'Test Updatezzz', '49819919080193132214.pdf', 1, 1, '2019-04-07 11:32:52pm', 1),
+(4, 'Cobacoba', '27161933445683472194.pdf', 0, 2, '2019-04-07 11:33:24pm', 1);
 
 -- --------------------------------------------------------
 
@@ -116,15 +119,17 @@ CREATE TABLE `detail_user` (
   `ID_USER` int(11) NOT NULL,
   `ANGKATAN` int(11) NOT NULL,
   `AWAL_KONTRAK` varchar(128) NOT NULL,
-  `AKHIR_KONTRAK` varchar(128) NOT NULL
+  `AKHIR_KONTRAK` varchar(128) NOT NULL,
+  `ID_GAJI` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `detail_user`
 --
 
-INSERT INTO `detail_user` (`ID`, `ID_USER`, `ANGKATAN`, `AWAL_KONTRAK`, `AKHIR_KONTRAK`) VALUES
-(2, 5, 2015, '2019-04-29', '2019-04-30');
+INSERT INTO `detail_user` (`ID`, `ID_USER`, `ANGKATAN`, `AWAL_KONTRAK`, `AKHIR_KONTRAK`, `ID_GAJI`) VALUES
+(2, 5, 2015, '2019-04-29', '2019-04-30', 1),
+(3, 6, 2015, '2019-04-01', '2019-05-31', 2);
 
 -- --------------------------------------------------------
 
@@ -308,6 +313,7 @@ INSERT INTO `kebutuhan_pl` (`ID`, `NAMA_PL`, `ID_MATKUL`, `STATUS`, `LAST_CHECKE
 
 CREATE TABLE `konfigurasi_gaji` (
   `ID` int(11) NOT NULL,
+  `NAMA_GOLONGAN` varchar(128) NOT NULL,
   `JAM_MAX` varchar(150) NOT NULL,
   `TARIF` varchar(9000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -316,8 +322,9 @@ CREATE TABLE `konfigurasi_gaji` (
 -- Dumping data for table `konfigurasi_gaji`
 --
 
-INSERT INTO `konfigurasi_gaji` (`ID`, `JAM_MAX`, `TARIF`) VALUES
-(1, '150', '9000');
+INSERT INTO `konfigurasi_gaji` (`ID`, `NAMA_GOLONGAN`, `JAM_MAX`, `TARIF`) VALUES
+(1, 'Golongan 1A', '150', '9000'),
+(2, 'Golongan IIA', '150', '7000');
 
 -- --------------------------------------------------------
 
@@ -336,6 +343,8 @@ CREATE TABLE `laporan_gaji_admin` (
   `JAM_KELUAR` varchar(32) NOT NULL,
   `TOTAL_JAM` varchar(5) NOT NULL,
   `ISTIRAHAT` varchar(5) NOT NULL,
+  `TARIF_AKTIF` int(11) NOT NULL,
+  `WAKTU_MAKS_AKTIF` int(11) NOT NULL,
   `WAKTU_REAL` varchar(10) NOT NULL,
   `BIAYA` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -344,9 +353,8 @@ CREATE TABLE `laporan_gaji_admin` (
 -- Dumping data for table `laporan_gaji_admin`
 --
 
-INSERT INTO `laporan_gaji_admin` (`ID`, `UNIQ`, `ID_PERIODE`, `ID_ADMIN`, `HARI`, `TANGGAL_MASUK`, `JAM_MASUK`, `JAM_KELUAR`, `TOTAL_JAM`, `ISTIRAHAT`, `WAKTU_REAL`, `BIAYA`) VALUES
-(2, '91359842', 3, 5, 'Rabu', '2019-06-19', '12:00', '13:05', '1', '0', '1', '9000'),
-(3, '32737207', 3, 5, 'Rabu', '2019-06-05', '12:00', '15:00', '3', '0', '3', '27000');
+INSERT INTO `laporan_gaji_admin` (`ID`, `UNIQ`, `ID_PERIODE`, `ID_ADMIN`, `HARI`, `TANGGAL_MASUK`, `JAM_MASUK`, `JAM_KELUAR`, `TOTAL_JAM`, `ISTIRAHAT`, `TARIF_AKTIF`, `WAKTU_MAKS_AKTIF`, `WAKTU_REAL`, `BIAYA`) VALUES
+(5, '46904656', 3, 5, 'Rabu', '2019-06-19', '10:00', '16:00', '6', '1', 9000, 160, '5', '45000');
 
 -- --------------------------------------------------------
 
@@ -454,9 +462,8 @@ CREATE TABLE `periode_akademik` (
 --
 
 INSERT INTO `periode_akademik` (`ID`, `NAMA`, `START_PERIODE`, `END_PERIODE`, `START_UTS`, `END_UTS`, `START_UAS`, `END_UAS`, `STATUS`, `CREATED_ON`, `CREATED_BY`) VALUES
-(1, 'Semester Genap 2018/2019', '', '', '', '', '', '', 0, '2019-02-05 15:25:53', 1),
 (2, 'Semester Genap 2018/2019', '', '', '', '', '', '', 0, '2019-02-06 07:00:20', 1),
-(4, 'Semester Ganjil 2019/2020', '2019-08-12', '2019-12-23', '2019-10-14', '2019-10-28', '2019-12-02', '2019-12-16', 1, '2019-03-28 07:20:27', 1);
+(4, 'Semester Ganjil 2019/2020', '2019-08-12', '2019-12-23', '2019-10-14', '2019-10-28', '2019-12-02', '2019-12-16', 0, '2019-03-28 07:20:27', 1);
 
 -- --------------------------------------------------------
 
@@ -479,7 +486,7 @@ CREATE TABLE `periode_gaji` (
 INSERT INTO `periode_gaji` (`ID`, `START_PERIODE`, `END_PERIODE`, `KETERANGAN`, `STATUS`) VALUES
 (1, '2019-04-01', '2019-05-01', 'Periode Bulan April - Mei', 0),
 (2, '2019-05-01', '2019-06-13', 'Periode Bulan Mei - Juni', 0),
-(3, '2019-06-05', '2019-07-26', 'Periode Bulan Juni - Juli', 1);
+(3, '2019-06-05', '2019-07-26', 'Periode Bulan Juni - Juli', 0);
 
 -- --------------------------------------------------------
 
@@ -494,18 +501,21 @@ CREATE TABLE `users` (
   `EMAIL` varchar(128) NOT NULL,
   `NIK` int(11) NOT NULL,
   `STATUS` int(11) NOT NULL COMMENT 'Status Aktivitas. 1 : Aktif. 2 : Nonaktif',
-  `IS_DOSEN` int(11) NOT NULL COMMENT '1 : Dosen. 2 : Non Dosen'
+  `IS_DOSEN` int(11) NOT NULL COMMENT '1 : Dosen. 2 : Non Dosen',
+  `LAST_LOGIN` varchar(64) DEFAULT NULL,
+  `LAST_IP` varchar(64) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`ID`, `ID_ROLE`, `NAMA`, `EMAIL`, `NIK`, `STATUS`, `IS_DOSEN`) VALUES
-(1, 1, 'Hengky Surya', '7315051@student.unpar.ac.id', 0, 1, 1),
-(2, 2, 'Pascal Alfadian', 'pascal@unpar.ac.id', 20180014, 1, 1),
-(4, 3, 'Pranyoto', 'pranyoto@unpar.ac.id', 2018012, 1, 0),
-(5, 4, 'Stephen Senjaya', '7315014@student.unpar.ac.id', 20180014, 1, 0);
+INSERT INTO `users` (`ID`, `ID_ROLE`, `NAMA`, `EMAIL`, `NIK`, `STATUS`, `IS_DOSEN`, `LAST_LOGIN`, `LAST_IP`) VALUES
+(1, 1, 'Hengky Surya', '7315051@student.unpar.ac.id', 0, 1, 1, '2019-04-07 11:54:05pm', '::1'),
+(2, 2, 'Pascal Alfadian', 'pascal@unpar.ac.id', 20180014, 1, 1, NULL, NULL),
+(4, 3, 'Pranyoto', 'pranyoto@unpar.ac.id', 2018012, 1, 0, NULL, NULL),
+(5, 4, 'Stephen Senjaya', '7315014@student.unpar.ac.id', 20180014, 1, 0, NULL, NULL),
+(6, 4, 'Adrian Stefanus', '7315014@student.unpar.ac.id', 20180100, 1, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -562,21 +572,24 @@ ALTER TABLE `daftar_lab`
 -- Indexes for table `data_buku_saku`
 --
 ALTER TABLE `data_buku_saku`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `USER` (`USER`);
 
 --
 -- Indexes for table `data_file_sop`
 --
 ALTER TABLE `data_file_sop`
   ADD PRIMARY KEY (`ID`),
-  ADD KEY `ID_KATEGORI` (`ID_KATEGORI`);
+  ADD KEY `ID_KATEGORI` (`ID_KATEGORI`),
+  ADD KEY `USER` (`USER`);
 
 --
 -- Indexes for table `detail_user`
 --
 ALTER TABLE `detail_user`
   ADD PRIMARY KEY (`ID`),
-  ADD KEY `ID_USER` (`ID_USER`);
+  ADD KEY `ID_USER` (`ID_USER`),
+  ADD KEY `ID_GAJI` (`ID_GAJI`);
 
 --
 -- Indexes for table `file_bantuan_ujian`
@@ -716,13 +729,13 @@ ALTER TABLE `data_buku_saku`
 -- AUTO_INCREMENT for table `data_file_sop`
 --
 ALTER TABLE `data_file_sop`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `detail_user`
 --
 ALTER TABLE `detail_user`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `file_bantuan_ujian`
@@ -764,13 +777,13 @@ ALTER TABLE `kebutuhan_pl`
 -- AUTO_INCREMENT for table `konfigurasi_gaji`
 --
 ALTER TABLE `konfigurasi_gaji`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `laporan_gaji_admin`
 --
 ALTER TABLE `laporan_gaji_admin`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `mata_kuliah`
@@ -800,13 +813,13 @@ ALTER TABLE `periode_akademik`
 -- AUTO_INCREMENT for table `periode_gaji`
 --
 ALTER TABLE `periode_gaji`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `user_permission`
@@ -825,16 +838,24 @@ ALTER TABLE `user_role`
 --
 
 --
+-- Constraints for table `data_buku_saku`
+--
+ALTER TABLE `data_buku_saku`
+  ADD CONSTRAINT `data_buku_saku_ibfk_1` FOREIGN KEY (`USER`) REFERENCES `users` (`ID`);
+
+--
 -- Constraints for table `data_file_sop`
 --
 ALTER TABLE `data_file_sop`
-  ADD CONSTRAINT `data_file_sop_ibfk_1` FOREIGN KEY (`ID_KATEGORI`) REFERENCES `kategori_sop` (`ID`);
+  ADD CONSTRAINT `data_file_sop_ibfk_1` FOREIGN KEY (`ID_KATEGORI`) REFERENCES `kategori_sop` (`ID`),
+  ADD CONSTRAINT `data_file_sop_ibfk_2` FOREIGN KEY (`USER`) REFERENCES `users` (`ID`);
 
 --
 -- Constraints for table `detail_user`
 --
 ALTER TABLE `detail_user`
-  ADD CONSTRAINT `detail_user_ibfk_1` FOREIGN KEY (`ID_USER`) REFERENCES `users` (`ID`);
+  ADD CONSTRAINT `detail_user_ibfk_1` FOREIGN KEY (`ID_USER`) REFERENCES `users` (`ID`),
+  ADD CONSTRAINT `detail_user_ibfk_2` FOREIGN KEY (`ID_GAJI`) REFERENCES `konfigurasi_gaji` (`ID`);
 
 --
 -- Constraints for table `file_bantuan_ujian`

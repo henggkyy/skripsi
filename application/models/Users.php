@@ -1,6 +1,17 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Users extends CI_Model{
+	//Method untuk update last login dan last ip
+	function updateDataLogin($id_user, $data){
+		$this->db->where('ID', $id_user);
+		$res = $this->db->update('users', $data);
+		if($res){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 	//Method untuk mendapatkan data user berdasarkan id 
 	function getUserById($id){
 		$this->db->select('users.ID as ID, ID_ROLE, NAMA, NIK, EMAIL, STATUS');
@@ -165,10 +176,23 @@ class Users extends CI_Model{
 			return false;
 		}
 	}
-
+	//Method untuk mendapatkan data login user pada halaman dashboard
+	function getDataLogin(){
+		$this->db->select('NAMA, EMAIL, STATUS, NAMA_ROLE, LAST_LOGIN, LAST_IP');
+		$this->db->from('users');
+		$this->db->join('user_role', 'users.ID_ROLE = user_role.ID');
+		$this->db->order_by('LAST_LOGIN', 'desc');
+		$result = $this->db->get();
+		if($result->num_rows() > 0){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk mendapatkan data user.
 	function getUser(){
-		$this->db->select('users.ID as ID, ID_ROLE, NAMA, EMAIL, STATUS, NAMA_ROLE');
+		$this->db->select('users.ID as ID, ID_ROLE, NAMA, EMAIL, STATUS, NAMA_ROLE, LAST_LOGIN, LAST_IP');
 		$this->db->from('users');
 		$this->db->join('user_role', 'users.ID_ROLE = user_role.ID');
 		$result = $this->db->get();
