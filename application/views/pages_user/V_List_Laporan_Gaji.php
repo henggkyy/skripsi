@@ -38,7 +38,7 @@
 	                                                <th>Periode Gaji</th>
 	                                                <th>Status</th>
 	                                                <th>Jumlah Hari Masuk</th>
-	                                                <th>Action</th>
+	                                                <th>Aksi</th>
 	                                            </tr>
                                         	</thead>
                                         	<tbody>
@@ -72,8 +72,8 @@
                                         					?>
                                         				</td>
                                         				<td>
-                                        					<button class="btn btn-sm btn-primary"><i class="fas fa-info"></i> Detail</button>
-                                        					<button class="btn btn-sm btn-success"><i class="fas fa-print"></i> Print</button>
+                                        					<a href="<?php echo base_url();?>laporan_gaji/detail?id_periode=<?php echo $id_periode_aktif;?>&id_admin=<?php echo $admin['ID'];?>" class="btn btn-sm btn-primary"><i class="fas fa-info"></i> Detail</a>
+                                        					<a target="_blank" href="<?php echo base_url();?>laporan_gaji/cetak?id_periode=<?php echo $id_periode_aktif;?>&id_admin=<?php echo $admin['ID'];?>" class="btn btn-sm btn-success"><i class="fas fa-print"></i> Print</a>
                                         				</td>
                                         			</tr>
                                         				<?php

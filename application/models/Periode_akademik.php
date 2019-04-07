@@ -1,6 +1,20 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Periode_akademik extends CI_Model{
+	//Method untuk mendapatkan id periode terakhir aktif
+	function getLastActiveId(){
+		$this->db->select('ID');
+		$this->db->order_by('ID', 'desc');
+		$this->db->from('periode_akademik', 1);
+		$item = 'ID';
+		$result = $this->db->get();
+		if($result->num_rows() > 0){
+			return $result->row(0)->$item;
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk mendapatkan tanggal periode akademik, tanggal uts, dan tanggal uas
 	function getTanggalAkademik($id_periode){
 		$this->db->select('START_PERIODE, END_PERIODE, START_UTS, END_UTS, START_UAS, END_UAS');

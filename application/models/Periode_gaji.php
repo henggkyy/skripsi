@@ -8,7 +8,7 @@ class Periode_gaji extends CI_Model{
 		$this->db->from('periode_gaji', 1);
 		$item = 'ID';
 		$result = $this->db->get();
-		if($result->num_rows() == 1){
+		if($result->num_rows() > 0){
 			return $result->row(0)->$item;
 		} 
 		else {

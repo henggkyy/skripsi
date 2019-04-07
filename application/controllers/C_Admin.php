@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani proses administrasi admin mulai dari proses input, jadwal, dsb.
 class C_Admin extends CI_Controller {
+	//Method untuk melakukan update jadwal bertugas admin
 	function updateJadwalBertugasAdmin(){
 		if($this->session->userdata('logged_in')){
 			$this->load->library('form_validation');
@@ -181,14 +182,6 @@ class C_Admin extends CI_Controller {
 					}
 
 					$res = $this->Jadwal_bertugas_admin->deleteJadwalBertugas($id_bertugas);
-					if($res){
-						$this->session->set_flashdata('success', "Berhasil menghapus jadwal bertugas admin!");
-						redirect("admin_lab/detail?id_admin=$id_admin");
-					}
-					else{
-						$this->session->set_flashdata('error', "Gagal menghapus jadwal bertugas admin!");
-						redirect("admin_lab/detail?id_admin=$id_admin");
-					}
 				}
 				else{
 					$this->session->set_flashdata('error', 'Tidak dapat menghapus tanggal bertugas karena tidak terdapat periode akademik yg sedang aktif!');
@@ -242,6 +235,11 @@ class C_Admin extends CI_Controller {
 				$is_admin = $this->Users->checkUserRole($id_admin, 4);
 				if(!$is_admin){
 					$this->session->set_flashdata('error', 'Tidak dapat perbaharui masa kontrak karena ID User bukan Admin!');
+					redirect('/admin_lab');
+				}
+				$admin_aktif = $this->Users->checkAdminAktif($id_admin);
+				if(!$admin_aktif){
+					$this->session->set_flashdata('error', 'Tidak dapat memasukkan jadwal bertugas karena status Admin sedang nonaktif!');
 					redirect('/admin_lab');
 				}
 				//Cek ada periode aktif atau tidak
@@ -363,7 +361,11 @@ class C_Admin extends CI_Controller {
 					$this->session->set_flashdata('error', 'Tidak dapat memasukkan jadwal bertugas karena ID User bukan Admin!');
 					redirect('/admin_lab');
 				}
-
+				$admin_aktif = $this->Users->checkAdminAktif($id_admin);
+				if(!$admin_aktif){
+					$this->session->set_flashdata('error', 'Tidak dapat memasukkan jadwal bertugas karena status Admin sedang nonaktif!');
+					redirect('/admin_lab');
+				}
 				$this->load->model('Periode_akademik');
 				$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
 				if($id_periode){
@@ -497,6 +499,11 @@ class C_Admin extends CI_Controller {
 				$data['id_admin'] = $this->Users->getIndividualItem($id_admin, 'ID');
 				$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
 				$flag = true;
+				$flag_admin = true;
+				$admin_aktif = $this->Users->checkAdminAktif($id_admin);
+				if(!$admin_aktif){
+					$flag_admin = false;
+				}
 				if(isset($_GET['id_periode'])){
 					$id_periode_selected = $_GET['id_periode'];
 					if($id_periode_selected != ""){
@@ -508,9 +515,18 @@ class C_Admin extends CI_Controller {
 					}
 				}
 				else{
-					$data['id_periode_aktif'] = $id_periode;
-					$data['jadwal_admin'] = $this->Jadwal_bertugas_admin->getJadwalBertugas($data['id_admin'], $id_periode);
+					if(!$id_periode){
+						$data['id_periode_aktif'] = $this->Periode_akademik->getLastActiveId();
+						$data['jadwal_admin'] = $this->Jadwal_bertugas_admin->getJadwalBertugas($data['id_admin'], $data['id_periode_aktif']);
+						$flag = false;
+					}
+					else{
+						$data['id_periode_aktif'] = $id_periode;
+						$data['jadwal_admin'] = $this->Jadwal_bertugas_admin->getJadwalBertugas($data['id_admin'], $id_periode);
+					}
 				}
+
+				$data['flag_admin'] = $flag_admin; 
 				$data['flag'] = $flag; 
 				$data_json = array();
 				if(isset($data['jadwal_admin']) && $data['jadwal_admin']){
@@ -605,6 +621,7 @@ class C_Admin extends CI_Controller {
 			$this->form_validation->set_rules('angkatan', 'Angkatan Admin', 'required');
 			$this->form_validation->set_rules('awal_kontrak', 'Awal Kontrak Admin', 'required');
 			$this->form_validation->set_rules('akhir_kontrak', 'Akhir Kontrak Admin', 'required');
+			$this->form_validation->set_rules('id_gol', 'ID Golongan', 'required');
 			if($this->form_validation->run() == FALSE){
 				$this->session->set_flashdata('error_message', 'Missing required Field!');
 	            redirect('/admin_lab');
@@ -618,11 +635,12 @@ class C_Admin extends CI_Controller {
 				$akhir_kontrak = $this->input->post('akhir_kontrak');
 				$awal_kontrak = date("Y-m-d", strtotime($awal_kontrak));
 				$akhir_kontrak = date("Y-m-d", strtotime($akhir_kontrak));
+				$id_gol = $this->input->post('id_gol');
 				$this->load->model('Users');
 				$inserted_id = $this->Users->addUser(4, $nama, $email, $nik, 0);
 				if($inserted_id){
 					$this->load->model('Detail_user');
-					$insert_detail = $this->Detail_user->insertDetailUser($inserted_id, $angkatan, $awal_kontrak, $akhir_kontrak);
+					$insert_detail = $this->Detail_user->insertDetailUser($inserted_id, $angkatan, $awal_kontrak, $akhir_kontrak, $id_gol);
 					if($insert_detail){
 						$this->session->set_flashdata('success', 'Berhasil memasukkan data admin laboratorium!');
 						redirect('/admin_lab');

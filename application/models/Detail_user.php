@@ -2,6 +2,19 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Method menangani koneksi antara aplikasi dengan tabel detail_user
 class Detail_user extends CI_Model{
+	//Method untuk mengambil individual item berdasarkan id admin
+	function getIndividualItem($id_admin, $item){
+		$this->db->select($item);
+		$this->db->where('ID_USER', $id_admin);
+		$this->db->from('detail_user');
+		$result = $this->db->get();
+		if($result->num_rows() == 1){
+			return $result->row(0)->$item;
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk update periode kontrak admin
 	function updateKontrakAdmin($id_user, $tgl_awal, $tgl_akhir){
 		$data = array(
@@ -34,12 +47,13 @@ class Detail_user extends CI_Model{
 		}
 	}
 	//Method untuk memasukkan data detail admin
-	function insertDetailUser($id_user, $angkatan, $awal_kontrak, $akhir_kontrak){
+	function insertDetailUser($id_user, $angkatan, $awal_kontrak, $akhir_kontrak, $id_gol){
 		$data = array(
 		    'ID_USER' => $id_user,
 		    'ANGKATAN' => $angkatan,
 		    'AWAL_KONTRAK' => $awal_kontrak,
-		    'AKHIR_KONTRAK' => $akhir_kontrak
+		    'AKHIR_KONTRAK' => $akhir_kontrak,
+		    'ID_GAJI' => $id_gol
 		);
 		$res = $this->db->insert('detail_user', $data);
 		if($res){

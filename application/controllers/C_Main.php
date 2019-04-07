@@ -121,9 +121,11 @@ class C_Main extends CI_Controller{
 			$data['title'] = 'Administrasi Admin Laboratorium | SI Akademik Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$this->load->model('Users');
+			$this->load->model('Konfigurasi_gaji');
 			$data['admin_lab'] = true;
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$data['data_admin'] = $this->Users->getAllUserByRole(4);
+			$data['konfigurasi_gaji'] = $this->Konfigurasi_gaji->getKonfigurasi();
 			$this->load->view('template/Header', $data);
 			$this->load->view('template/Sidebar', $data);
 			$this->load->view('template/Topbar');
@@ -298,10 +300,15 @@ class C_Main extends CI_Controller{
 					}
 				}
 				else{
-					$data['id_periode_aktif'] = $id_periode;
+					if(!$id_periode){
+						$data['id_periode_aktif'] = $this->Periode_akademik->getLastActiveId();
+					}
+					else{
+						$data['id_periode_aktif'] = $id_periode;
+					}
 				}
-				$data['matkul'] = $this->Mata_kuliah->getMatkul($id_periode);
-				$data['id_periode_aktif'] = $id_periode;
+
+				$data['matkul'] = $this->Mata_kuliah->getMatkul($data['id_periode_aktif']);
 				$this->load->view('template/Header', $data);
 				$this->load->view('template/Sidebar', $data);
 				$this->load->view('template/Topbar');

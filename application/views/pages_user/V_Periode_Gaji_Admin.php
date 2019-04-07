@@ -68,24 +68,76 @@
                                   <div class="row">
                                     <?php
                                     if(isset($konfigurasi) && $konfigurasi){
+                                      $iterator = 0;
                                       foreach ($konfigurasi as $konf) {
                                         ?>
-                                          <div class="form-group col-lg-3">
-                                            <label>Maksimal Jam :</label><input class="form-control" type="number" min="0" id="maks_jam" name="maks_jam" value="<?php echo $konf['JAM_MAX'];?>" disabled>
+                                        <div class="col-lg-12">
+                                          <div class="form-group col-lg-2">
+                                            <br>
+                                            <h4><?php echo $konf['NAMA_GOLONGAN'];?> : </h4>
                                           </div>
                                           <div class="form-group col-lg-3">
-                                            <label>Tarif per Jam :</label><input class="form-control" type="number" min="0" id="tarif" name="tarif" value="<?php echo $konf['TARIF'];?>" disabled>
+                                            <label>Maksimal Jam :</label><input class="form-control" type="number" min="0" id="maks_jam_<?php echo $iterator;?>" name="maks_jam" value="<?php echo $konf['JAM_MAX'];?>" disabled>
                                           </div>
+                                          <div class="form-group col-lg-3">
+                                            <label>Tarif per Jam :</label><input class="form-control" type="number" min="0" id="tarif_<?php echo $iterator;?>" name="tarif" value="<?php echo $konf['TARIF'];?>" disabled>
+                                          </div>
+                                          <br>
+                                          <div class="form-group col-lg-4">
+                                              <button onclick="showSave('<?php echo $iterator;?>');" id="edit_btn_<?php echo $iterator;?>" class="btn btn-primary btn-md"><i class="far fa-edit"></i> Edit</button>
+                                            <button style="display: none;" id="save_btn_<?php echo $iterator;?>" onclick="saveKonfigurasi('<?php echo $iterator;?>');" class="btn btn-success btn-md"><i class="fas fa-save"></i> Save</button>
+                                            <p id="notif_<?php echo $iterator;?>"></p>
+                                          </div>
+                                        </div>
+                                          
                                         <?php
+                                        $iterator++;
                                       }
                                     }
                                     ?>
-                                   
-                                    <div class="form-group col-lg-6"> 
+                                    <div class="form-group col-lg-2"> 
                                       <br>
-                                      <button id="edit_btn" class="btn btn-primary btn-md"><i class="far fa-edit"></i> Edit</button>
-                                      <button style="display: none;" id="save_btn" class="btn btn-success btn-md"><i class="fas fa-save"></i> Save</button>
-                                      <h4 style="display: none;" id="notif"></h4>
+                                      <button id="edit_btn" class="btn btn-warning btn-md" data-toggle="modal" data-target="#modalAddGolongan"><i class="fas fa-plus"></i> Add Golongan</button>
+                                      <!--START MODAL SET PERIODE-->
+                                   <div class="modal inmodal" id="modalAddGolongan" tabindex="-1" role="dialog"  aria-hidden="true">
+                                      <div class="modal-dialog">
+                                                                        <div class="modal-content animated fadeIn">
+                                                                            <div class="modal-header">
+                                                                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                                                <h4 class="modal-title">Add Konfigurasi Golongan Gaji Admin</h4>
+                                                                            </div>
+                                                                            <?php echo form_open('konfigurasi_gaji/add');?>
+                                                                            <div class="modal-body">
+                                                                                <div class="form-group  row">
+                                                                                  <label class="col-sm-5 col-form-label">Nama <span style="color: red">*</span> :</label>
+                                                                                  <div class="input-group col-sm-7">
+                                                                                    <input type="text" name="nama" placeholder="Contoh : Golongan 1A" required class="form-control">
+                                                                                  </div>
+                                                                                </div>
+                                                                                <div class="form-group  row">
+                                                                                    <label class="col-sm-5 col-form-label">Maksimal Jam <span style="color: red">*</span> :</label>
+                                                                          <div class="col-sm-7">
+                                                                              <input type="number" class="form-control-sm form-control" name="maks_jam" placeholder="0" min="0" required/>
+                                                                          </div>
+                                                                                </div>
+                                                                                <div class="form-group  row">
+                                                                                    <label class="col-sm-5 col-form-label">Tarif (per jam) <span style="color: red">*</span> :</label>
+                                                                          <div class="col-sm-7">
+                                                                              <input type="number" class="form-control-sm form-control" name="tarif" placeholder="0" min="0" required/>
+                                                                          </div>
+                                                                                </div>
+                                                                                <p align="center" style="color: red">* Wajib Diisi</p>
+                                                                            </div>
+                                                                            
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                                                                                <button type="submit" id="button_save" class="btn btn-primary">Add Golongan</button>
+                                                                            </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                  <!--END MODAL SET PERIODE-->
                                     </div>
                                   </div>
                               </div>
@@ -165,33 +217,34 @@
                 </div>
             </div>
             <script type="text/javascript">
-              $( "#edit_btn" ).click(function() {
-                $('#save_btn').show();
-                $('#edit_btn').hide();
-                $('#maks_jam').prop('disabled', false);
-                $('#tarif').prop('disabled', false);
-              });
-              $('#save_btn').click(function(){
-                var jam_maks = $('#maks_jam').val();
-                var tarif = $('#tarif').val();
+              function showSave(index){
+                $('#save_btn_'+index).show();
+                $('#edit_btn_'+index).hide();
+                $('#maks_jam_'+index).prop('disabled', false);
+                $('#tarif_'+index).prop('disabled', false);
+              }
+              function saveKonfigurasi(index){
+                var jam_maks = $('#maks_jam_'+index).val();
+                var tarif = $('#tarif_'+index).val();
+                var id_konf = parseInt(index, 10) + 1;
                 if(jam_maks != "" && tarif != ""){
                   $.ajax({
                       //Ganti URL nanti kl udah dipindah server
                     url: "<?php echo base_url('laporan_gaji/edit_konfigurasi'); ?>",
                     type: "POST",
-                    data: {tarif : tarif, jam_max : jam_maks},
+                    data: {tarif : tarif, jam_max : jam_maks, id: id_konf},
                     success: function(data) { 
-                        $("#notif").show();
-                        $("#notif").html(data);
-                        $('#save_btn').hide();
-                        $('#edit_btn').show();
-                        $('#maks_jam').prop('disabled', true);
-                        $('#tarif').prop('disabled', true);
+                        $("#notif_"+index).show();
+                        $("#notif_"+index).html(data);
+                        $('#save_btn_'+index).hide();
+                        $('#edit_btn_'+index).show();
+                        $('#maks_jam_'+index).prop('disabled', true);
+                        $('#tarif_'+index).prop('disabled', true);
                     },
                     error: function() {
                         alert('error!');
                     }
                   }); 
                 }
-              });
+              }
             </script>

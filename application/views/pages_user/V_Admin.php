@@ -61,6 +61,23 @@
                                                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" placeholder="mm/dd/yyyy" data-mask="99/99/9999" name="akhir_kontrak" required>
                                                         </div>
                                                     </div>
+                                                    <div class="form-group row" id="data_1">
+                                                        <label class="col-sm-4 col-form-label">Golongan Gaji <span style="color: red">*</span> :</label>
+                                                        <div class="col-sm-8">
+                                                            <select name="id_gol" required class="form-control">
+                                                                <option value="" selected disabled>-- Please Select One --</option>
+                                                                <?php
+                                                                if(isset($konfigurasi_gaji) && $konfigurasi_gaji){
+                                                                    foreach ($konfigurasi_gaji as $konf) {
+                                                                        ?>
+                                                                <option value="<?php echo $konf['ID'];?>"><?php echo $konf['NAMA_GOLONGAN']." (".$konf['TARIF']."/jam)";?></option>
+                                                                        <?php
+                                                                    }
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                     <p style="color: red;" align="center">* Wajib Diisi</p>
                                                 </div>
                                                 <div class="modal-footer">

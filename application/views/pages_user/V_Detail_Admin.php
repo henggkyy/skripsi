@@ -91,7 +91,7 @@
                                                                 </div>
                                                                 <!-- END Modal Update Kontrak-->
                                     <?php
-                                    if($periode_aktif){
+                                    if($periode_aktif && $flag_admin){
 
                                     ?>
                                     <button data-toggle="modal" data-target="#modalJadwalAuto" class="btn btn-md btn-success"><i class="far fa-calendar-alt"></i> Add Jadwal Bertugas (Auto)</button>
@@ -249,10 +249,10 @@
                                                         <td><?php echo $jadwal['INSERT_DATE'];?></td>
                                                         <td align="center">
                                                             <?php
-                                                            if($flag){
+                                                            if($flag && $flag_admin){
                                                                 ?>
                                                             <button class="btn btn-primary btn-sm" data-toggle="modal" onclick="getJadwal(<?php echo $jadwal['ID'];?>,<?php echo $id_admin;?>);" data-target="#modalUpdateJadwal"><i class="fas fa-pen"></i> Update</button>
-                                                            <?php echo form_open('admin_lab/delete_jadwal');?>
+                                                            <?php echo form_open('admin_lab/delete_jadwal', 'style="margin: 0; padding: 0;"');?>
                                                             <input type="hidden" name="id_bertugas" required value="<?php echo $jadwal['ID'];?>">
                                                             <input type="hidden" name="id_admin" required value="<?php echo $id_admin;?>">
                                                             <button class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')" type="submit"><i class="far fa-trash-alt"></i> Delete</button>

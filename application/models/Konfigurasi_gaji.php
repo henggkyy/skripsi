@@ -1,9 +1,19 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Konfigurasi_gaji extends CI_Model{
+	//Method untuk memasukkan data golongan konfigurasi admin ke dalam database
+	function insertKonfigurasi($data){
+		$res = $this->db->insert('konfigurasi_gaji', $data);
+		if($res){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 	//Method untuk melakukan edit konfigurasi gaji
-	function editKonfigurasi($data){
-		$this->db->where('ID', 1);
+	function editKonfigurasi($data, $id){
+		$this->db->where('ID', $id);
 		$res = $this->db->update('konfigurasi_gaji', $data);
 		if($res){
 			return true;
@@ -12,10 +22,10 @@ class Konfigurasi_gaji extends CI_Model{
 			return false;
 		}
 	}
-	//Method untuk mendapatkan item peminjaman lab
-	function getIndividualItem($item){
+	//Method untuk mendapatkan item 
+	function getIndividualItem($id, $item){
 		$this->db->select($item);
-		$this->db->where('ID', 1);
+		$this->db->where('ID', $id);
 		$this->db->from('konfigurasi_gaji');
 		$result = $this->db->get();
 		if($result->num_rows() == 1){
@@ -27,11 +37,10 @@ class Konfigurasi_gaji extends CI_Model{
 	}
 	//Method untuk mendapatkan konfigurasi gaji dari database
 	function getKonfigurasi(){
-		$this->db->select('JAM_MAX, TARIF');
-		$this->db->where('ID', 1);
+		$this->db->select('ID, NAMA_GOLONGAN, JAM_MAX, TARIF');
 		$this->db->from('konfigurasi_gaji');
 		$result = $this->db->get();
-		if($result->num_rows() == 1 ){
+		if($result->num_rows() > 0 ){
 			return $result->result_array();
 		} 
 		else {

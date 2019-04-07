@@ -125,6 +125,13 @@ $route['laporan_gaji/edit_konfigurasi'] = 'C_Gaji_Admin/editKonfigurasi';
 $route['laporan_gaji/input'] = 'C_Gaji_Admin/insertAbsensi';
 $route['laporan_gaji/proses_input_gaji'] = 'C_Gaji_Admin/prosesInputGaji';
 $route['laporan_gaji/report'] = 'C_Gaji_Admin/loadHalamanLaporan';
+$route['laporan_gaji/cetak'] = 'C_Gaji_Admin/cetakLaporanAdmin';
+$route['laporan_gaji/detail'] = 'C_Gaji_Admin/getDaftarLaporan';
+$route['laporan_gaji/get_laporan'] = 'C_Gaji_Admin/getInputLaporan';
+$route['laporan_gaji/update'] = 'C_Gaji_Admin/editLaporanGaji';
+$route['laporan_gaji/delete'] = 'C_Gaji_Admin/hapusLaporanGaji';
+
+$route['konfigurasi_gaji/add'] = 'C_Konfigurasi/addKonfigurasi';
 
 $route['alat_lab'] = 'C_Main/loadMenuAlatLab';
 $route['alat_lab/add'] = 'C_Alat/insertAlat';

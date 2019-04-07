@@ -1,6 +1,59 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Laporan_gaji_admin extends CI_Model{
+	//Method untuk menghapus laporan gaji admin dari database
+	function deleteLaporanGaji($hash, $id_admin, $id_periode){
+		$this->db->where('UNIQ', $hash);
+		$this->db->where('ID_ADMIN', $id_admin);
+		$this->db->where('ID_PERIODE', $id_periode);
+		$res = $this->db->delete('laporan_gaji_admin');
+		if($res){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	//Method untuk melakukan update laporan gaji ke dalam database
+	function updateLaporanGaji($hash,$id_admin, $id_periode, $data){
+		$this->db->where('UNIQ', $hash);
+		$this->db->where('ID_ADMIN', $id_admin);
+		$this->db->where('ID_PERIODE', $id_periode);
+		$res = $this->db->update('laporan_gaji_admin', $data);
+		if($res){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	//Method untuk mendapatkan input laporan gaji untuk keperluan update berdasarkan hash
+	function getInputLaporan($hash){
+		$this->db->select('TANGGAL_MASUK, JAM_MASUK, JAM_KELUAR, TOTAL_JAM, ISTIRAHAT, ID_ADMIN, ID_PERIODE');
+		$this->db->where('UNIQ', $hash);
+		$this->db->from('laporan_gaji_admin');
+		$result = $this->db->get();
+		if($result->num_rows() == 1){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
+	//Method untuk mendapakatkan seluruh data laporan absensi/gaji admin
+	function getDataLaporan($id_periode, $id_admin){
+		$this->db->select('UNIQ, HARI, TANGGAL_MASUK, JAM_MASUK, JAM_KELUAR, TOTAL_JAM, ISTIRAHAT, WAKTU_REAL, BIAYA');
+		$this->db->where('ID_PERIODE', $id_periode);
+		$this->db->where('ID_ADMIN', $id_admin);
+		$this->db->from('laporan_gaji_admin');
+		$result = $this->db->get();
+		if($result->num_rows() > 0){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk melakukan count terhadap jumlah laporan gaji berdasarkan user
 	function countJumlahMasuk($id_admin, $id_periode){
 		$this->db->select('ID');
