@@ -19,6 +19,10 @@ class C_BukuSaku extends CI_Controller {
 				$judul_saku = htmlentities($this->input->post('judul_saku'));
 				$id_saku = $this->input->post('id_saku');
 				$this->load->model('Data_buku_saku');
+				if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+					$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+					redirect('/dashboard');
+				}
 				// print_r($_FILES['dokumen']['name']);
 				// return;
 				if(!empty($_FILES['dokumen']['name'])){
@@ -77,6 +81,10 @@ class C_BukuSaku extends CI_Controller {
 				$this->session->set_flashdata('error', 'Missing ID Buku Saku!');
 				redirect('/dokumen_saku');
 			}
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->model('Data_buku_saku');
 			$path_file = $this->Data_buku_saku->getPathFile($id_saku);
 
@@ -113,6 +121,10 @@ class C_BukuSaku extends CI_Controller {
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('visibility', 'Visibility Buku Saku', 'required');
 			$this->form_validation->set_rules('judul_saku', 'Judul Buku Saku', 'required');
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			if(empty($_FILES['dokumen']['name'])){
 				$this->session->set_flashdata('error_message', 'File dokumen Buku Saku belum dilampirkan!');
 	            redirect('/dokumen_saku');

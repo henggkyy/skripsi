@@ -18,8 +18,11 @@
                 <li <?php if(isset($dashboard)){ echo 'class='. '"active"';}?>>
                     <a href="<?php echo base_url();?>dashboard"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a>
                 </li>
+                <?php
+                if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 4){
+                    ?>
                 <li <?php if(isset($dokumen_sop) || isset($dokumen_saku)){ echo 'class='. '"active"';}?>>
-                	<a href="#"><i class="fa fa-envelope-open"></i> <span class="nav-label">Dokumen </span><span class="fa arrow"></span></a>
+                    <a href="#"><i class="fa fa-envelope-open"></i> <span class="nav-label">Dokumen </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li <?php if(isset($dokumen_sop)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>dokumen_sop">Standard Operational Procedure (SOP)</a>
@@ -29,7 +32,11 @@
                             </li>
 
                         </ul>
-                </li>
+                </li>    
+                    <?php
+                }
+                ?>
+                
                 <li <?php if(isset($periode) || isset($matkul)){ echo 'class='. '"active"';}?>>
                     <a href="#"><i class="fas fa-book"></i> <span class="nav-label">Administrasi Perkuliahan </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
@@ -42,20 +49,46 @@
 
                         </ul>
                 </li>
+                <?php
+                if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 3){
+                    ?>
                 <li <?php if(isset($admin_dosen) || isset($admin_lab) || isset($tata_usaha)){ echo 'class='. '"active"';}?>>
                     <a href="#"><i class="fas fa-group"></i> <span class="nav-label">Administrasi User </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
+                            <?php
+                            if($this->session->userdata('id_role') == 1){
+                                ?>
                             <li <?php if(isset($admin_dosen)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>dosen">Administrasi Dosen</a>
                             </li>
+                                <?php
+                            }
+                            ?>
+                            <?php
+                            if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 3){
+                                ?>
                             <li <?php if(isset($admin_lab)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>admin_lab">Administrasi Admin Laboratorium</a>
                             </li>
+                                <?php
+                            }
+                            ?>
+                            <?php
+                            if($this->session->userdata('id_role') == 1){
+                                ?>
                             <li <?php if(isset($tata_usaha)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>tata_usaha">Administrasi Tata Usaha</a>
                             </li>
+                                <?php
+                            }
+                            ?>
+                            
                         </ul>
                 </li>
+                    <?php
+                }
+                ?>
+                
                 <li <?php if(isset($periode_gaji) || isset($input_gaji) || isset($laporan_gaji)){ echo 'class='. '"active"';}?>>
                     <a href="#"><i class="fas fa-user-clock"></i> <span class="nav-label">Laporan Gaji/Absensi Admin </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">

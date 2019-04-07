@@ -11,6 +11,10 @@ class C_Sop extends CI_Controller {
 			$this->form_validation->set_rules('visibility', 'Visibility SOP', 'required');
 			$this->form_validation->set_rules('judul_sop', 'Judul SOP', 'required');
 			$this->form_validation->set_rules('id_sop', 'ID SOP', 'required');
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			if($this->form_validation->run() == FALSE){
 				$this->session->set_flashdata('error_message', 'Missing required Field!');
 	            redirect('/dokumen_sop');
@@ -75,6 +79,10 @@ class C_Sop extends CI_Controller {
 	function deleteSop(){
 		if($this->session->userdata('logged_in')){
 			$id_sop = $this->input->post('id_sop');
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			if($id_sop == ""){
 				$this->session->set_flashdata('error', 'Missing ID SOP!');
 				redirect('/dokumen_sop');
@@ -115,6 +123,10 @@ class C_Sop extends CI_Controller {
 			$this->form_validation->set_rules('kategori_sop', 'Kategori SOP', 'required');
 			$this->form_validation->set_rules('visibility', 'Visibility SOP', 'required');
 			$this->form_validation->set_rules('judul_sop', 'Judul SOP', 'required');
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			if(empty($_FILES['dokumen']['name'])){
 				$this->session->set_flashdata('error_message', 'File dokumen SOP belum dilampirkan!');
 	            redirect('/dokumen_sop');

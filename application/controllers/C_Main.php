@@ -161,6 +161,10 @@ class C_Main extends CI_Controller{
 	//Method untuk menampilkan halaman utama dari buku saku
 	function loadMenuBukuSaku(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$data['title'] = 'Dokumen Buku Saku | SI Akademik Lab. Komputasi TIF UNPAR';
 			$data['dokumen_saku'] = true;
 			$this->load->model('Periode_akademik');
@@ -182,6 +186,10 @@ class C_Main extends CI_Controller{
 	//Method untuk menampilkan halaman utama dokumen SOP
 	function loadMenuSOP(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$data['title'] = 'Dokumen SOP | SI Akademik Lab. Komputasi TIF UNPAR';
 			$data['dokumen_sop'] = true;
 			$this->load->model('Periode_akademik');
