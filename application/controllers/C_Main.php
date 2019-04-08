@@ -30,9 +30,7 @@ class C_Main extends CI_Controller{
 			$this->load->model('Jadwal_lab');
 			$data['jadwal_lab'] = true;
 			$data['jadwal'] = json_encode($this->Jadwal_lab->getJadwalPemakaianLab());
-			// print_r(json_encode($this->Jadwal_lab->getJadwalPemakaianLab()));
-			// return;
-			//$data['jadwal'] = json_decode($this->Jadwal_lab->getJadwalPemakaianLab());
+			$data['pemakaian_lab'] = $this->Jadwal_lab->getJadwalPemakaianLab();
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$this->load->view('template/Header', $data);
 			$this->load->view('template/Sidebar', $data);

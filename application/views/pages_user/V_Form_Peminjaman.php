@@ -6,6 +6,7 @@
                                 <h3>Form Peminjaman Ruangan Laboratorium & Alat</h3>
                             </div>
                             <div class="ibox-content">
+                            	<h4>Notice : Peminjaman ruangan laboratorium dapat dilakukan minimal 1 minggu sebelum ruangan laboratorium akan digunakan. Sedangkan untuk alat-alat, dapat dilakukan minimal 3 hari sebelum alat akan digunakan</h4>
                             	<?php
                             	$attributes = array('id' => 'form_peminjaman');
                             	echo form_open('peminjaman/ajuan', $attributes);?>
@@ -96,48 +97,48 @@
             </div>
             <script type="text/javascript">
             	function checkLab(){
-			if($("#choice").val() == 'lab'){
-	            var tanggal_data = $("#tgl_pinjam").val();
-	            var jam_mulai_data = $("#waktu_awal_2").val();
-	            var jam_selesai_data = $("#waktu_akhir_2").val();
-	            
-	            if(tanggal_data == "" || jam_mulai_data == "" || jam_selesai_data == ""){
-	                if(tanggal_data == ""){
-	                    $("#select_lab").html('<span style="color:red;">Tanggal peminjaman harus diisi terlebih dahulu!</span>');
-	                }
-	                else if(jam_mulai_data == ""){
-	                    $("#select_lab").html('<span style="color:red;">Jam mulai peminjaman harus diisi terlebih dahulu!</span>');
-	                }
-	                else{
-	                    $("#select_lab").html('<span style="color:red;">Jam selesai peminjaman harus diisi terlebih dahulu!</span>');
-	                }
-	                    
-	                return;
-	            }   
-	            if(jam_selesai_data < jam_mulai_data){
-	                $("#select_lab").html('<span style="color:red;">Jam mulai tidak boleh melebihi jam selesai!</span>');
-	                return;
-	            }
-	            console.log(tanggal_data);
-	            console.log(jam_mulai_data);
-	            console.log(jam_selesai_data);
-	               
-	                
-	            $.ajax({
-	                    //Ganti URL nanti kl udah dipindah server
-		            url: "<?php echo base_url('ketersediaan_lab'); ?>",
-		            method: "GET",
-		            data: {tanggal : tanggal_data, jam_mulai : jam_mulai_data, jam_selesai : jam_selesai_data},
-		            success: function(data) { 
-		                $("#select_lab").html(data);
-		                $('#button_submit').prop('disabled', false);
-		            },
-			        error: function() {
-			            alert('error!');
-			        }
-	            }); 
-			}	
-		}
+					if($("#choice").val() == 'lab'){
+			            var tanggal_data = $("#tgl_pinjam").val();
+			            var jam_mulai_data = $("#waktu_awal_2").val();
+			            var jam_selesai_data = $("#waktu_akhir_2").val();
+			            
+			            if(tanggal_data == "" || jam_mulai_data == "" || jam_selesai_data == ""){
+			                if(tanggal_data == ""){
+			                    $("#select_lab").html('<span style="color:red;">Tanggal peminjaman harus diisi terlebih dahulu!</span>');
+			                }
+			                else if(jam_mulai_data == ""){
+			                    $("#select_lab").html('<span style="color:red;">Jam mulai peminjaman harus diisi terlebih dahulu!</span>');
+			                }
+			                else{
+			                    $("#select_lab").html('<span style="color:red;">Jam selesai peminjaman harus diisi terlebih dahulu!</span>');
+			                }
+			                    
+			                return;
+			            }   
+			            if(jam_selesai_data < jam_mulai_data){
+			                $("#select_lab").html('<span style="color:red;">Jam mulai tidak boleh melebihi jam selesai!</span>');
+			                return;
+			            }
+			            console.log(tanggal_data);
+			            console.log(jam_mulai_data);
+			            console.log(jam_selesai_data);
+			               
+			                
+			            $.ajax({
+			                    //Ganti URL nanti kl udah dipindah server
+				            url: "<?php echo base_url('ketersediaan_lab'); ?>",
+				            method: "GET",
+				            data: {tanggal : tanggal_data, jam_mulai : jam_mulai_data, jam_selesai : jam_selesai_data},
+				            success: function(data) { 
+				                $("#select_lab").html(data);
+				                $('#button_submit').prop('disabled', false);
+				            },
+					        error: function() {
+					            alert('error!');
+					        }
+			            }); 
+					}	
+				}
 		$("#choice").change(function(e){
 	        if($("#choice").val() == 'lab'){
 	            $('#button_submit').prop('disabled', true);

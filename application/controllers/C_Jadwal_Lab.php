@@ -2,6 +2,58 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani penjadwalan pemakaian laboratorium
 class C_Jadwal_Lab extends CI_Controller{
+	//Method untuk memasukkan jadwal pemakaian lab
+	function insertJadwalPemakaian(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1){
+				redirect('/dashboard');
+			}
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('tgl_pemakaian', 'Tanggal Pemakaian', 'required');
+			$this->form_validation->set_rules('jam_mulai', 'Jam Mulai', 'required');
+			$this->form_validation->set_rules('jam_selesai', 'Jam Selesai', 'required');
+			$this->form_validation->set_rules('lab', 'Lab', 'required');
+			$this->form_validation->set_rules('keperluan', 'Keperluan', 'required');
+			if ($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing required fields!');
+				redirect("jadwal_lab");
+			}
+			else{
+				$tgl_pemakaian = $this->input->post('tgl_pemakaian');
+				$tgl_pemakaian = date("Y-m-d", strtotime($this->input->post('tgl_pemakaian')));
+				$jam_mulai = $this->input->post('jam_mulai');
+				$jam_selesai = $this->input->post('jam_selesai');
+				if($jam_mulai > $jam_selesai){
+					$this->session->set_flashdata('error', 'Jam Mulai tidak boleh lebih besar daripada jam selesai!');
+					redirect("jadwal_lab");
+				}
+				$lab = $this->input->post('lab');
+				$keperluan = $this->input->post('keperluan');
+				$this->load->model('Jadwal_lab');
+				$start_event = $tgl_pemakaian." ".$jam_mulai.":00";
+				date_default_timezone_set('Asia/Jakarta');
+				$date_time = date("Y-m-d H:i:s");
+				$date_time = date('Y-m-d H:i:s',(strtotime ( '-1 day' , strtotime ( $date_time) ) ));
+				if($start_event < $date_time){
+					$this->session->set_flashdata('error', 'Tanggal pemakaian tidak boleh lebih kecil daripada tanggal saat ini!');
+					redirect("jadwal_lab");
+				}
+				$end_event = $tgl_pemakaian." ".$jam_selesai.":00";;
+				$res = $this->Jadwal_lab->insertJadwalPemakaian($keperluan, $lab, $start_event, $end_event);
+				if($res){
+					$this->session->set_flashdata('success', 'Berhasil menambahkan jadwal pemakaian laboratorium!');
+					redirect("jadwal_lab");
+				}
+				else{
+					$this->session->set_flashdata('error', 'Gagal menambahkan jadwal pemakaian laboratorium!');
+					redirect("jadwal_lab");
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
 	//Method untuk melakukan pengecekan ketersediaan peminjaman laboratorium
 	function checkKetersediaanPeminjaman(){
 		

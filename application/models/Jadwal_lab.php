@@ -39,7 +39,10 @@ class Jadwal_lab extends CI_Model{
 	//Method untuk mendapatkan jadwal keseluruhan laboratorium, termasuk jadwal kuliah, jadwal uts/uas,
 	//dan jadwal ketika ada permintaan peminjaman
 	function getJadwalPemakaianLab(){
+		date_default_timezone_set('Asia/Jakarta');
+		$date_time = date('Y-m-d h:i');
 		$this->db->select('jadwal_lab.ID as id, daftar_lab.NAMA_LAB as nama_lab, jadwal_lab.TITLE as title, jadwal_lab.START_EVENT as start, jadwal_lab.END_EVENT as end, daftar_lab.BG_COLOR as backgroundColor');
+		$this->db->where('START_EVENT >=', $date_time);
 		$this->db->from('jadwal_lab');
 		$this->db->join('daftar_lab', 'jadwal_lab.ID_LAB = daftar_lab.ID' , 'left outer');
 		$result = $this->db->get();
