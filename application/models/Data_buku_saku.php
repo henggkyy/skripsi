@@ -55,6 +55,7 @@ class Data_buku_saku extends CI_Model{
 	}
 	function getSakuPublic(){
 		$this->db->select('data_buku_saku.ID as ID, data_buku_saku.VISIBILITY as visibility, data_buku_saku.JUDUL as judul, data_buku_saku.PATH_FILE as path, data_buku_saku.LAST_UPDATE as LAST_UPDATE, users.EMAIL as USER');
+		$this->db->order_by('LAST_UPDATE', 'desc');
 		$this->db->from('data_buku_saku');
 		$this->db->join('users', 'data_buku_saku.USER = users.ID' , 'left outer');
 		$this->db->where('VISIBILITY', 1);
@@ -68,6 +69,7 @@ class Data_buku_saku extends CI_Model{
 	}
 	function getAllBukuSaku(){
 		$this->db->select('data_buku_saku.ID as ID, data_buku_saku.VISIBILITY as visibility, data_buku_saku.JUDUL as judul, data_buku_saku.PATH_FILE as path, data_buku_saku.LAST_UPDATE as LAST_UPDATE, users.EMAIL as USER');
+		$this->db->order_by('LAST_UPDATE', 'desc');
 		$this->db->from('data_buku_saku');
 		$this->db->join('users', 'data_buku_saku.USER = users.ID' , 'left outer');
 		$result = $this->db->get();

@@ -144,21 +144,38 @@ class C_Peminjaman extends CI_Controller{
 				$tipe_lab = $this->input->post('lab');
 				$alat =  $this->input->post('alat');
 				$tgl_pinjam = $this->input->post('tgl_pinjam');
+				$tgl_pinjam = date('Y-m-d', strtotime($tgl_pinjam));
 				$jam_mulai = $this->input->post('jam_mulai');
 				$jam_selesai = $this->input->post('jam_selesai');
 				if($jam_mulai > $jam_selesai){
 					$this->session->set_flashdata('success', 'Tidak dapat melakukan permintaan peminjaman. Jam mulai tidak boleh lebih besar dari jam selesai peminjaman!');
 					redirect("/peminjaman/form");
 				}
+				date_default_timezone_set('Asia/Jakarta');
+				$date_time = date("Y-m-d");
 				$start_event = $tgl_pinjam. " ". $jam_mulai;
 				$end_event = $tgl_pinjam. " ". $jam_selesai;
+				
 				if($mode == 'lab'){
 					$arr_lab_tersedia = $this->cekKetersediaanLab($start_event, $end_event);
 
+					$date_time = date('Y-m-d',(strtotime ( '+6 day' , strtotime ( $date_time) ) ));
+					
+					if($start_event < $date_time){
+						$this->session->set_flashdata('error', 'Gagal mengajukan permintaan peminjaman! Tanggal pemakaian minimal H+7 dari tanggal hari ini!');
+						redirect("/peminjaman/form");
+					}
 					//Cek ketersediaan laboratorium yang dipilih
 					//If tidak tersedia, return ke home peminjaman
 					if(!in_array($tipe_lab, $arr_lab_tersedia)){
-						$this->session->set_flashdata('error', 'Ruangan laboratorium yang dipilih tidak dapat digunakan pada tanggal dan rentang waktu yang diinginkan!');
+						$this->session->set_flashdata('error', 'Ruangan laboratorium yang dipilih tidak dapat digunakan pada tanggal dan rentang waktu yang diinginkan karena sudah dipakai oleh kegiatan lain!');
+						redirect("/peminjaman/form");
+					}
+				}
+				else{
+					$date_time = date('Y-m-d',(strtotime ( '+2 day' , strtotime ( $date_time) ) ));
+					if($start_event < $date_time){
+						$this->session->set_flashdata('error', 'Gagal mengajukan permintaan peminjaman! Tanggal pemakaian minimal H+3 dari tanggal hari ini!');
 						redirect("/peminjaman/form");
 					}
 				}
@@ -210,17 +227,24 @@ class C_Peminjaman extends CI_Controller{
 				$tipe_lab = $this->input->post('lab');
 				$alat =  $this->input->post('alat');
 				$tgl_pinjam = $this->input->post('tgl_pinjam');
+				$tgl_pinjam = date('Y-m-d', strtotime($tgl_pinjam));
 				$jam_mulai = $this->input->post('jam_mulai');
 				$jam_selesai = $this->input->post('jam_selesai');
 				if($jam_mulai > $jam_selesai){
 					$this->session->set_flashdata('success', 'Tidak dapat melakukan permintaan peminjaman. Jam mulai tidak boleh lebih besar dari jam selesai peminjaman!');
 					redirect("/peminjaman");
 				}
+				date_default_timezone_set('Asia/Jakarta');
+				$date_time = date("Y-m-d");
 				$start_event = $tgl_pinjam. " ". $jam_mulai;
 				$end_event = $tgl_pinjam. " ". $jam_selesai;
 				if($mode == 'lab'){
 					$arr_lab_tersedia = $this->cekKetersediaanLab($start_event, $end_event);
-
+					$date_time = date('Y-m-d',(strtotime ( '+6 day' , strtotime ( $date_time) ) ));
+					if($start_event < $date_time){
+						$this->session->set_flashdata('error', 'Gagal mengajukan permintaan peminjaman! Tanggal pemakaian minimal H+7 dari tanggal hari ini!');
+						redirect("/peminjaman/form");
+					}
 					//Cek ketersediaan laboratorium yang dipilih
 					//If tidak tersedia, return ke home peminjaman
 					if(!in_array($tipe_lab, $arr_lab_tersedia)){
@@ -228,7 +252,13 @@ class C_Peminjaman extends CI_Controller{
 						redirect("/peminjaman");
 					}
 				}
-				
+				else{
+					$date_time = date('Y-m-d',(strtotime ( '+2 day' , strtotime ( $date_time) ) ));
+					if($start_event < $date_time){
+						$this->session->set_flashdata('error', 'Gagal mengajukan permintaan peminjaman! Tanggal pemakaian minimal H+3 dari tanggal hari ini!');
+						redirect("/peminjaman/form");
+					}
+				}
 
 				$keterangan = $this->input->post('keterangan');
 				$keperluan = $this->input->post('keperluan');

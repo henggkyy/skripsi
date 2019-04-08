@@ -151,6 +151,9 @@ $route['peminjaman_alat'] = 'C_Main/loadDaftarPeminjamanAlat';
 
 $route['jadwal_lab'] = 'C_Main/loadJadwalPemakaianLaboratorium';
 $route['jadwal_lab/add'] = 'C_Jadwal_Lab/insertJadwalPemakaian';
+$route['jadwal_lab/get_data'] = 'C_Jadwal_Lab/loadDataPemakaian';
+$route['jadwal_lab/updatePemakaian'] = 'C_Jadwal_Lab/updateJadwalPemakaian';
+$route['jadwal_lab/delete'] = 'C_Jadwal_Lab/deleteJadwalPemakaian';
 
 $route['download/template_insertMhs'] = 'C_Download/downloadTemplateInsertMhs';
 $route['download/checker'] = 'C_Download/downloadChecker';

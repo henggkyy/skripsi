@@ -6,7 +6,12 @@
                                 <h3>Form Peminjaman Ruangan Laboratorium & Alat</h3>
                             </div>
                             <div class="ibox-content">
-                            	<h4>Notice : Peminjaman ruangan laboratorium dapat dilakukan minimal 1 minggu sebelum ruangan laboratorium akan digunakan. Sedangkan untuk alat-alat, dapat dilakukan minimal 3 hari sebelum alat akan digunakan</h4>
+                            	<div class="row">
+                            		<div class="alert alert-danger alert-dismissable">
+		                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+		                                <span style="font-weight: bold;">Peminjaman ruangan laboratorium dapat dilakukan minimal 1 minggu sebelum ruangan laboratorium akan digunakan. Untuk alat-alat, dapat dilakukan minimal 3 hari sebelum alat akan digunakan.</span>
+		                            </div>
+                            	</div>
                             	<?php
                             	$attributes = array('id' => 'form_peminjaman');
                             	echo form_open('peminjaman/ajuan', $attributes);?>
@@ -84,6 +89,7 @@
 			                        </div>
 			                    </div>
 			                    <p style="color: red;" align="center">* Wajib Diisi</p>
+			                    <p id="notif" style="color: red; font-weight: bold;" align="center"></p>
 			                    <div class="form-group row">
 			                        <div class="col-sm-12">
 			                            <button class="btn btn-primary btn-lg" type="submit" id="button_submit">Ajukan Peminjaman</button>
@@ -96,12 +102,26 @@
                 </div>
             </div>
             <script type="text/javascript">
+            	var loader = '<img style="display: block; margin:auto;" src="<?php echo base_url();?>assets/img/loader.gif">';
             	function checkLab(){
+            		var date_today = new Date();
+            		var tanggal_data = $("#tgl_pinjam").val();
 					if($("#choice").val() == 'lab'){
-			            var tanggal_data = $("#tgl_pinjam").val();
+			           	
 			            var jam_mulai_data = $("#waktu_awal_2").val();
 			            var jam_selesai_data = $("#waktu_akhir_2").val();
-			            
+			            var date_input = new Date(tanggal_data);
+			            date_next_week = date_today.setDate(date_today.getDate()+6);
+			            if(date_input < date_next_week){
+			            	$('#notif').html('Tanggal peminjaman minimal harus H+7 dari tanggal hari ini!');
+			            	$('#button_submit').prop('disabled', true);
+			            	return;
+			            }
+			            else{
+			            	$('#notif').html('');
+			            	$('#button_submit').prop('disabled', false);
+			            }
+			            $("#select_lab").html(loader);
 			            if(tanggal_data == "" || jam_mulai_data == "" || jam_selesai_data == ""){
 			                if(tanggal_data == ""){
 			                    $("#select_lab").html('<span style="color:red;">Tanggal peminjaman harus diisi terlebih dahulu!</span>');
@@ -137,6 +157,19 @@
 					            alert('error!');
 					        }
 			            }); 
+					}
+					else{
+						var date_input = new Date(tanggal_data);
+			            date_next_week = date_today.setDate(date_today.getDate()+2);
+			            if(date_input < date_next_week){
+			            	$('#notif').html('Tanggal peminjaman minimal harus H+3 dari tanggal hari ini!');
+			            	$('#button_submit').prop('disabled', true);
+			            	
+			            }
+			            else{
+			            	$('#notif').html('');
+			            	$('#button_submit').prop('disabled', false);
+			            }
 					}	
 				}
 		$("#choice").change(function(e){
@@ -146,7 +179,7 @@
 	            $("#choice_alat").prop('required',false);
 	            $("#div_lab").show();
 	            $("#choice_lab").prop('required',true);
-
+	            checkLab();
 	        }
 	        else{
 	            $("#div_alat").show();
@@ -154,6 +187,7 @@
 	            $("#div_lab").hide();
 	            $("#choice_lab").prop('required',false);
 	            $('#button_submit').prop('disabled', false);
+	            checkLab();
 	        }
 	    });
             </script>

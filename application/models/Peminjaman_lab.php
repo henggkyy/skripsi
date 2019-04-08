@@ -60,6 +60,8 @@ class Peminjaman_lab extends CI_Model{
 	function getAllDataPeminjamanAlat(){
 		$this->db->select('peminjaman_lab.ID as ID, peminjaman_lab.EMAIL_PEMINJAM as EMAIL_PEMINJAM, peminjaman_lab.NAMA_PEMINJAM as NAMA_PEMINJAM, peminjaman_lab.KEPERLUAN as KEPERLUAN, peminjaman_lab.TANGGAL_REQUEST as TANGGAL_REKAM, peminjaman_lab.TANGGAL_PINJAM, alat_lab.NAMA_ALAT as NAMA_ALAT, peminjaman_lab.JAM_MULAI as JAM_MULAI, peminjaman_lab.JAM_SELESAI as JAM_SELESAI, peminjaman_lab.DISETUJUI as STATUS,  peminjaman_lab.KETERANGAN_PEMINJAM as KETERANGAN_PEMINJAM');
 		$this->db->from('peminjaman_lab');
+		$this->db->order_by('DISETUJUI', 'asc');
+		$this->db->order_by('TANGGAL_REQUEST', 'desc');
 		$this->db->where('LAB', NULL);
 		$this->db->join('alat_lab', 'peminjaman_lab.ID_ALAT = alat_lab.ID' , 'left outer');
 		$result = $this->db->get();
@@ -73,6 +75,8 @@ class Peminjaman_lab extends CI_Model{
 	//Method untuk mendapatkan seluruh data permintaan peminjaman ruangan laboratorium
 	function getAllDataPeminjamanLab(){
 		$this->db->select('peminjaman_lab.ID as ID, peminjaman_lab.EMAIL_PEMINJAM as EMAIL_PEMINJAM, peminjaman_lab.NAMA_PEMINJAM as NAMA_PEMINJAM, peminjaman_lab.KEPERLUAN as KEPERLUAN, peminjaman_lab.TANGGAL_REQUEST as TANGGAL_REKAM, peminjaman_lab.TANGGAL_PINJAM, daftar_lab.NAMA_LAB as NAMA_LAB, daftar_lab.LOKASI as LOKASI, peminjaman_lab.JAM_MULAI as JAM_MULAI, peminjaman_lab.JAM_SELESAI as JAM_SELESAI, peminjaman_lab.DISETUJUI as STATUS,  peminjaman_lab.KETERANGAN_PEMINJAM as KETERANGAN_PEMINJAM');
+		$this->db->order_by('DISETUJUI', 'asc');
+		$this->db->order_by('TANGGAL_REQUEST', 'asc');
 		$this->db->from('peminjaman_lab');
 		$this->db->where('ID_ALAT', NULL);
 		$this->db->join('daftar_lab', 'peminjaman_lab.LAB = daftar_lab.ID' , 'left outer');

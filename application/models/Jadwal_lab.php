@@ -1,7 +1,42 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Jadwal_lab extends CI_Model{
-
+	//Method untuk menghapus jadwal pemakaian laboratorium dari database
+	function deleteJadwalPemakaian($id){
+		$this->db->where('ID', $id);
+		$res = $this->db->delete('jadwal_lab');
+		if($res){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	//Method untuk melakukan update jadwal pemakaian laboratorium
+	function editJadwalPemakaian($id, $data){
+		$this->db->where('ID', $id);
+		$res = $this->db->update('jadwal_lab', $data);
+		if($res){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	//Method untuk mendapatkan jadwal pemakaian lab berdasarkan id pemakaian
+	function getDataPemakaian($id){
+		$this->db->select('jadwal_lab.ID as id,daftar_lab.ID as id_lab, daftar_lab.NAMA_LAB as nama_lab, jadwal_lab.TITLE as title, jadwal_lab.START_EVENT as start, jadwal_lab.END_EVENT as end, daftar_lab.BG_COLOR as backgroundColor');
+		$this->db->where('jadwal_lab.ID', $id);
+		$this->db->from('jadwal_lab');
+		$this->db->join('daftar_lab', 'jadwal_lab.ID_LAB = daftar_lab.ID' , 'left outer');
+		$result = $this->db->get();
+		if($result->num_rows() == 1){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk mendapatkan laboratorium yang sedang dipakai dalam rentang waktu tertentu
 	function checkPemakaianLab($start_event, $end_event){
 		$this->db->select('daftar_lab.ID as ID_LAB_PAKAI, daftar_lab.NAMA_LAB as NAMA_LAB_PAKAI, jadwal_lab.TITLE as TITLE_PAKAI ,jadwal_lab.START_EVENT as START_EVENT_PAKAI, jadwal_lab.END_EVENT as END_EVENT_PAKAI');

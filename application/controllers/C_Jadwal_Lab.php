@@ -2,6 +2,121 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani penjadwalan pemakaian laboratorium
 class C_Jadwal_Lab extends CI_Controller{
+	//Method untuk menghapus jadwal pemakaian laboratorium
+	function deleteJadwalPemakaian(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1){
+				redirect('/dashboard');
+			}
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('id_pemakaian', 'ID Pemakaian Lab', 'required');
+			if ($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing required fields!');
+				redirect("jadwal_lab");
+			}
+			else{
+				$id_pemakaian = $this->input->post('id_pemakaian');
+				$this->load->model('Jadwal_lab');
+				$res = $this->Jadwal_lab->deleteJadwalPemakaian($id_pemakaian);
+				if($res){
+					$this->session->set_flashdata('success', 'Berhasil menghapus jadwal pemakaian laboratorium!');
+					redirect("jadwal_lab");
+				}
+				else{
+					$this->session->set_flashdata('error', 'Gagal menghapus pemakaian laboratorium!');
+					redirect("jadwal_lab");
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
+	//Method ini digunakan untuk mengambil data pemakaian laboratorium
+	//Method ini dipanggil menggunakan jquery ajax
+	function loadDataPemakaian(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1){
+				return;
+			}
+			$id_pemakaian = $this->input->get('id_pemakaian');
+			if($id_pemakaian!=""){
+				$this->load->model('Jadwal_lab');
+				$data['data_pemakaian'] = $this->Jadwal_lab->getDataPemakaian($id_pemakaian);
+				if($data['data_pemakaian']){
+					$string =  $this->load->view('pages_user/V_Template_Jadwal_Lab', $data, TRUE);
+					echo $string;
+					return;
+				}
+				else{
+					return;
+				}
+			}
+			else{
+				return;
+			}
+		}
+		else{
+			return;
+		}	
+	}
+	//Method untuk update jadwal pemakaian laboratorium
+	function updateJadwalPemakaian(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1){
+				redirect('/dashboard');
+			}
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('id_pemakaian', 'ID Pemakaian Lab', 'required');
+			$this->form_validation->set_rules('tgl_pemakaian', 'Tanggal Pemakaian', 'required');
+			$this->form_validation->set_rules('jam_mulai', 'Jam Mulai', 'required');
+			$this->form_validation->set_rules('jam_selesai', 'Jam Selesai', 'required');
+			$this->form_validation->set_rules('lab', 'Lab', 'required');
+			if ($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing required fields!');
+				redirect("jadwal_lab");
+			}
+			else{
+				$id_pemakaian = $this->input->post('id_pemakaian');
+				$tgl_pemakaian = $this->input->post('tgl_pemakaian');
+				$tgl_pemakaian = date("Y-m-d", strtotime($tgl_pemakaian));
+				$jam_mulai = $this->input->post('jam_mulai');
+				$jam_selesai = $this->input->post('jam_selesai');
+				if($jam_mulai > $jam_selesai){
+					$this->session->set_flashdata('error', 'Jam Mulai tidak boleh lebih besar daripada jam selesai!');
+					redirect("jadwal_lab");
+				}
+				$lab = $this->input->post('lab');
+				$start_event = $tgl_pemakaian." ".$jam_mulai.":00";
+				date_default_timezone_set('Asia/Jakarta');
+				$date_time = date("Y-m-d H:i:s");
+				$date_time = date('Y-m-d H:i:s',(strtotime ( '-1 day' , strtotime ( $date_time) ) ));
+				if($start_event < $date_time){
+					$this->session->set_flashdata('error', 'Tanggal pemakaian tidak boleh lebih kecil daripada tanggal hari ini!');
+					redirect("jadwal_lab");
+				}
+				$end_event = $tgl_pemakaian." ".$jam_selesai.":00";
+				$this->load->model('Jadwal_lab');
+				$data = array(
+					'START_EVENT' => $start_event,
+					'END_EVENT' => $end_event,
+					'ID_LAB' => $lab
+				);
+				$res = $this->Jadwal_lab->editJadwalPemakaian($id_pemakaian, $data);
+				if($res){
+					$this->session->set_flashdata('success', 'Berhasil melakukan update jadwal pemakaian laboratorium!');
+					redirect("jadwal_lab");
+				}
+				else{
+					$this->session->set_flashdata('error', 'Gagal melakukan update jadwal pemakaian laboratorium!');
+					redirect("jadwal_lab");
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
 	//Method untuk memasukkan jadwal pemakaian lab
 	function insertJadwalPemakaian(){
 		if($this->session->userdata('logged_in')){
@@ -38,7 +153,7 @@ class C_Jadwal_Lab extends CI_Controller{
 					$this->session->set_flashdata('error', 'Tanggal pemakaian tidak boleh lebih kecil daripada tanggal saat ini!');
 					redirect("jadwal_lab");
 				}
-				$end_event = $tgl_pemakaian." ".$jam_selesai.":00";;
+				$end_event = $tgl_pemakaian." ".$jam_selesai.":00";
 				$res = $this->Jadwal_lab->insertJadwalPemakaian($keperluan, $lab, $start_event, $end_event);
 				if($res){
 					$this->session->set_flashdata('success', 'Berhasil menambahkan jadwal pemakaian laboratorium!');

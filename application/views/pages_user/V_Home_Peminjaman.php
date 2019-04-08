@@ -35,6 +35,12 @@
                     <h5>Email : <?php echo $this->session->userdata('email'); ?>.  <a href="<?php echo base_url()?>logout">Logout</a></h5>
                     <hr>
                     <div class="form-group row">
+                        <div class="row">
+                            <div class="alert alert-danger alert-dismissable">
+                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                <span style="font-weight: bold;">Peminjaman ruangan laboratorium dapat dilakukan minimal 1 minggu sebelum ruangan laboratorium akan digunakan. Untuk alat-alat, dapat dilakukan minimal 3 hari sebelum alat akan digunakan.</span>
+                            </div>
+                        </div>
                         <label class="col-sm-4 col-form-label">Pilih Tipe Peminjaman <span style="color: red">*</span> :</label>
                         <div class="col-sm-6">
                             <select id="choice" name="choice" required class="form-control"> 
@@ -130,12 +136,27 @@
 <script src="<?php echo base_url();?>assets/js/plugins/jasny/jasny-bootstrap.min.js"></script>
 <script src="<?php echo base_url();?>assets/js/plugins/datapicker/bootstrap-datepicker.js"></script>
 <script type="text/javascript">
+    var loader = '<img style="display: block; margin:auto;" src="<?php echo base_url();?>assets/img/loader.gif">';
     function checkLab(){
+        
+        var date_today = new Date();
+        var tanggal_data = $("#tgl_pinjam").val();
         if($("#choice").val() == 'lab'){
+            $("#select_lab").html(loader);
             var tanggal_data = $("#tgl_pinjam").val();
             var jam_mulai_data = $("#jam_awal").val();
             var jam_selesai_data = $("#jam_berakhir").val();
-            
+            var date_input = new Date(tanggal_data);
+            date_next_week = date_today.setDate(date_today.getDate()+6);
+            if(date_input < date_next_week){
+                $('#notif').html('Tanggal peminjaman minimal harus H+7 dari tanggal hari ini!');
+                $('#button_submit').prop('disabled', true);
+                return;
+            }
+            else{
+                $('#notif').html('');
+                $('#button_submit').prop('disabled', false);
+            }
             if(tanggal_data == "" || jam_mulai_data == "" || jam_selesai_data == ""){
                 if(tanggal_data == ""){
                     $("#select_lab").html('<span style="color:red;">Tanggal peminjaman harus diisi terlebih dahulu!</span>');
@@ -153,10 +174,6 @@
                 $("#select_lab").html('<span style="color:red;">Jam mulai tidak boleh melebihi jam selesai!</span>');
                 return;
             }
-            console.log(tanggal_data);
-            console.log(jam_mulai_data);
-            console.log(jam_selesai_data);
-               
                 
             $.ajax({
                     //Ganti URL nanti kl udah dipindah server
@@ -169,6 +186,18 @@
                 }
             }); 
         }
+        else{
+            var date_input = new Date(tanggal_data);
+            date_next_week = date_today.setDate(date_today.getDate()+2);
+            if(date_input < date_next_week){
+                $('#notif').html('Tanggal peminjaman minimal harus H+3 dari tanggal hari ini!');
+                $('#button_submit').prop('disabled', true);
+            }
+            else{
+                $('#notif').html('');
+                $('#button_submit').prop('disabled', false);
+            }
+        }
     }
     $("#choice").change(function(e){
         if($("#choice").val() == 'lab'){
@@ -177,7 +206,7 @@
             $("#choice_alat").prop('required',false);
             $("#div_lab").show();
             $("#choice_lab").prop('required',true);
-
+            checkLab();
         }
         else{
             $("#div_alat").show();
@@ -185,6 +214,7 @@
             $("#div_lab").hide();
             $("#choice_lab").prop('required',false);
             $('#button_submit').prop('disabled', false);
+            checkLab();
         }
     });
     var mem = $('#data_1 .input-group.date').datepicker({
