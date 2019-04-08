@@ -290,7 +290,6 @@ class C_Main extends CI_Controller{
 	//Return : View V_InisiasisMatkul.php
 	function loadViewAdministrasiMatkul(){
 		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('id_role') == 1){
 				$data['title'] = 'Inisiasi & Administrasi Mata Kuliah | SI Akademik Lab. Komputasi TIF UNPAR';
 				$data['matkul'] = true;
 
@@ -325,10 +324,6 @@ class C_Main extends CI_Controller{
 				$this->load->view('template/Notification');
 				$this->load->view('pages_user/V_InisiasiMatkul', $data);
 				$this->load->view('template/Footer');
-			}
-			else{
-				redirect('/dashboard');
-			}
 		}
 		else{
 			redirect('/');

@@ -36,13 +36,18 @@
                     <?php
                 }
                 ?>
-                
                 <li <?php if(isset($periode) || isset($matkul)){ echo 'class='. '"active"';}?>>
                     <a href="#"><i class="fas fa-book"></i> <span class="nav-label">Administrasi Perkuliahan </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
+                            <?php
+                            if($this->session->userdata('id_role') == 1){
+                                ?>
                             <li <?php if(isset($periode)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>periode_akademik">Periode Akademik</a>
                             </li>
+                                <?php
+                            }   
+                            ?>
                             <li <?php if(isset($matkul)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>administrasi_matkul">Mata Kuliah</a>
                             </li>

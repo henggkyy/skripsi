@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 07, 2019 at 06:57 PM
--- Server version: 10.1.36-MariaDB
--- PHP Version: 5.6.38
+-- Generation Time: Apr 08, 2019 at 09:06 AM
+-- Server version: 10.1.38-MariaDB
+-- PHP Version: 7.3.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -39,6 +39,39 @@ CREATE TABLE `alat_lab` (
 
 INSERT INTO `alat_lab` (`ID`, `NAMA_ALAT`) VALUES
 (1, 'Tespen');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `checklist_ujian`
+--
+
+CREATE TABLE `checklist_ujian` (
+  `ID` int(11) NOT NULL,
+  `ID_MATKUL` int(11) NOT NULL,
+  `TIPE_UJIAN` int(11) NOT NULL COMMENT '0: UTS, 1: UAS',
+  `CHECKLIST_01` varchar(32) DEFAULT NULL,
+  `CHECKLIST_02` varchar(32) DEFAULT NULL,
+  `CHECKLIST_03` varchar(32) DEFAULT NULL,
+  `CHECKLIST_04` varchar(32) DEFAULT NULL,
+  `CHECKLIST_05` varchar(32) DEFAULT NULL,
+  `CHECKLIST_06` varchar(32) DEFAULT NULL,
+  `CHECKLIST_07` varchar(32) DEFAULT NULL,
+  `CHECKLIST_08` varchar(32) DEFAULT NULL,
+  `CHECKLIST_09` varchar(32) DEFAULT NULL,
+  `CHECKLIST_10` varchar(32) DEFAULT NULL,
+  `LAST_UPDATE` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `checklist_ujian`
+--
+
+INSERT INTO `checklist_ujian` (`ID`, `ID_MATKUL`, `TIPE_UJIAN`, `CHECKLIST_01`, `CHECKLIST_02`, `CHECKLIST_03`, `CHECKLIST_04`, `CHECKLIST_05`, `CHECKLIST_06`, `CHECKLIST_07`, `CHECKLIST_08`, `CHECKLIST_09`, `CHECKLIST_10`, `LAST_UPDATE`) VALUES
+(1, 5, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-08 10:46:16am'),
+(2, 5, 0, '1', '1', '1', '1', '1', '1', '1', NULL, '1', '1', '2019-04-08 10:48:00am'),
+(3, 5, 1, NULL, NULL, '1', '1', NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-08 11:08:41am'),
+(4, 5, 1, '1', '1', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-08 11:08:52am');
 
 -- --------------------------------------------------------
 
@@ -106,7 +139,7 @@ CREATE TABLE `data_file_sop` (
 
 INSERT INTO `data_file_sop` (`ID`, `JUDUL`, `PATH_FILE`, `VISIBILITY`, `ID_KATEGORI`, `LAST_UPDATE`, `USER`) VALUES
 (3, 'Test Updatezzz', '49819919080193132214.pdf', 1, 1, '2019-04-07 11:32:52pm', 1),
-(4, 'Cobacoba', '27161933445683472194.pdf', 0, 2, '2019-04-07 11:33:24pm', 1);
+(4, 'Cobacoba', '89458368864465340169.pdf', 0, 2, '2019-04-08 09:38:20am', 1);
 
 -- --------------------------------------------------------
 
@@ -463,7 +496,7 @@ CREATE TABLE `periode_akademik` (
 
 INSERT INTO `periode_akademik` (`ID`, `NAMA`, `START_PERIODE`, `END_PERIODE`, `START_UTS`, `END_UTS`, `START_UAS`, `END_UAS`, `STATUS`, `CREATED_ON`, `CREATED_BY`) VALUES
 (2, 'Semester Genap 2018/2019', '', '', '', '', '', '', 0, '2019-02-06 07:00:20', 1),
-(4, 'Semester Ganjil 2019/2020', '2019-08-12', '2019-12-23', '2019-10-14', '2019-10-28', '2019-12-02', '2019-12-16', 0, '2019-03-28 07:20:27', 1);
+(4, 'Semester Ganjil 2019/2020', '2019-08-12', '2019-12-23', '2019-10-14', '2019-10-28', '2019-12-02', '2019-12-16', 1, '2019-03-28 07:20:27', 1);
 
 -- --------------------------------------------------------
 
@@ -511,11 +544,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`ID`, `ID_ROLE`, `NAMA`, `EMAIL`, `NIK`, `STATUS`, `IS_DOSEN`, `LAST_LOGIN`, `LAST_IP`) VALUES
-(1, 1, 'Hengky Surya', '7315051@student.unpar.ac.id', 0, 1, 1, '2019-04-07 11:54:05pm', '::1'),
+(1, 1, 'Hengky Surya', '7315051@student.unpar.ac.id', 0, 1, 1, '2019-04-08 11:56:39am', '::1'),
 (2, 2, 'Pascal Alfadian', 'pascal@unpar.ac.id', 20180014, 1, 1, NULL, NULL),
 (4, 3, 'Pranyoto', 'pranyoto@unpar.ac.id', 2018012, 1, 0, NULL, NULL),
-(5, 4, 'Stephen Senjaya', '7315014@student.unpar.ac.id', 20180014, 1, 0, NULL, NULL),
-(6, 4, 'Adrian Stefanus', '7315014@student.unpar.ac.id', 20180100, 1, 0, NULL, NULL);
+(5, 4, 'Stephen Senjaya', '7315033@student.unpar.ac.id', 20180014, 1, 0, NULL, NULL),
+(6, 4, 'Adrian Stefanus', '7315014@student.unpar.ac.id', 20180100, 1, 0, '2019-04-08 12:05:32pm', '::1');
 
 -- --------------------------------------------------------
 
@@ -561,6 +594,13 @@ INSERT INTO `user_role` (`ID`, `NAMA_ROLE`) VALUES
 --
 ALTER TABLE `alat_lab`
   ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `checklist_ujian`
+--
+ALTER TABLE `checklist_ujian`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `ID_MATKUL` (`ID_MATKUL`);
 
 --
 -- Indexes for table `daftar_lab`
@@ -714,6 +754,12 @@ ALTER TABLE `alat_lab`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `checklist_ujian`
+--
+ALTER TABLE `checklist_ujian`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `daftar_lab`
 --
 ALTER TABLE `daftar_lab`
@@ -836,6 +882,12 @@ ALTER TABLE `user_role`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `checklist_ujian`
+--
+ALTER TABLE `checklist_ujian`
+  ADD CONSTRAINT `checklist_ujian_ibfk_1` FOREIGN KEY (`ID_MATKUL`) REFERENCES `mata_kuliah` (`ID`);
 
 --
 -- Constraints for table `data_buku_saku`

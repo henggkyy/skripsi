@@ -2,6 +2,116 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani Inisiasi dan Administrasi Mata Kuliah.
 class C_Matkul extends CI_Controller{
+	//Method untuk melakukan checklist persiapan ujian
+	function checkListUjian(){
+		if($this->session->userdata('logged_in')){
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
+			$this->form_validation->set_rules('tipe_ujian', 'Tipe Ujian', 'required');
+			$id_matkul = $this->input->post('id_matkul');
+			if ($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing Required Fields');
+				redirect("/administrasi_matkul_detail?id=$id_matkul");
+			}
+			else{
+				$this->load->model('Mata_kuliah');
+				$tipe_ujian = $this->input->post('tipe_ujian');
+				if($tipe_ujian != 0 && $tipe_ujian != 1){
+					$this->session->set_flashdata('error', 'Error Tipe Ujian!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				$this->load->model('Periode_akademik');
+				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
+				$checkPeriodeAktif = $this->Periode_akademik->checkIdAktif($id_periode);
+				if(!$checkPeriodeAktif){
+					$this->session->set_flashdata('error', 'Tidak dapat melakukan checklist karena periode akademik mata kuliah sudah berakhir!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				$checklist_01 = NULL;
+				$checklist_02 = NULL;
+				$checklist_03 = NULL;
+				$checklist_04 = NULL;
+				$checklist_05 = NULL;
+				$checklist_06 = NULL;
+				$checklist_07 = NULL;
+				$checklist_08 = NULL;
+				$checklist_09 = NULL;
+				$checklist_10 = NULL;
+				$array_checklist = $this->input->post('checklist[]');
+				// print_r($array_checklist);
+				// return;
+				if(isset($array_checklist) && $array_checklist){
+					
+					if(in_array('01', $array_checklist)){
+						$checklist_01 = 1;
+					}
+					if(in_array('02', $array_checklist)){
+						$checklist_02 = 1;
+					}
+					if(in_array('03', $array_checklist)){
+						$checklist_03 = 1;
+					}
+					if(in_array('04', $array_checklist)){
+						$checklist_04 = 1;
+					}
+					if(in_array('05', $array_checklist)){
+						$checklist_05 = 1;
+					}
+					if(in_array('06', $array_checklist)){
+						$checklist_06 = 1;
+					}
+					if(in_array('07', $array_checklist)){
+						$checklist_07 = 1;
+					}
+					if(in_array('08', $array_checklist)){
+						$checklist_08 = 1;
+					}
+					if(in_array('09', $array_checklist)){
+						$checklist_09 = 1;
+					}
+					if(in_array('10', $array_checklist)){
+						$checklist_10 = 1;
+					}
+				}
+				date_default_timezone_set('Asia/Jakarta');
+				$date_time = date("Y-m-d h:i:sa");
+				$data = array(
+					'ID_MATKUL' => $id_matkul,
+					'TIPE_UJIAN' => $tipe_ujian,
+					'CHECKLIST_01' => $checklist_01,
+					'CHECKLIST_02' => $checklist_02,
+					'CHECKLIST_03' => $checklist_03,
+					'CHECKLIST_04' => $checklist_04,
+					'CHECKLIST_05' => $checklist_05,
+					'CHECKLIST_06' => $checklist_06,
+					'CHECKLIST_07' => $checklist_07,
+					'CHECKLIST_08' => $checklist_08,
+					'CHECKLIST_09' => $checklist_09,
+					'CHECKLIST_10' => $checklist_10,
+					'LAST_UPDATE' => $date_time
+				);
+				$this->load->model('Checklist_ujian');
+				if($tipe_ujian == 0){
+					$nama_ujian = 'UTS';
+				}
+				else{
+					$nama_ujian = 'UAS';
+				}
+				$res = $this->Checklist_ujian->insertChecklist($data);
+				if($res){
+					$this->session->set_flashdata('success', "Berhasil melakukan checklist persiapan ujian $nama_ujian");
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				else{
+					$this->session->set_flashdata('success', "Gagal melakukan checklist persiapan ujian $nama_ujian");
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
 	//Method untuk menghapus file-file bantuan ujian
 	function deleteFileBantuan(){
 		if($this->session->userdata('logged_in')){
@@ -389,6 +499,7 @@ class C_Matkul extends CI_Controller{
 			$this->load->model('Mhs_peserta');
 			$this->load->model('Kebutuhan_pl');
 			$this->load->model('File_bantuan_ujian');
+			$this->load->model('Checklist_ujian');
 			$id_matkul = $_GET['id'];
 
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
@@ -412,6 +523,8 @@ class C_Matkul extends CI_Controller{
 			$data['set_peserta'] = $this->Mhs_peserta->checkMhs($id_matkul);
 			$data['daftar_pl'] = $this->Kebutuhan_pl->getPL($id_matkul);
 			$data['file_bantuan'] = $this->File_bantuan_ujian->getFileBantuan($id_matkul);
+			$data['checklist_uts'] = $this->Checklist_ujian->getChecklist($id_matkul, 0);
+			$data['checklist_uas'] = $this->Checklist_ujian->getChecklist($id_matkul, 1);
 			//$data['matkul'] = true;
 			$this->load->view('template/Header', $data);
 			$this->load->view('template/Sidebar', $data);

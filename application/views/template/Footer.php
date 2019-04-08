@@ -18,6 +18,7 @@
 	<script src="<?php echo base_url();?>assets/js/plugins/fullcalendar/moment.min.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/fullcalendar/fullcalendar.min.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/jasny/jasny-bootstrap.min.js"></script>
+	<script src="<?php echo base_url();?>assets/js/plugins/iCheck/icheck.min.js"></script>
 	<script type="text/javascript">
 		var mem = $('#data_1 .input-group.date').datepicker({
 			todayBtn: "linked",
@@ -122,6 +123,11 @@
 	<script src="<?php echo base_url();?>assets/js/plugins/dataTables/datatables.min.js"></script>
 	<script type="text/javascript">
 		$('document').ready(function(){
+			// $('.i-checks').iCheck({
+   //              checkboxClass: 'icheckbox_square-green',
+   //              radioClass: 'iradio_square-green',
+   //          });
+
 			var input_text_pl = '<input class="form-control" type="text" required name="nama_pl" placeholder="Contoh: netbeans, spotify, googlechrome"></input>'
 			var button_add_pl = $('#button_add_pl');
 			$(button_add_pl).click(function(e){

@@ -24,6 +24,7 @@ class C_Login extends CI_Controller {
 	//Method untuk menangani email dan password yang diinput oleh pengguna
 	//Method ini akan melakukan pengecekan terhadap pengguna yang telah terdaftar di database.
 	function prosesLogin(){
+		if(!$this->session->userdata('logged_in') && !$this->session->userdata('logged_in_public')){
 			$google_data = $this->google->validate();
 			$email = $google_data['email'];    
 			$email_domain = substr($email, strpos($email, "@") + 1);
@@ -73,19 +74,29 @@ class C_Login extends CI_Controller {
 				$this->google->revokeToken();
 				redirect('/');
 			}
+		}
+		else{
+			if($this->session->userdata('logged_in')){
+				redirect('/dashboard');
+			}
+			else{
+				redirect('/peminjaman');
+			}
+		}	
 	}
 
 	//Method untuk melakukan logout dari aplikasi website
 	function logout(){
 		if($this->session->userdata('logged_in')){
 			$this->session->set_flashdata('message', 'Berhasil Logout!');
-			$this->google->revokeToken();
 			$this->session->unset_userdata('logged_in');
 			$this->session->unset_userdata('logged_in_public');
 			$this->session->unset_userdata('id');
 			$this->session->unset_userdata('id_role');
 			$this->session->unset_userdata('email');
 			$this->session->unset_userdata('nama');
+			$this->google->revokeToken();
+			
 			redirect('/');
 		}
 		else{

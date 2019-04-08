@@ -481,7 +481,406 @@
                                                     </div>
                                                 </li>
                                                 <!-- END MENU FILE BANTUAN UJIAN-->
-                                                
+                                                <!--START MENU CHECKLIST PERSIAPAN UJIAN-->
+                                                <li>
+                                                    <h4 style="font-weight: bold;">Checklist Persiapan Ujian : </h4>
+                                                    <?php
+                                                    if($flag){
+                                                        ?>
+                                                    <button class="btn btn-sm btn-success" id="btn_checklist"><i class="fas fa-tasks"></i> Checklist Persiapan Ujian</button>
+                                                    <div style="display: none;" id="container_checklist" class="panel panel-success">
+                                                        <div class="panel-heading">
+                                                            <i class="fas fa-tasks"></i> Checklist Persiapan Ujian
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <?php echo form_open_multipart('administrasi_matkul/checklist_ujian');?>
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-4 col-form-label">Tipe Ujian <span style="color: red">*</span> :</label>
+                                                                <div class="col-sm-8">
+                                                                    <select required class="form-control" name="tipe_ujian">
+                                                                        <option value="" selected disabled>-- Please Select One --</option>
+                                                                        <option value="0">Ujian Tengah Semester (UTS)</option>
+                                                                        <option value="1">Ujian Akhir Semester (UAS)</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-4 col-form-label">Hal yang diperiksa <span style="color: red">*</span> :</label>
+                                                                <div class="col-sm-8">
+                                                                    <div class="i-checks"><label> <input type="checkbox" value="01" name="checklist[]"> <i></i> Admin telah memiliki daftar terbaru peserta ujian</label></div>
+                                                                    <div class="i-checks"><label> <input type="checkbox" value="02" name="checklist[]"> <i></i> Posisi peserta ujian telah diacak, dicetak, dan ditempel.</label></div>
+                                                                    <div class="i-checks"><label> <input type="checkbox" value="03" name="checklist[]"> <i></i> Soal Ujian (hardcopy/softcopy) telah diberikan di komputer peserta</label></div>
+                                                                    <div class="i-checks"><label> <input type="checkbox" value="04" name="checklist[]"> <i></i> Pembuatan tempat pengumpulan jawaban ujian: (ujian.ftis.unpar/) atau (judgeujian.ftis.unpar/)</label></div>
+                                                                    <div class="i-checks"><label> <input type="checkbox" value="05" name="checklist[]"> <i></i> Penyetelan & Sinkronisasi waktu ujian di setiap ruangan</label></div>
+                                                                    <div class="i-checks"><label> <input type="checkbox" value="06" name="checklist[]"> <i></i> Penutupan/pembukaan drive Z mahasiswa</label></div>
+                                                                    <div class="i-checks"><label> <input type="checkbox" value="07" name="checklist[]"> <i></i> Penyalinan file bantuan dari dosen</label></div>
+                                                                    <div class="i-checks"><label> <input type="checkbox" value="08" name="checklist[]"> <i></i> Pembukaan/penutupan jalur ke server dan/atau internet</label></div>
+                                                                    <div class="i-checks"><label> <input type="checkbox" value=09 name="checklist[]"> <i></i> Admin telah memiliki daftar terbaru peserta ujian</label></div>
+                                                                    <div class="i-checks"><label> <input type="checkbox" value="10" name="checklist[]"> <i></i> Server bantuan telah diperiksa dan dapat digunakan untuk ujian</label></div>
+                                                                </div>
+                                                                <input type="hidden" name="id_matkul" value="<?php echo $_GET['id'];?>" required>
+                                                                <button type="submit" class="btn btn-success" style="margin-left: 40px;">Submit Checklist</button>
+                                                                </form>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>  
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                    <div class="table-responsive">
+                                                        <h5>Checklist UTS</h5>
+                                                        <table class="table table-striped table-bordered table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>Hal yang diperiksa</th>
+                                                                    <th>Status</th>
+                                                                    <th>Last Checked</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php if(isset($checklist_uts) && $checklist_uts){
+                                                                    foreach ($checklist_uts as $uts) {
+                                                                        ?>
+                                                                    <tr>
+                                                                        <td>1</td>
+                                                                        <td>Admin telah memiliki daftar terbaru peserta ujian</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uts['CHECKLIST_01'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uts['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>2</td>
+                                                                        <td>Posisi peserta ujian telah diacak, dicetak, dan ditempel</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uts['CHECKLIST_02'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uts['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>3</td>
+                                                                        <td>Soal ujian (hardcopy/softcopy) telah diberikan di komputer peserta</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uts['CHECKLIST_03'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uts['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>4</td>
+                                                                        <td>Pembuatan tempat pengumpulan jawaban ujian: (ujian.ftis.unpar/) atau (judgeujian.ftis.unpar/)</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uts['CHECKLIST_04'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uts['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>5</td>
+                                                                        <td>Penyetelan & sinkronisasi waktu ujian di setiap ruangan ujian</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uts['CHECKLIST_05'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uts['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>6</td>
+                                                                        <td>Penutupan/pembukaan drive Z mahasiswa</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uts['CHECKLIST_06'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uts['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>7</td>
+                                                                        <td>Penyalinan file bantuan dari dosen</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uts['CHECKLIST_07'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uts['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>8</td>
+                                                                        <td>Pembukaan/penutupan jalur ke server dan/atau internet</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uts['CHECKLIST_08'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uts['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>9</td>
+                                                                        <td>Koordinasi jam buka/tutup pintu laboratorium</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uts['CHECKLIST_09'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uts['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>10</td>
+                                                                        <td>Server bantuan telah diperiksa dan dapat digunakan untuk ujian</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uts['CHECKLIST_10'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uts['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                        <?php
+                                                                        $iterator++;
+                                                                    }
+                                                                }
+                                                                else{
+                                                                    echo '<tr><td colspan="4">Checklist persiapan UTS belum dilakukan!</td></tr>';
+                                                                } ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="table-responsive">
+                                                        <h5>Checklist UAS</h5>
+                                                        <table class="table table-striped table-bordered table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>Hal yang diperiksa</th>
+                                                                    <th>Status</th>
+                                                                    <th>Last Checked</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php if(isset($checklist_uas) && $checklist_uas){
+                                                                    $iterator = 1;
+                                                                    foreach ($checklist_uas as $uas) {
+                                                                        ?>
+                                                                    <tr>
+                                                                        <td>1</td>
+                                                                        <td>Admin telah memiliki daftar terbaru peserta ujian</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uas['CHECKLIST_01'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uas['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>2</td>
+                                                                        <td>Posisi peserta ujian telah diacak, dicetak, dan ditempel</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uas['CHECKLIST_02'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uas['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>3</td>
+                                                                        <td>Soal ujian (hardcopy/softcopy) telah diberikan di komputer peserta</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uas['CHECKLIST_03'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uas['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>4</td>
+                                                                        <td>Pembuatan tempat pengumpulan jawaban ujian: (ujian.ftis.unpar/) atau (judgeujian.ftis.unpar/)</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uas['CHECKLIST_04'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uas['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>5</td>
+                                                                        <td>Penyetelan & sinkronisasi waktu ujian di setiap ruangan ujian</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uas['CHECKLIST_05'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uas['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>6</td>
+                                                                        <td>Penutupan/pembukaan drive Z mahasiswa</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uas['CHECKLIST_06'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uas['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>7</td>
+                                                                        <td>Penyalinan file bantuan dari dosen</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uas['CHECKLIST_07'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uas['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>8</td>
+                                                                        <td>Pembukaan/penutupan jalur ke server dan/atau internet</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uas['CHECKLIST_08'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uas['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>9</td>
+                                                                        <td>Koordinasi jam buka/tutup pintu laboratorium</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uas['CHECKLIST_09'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i>Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uas['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>10</td>
+                                                                        <td>Server bantuan telah diperiksa dan dapat digunakan untuk ujian</td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($uas['CHECKLIST_10'] != NULL){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?php echo $uas['LAST_UPDATE'];?></td>
+                                                                    </tr>
+                                                                        <?php
+                                                                        $iterator++;
+                                                                    }
+                                                                }
+                                                                else{
+                                                                    echo '<tr><td colspan="4">Checklist persiapan UAS belum dilakukan!</td></tr>';
+                                                                } ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </li> 
+                                                <!--END MENU CHECKLIST PERSIAPAN UJIAN-->
                                             </ul>
                                         </li>
                                     </ul>
@@ -491,3 +890,13 @@
                     </div>
                 </div>
             </div>
+            <script type="text/javascript">
+                $('#btn_checklist').click(function () {
+                    if($('#container_checklist').css('display') == 'none'){
+                        $('#container_checklist').show();
+                    }
+                    else{
+                        $('#container_checklist').hide();
+                    }
+                });
+            </script>
