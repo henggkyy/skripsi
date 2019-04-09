@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 08, 2019 at 09:06 AM
--- Server version: 10.1.38-MariaDB
--- PHP Version: 7.3.3
+-- Generation Time: Apr 09, 2019 at 03:43 AM
+-- Server version: 10.1.36-MariaDB
+-- PHP Version: 5.6.38
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -270,17 +270,23 @@ CREATE TABLE `jadwal_lab` (
   `ID_LAB` int(11) NOT NULL,
   `TITLE` varchar(128) NOT NULL,
   `START_EVENT` varchar(64) NOT NULL,
-  `END_EVENT` varchar(64) NOT NULL
+  `END_EVENT` varchar(64) NOT NULL,
+  `STATUS` int(11) NOT NULL COMMENT '0 : pending, 1:show'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `jadwal_lab`
 --
 
-INSERT INTO `jadwal_lab` (`ID`, `ID_LAB`, `TITLE`, `START_EVENT`, `END_EVENT`) VALUES
-(1, 1, 'Perkuliahan ASD', '2019-03-28 11:00:00', '2019-03-28 13:00:00'),
-(2, 2, 'Perkuliahan DAA', '2019-03-28 11:00:00', '2019-03-28 14:00:00'),
-(3, 1, 'Acara Index[1]', '2019-03-22 09:30', '2019-03-22 09:40');
+INSERT INTO `jadwal_lab` (`ID`, `ID_LAB`, `TITLE`, `START_EVENT`, `END_EVENT`, `STATUS`) VALUES
+(1, 1, 'Perkuliahan ASD', '2019-03-28 11:00:00', '2019-03-28 13:00:00', 1),
+(2, 2, 'Perkuliahan DAA', '2019-03-28 11:00:00', '2019-03-28 14:00:00', 1),
+(3, 1, 'Acara Index[1]', '2019-03-22 09:30', '2019-03-22 09:40', 1),
+(4, 1, 'asdasdas', '2019-04-16 12:00:00', '2019-04-16 14:00:00', 1),
+(5, 1, 'Presentasi 1', '2019-04-08 12:00:00', '2019-04-08 14:00:00', 1),
+(6, 1, 'Presentasi 3', '2019-04-09 12:00:00', '2019-04-09 14:00:00', 1),
+(7, 2, 'Presentasi 4', '2019-04-16 12:00', '2019-04-16 14:00', 1),
+(9, 1, 'Coba cuyyy', '2019-04-24 11:00', '2019-04-24 15:55', 0);
 
 -- --------------------------------------------------------
 
@@ -457,18 +463,18 @@ CREATE TABLE `peminjaman_lab` (
   `KETERANGAN_PEMINJAM` varchar(1024) NOT NULL,
   `DISETUJUI` int(11) NOT NULL COMMENT '1 : Disetujui, 0 : Pending, 2 : Ditolak',
   `KETERANGAN_KALAB` varchar(1024) NOT NULL,
-  `TANGGAL_REQUEST` varchar(64) NOT NULL
+  `TANGGAL_REQUEST` varchar(64) NOT NULL,
+  `ID_JADWAL` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `peminjaman_lab`
 --
 
-INSERT INTO `peminjaman_lab` (`ID`, `EMAIL_PEMINJAM`, `NAMA_PEMINJAM`, `KEPERLUAN`, `LAB`, `ID_ALAT`, `TANGGAL_PINJAM`, `JAM_MULAI`, `JAM_SELESAI`, `KETERANGAN_PEMINJAM`, `DISETUJUI`, `KETERANGAN_KALAB`, `TANGGAL_REQUEST`) VALUES
-(1, NULL, '', '', 1, NULL, '2019-03-24', '09:30', '11:30', 'Untuk les', 2, 'Tidak dapat disetujui karena dipakai kelas.', ''),
-(2, '7315051@student.unpar.ac.id', '', 'Acara Index[1]', 1, NULL, '2019-03-22', '09:30', '09:40', '00', 1, 'Mantap', ''),
-(3, '7315051@student.unpar.ac.id', '', '', NULL, 1, '2019-03-20', '09:30', '09:30', 'pinjem aja iseng', 1, 'ff', ''),
-(4, 'suaramahasiswa@unpar.ac.id', 'Suara Mahasiswa', 'Tutorial Power Point', 1, NULL, '03/28/2019', '15:00', '16:00', 'Percobaan', 0, '', '2019-03-31 11:00:20am');
+INSERT INTO `peminjaman_lab` (`ID`, `EMAIL_PEMINJAM`, `NAMA_PEMINJAM`, `KEPERLUAN`, `LAB`, `ID_ALAT`, `TANGGAL_PINJAM`, `JAM_MULAI`, `JAM_SELESAI`, `KETERANGAN_PEMINJAM`, `DISETUJUI`, `KETERANGAN_KALAB`, `TANGGAL_REQUEST`, `ID_JADWAL`) VALUES
+(1, '7315051@student.unpar.ac.id', 'Hengky Surya', 'Presentasi 4', 2, NULL, '2019-04-16', '12:00', '14:00', '-', 1, 'Okay', '2019-04-09 07:57:49am', 7),
+(2, '7315051@student.unpar.ac.id', 'Hengky Surya', 'Coba cuy', 2, NULL, '2019-04-23', '12:00', '15:55', '-', 2, '-', '2019-04-09 08:25:13am', NULL),
+(3, '7315051@student.unpar.ac.id', 'Hengky Surya', 'Coba cuyyy', 1, NULL, '2019-04-24', '11:00', '15:55', '-', 2, '-', '2019-04-09 08:31:16am', NULL);
 
 -- --------------------------------------------------------
 
@@ -544,7 +550,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`ID`, `ID_ROLE`, `NAMA`, `EMAIL`, `NIK`, `STATUS`, `IS_DOSEN`, `LAST_LOGIN`, `LAST_IP`) VALUES
-(1, 1, 'Hengky Surya', '7315051@student.unpar.ac.id', 0, 1, 1, '2019-04-08 11:56:39am', '::1'),
+(1, 1, 'Hengky Surya', '7315051@student.unpar.ac.id', 0, 1, 1, '2019-04-09 07:41:29am', '::1'),
 (2, 2, 'Pascal Alfadian', 'pascal@unpar.ac.id', 20180014, 1, 1, NULL, NULL),
 (4, 3, 'Pranyoto', 'pranyoto@unpar.ac.id', 2018012, 1, 0, NULL, NULL),
 (5, 4, 'Stephen Senjaya', '7315033@student.unpar.ac.id', 20180014, 1, 0, NULL, NULL),
@@ -708,7 +714,8 @@ ALTER TABLE `mhs_peserta`
 ALTER TABLE `peminjaman_lab`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `LAB` (`LAB`),
-  ADD KEY `ID_ALAT` (`ID_ALAT`);
+  ADD KEY `ID_ALAT` (`ID_ALAT`),
+  ADD KEY `ID_JADWAL` (`ID_JADWAL`);
 
 --
 -- Indexes for table `periode_akademik`
@@ -799,7 +806,7 @@ ALTER TABLE `jadwal_bertugas_admin`
 -- AUTO_INCREMENT for table `jadwal_lab`
 --
 ALTER TABLE `jadwal_lab`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `jadwal_matkul`
@@ -823,13 +830,13 @@ ALTER TABLE `kebutuhan_pl`
 -- AUTO_INCREMENT for table `konfigurasi_gaji`
 --
 ALTER TABLE `konfigurasi_gaji`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `laporan_gaji_admin`
 --
 ALTER TABLE `laporan_gaji_admin`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `mata_kuliah`
@@ -847,7 +854,7 @@ ALTER TABLE `mhs_peserta`
 -- AUTO_INCREMENT for table `peminjaman_lab`
 --
 ALTER TABLE `peminjaman_lab`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `periode_akademik`
@@ -859,7 +866,7 @@ ALTER TABLE `periode_akademik`
 -- AUTO_INCREMENT for table `periode_gaji`
 --
 ALTER TABLE `periode_gaji`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -960,7 +967,8 @@ ALTER TABLE `mhs_peserta`
 --
 ALTER TABLE `peminjaman_lab`
   ADD CONSTRAINT `peminjaman_lab_ibfk_1` FOREIGN KEY (`LAB`) REFERENCES `daftar_lab` (`ID`),
-  ADD CONSTRAINT `peminjaman_lab_ibfk_2` FOREIGN KEY (`ID_ALAT`) REFERENCES `alat_lab` (`ID`);
+  ADD CONSTRAINT `peminjaman_lab_ibfk_2` FOREIGN KEY (`ID_ALAT`) REFERENCES `alat_lab` (`ID`),
+  ADD CONSTRAINT `peminjaman_lab_ibfk_3` FOREIGN KEY (`ID_JADWAL`) REFERENCES `jadwal_lab` (`ID`);
 
 --
 -- Constraints for table `periode_akademik`

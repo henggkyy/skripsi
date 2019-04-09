@@ -1,6 +1,20 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Peminjaman_lab extends CI_Model{
+	//Method untuk melakukan set id jadwal ke null ketika permintaan peminjaman ditolak
+	function setJadwalToNull($id_pinjaman){
+		$data = array(
+			'ID_JADWAL' => NULL
+		);
+		$this->db->where('ID', $id_pinjaman);
+		$res = $this->db->update('peminjaman_lab', $data);
+		if($res){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 	//Method untuk melakukan update status permintaan peminjaman laboratorium kedalam database.
 	function tindaklanjutiPermintaanLab($id_pinjaman, $tindakan, $keterangan){
 		$data = array(
@@ -18,7 +32,7 @@ class Peminjaman_lab extends CI_Model{
 		}
 	}
 	//Method untuk memasukkan data permintaan peminjaman laboratorium ke dalam database 
-	function addPeminjaman($email_peminjam, $nama_peminjam, $lab, $id_alat, $tgl_pinjam, $jam_mulai, $jam_selesai, $keterangan, $keperluan){
+	function addPeminjaman($email_peminjam, $nama_peminjam, $lab, $id_alat, $tgl_pinjam, $jam_mulai, $jam_selesai, $keterangan, $keperluan, $id_jadwal){
 		date_default_timezone_set("Asia/Jakarta");
 		$tanggal_request = date("Y-m-d h:i:sa");
 		$tgl_pinjam = date("Y-m-d", strtotime($tgl_pinjam));
@@ -33,7 +47,8 @@ class Peminjaman_lab extends CI_Model{
 		    'KETERANGAN_PEMINJAM' => $keterangan,
 		    'DISETUJUI' => 0,
 		    'KEPERLUAN' => $keperluan,
-		    'TANGGAL_REQUEST' => $tanggal_request
+		    'TANGGAL_REQUEST' => $tanggal_request,
+		    'ID_JADWAL' => $id_jadwal
 		);
 		$res = $this->db->insert('peminjaman_lab', $data);
 		if($res){

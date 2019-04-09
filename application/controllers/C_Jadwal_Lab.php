@@ -243,27 +243,50 @@ class C_Jadwal_Lab extends CI_Controller{
 	}
 
 	function checkKetersediaan(){
-		$hari = $this->input->post('hari[]');
-		
+		$hari = $this->input->get('hari');
+		$jam_mulai = $this->input->get('jam_mulai');
+		$jam_selesai = $this->input->get('jam_selesai');
 		$this->load->model('Periode_akademik');
 		$periode_aktif = $this->Periode_akademik->getIDPeriodeAktif();
 		if($periode_aktif){
+			//Get Tanggal Periode Akadeim Aktif
 			$start_periode = $this->Periode_akademik->getIndividualItem($periode_aktif, 'START_PERIODE');
 			$end_periode = $this->Periode_akademik->getIndividualItem($periode_aktif, 'END_PERIODE');
 			$start_uts = $this->Periode_akademik->getIndividualItem($periode_aktif, 'START_UTS');
 			$end_uts = $this->Periode_akademik->getIndividualItem($periode_aktif, 'END_UTS');
 			$start_uas = $this->Periode_akademik->getIndividualItem($periode_aktif, 'START_UAS');
-
-			print_r($hari);
-			$list_tanggal = array();
-
+			$start_uts = date('Y-m-d', strtotime('-1 day', strtotime($start_uts)));
+			$start_uas = date('Y-m-d', strtotime('-1 day', strtotime($start_uas)));
+			$hari = array($hari);
+			//Get seluruh tanggal sebelum uts dan setelah uts
 			$arr_tgl_sebelum_uts = $this->getAllDate($start_periode, $start_uts, $hari);
-			$arr_tgl_setelah_uas = $this->getAllDate($end_uts, $start_uas, $hari);
-
-			array_push($list_tanggal, $arr_tgl_sebelum_uts);
-			array_push($list_tanggal, $arr_tgl_setelah_uas);
-
-			print_r($arr_tgl_sebelum_uts);
+			$arr_tgl_setelah_uts = $this->getAllDate($end_uts, $start_uas, $hari);
+			//Nyatuin array tanggal sebelum uts dna setelah uts
+			$array_merge = array_merge($arr_tgl_sebelum_uts, $arr_tgl_setelah_uts);
+			//Masukkin data event (start event sama end event) ke dalam satu array
+			$array_event = array();
+			for ($i=0; $i < sizeof($array_merge); $i++) { 
+				$start_event = $array_merge[$i]." ".$jam_mulai;
+				$end_event = $array_merge[$i]." ".$jam_selesai;
+				$array_ind = array($start_event, $end_event);
+				array_push($array_event, $array_ind);
+			}
+			$arr_lab_tersedia = array();
+			//Method untuk mendapatkan seluruh list lab
+			$daftar_lab = $this->getAllListLab();
+			$flag = true;
+			foreach ($array_event as $event) {
+				$start_event = $event[0];
+				$end_event = $event[1];
+				$this->load->model('Jadwal_lab');
+				$lab_terpakai = $this->Jadwal_lab->checkPemakaianLab($start_event, $end_event);
+			}
+			//Method untuk mendapatkan jadwal pemakaian laboratorium
+			
+			
+			//Method untuk mendapatkan seluruh daftar lab
+			
+			print_r($array_event);
 			return;
 		}
 		else{
@@ -272,8 +295,7 @@ class C_Jadwal_Lab extends CI_Controller{
 
 		print_r($arr_hari);
 		return;
-		$jam_mulai = $this->input->post('jam_mulai[]');
-		$jam_selesai = $this->input->post('jam_selesai[]');
+		
 		$daftar_lab = $this->getAllListLab();
 	}
 

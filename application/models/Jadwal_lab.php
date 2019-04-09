@@ -52,7 +52,41 @@ class Jadwal_lab extends CI_Model{
   			return false;
   		}
 	}
-
+	function deleteJadwalBooking($id){
+		$this->db->where('ID', $id);
+		$res = $this->db->delete('jadwal_lab');
+		if($res){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	//Method untuk update status jadwal pemakaian
+	function updateJadwalBookingAccepted($id){
+		$data = array(
+			'STATUS' => 1
+		);
+		$this->db->where('ID', $id);
+		$res = $this->db->update('jadwal_lab', $data);
+		if($res){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	//Method untuk memasukkan data pemakaian laboratorium (booking sistem ketika ada yang pinjam)
+	function insertJadwalBooking($data){
+		$res = $this->db->insert('jadwal_lab', $data);
+		if($res){
+			$insert_id = $this->db->insert_id();
+   			return  $insert_id;
+		}
+		else{
+			return false;
+		}
+	}
 	//Method untuk memasukkan jadwal pemakaian laboratorium berdasarkan ketika ada peminjaman
 	//yang sudah disetujui oleh Kepala Laboratorium
 	function insertJadwalPemakaian($title, $id_lab, $start, $end){
@@ -70,14 +104,31 @@ class Jadwal_lab extends CI_Model{
 			return false;
 		}
 	}
-
+	//Method untuk mendapatkan jadwal laboratorium untuk datatables
+	//Data yang didapatkan merupakan jadwal yang lebih dari hari ini dan menampilkan status pemakaian
+	function getJadwalPemakaianLabDataTables(){
+		date_default_timezone_set('Asia/Jakarta');
+		$date_time = date('Y-m-d h:i');
+		$this->db->select('jadwal_lab.ID as id, daftar_lab.NAMA_LAB as nama_lab, jadwal_lab.TITLE as title, jadwal_lab.START_EVENT as start, jadwal_lab.END_EVENT as end, daftar_lab.BG_COLOR as backgroundColor, jadwal_lab.STATUS as status');
+		$this->db->where('START_EVENT >=', $date_time);
+		$this->db->from('jadwal_lab');
+		$this->db->join('daftar_lab', 'jadwal_lab.ID_LAB = daftar_lab.ID' , 'left outer');
+		$result = $this->db->get();
+		if($result->num_rows() > 0 ){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk mendapatkan jadwal keseluruhan laboratorium, termasuk jadwal kuliah, jadwal uts/uas,
 	//dan jadwal ketika ada permintaan peminjaman
+	//Data yang didapatkan dari method ini merupakan data yang sudah terverifikasi
 	function getJadwalPemakaianLab(){
 		date_default_timezone_set('Asia/Jakarta');
 		$date_time = date('Y-m-d h:i');
 		$this->db->select('jadwal_lab.ID as id, daftar_lab.NAMA_LAB as nama_lab, jadwal_lab.TITLE as title, jadwal_lab.START_EVENT as start, jadwal_lab.END_EVENT as end, daftar_lab.BG_COLOR as backgroundColor');
-		$this->db->where('START_EVENT >=', $date_time);
+		$this->db->where('STATUS', 1);
 		$this->db->from('jadwal_lab');
 		$this->db->join('daftar_lab', 'jadwal_lab.ID_LAB = daftar_lab.ID' , 'left outer');
 		$result = $this->db->get();

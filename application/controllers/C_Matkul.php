@@ -500,6 +500,7 @@ class C_Matkul extends CI_Controller{
 			$this->load->model('Kebutuhan_pl');
 			$this->load->model('File_bantuan_ujian');
 			$this->load->model('Checklist_ujian');
+			$this->load->model('Daftar_lab');
 			$id_matkul = $_GET['id'];
 
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
@@ -515,6 +516,7 @@ class C_Matkul extends CI_Controller{
 			if($id_periode_aktif != $id_periode_matkul){
 				$flag = false;
 			}
+
 			$data['flag'] = $flag;
 			$data['nama_matkul'] = $nama_matkul;
 			$data['info_matkul'] = $this->Mata_kuliah->getInformasiBasicMatkul($id_matkul);
@@ -525,6 +527,8 @@ class C_Matkul extends CI_Controller{
 			$data['file_bantuan'] = $this->File_bantuan_ujian->getFileBantuan($id_matkul);
 			$data['checklist_uts'] = $this->Checklist_ujian->getChecklist($id_matkul, 0);
 			$data['checklist_uas'] = $this->Checklist_ujian->getChecklist($id_matkul, 1);
+			$data['daftar_lab'] = $this->Daftar_lab->getListLab();
+			$data['page_detail_matkul'] = true;
 			//$data['matkul'] = true;
 			$this->load->view('template/Header', $data);
 			$this->load->view('template/Sidebar', $data);

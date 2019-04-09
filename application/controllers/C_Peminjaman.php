@@ -71,16 +71,11 @@ class C_Peminjaman extends CI_Controller{
 				$res = $this->Peminjaman_lab->tindaklanjutiPermintaanLab($id_pinjaman, $tindakan, $keterangan);
 				if($res){
 					if($id_alat == NULL){
+						$this->load->model('Jadwal_lab');
 						if($tindakan == 1){
-							$this->load->model('Jadwal_lab');
-							$event = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, 'KEPERLUAN');
-							$tanggal = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, 'TANGGAL_PINJAM');
-							$jam_mulai = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, 'JAM_MULAI');
-							$jam_selesai = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, 'JAM_SELESAI');
-							$id_lab = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, 'LAB');
-							$start = $tanggal. " ".$jam_mulai;
-							$end = $tanggal. " ".$jam_selesai;
-							$res_insert_jadwal = $this->Jadwal_lab->insertJadwalPemakaian($event, $id_lab, $start, $end);
+							
+							$id_jadwal = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, 'ID_JADWAL');
+							$res_insert_jadwal = $this->Jadwal_lab->updateJadwalBookingAccepted($id_jadwal);
 							if($res_insert_jadwal){
 								$this->session->set_flashdata('success', 'Berhasil menindaklanjuti permintaan peminjaman ruangan laboratorium');
 								redirect("/peminjaman_lab");
@@ -91,6 +86,10 @@ class C_Peminjaman extends CI_Controller{
 							}
 						}
 						else{
+
+							$id_jadwal = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, 'ID_JADWAL');
+							$res_set_jadwal_null = $this->Peminjaman_lab->setJadwalToNull($id_pinjaman);
+							$res_delete_jadwal = $this->Jadwal_lab->deleteJadwalBooking($id_jadwal);
 							$this->session->set_flashdata('success', 'Berhasil menindaklanjuti permintaan peminjaman ruangan laboratorium');
 							redirect("/peminjaman_lab");
 						}
@@ -184,7 +183,16 @@ class C_Peminjaman extends CI_Controller{
 				$keterangan = $this->input->post('keterangan');
 				$keperluan = $this->input->post('keperluan');
 				$this->load->model('Peminjaman_lab');
-				$res = $this->Peminjaman_lab->addPeminjaman($email_peminjam, $nama_peminjam, $tipe_lab, $alat, $tgl_pinjam, $jam_mulai, $jam_selesai, $keterangan, $keperluan);
+				$this->load->model('Jadwal_lab');
+				$data = array(
+					'TITLE' => $keperluan,
+					'ID_LAB' => $tipe_lab,
+					'START_EVENT' => $start_event,
+					'END_EVENT' => $end_event,
+					'STATUS' => 0
+				);
+				$id_jadwal = $this->Jadwal_lab->insertJadwalBooking($data);
+				$res = $this->Peminjaman_lab->addPeminjaman($email_peminjam, $nama_peminjam, $tipe_lab, $alat, $tgl_pinjam, $jam_mulai, $jam_selesai, $keterangan, $keperluan, $id_jadwal);
 				if($res){
 					$this->session->set_flashdata('success', 'Berhasil melakukan permintaan peminjaman alat/ruangan laboratorium. Silahkan tunggu notifikasi selanjutnya pada Email UNPAR Anda');
 					redirect("/peminjaman/form");
@@ -263,7 +271,16 @@ class C_Peminjaman extends CI_Controller{
 				$keterangan = $this->input->post('keterangan');
 				$keperluan = $this->input->post('keperluan');
 				$this->load->model('Peminjaman_lab');
-				$res = $this->Peminjaman_lab->addPeminjaman($email_peminjam, $nama_peminjam, $tipe_lab, $alat, $tgl_pinjam, $jam_mulai, $jam_selesai, $keterangan, $keperluan);
+				$this->load->model('Jadwal_lab');
+				$data = array(
+					'TITLE' => $keperluan,
+					'ID_LAB' => $tipe_lab,
+					'START_EVENT' => $start_event,
+					'END_EVENT' => $end_event,
+					'STATUS' => 0
+				);
+				$id_jadwal = $this->Jadwal_lab->insertJadwalBooking($data);
+				$res = $this->Peminjaman_lab->addPeminjaman($email_peminjam, $nama_peminjam, $tipe_lab, $alat, $tgl_pinjam, $jam_mulai, $jam_selesai, $keterangan, $keperluan, $id_jadwal);
 				if($res){
 					$this->session->set_flashdata('success', 'Berhasil melakukan permintaan peminjaman alat/ruangan laboratorium. Silahkan tunggu notifikasi selanjutnya pada Email UNPAR Anda');
 					redirect("/peminjaman");

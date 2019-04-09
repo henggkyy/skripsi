@@ -216,21 +216,33 @@
                                                             Insert Jadwal Kelas
                                                         </div>
                                                         <div class="panel-body">
-                                                            <?php echo form_open_multipart('administrasi_matkul/insert_kelas');?>
+                                                            <?php
+                                                            if(isset($daftar_lab) && $daftar_lab){
+                                                                $option = "";
+                                                                foreach ($daftar_lab as $lab ) {
+                                                                    $option.= '<option value="'.$lab['ID'].'">'.$lab['NAMA_LAB']." (".$lab['LOKASI'].") </option>";
+                                                                }
+                                                            }
+                                                            echo form_open_multipart('administrasi_matkul/insert_kelas');?>
                                                             
                                                             <div class="form-group  row">
                                                                 <label class="col-sm-4 col-form-label">Jadwal Kelas <span style="color: red">*</span> :</label>
                                                                 <div class="col-sm-8"> 
                                                                     <h5>Pertemuan Ke - 1</h5>       
-                                                                    <label>Hari :</label><select name="hari[]" class="form-control col-md-4" required><option value="" selected disabled>-- Please Select One --</option><option value="Monday">Senin</option><option value="Tuesday" >Selasa</option><option value="Wednesday" >Rabu</option><option value="Thursday" >Kamis</option><option value="Friday" >Jumat</option><option value="Saturday" >Sabtu</option></select>  
-                                                                    <div class="col-sm-4 input-group clockpicker" data-autoclose="true"><label>Jam Mulai :</label> <input type="text" name="jam_mulai[]" class="form-control" value="" data-mask="99:99" required></div>
-                                                                    <div class="col-sm-4 input-group clockpicker" data-autoclose="true"><label>Jam Selesai :</label> <input type="text" name="jam_selesai[]" class="form-control" value="" data-mask="99:99" required></div>
+                                                                    <label>Hari :</label><select id="select_0" name="hari[]" class="form-control col-md-4" required><option value="" selected disabled>-- Please Select One --</option><option value="Monday">Senin</option><option value="Tuesday" >Selasa</option><option value="Wednesday" >Rabu</option><option value="Thursday" >Kamis</option><option value="Friday" >Jumat</option><option value="Saturday" >Sabtu</option></select>  
+                                                                    <div class="col-sm-4 input-group clockpicker" data-autoclose="true"><label>Jam Mulai :</label> <input id="jam_mulai_0" type="text" name="jam_mulai[]" class="form-control" value="" data-mask="99:99" required></div>
+                                                                    <div class="col-sm-4 input-group clockpicker" data-autoclose="true"><label>Jam Selesai :</label> <input id="jam_selesai_0" type="text" name="jam_selesai[]" class="form-control" value="" data-mask="99:99" required></div>
+                                                                    <label>Ruangan Laboratorium :</label>
+                                                                        <select name="lab[]" class="form-control" required>
+                                                                            <option value="" disabled selected>-- Please Select One --</option>
+                                                                            <?php echo $option;?>
+                                                                        </select>
+                                                                    
                                                                     <br>    
                                                                     <div id="container">
                                                                         
                                                                     </div>
-                                                                    <a href="javascript:void(0)" class="btn btn-sm btn-primary">Cek Ketersediaan Laboratorium</a>
-                                                                    <a href="javascript:void(0)" class="btn btn-sm add_button_pertemuan">Add Pertemuan</a>  
+                                                                    <a  href="javascript:void(0)" class="btn btn-sm add_button_pertemuan">Add Pertemuan</a>  
                                                                 </div>
                                                                                 
                                                             </div>
@@ -242,7 +254,7 @@
                                                             </div>
                                                             <input type="hidden" name="id_matkul" value="<?php echo $_GET['id'];?>" required>
                                                             <p style="color: red;" align="center">* Wajib Diisi</p>
-                                                            <button type="submit" class="btn btn-success" name="">Masukkan Jadwal</button>
+                                                            <button type="submit" class="btn btn-success" disabled="true" name="">Masukkan Jadwal</button>
                                                             </form>
                                                         </div>
                                                     </div>
@@ -891,6 +903,7 @@
                 </div>
             </div>
             <script type="text/javascript">
+                
                 $('#btn_checklist').click(function () {
                     if($('#container_checklist').css('display') == 'none'){
                         $('#container_checklist').show();
