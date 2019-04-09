@@ -145,6 +145,16 @@
                 </li>
                 <li <?php if(isset($jadwal_lab)){ echo 'class='. '"active"';}?>>
                     <a href="<?php echo base_url();?>jadwal_lab"><i class="fas fa-clock"></i> <span class="nav-label">Jadwal Laboratorium </span></a>
-                </li>        
+                </li> 
+                <?php
+                if($this->session->userdata('id_role') == 4){
+                    ?>
+                <li <?php if(isset($jadwal_admin_flag)){ echo 'class='. '"active"';}?>>
+                    <a href="<?php echo base_url();?>admin_lab/jadwal_bertugas"><i class="fas fa-calendar-alt"></i> <span class="nav-label">Jadwal Bertugas Admin </span></a>
+                </li> 
+                    <?php
+                }
+                ?>   
+                   
             </div>
     </nav>

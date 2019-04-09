@@ -1,11 +1,5 @@
-<div class="modal-dialog">
-    <div class="modal-content animated fadeIn">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Update Jadwal Bertugas</h4>
-        </div>
+
         	<?php echo form_open('admin_lab/update_jadwal');?>
-            <div class="modal-body">
             	<?php if( isset($data_jadwal) && $data_jadwal){
             		foreach ($data_jadwal as $jadwal) {
             		$tanggal = date("m/d/Y", strtotime($jadwal['TANGGAL']));
@@ -29,7 +23,14 @@
                     </div>
                 </div>
                 <input type="hidden" name="id_bertugas" value="<?php echo $jadwal['ID'];?>" required>
+                <?php
+                if($this->session->userdata('id') != 4){
+                    ?>
                 <input type="hidden" name="id_admin" value="<?php echo $id_admin;?>" required>
+                    <?php
+                }
+                ?>
+               
             		<?php
             		}
             	}
@@ -44,5 +45,3 @@
                                                     <button type="submit" class="btn btn-primary">Save Changes</button>
                                                 </div>
                                             </form>
-    </div>
-</div>

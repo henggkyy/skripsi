@@ -272,7 +272,25 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                
+                                                                <?php
+                                                                if(isset($jadwal_kelas) && $jadwal_kelas){
+                                                                    $iterator = 1;
+                                                                    foreach ($jadwal_kelas as $kelas) {
+                                                                        ?>
+                                                                <tr>
+                                                                    <td><?php echo $iterator;?></td>
+                                                                    <td><?php echo $kelas['KODE_KELAS'];?></td>
+                                                                    <td><?php echo $kelas['HARI']. " / ".$kelas['JAM_MULAI'] ." - ".$kelas['JAM_SELESAI'];?></td>
+                                                                    <td><?php echo $kelas['NAMA_LAB']." (".$kelas['LOKASI'].")";?></td>
+                                                                </tr>
+                                                                        <?php
+                                                                        $iterator++;
+                                                                    }
+                                                                }
+                                                                else{
+                                                                     echo "<tr><td colspan='4'>Jadwal kuliah belum diinput!</td></tr>";
+                                                                }
+                                                                ?>
                                                             </tbody>
                                                         </table>
                                                     </div>

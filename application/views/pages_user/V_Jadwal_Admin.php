@@ -51,98 +51,9 @@
                         <div class="col-lg-6">
                             <div class="ibox float-e-margins">
                                  <div class="ibox-title">
-                                    <h3>Edit Masa Kontrak & Jadwal Bertugas Admin</h3>
+                                    <h3>Insert Jadwal Bertugas Admin</h3>
                                 </div>
-                                <div class="ibox-content">
-                                    <button data-toggle="modal" data-target="#modalKontrak" class="btn btn-md btn-primary"><i class="fas fa-user-edit"></i> Perbaharui Masa Kontrak</button>
-                                    <?php
-                                    if(!$flag_gaji && $flag_admin){?>
-                                         <button data-toggle="modal" data-target="#modalGolongan" class="btn btn-md btn-info"><i class="fas fa-user-edit"></i> Perbaharui Golongan Gaji</button>
-                                    <!--Modal Golongan Gaji-->
-                                    <div class="modal inmodal" id="modalGolongan" tabindex="-1" role="dialog"  aria-hidden="true">
-                                         <div class="modal-dialog">
-                                            <div class="modal-content animated fadeIn">
-                                                 <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                    <h4 class="modal-title">Perbaharui Golongan Gaji</h4>
-                                                 </div>
-                                                 <?php echo form_open('admin_lab/update_golongan');?>
-                                                 <div class="modal-body">
-                                                    <div class="form-group row" >
-                                                        <label class="col-sm-6 col-form-label">Golongan Gaji <span style="color: red">*</span> :</label>
-                                                        <div class="col-sm-6">
-                                                            <select class="form-control" name="id_gol" required>
-                                                                <?php
-                                                                if(isset($konfigurasi_gaji) && $konfigurasi_gaji){
-                                                                    foreach ($konfigurasi_gaji as $konf) {
-                                                                        ?>
-                                                                    <option <?php if($id_gol == $konf['ID']){ echo 'selected';}?> value="<?php echo $konf['ID'];?>" ><?php echo $konf['NAMA_GOLONGAN']." (".$konf['TARIF']."/jam)";?></option>
-                                                                        <?php
-                                                                    }
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </div>
-                                                        <input type="hidden" name="id_admin" required value="<?php echo $id_admin;?>">
-                                                    </div>
-                                                 </div>
-                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                                                    <button type="submit" id="button_save" class="btn btn-primary">Save changes</button>
-                                                </div>
-                                                </form>
-                                            </div>
-                                         </div>
-                                    </div>
-                                    <?php
-                                    }
-                                    else{
-                                        if(!$flag_admin){
-                                            echo '<h4 style="color: red;">Tidak dapat melakukan edit golongan gaji admin karena admin dalam status nonaktif!</h4>';
-                                        }
-                                        if($flag_gaji){
-                                            echo '<h4 style="color: red;">Tidak dapat melakukan edit golongan gaji admin karena terdapat periode gaji yang sedang berjalan!</h4>';
-                                        }
-                                        
-                                    }
-                                    ?>
-                                   
-                                                                <!--Modal Update Kontrak-->
-                                                                <div class="modal inmodal" id="modalKontrak" tabindex="-1" role="dialog"  aria-hidden="true">
-                                                                    <div class="modal-dialog">
-                                                                        <div class="modal-content animated fadeIn">
-                                                                            <div class="modal-header">
-                                                                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                                                <h4 class="modal-title">Perbaharui Masa Kontrak</h4>
-                                                                            </div>
-                                                                            <?php echo form_open('admin_lab/update_kontrak');?>
-                                                                            <div class="modal-body">
-                                                                                
-                                                                                <div class="form-group  row" >
-                                                                                    <label class="col-sm-6 col-form-label">Tanggal Mulai Kontrak <span style="color: red">*</span> :</label>
-                                                                                    <div class="col-sm-6 input-group date">
-                                                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="tgl_mulai" required type="text" placeholder="mm/dd/yyy"  class="form-control" name="mulai_kontrak">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="form-group  row" >
-                                                                                    <label class="col-sm-6 col-form-label">Tanggal Berakhir Kontrak <span style="color: red">*</span> :</label>
-                                                                                    <div class="col-sm-6 input-group date">
-                                                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input required id="tgl_akhir" type="text" placeholder="mm/dd/yyy" data-mask="99/99/9999" class="form-control" name="akhir_kontrak">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <input type="hidden" name="id_admin" value="<?php echo $id_admin;?>" required>
-                                                                                <p align="center" style="color: red">* Wajib Diisi</p>
-                                                                            </div>
-                                                                            
-                                                                            <div class="modal-footer">
-                                                                                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                                                                                <button type="submit" id="button_save" class="btn btn-primary">Save changes</button>
-                                                                            </div>
-                                                                            </form>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <!-- END Modal Update Kontrak-->
+                                <div class="ibox-content">               
                                     <?php
                                     if($periode_aktif && $flag_admin){
 
@@ -156,7 +67,7 @@
                                                                                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                                                                                 <h4 class="modal-title">Insert Jadwal Bertugas Admin (Auto)</h4>
                                                                             </div>
-                                                                            <?php echo form_open('admin_lab/insert_jadwal_auto');?>
+                                                                            <?php echo form_open('admin_lab/insert_auto_admin');?>
                                                                             <div class="modal-body">
                                                                                 <div id="form_bertugas_auto">
                                                                                     <div class="form-group row">
@@ -179,7 +90,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <a href="javascript:void(0)" id="add_day" class="btn btn-sm btn-primary">Add Hari</a>
-                                                                                <input type="hidden" name="id_admin" value="<?php echo $id_admin;?>" required>
+                                                                               
                                                                                 <p align="center" style="font-size: 12px; font-weight: bold;">Form ini akan melakukan generate seluruh tanggal bertugas pada periode akademik yg sdg aktif berdasarkan hari yang dipilih<br>
                                                                                 Tanggal bertugas pada periode UTS/UAS tidak akan masuk dari form ini. Jadwal bertugas UTS/UAS harap input secara manual</p>
                                                                                 <p align="center" style="color: red">* Wajib Diisi</p>
@@ -203,7 +114,7 @@
                                                                                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                                                                                 <h4 class="modal-title">Insert Jadwal Bertugas Admin (Manual)</h4>
                                                                             </div>
-                                                                            <?php echo form_open('admin_lab/insert_jadwal_manual');?>
+                                                                            <?php echo form_open('admin_lab/insert_manual_admin');?>
                                                                             <div class="modal-body">
                                                                                 
                                                                                 <div class="form-group row" id="data_1">
@@ -224,7 +135,7 @@
                                                                                         <input id="waktu_akhir_2" required type="text" placeholder="hh:mm" data-mask="99:99" class="form-control" name="jam_selesai">
                                                                                     </div>
                                                                                 </div>
-                                                                                <input type="hidden" name="id_admin" value="<?php echo $id_admin;?>" required>
+                                                                               
                                                                                 <p align="center" style="font-size: 12px; font-weight: bold;">Tanggal bertugas harus berada pada tanggal periode akademik yg sdg aktif<br>
                                                                                 Tanggal bertugas pada periode UTS/UAS akan langsung masuk ke dalam shift bertugas UTS/UAS</p>
                                                                                 <p align="center" style="color: red">* Wajib Diisi</p>
@@ -261,8 +172,7 @@
                                 <div class="ibox-content">
                                     <label class="col-sm-4 col-form-label">Periode Akademik:</label>
                                     <div class="col-sm-8 ">
-                                        <form method="GET" action="<?php echo base_url()."admin_lab/detail?id_admin=".$id_admin;?>">
-                                            <input type="hidden" name="id_admin" required value="<?php echo $id_admin;?>">
+                                        <form method="GET" action="<?php echo base_url()."admin_lab/jadwal_bertugas";?>">
                                             <select name="id_periode" onchange="this.form.submit()" class="form-control">
                                                 <?php
                                                 if(isset($daftar_periode) && $daftar_periode){
@@ -315,7 +225,6 @@
                                                             <button class="btn btn-primary btn-sm" data-toggle="modal" onclick="getJadwal(<?php echo $jadwal['ID'];?>,<?php echo $id_admin;?>);" data-target="#modalUpdateJadwal"><i class="fas fa-pen"></i> Update</button>
                                                             <?php echo form_open('admin_lab/delete_jadwal', 'style="margin: 0; padding: 0;"');?>
                                                             <input type="hidden" name="id_bertugas" required value="<?php echo $jadwal['ID'];?>">
-                                                            <input type="hidden" name="id_admin" required value="<?php echo $id_admin;?>">
                                                             <button class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')" type="submit"><i class="far fa-trash-alt"></i> Delete</button>
                                                             </form>
                                                                 <?php
@@ -336,7 +245,7 @@
                                                 ?>
                                             </tbody>
                                         </table>
-                                        <!--START MODAL UPDATE JADWAL-->
+                                         <!--START MODAL UPDATE JADWAL-->
                                         <div class="modal inmodal" id="modalUpdateJadwal" tabindex="-1" role="dialog"  aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content animated fadeIn">

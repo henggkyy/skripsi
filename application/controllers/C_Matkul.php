@@ -71,7 +71,7 @@ class C_Matkul extends CI_Controller{
 
 				foreach ($array_merge_alldate as $date) {
 					$arr_ind_lab = array();
-					$arr_ind_lab['TITLE'] = "Kelas ".$nama_matkul. " (".$kd_matkul.")";
+					$arr_ind_lab['TITLE'] = "Kelas ".$nama_matkul." [" .$kd_kelas."] (".$kd_matkul.")";
 					$day = $this->getDay($date);
 					$index = array_search($day,$array_day_english);
 					$arr_ind_lab['START_EVENT'] = $date." ".$jam_mulai[$index];
@@ -602,6 +602,7 @@ class C_Matkul extends CI_Controller{
 			$this->load->model('File_bantuan_ujian');
 			$this->load->model('Checklist_ujian');
 			$this->load->model('Daftar_lab');
+			$this->load->model('Jadwal_matkul');
 			$id_matkul = $_GET['id'];
 
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
@@ -629,6 +630,7 @@ class C_Matkul extends CI_Controller{
 			$data['checklist_uts'] = $this->Checklist_ujian->getChecklist($id_matkul, 0);
 			$data['checklist_uas'] = $this->Checklist_ujian->getChecklist($id_matkul, 1);
 			$data['daftar_lab'] = $this->Daftar_lab->getListLab();
+			$data['jadwal_kelas'] = $this->Jadwal_matkul->getJadwalMatkul($id_matkul);
 			$data['page_detail_matkul'] = true;
 			//$data['matkul'] = true;
 			$this->load->view('template/Header', $data);

@@ -1,6 +1,20 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Jadwal_bertugas_admin extends CI_Model{
+	//Method untuk mendapatkan seluruh jadwal bertugas admin
+	function getAllJadwal(){
+		$this->db->select('users.NAMA as NAMA, HARI, TANGGAL, JAM_MULAI, JAM_SELESAI, TIPE_BERTUGAS, INSERT_DATE');
+		$this->db->order_by('TANGGAL', 'asc');
+		$this->db->from('jadwal_bertugas_admin');
+		$this->db->join('users', 'users.ID = jadwal_bertugas_admin.ID_ADMIN', 'left');
+		$result = $this->db->get();
+		if($result->num_rows() > 0 ){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk melakukan update jadwal bertugas admin
 	function updateJadwalBertugas($id_bertugas, $id_user, $data){
 		$this->db->where('ID', $id_bertugas);

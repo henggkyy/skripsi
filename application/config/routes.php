@@ -119,6 +119,9 @@ $route['admin_lab/delete_jadwal'] = 'C_Admin/deleteJadwalAdmin';
 $route['admin_lab/get_jadwal_bertugas'] = 'C_Admin/getIndividualJadwalAdmin';
 $route['admin_lab/update_jadwal'] = 'C_Admin/updateJadwalBertugasAdmin';
 $route['admin_lab/update_golongan'] = 'C_Admin/editKonfigurasiGolonganGaji';
+$route['admin_lab/jadwal_bertugas'] = 'C_Admin/loadJadwalBertugasAdmin';
+$route['admin_lab/insert_manual_admin'] = 'C_Admin/insertJadwalManualInAdmin';
+$route['admin_lab/insert_auto_admin'] = 'C_Admin/insertJadwalAutoInAdmin';
 
 $route['laporan_gaji/periode'] = 'C_Gaji_Admin/loadSetPeriode';
 $route['laporan_gaji/periode/add'] = 'C_Gaji_Admin/setPeriodeGaji';
@@ -148,6 +151,8 @@ $route['peminjaman/ajuan'] = 'C_Peminjaman/insertPeminjamanInAdmin';
 $route['peminjaman_lab'] = 'C_Main/loadDaftarPeminjamanLaboratorium';
 
 $route['peminjaman_alat'] = 'C_Main/loadDaftarPeminjamanAlat';
+
+$route['jadwal'] = 'C_Jadwal/loadJadwalPublic';
 
 $route['jadwal_lab'] = 'C_Main/loadJadwalPemakaianLaboratorium';
 $route['jadwal_lab/add'] = 'C_Jadwal_Lab/insertJadwalPemakaian';

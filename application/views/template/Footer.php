@@ -47,24 +47,27 @@
 		//Ada pengecekan apabila input jam selesai lebih kecil daripada jam mulai
 		//If Button Add Hari on click, maka akan menambah form.
 		<?php
-		if(isset($detail_admin) && $detail_admin){
+		if((isset($detail_admin) && $detail_admin) || isset($jadwal_admin_flag) && $jadwal_admin_flag){
 			?>
 		$('document').ready(function(){
 			var form = '<div class="form-group row"><label class="col-sm-6 col-form-label">Hari Bertugas <span style="color: red">*</span> :</label><div class="col-sm-6"><select name="hari_bertugas[]" class="form-control" required><option value="" selected disabled>-- Please Select One --</option><option value="Monday">Senin</option><option value="Tuesday" >Selasa</option><option value="Wednesday" >Rabu</option><option value="Thursday" >Kamis</option><option value="Friday" >Jumat</option><option value="Saturday" >Sabtu</option></select></div></div><div class="form-group row"><label class="col-sm-6 col-form-label">Jam Mulai Bertugas <span style="color: red">*</span> :</label> <div class="col-sm-6"><input id="waktu_awal" required type="text" placeholder="hh:mm" data-mask="99:99" class="form-control" name="jam_mulai[]"></div></div><div class="form-group row"><label class="col-sm-6 col-form-label">Jam Selesai Bertugas <span style="color: red">*</span> :</label><div class="col-sm-6"><input id="waktu_akhir" required type="text" placeholder="hh:mm" data-mask="99:99" class="form-control" name="jam_selesai[]"></div></div>';
 			
 
-			function bindClockPicker() {
-		        $('#waktu_awal').clockpicker({
+			$('#waktu_awal').clockpicker({
+				autoclose: true
+			});
+			$('#waktu_akhir').clockpicker({
+				autoclose: true
+			});
+			$('#add_day').on('click', function(){
+				$('#form_bertugas_auto').append(form);
+				
+				$('#waktu_awal').clockpicker({
 					autoclose: true
 				});
 				$('#waktu_akhir').clockpicker({
 					autoclose: true
 				});
-		    }
-			bindClockPicker();
-			$('#add_day').on('click', function(){
-				$('#form_bertugas_auto').append(form);
-				bindClockPicker();
 			});
 			
 		});
@@ -102,13 +105,16 @@
 	    
 		//Method untuk mendapatkan individual jadwal admin
 		function getJadwal(id_bertugas, id_admin){
+			var loader = '<img style="display: block; margin:auto;" src="<?php echo base_url();?>assets/img/loader.gif">';
+			$("#modal-content").html(loader);
 		    $.ajax({
 		        
 		        url: "<?php echo base_url();?>" + "admin_lab/get_jadwal_bertugas",
 		        method: "GET",
 		        data: {id_bertugas : id_bertugas, id_admin : id_admin},
 		        success: function(data) { 
-		            $("#modalUpdateJadwal").html(data);
+
+		            $("#modal-content").html(data);
 		            $('#waktu_awal_modal').clockpicker({
 						autoclose: true
 					});
@@ -208,16 +214,15 @@
 		                center: 'title',
 		                right: 'month,agendaWeek,agendaDay'
 		            },
-		            events: <?php echo $jadwal_json;?>
-		     //        eventClick: function(event, jsEvent, view) {
+		            events: <?php echo $jadwal_json;?>,
+		            eventClick: function(event, jsEvent, view) {
 
-					  //   $('#modal_event').modal('show');
-					  //   $('#judul_event').text(event.title);
-					  //   $('#event').text(event.title);
-					  //   $('#start').text(event.start);
-					  //   $('#end').text(event.end);
-					  //   $('#lokasi_event').text(event.nama_lab);
-					  // }
+					    $('#modal_event').modal('show');
+					    $('#judul_event').text(event.title);
+					    $('#event').text(event.title);
+					    $('#start').text(event.start);
+					    $('#end').text(event.end);
+					  }
 		        });
 
 				<?php
