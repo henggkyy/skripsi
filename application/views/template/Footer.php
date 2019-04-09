@@ -154,7 +154,7 @@
                 if(x < maxField){ 
                     x++; //Increment field counter
                     $(wrapper).append('<h5>Pertemuan Ke - ' + x+'</h5>');
-                    $(wrapper).append('<select name="hari[]" id="select_'+x+'" class="form-control col-md-8" required><option value="" selected disabled>-- Please Select One --</option><option value="Monday">Senin</option><option value="Tuesday" >Selasa</option><option value="Wednesday" >Rabu</option><option value="Thursday" >Kamis</option><option value="Friday" >Jumat</option><option value="Saturday" >Sabtu</option></select>');
+                    $(wrapper).append('<select name="hari[]" id="select_'+x+'" class="form-control col-md-8" required><option value="" selected disabled>-- Please Select One --</option><option value="1">Senin</option><option value="2" >Selasa</option><option value="3" >Rabu</option><option value="4" >Kamis</option><option value="5" >Jumat</option><option value="6" >Sabtu</option></select>');
                     $(wrapper).append('<div class="col-sm-8 input-group clockpicker" data-autoclose="true"><label>Jam Mulai :</label> <input id="jam_mulai_'+x+'" type="text" name="jam_mulai[]" class="form-control" value="" data-mask="99:99" required></div>');
                     $(wrapper).append('<div class="col-sm-8 input-group clockpicker" data-autoclose="true"><label>Jam Selesai :</label> <input id="jam_selesai_'+x+'" type="text" name="jam_selesai[]" class="form-control" value="" data-mask="99:99" required></div>'); //Add field html
                     $(wrapper).append('<label>Ruangan Laboratorium :</label><select name="lab[]" class="form-control" required><option value="" disabled selected>-- Please Select One --</option>'+'<?php echo $option;?>'+'</select><br>');

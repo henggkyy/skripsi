@@ -132,7 +132,7 @@
                                                     }
                                                 }
                                                 else{
-                                                    echo "<tr><td colspan='5'>Belum ada permintaan Peminjaman Alat</td></tr>";
+                                                    echo "<tr><td colspan='10'>Belum ada permintaan Peminjaman Alat</td></tr>";
                                                 }
                                                 ?>
                                             </tbody>

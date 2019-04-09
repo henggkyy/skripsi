@@ -27,7 +27,7 @@
                                     <h2>Status Anda : <?php echo $this->session->userdata('nama_role'); ?></h2>
                                 </div>
                             </div>
-                        </div>       
+                        </div>
                         <div class="col-lg-12">
                             <div class="ibox-title">
                                 <h3>Log User</h3>

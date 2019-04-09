@@ -2,6 +2,107 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani Inisiasi dan Administrasi Mata Kuliah.
 class C_Matkul extends CI_Controller{
+	//Method untuk memasukkan jadwal kelas setiap mata kuliah
+	function insertJadwalKelas(){
+		if($this->session->userdata('logged_in')){
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
+			$this->form_validation->set_rules('hari[]', 'Hari Kelas', 'required');
+			$this->form_validation->set_rules('jam_mulai[]', 'Jam Mulai', 'required');
+			$this->form_validation->set_rules('jam_selesai[]', 'Jam Selesai', 'required');
+			$this->form_validation->set_rules('lab[]', 'Kode Laboratorium', 'required');
+			$this->form_validation->set_rules('kd_kelas', 'Kode Kelas', 'required');
+			$id_matkul = $this->input->post('id_matkul');
+			if ($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing Required Fields');
+				redirect("/administrasi_matkul_detail?id=$id_matkul");
+			}
+			else{
+				$this->load->model('Mata_kuliah');
+				$this->load->model('Periode_akademik');
+				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
+				$nama_matkul = $this->Mata_kuliah->getIndividualItem($id_matkul, 'NAMA_MATKUL');
+				$kd_matkul = $this->Mata_kuliah->getIndividualItem($id_matkul, 'KD_MATKUL');
+				$jam_mulai = $this->input->post('jam_mulai[]');
+				$jam_selesai = $this->input->post('jam_selesai[]');
+				$lab = $this->input->post('lab[]');
+				$hari = $this->input->post('hari[]');
+				$kd_kelas = $this->input->post('kd_kelas');
+				$checkPeriodeAktif = $this->Periode_akademik->checkIdAktif($id_periode);
+				if(!$checkPeriodeAktif){
+					$this->session->set_flashdata('error', 'Tidak dapat memasukkan jadwal kelas karena periode akademik mata kuliah sudah berakhir!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				
+				$iterator = 0;
+				$array_jadwal_kelas = array();
+				$array_day_english = array();
+				$array_event_lab = array();
+				foreach ($hari as $day) {
+					$arr_ind = array();
+					$arr_ind['ID_MATKUL'] = $id_matkul;
+					$arr_ind['HARI'] = $this->convertNumDay($day, 'id');
+					$day_english = $this->convertNumDay($day, 'eng');
+					$arr_ind['JAM_MULAI'] = $jam_mulai[$iterator];
+					$arr_ind['JAM_SELESAI'] = $jam_selesai[$iterator];
+					$arr_ind['ID_LAB'] = $lab[$iterator];
+					$arr_ind['KODE_KELAS'] = $kd_kelas;
+					array_push($array_day_english, $day_english);
+					array_push($array_jadwal_kelas, $arr_ind);
+					$iterator++;
+				}
+
+				$this->load->model('Jadwal_matkul');
+				$res_jadwal = $this->Jadwal_matkul->bulkInsertJadwal($array_jadwal_kelas);
+				//Get Tanggal Periode Akadeim Aktif
+				$start_periode = $this->Periode_akademik->getIndividualItem($id_periode, 'START_PERIODE');
+				$end_periode = $this->Periode_akademik->getIndividualItem($id_periode, 'END_PERIODE');
+				$start_uts = $this->Periode_akademik->getIndividualItem($id_periode, 'START_UTS');
+				$end_uts = $this->Periode_akademik->getIndividualItem($id_periode, 'END_UTS');
+				$start_uas = $this->Periode_akademik->getIndividualItem($id_periode, 'START_UAS');
+				$start_uts = date('Y-m-d', strtotime('-1 day', strtotime($start_uts)));
+				$start_uas = date('Y-m-d', strtotime('-1 day', strtotime($start_uas)));
+				$hari = array($hari);
+				//Get seluruh tanggal sebelum uts dan setelah uts
+				$arr_tgl_sebelum_uts = $this->getAllDate($start_periode, $start_uts, $array_day_english);
+				$arr_tgl_setelah_uts = $this->getAllDate($end_uts, $start_uas, $array_day_english);
+				$array_merge_alldate = array_merge($arr_tgl_sebelum_uts, $arr_tgl_setelah_uts);
+				
+
+				foreach ($array_merge_alldate as $date) {
+					$arr_ind_lab = array();
+					$arr_ind_lab['TITLE'] = "Kelas ".$nama_matkul. " (".$kd_matkul.")";
+					$day = $this->getDay($date);
+					$index = array_search($day,$array_day_english);
+					$arr_ind_lab['START_EVENT'] = $date." ".$jam_mulai[$index];
+					$arr_ind_lab['END_EVENT'] = $date." ".$jam_selesai[$index];
+					$arr_ind_lab['ID_LAB'] = $lab[$index];
+					$arr_ind_lab['STATUS'] = 1;
+					array_push($array_event_lab, $arr_ind_lab);
+				}
+				$this->load->model('Jadwal_lab');
+				$res_lab = $this->Jadwal_lab->bulkInsertJadwal($array_event_lab);
+				
+				if($res_jadwal && $res_lab){
+					$this->session->set_flashdata('success', 'Berhasil memasukkan jadwal kelas!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				else{
+					if(!$res_jadwal){
+						$this->session->set_flashdata('error', 'Gagal memasukkan data ke dalam tabel jadwal mata kuliah!');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
+					else{
+						$this->session->set_flashdata('error', 'Gagal memasukkan data ke dalam tabel jadwal pemakaian lab!');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
 	//Method untuk melakukan checklist persiapan ujian
 	function checkListUjian(){
 		if($this->session->userdata('logged_in')){
@@ -680,6 +781,44 @@ class C_Matkul extends CI_Controller{
 		else{
 			redirect('/');
 		}
+	}
+	//Method untuk mendapatkan nama hari dari tanggal yang dipilih user
+	private function getDay($date){
+		date_default_timezone_set('Asia/Jakarta');
+		$day = array ( 1 =>    'Monday',
+			'Tuesday',
+			'Wednesday',
+			'Thursday',
+			'Friday',
+			'Saturday',
+			'Sunday'
+		);
+		$day_num = date('N', strtotime($date)); 
+		return $day[$day_num];
+	}
+	//Method untuk konversi nama hari dari numerik ke nama hari
+	function convertNumDay($num_day, $tipe){
+		if($tipe == 'eng'){
+			$day = array ( 1 =>    'Monday',
+				'Tuesday',
+				'Wednesday',
+				'Thursday',
+				'Friday',
+				'Saturday',
+				'Sunday'
+			);
+		}
+		else{
+			$day = array ( 1 =>    'Senin',
+				'Selasa',
+				'Rabu',
+				'Kamis',
+				'Jumat',
+				'Sabtu',
+				'Minggu'
+			);
+		}
+		return $day[$num_day];
 	}
 	//Method untuk melakukan pengecekan range tanggal yang dipilih user berada dalam periode uts/uas/kuliah
 	private function check_in_range($start_date, $end_date, $date_from_user, $tipe){

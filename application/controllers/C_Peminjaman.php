@@ -184,14 +184,16 @@ class C_Peminjaman extends CI_Controller{
 				$keperluan = $this->input->post('keperluan');
 				$this->load->model('Peminjaman_lab');
 				$this->load->model('Jadwal_lab');
-				$data = array(
-					'TITLE' => $keperluan,
-					'ID_LAB' => $tipe_lab,
-					'START_EVENT' => $start_event,
-					'END_EVENT' => $end_event,
-					'STATUS' => 0
-				);
-				$id_jadwal = $this->Jadwal_lab->insertJadwalBooking($data);
+				if($mode == 'lab'){
+					$data = array(
+						'TITLE' => $keperluan,
+						'ID_LAB' => $tipe_lab,
+						'START_EVENT' => $start_event,
+						'END_EVENT' => $end_event,
+						'STATUS' => 0
+					);
+					$id_jadwal = $this->Jadwal_lab->insertJadwalBooking($data);
+				}
 				$res = $this->Peminjaman_lab->addPeminjaman($email_peminjam, $nama_peminjam, $tipe_lab, $alat, $tgl_pinjam, $jam_mulai, $jam_selesai, $keterangan, $keperluan, $id_jadwal);
 				if($res){
 					$this->session->set_flashdata('success', 'Berhasil melakukan permintaan peminjaman alat/ruangan laboratorium. Silahkan tunggu notifikasi selanjutnya pada Email UNPAR Anda');
@@ -272,14 +274,16 @@ class C_Peminjaman extends CI_Controller{
 				$keperluan = $this->input->post('keperluan');
 				$this->load->model('Peminjaman_lab');
 				$this->load->model('Jadwal_lab');
-				$data = array(
-					'TITLE' => $keperluan,
-					'ID_LAB' => $tipe_lab,
-					'START_EVENT' => $start_event,
-					'END_EVENT' => $end_event,
-					'STATUS' => 0
-				);
-				$id_jadwal = $this->Jadwal_lab->insertJadwalBooking($data);
+				if($mode == 'lab'){
+					$data = array(
+						'TITLE' => $keperluan,
+						'ID_LAB' => $tipe_lab,
+						'START_EVENT' => $start_event,
+						'END_EVENT' => $end_event,
+						'STATUS' => 0
+					);
+					$id_jadwal = $this->Jadwal_lab->insertJadwalBooking($data);
+				}
 				$res = $this->Peminjaman_lab->addPeminjaman($email_peminjam, $nama_peminjam, $tipe_lab, $alat, $tgl_pinjam, $jam_mulai, $jam_selesai, $keterangan, $keperluan, $id_jadwal);
 				if($res){
 					$this->session->set_flashdata('success', 'Berhasil melakukan permintaan peminjaman alat/ruangan laboratorium. Silahkan tunggu notifikasi selanjutnya pada Email UNPAR Anda');

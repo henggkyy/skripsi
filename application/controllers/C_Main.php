@@ -243,11 +243,14 @@ class C_Main extends CI_Controller{
 			$data['dashboard'] = true;
 			$this->load->model('Periode_akademik');
 			$this->load->model('Users');
+			$this->load->model('Peminjaman_lab');
 			$data['data_login'] = $this->Users->getDataLogin();
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+			$data['count_lab'] = $this->Peminjaman_lab->countPeminjamanLabPending();
+			$data['count_alat'] = $this->Peminjaman_lab->countPeminjamanAlatPending();
 			$this->load->view('template/Header', $data);
 			$this->load->view('template/Sidebar', $data);
-			$this->load->view('template/Topbar');
+			$this->load->view('template/Topbar', $data);
 			$this->load->view('template/Notification');
 			$this->load->view('pages_user/V_Dashboard', $data);
 			$this->load->view('template/Footer');

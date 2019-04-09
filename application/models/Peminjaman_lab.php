@@ -1,6 +1,20 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Peminjaman_lab extends CI_Model{
+	//Method untuk menghitung jumlah peminjaman laboratorium yang masih pending
+	function countPeminjamanLabPending(){
+		$this->db->where('DISETUJUI', 0);
+		$this->db->where('ID_ALAT', NULL);
+		$this->db->from('peminjaman_lab');
+		return $this->db->count_all_results();
+	}
+	//Method untuk menghitung jumlah peminjaman alat yang masih dalam status pending
+	function countPeminjamanAlatPending(){
+		$this->db->where('DISETUJUI', 0);
+		$this->db->where('LAB', NULL);
+		$this->db->from('peminjaman_lab');
+		return $this->db->count_all_results();
+	}
 	//Method untuk melakukan set id jadwal ke null ketika permintaan peminjaman ditolak
 	function setJadwalToNull($id_pinjaman){
 		$data = array(

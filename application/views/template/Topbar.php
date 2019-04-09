@@ -9,6 +9,47 @@
                 <li>
                     <span class="m-r-lg welcome-message"><span style="font-weight: bold;">You're logged in as :</span> <?php echo $this->session->userdata('nama');?> (<?php echo $this->session->userdata('email');?>)</span>
                 </li>
+                <?php
+                $count = 0;
+                if(isset($count_lab) && $count_lab){
+                    $count++;
+                }
+                if(isset($count_alat) && $count_alat){
+                    $count++;
+                }
+                ?>
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell"></i>  <span class="label label-primary"><?php echo $count;?></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <?php
+                        if($count){
+                            ?>
+                            <?php if(isset($count_lab) && $count_lab){?>
+                        <li>
+                            <a href="<?php echo base_url();?>peminjaman_lab" class="dropdown-item">
+                                <div>
+                                    <i class="fas fa-exclamation-circle fa-fw"></i> <?php echo $count_lab;?> Permintaan peminjaman lab
+                                </div>
+                            </a>
+                        </li>   
+                            <?php } ?>
+                            <?php if(isset($count_alat) && $count_alat){?>
+                        <li>
+                            <a href="<?php echo base_url();?>peminjaman_alat" class="dropdown-item">
+                                <div>
+                                    <i class="fas fa-exclamation-circle fa-fw"></i> <?php echo $count_alat;?> Permintaan peminjaman alat
+                                </div>
+                            </a>
+                        </li>   
+                            <?php } ?>
+                            <?php
+                        }
+                        ?>
+                        
+                    </ul>
+                </li>
                 <li>
                     <a href="<?php echo base_url();?>logout">
                         <i class="fas fa-sign-out-alt"></i> Log out

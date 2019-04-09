@@ -1,6 +1,16 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Jadwal_lab extends CI_Model{
+	//Method untuk bulk insert jadwal pemakaian lab
+	function bulkInsertJadwal($data){
+		$res = $this->db->insert_batch('jadwal_lab', $data);
+		if($res){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 	//Method untuk menghapus jadwal pemakaian laboratorium dari database
 	function deleteJadwalPemakaian($id){
 		$this->db->where('ID', $id);
