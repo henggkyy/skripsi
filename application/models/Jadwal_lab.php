@@ -104,7 +104,8 @@ class Jadwal_lab extends CI_Model{
 		    'ID_LAB' => $id_lab,
 		    'TITLE' => $title,
 		    'START_EVENT' => $start,
-		    'END_EVENT' => $end
+		    'END_EVENT' => $end,
+		    'STATUS' => 1
 		);
 		$res = $this->db->insert('jadwal_lab', $data);
 		if($res){

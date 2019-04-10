@@ -78,6 +78,8 @@ $route['administrasi_matkul/perangkat_lunak/checker'] = 'C_Matkul/periksaPL';
 $route['administrasi_matkul/insert_file_bantuan'] = 'C_Matkul/insertFileBantuan';
 $route['administrasi_matkul/file_bantuan/remove'] = 'C_Matkul/deleteFileBantuan';
 $route['administrasi_matkul/checklist_ujian'] = 'C_Matkul/checkListUjian';
+$route['administrasi_matkul/add_ruang_uts'] = 'C_Matkul/setRuanganUTS';
+$route['administrasi_matkul/add_ruang_uas'] = 'C_Matkul/setRuanganUAS';
 
 $route['user'] = 'C_Main/loadMenuUser';
 $route['user/tambah_user'] = 'C_User/addUser';

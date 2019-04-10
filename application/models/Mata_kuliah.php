@@ -1,15 +1,45 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Mata_kuliah extends CI_Model{
+	//Method untuk update ruangan ujian
+	function updateRuanganUjian($id_matkul, $data){
+		$this->db->where('ID', $id_matkul);
+		$res = $this->db->update('mata_kuliah', $data);
+		if($res){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	//Method untuk melakukan pengecekan mata kuliah milik dosen
+	function checkMatkulDosen($id_matkul, $id_dosen){
+		$this->db->select('ID');
+		$this->db->where('ID', $id_matkul);
+		$this->db->where('ID_DOSEN', $id_dosen);
+		$this->db->from('mata_kuliah');
+		$result = $this->db->get();
+		if($result->num_rows() == 1 ){
+			return true;
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk pengecekan apakah tanggal UTS/UAS telah di set
 	//Param : Id Matkul, Tipe Ujian (UTS / UAS)
 	function cekJadwalUjian($id_matkul, $tipe_ujian){
-		$this->db->select($tipe_ujian);
+		if($tipe_ujian == 'UTS'){
+			$this->db->select('TANGGAL_UTS, JAM_MULAI_UTS, JAM_SELESAI_UTS');
+		}
+		else{
+			$this->db->select('TANGGAL_UAS, JAM_MULAI_UAS, JAM_SELESAI_UAS');
+		}
 		$this->db->where('mata_kuliah.ID', $id_matkul);
 		$this->db->from('mata_kuliah');
 		$result = $this->db->get();
 		if($result->num_rows() == 1 ){
-			return $result->row(0)->$tipe_ujian;
+			return $result->result_array();
 		} 
 		else {
 			return false;
@@ -46,10 +76,8 @@ class Mata_kuliah extends CI_Model{
 	}
 
 	//Method untuk memasukkan tanggal ujian UTS dan tanggal ujian UAS
-	function insertTanggalUjian($id_matkul, $tipe_ujian, $tanggal){
-		$data = array(
-		    $tipe_ujian => $tanggal
-		);
+	function insertTanggalUjian($id_matkul, $data){
+		
 
 		$this->db->where('ID', $id_matkul);
 		$res = $this->db->update('mata_kuliah', $data);

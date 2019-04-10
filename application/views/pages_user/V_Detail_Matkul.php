@@ -39,17 +39,123 @@
                                         <li><h4>Administrasi Akademik</h4>
                                             <ul>
                                                 <li>
-                                                    <h4 style="font-weight: bold;">Tanggal UTS : </h4>
+                                                    <h4 style="font-weight: bold;">Jadwal & Ruangan UTS : </h4>
                                                     <?php
-                                                    if($set_uts != NULL){
-                                                        echo $set_uts;
+                                                    if($set_uts){
+                                                        ?>
+                                                        <div class="col-md-12">
+                                                           <div class="col-md-4">
+                                                                <h5>Tanggal : <?php echo $tanggal_uts;?></h5>
+                                                                <h5>Jam Mulai : <?php echo $jam_mulai_uts;?></h5>
+                                                                <h5>Jam Selesai : <?php echo $jam_selesai_uts;?></h5>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <h5>Ruangan Laboratorium : </h5>
+                                                                <?php
+                                                                if(isset($lab_uts) && $lab_uts){
+                                                                    ?>
+                                                                    <ul>
+                                                                        <?php
+                                                                        foreach ($lab_uts as $ruang_uts) {
+                                                                            ?>
+                                                                        <li><?php echo $ruang_uts['nama_lab']." (".$ruang_uts['lokasi'].")";?></li>
+                                                                            <?php
+                                                                        }
+                                                                        ?>
+                                                                    </ul>
+                                                                    <?php
+                                                                }
+                                                                else{
+                                                                    echo 'Ruangan UTS belum diset oleh Admin!';
+                                                                }
+                                                                ?>
+                                                            </div>
+                                                            <?php
+                                                            if($flag && $this->session->userdata('id_role') == 4){
+                                                                ?>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modalRuangUTS">Add Ruangan UTS</button>
+                                                                <!--Modal Set Ruangan UTS-->
+                                                                <div class="modal inmodal" id="modalRuangUTS" tabindex="-1" role="dialog"  aria-hidden="true">
+                                                                    <div class="modal-dialog">
+                                                                        <div class="modal-content animated fadeIn">
+                                                                            <div class="modal-header">
+                                                                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                                                <h3 class="modal-title">Set Ruangan UTS - <?php echo $nama_matkul;?></h3>
+                                                                            </div>
+                                                                            <?php echo form_open('administrasi_matkul/add_ruang_uts');?>
+                                                                            <div class="modal-body">
+                                                                                <div class="form-group  row" id="data_1">
+                                                                                    <label class="col-sm-4 col-form-label">Tanggal UTS <span style="color: red">*</span> :</label>
+                                                                                    <div class="input-group date">
+                                                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="<?php echo $tanggal_uts;?>" data-mask="9999-99-99" readonly disabled >
+                                                                                    </div>
+
+                                                                                </div>
+                                                                                <div class="form-group row">
+                                                                                    <label class="col-sm-4 col-form-label">Jam Mulai <span style="color: red">*</span> :</label>
+                                                                                    <div class="col-sm-8">
+                                                                                        <input required value="<?php echo $jam_mulai_uts;?>" disabled readonly type="text" placeholder="hh:mm" data-mask="99:99" class="form-control">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group row">
+                                                                                    <label class="col-sm-4 col-form-label">Jam Selesai <span style="color: red">*</span> :</label>
+                                                                                    <div class="col-sm-8">
+                                                                                        <input required value="<?php echo $jam_selesai_uts;?>" disabled readonly  type="text" placeholder="hh:mm" data-mask="99:99" class="form-control">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group row">
+                                                                                    <label class="col-sm-4 col-form-label">Ruangan Laboratorium <span style="color: red">*</span> :</label>
+                                                                                    <div class="col-sm-8">
+                                                                                        <?php
+                                                                                        if(isset($list_lab_uts) && $list_lab_uts){
+                                                                                            ?>
+                                                                                        <select class="form-control" name="lab" required>
+                                                                                            <option value="" disabled selected>-- Please Select One --</option>
+                                                                                            <?php
+                                                                                            foreach ($list_lab_uts as $lab) {
+                                                                                                ?>
+                                                                                            <option value="<?php echo $lab[0];?>"><?php echo $lab['1']." (".$lab['2'].")";?></option>
+                                                                                                <?php
+                                                                                            }
+                                                                                            ?>
+                                                                                        </select>
+                                                                                            <?php
+                                                                                        }
+                                                                                        else{
+                                                                                            echo '<span style="color:red;">Tidak ada ruangan laboratorium yang tersedia!</span>';
+                                                                                        }
+                                                                                        ?>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <p style="color: red;" align="center">* Wajib Diisi</p>
+                                                                                <input type="hidden" name="id_matkul" value="<?php echo $_GET['id'];?>">
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                
+                                                                                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                                                                                <button type="submit" class="btn btn-primary">Save Changes </button>
+                                                                            </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!--END MODAL Set Ruang UTS-->
+                                                            </div> 
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                            
+                                                        </div>
+                                                        
+                                                        <?php
                                                     }
                                                     else{
-                                                        if($flag){
+                                                        if($flag && ($this->session->userdata('id_role') == 3) ){
 
                                                         
                                                         ?>
-                                                        <button data-toggle="modal" data-target="#modalUTS" class="btn btn-primary btn-sm" type="submit"><i class="fas fa-clock"></i> Set Tanggal UTS</button>
+                                                        <button data-toggle="modal" data-target="#modalUTS" class="btn btn-primary btn-sm" type="submit"><i class="fas fa-clock"></i> Set Jadwal UTS</button>
                                                     <!--Modal Set UTS-->
                                                     <div class="modal inmodal" id="modalUTS" tabindex="-1" role="dialog"  aria-hidden="true">
                                                         <div class="modal-dialog">
@@ -67,6 +173,18 @@
                                                                         </div>
 
                                                                     </div>
+                                                                    <div class="form-group row">
+                                                                        <label class="col-sm-4 col-form-label">Jam Mulai <span style="color: red">*</span> :</label>
+                                                                        <div class="col-sm-8">
+                                                                            <input id="waktu_awal_2" required type="text" placeholder="hh:mm" data-mask="99:99" class="form-control" name="jam_mulai">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label class="col-sm-4 col-form-label">Jam Selesai <span style="color: red">*</span> :</label>
+                                                                        <div class="col-sm-8">
+                                                                            <input id="waktu_akhir_2" required type="text" placeholder="hh:mm" data-mask="99:99" class="form-control" name="jam_selesai">
+                                                                        </div>
+                                                                    </div>
                                                                     <p style="color: red;" align="center">* Wajib Diisi</p>
                                                                     <input type="hidden" name="id_matkul" value="<?php echo $_GET['id'];?>">
                                                                 </div>
@@ -82,20 +200,128 @@
                                                     <!--END MODAL Set UTS-->
                                                         <?php
                                                         }
+                                                        else{
+                                                        echo '<h5 style="color:red">Jadwal UTS belum diset oleh Tata Usaha!</h5>';
+                                                    }
                                                     }
                                                     ?>
                                                     
                                                 </li>
                                                 <li>
-                                                    <h4 style="font-weight: bold;">Tanggal UAS : </h4>
+                                                    <h4 style="font-weight: bold;">Jadwal & Ruangan UAS : </h4>
                                                     <?php
 
-                                                    if($set_uas != NULL){
-                                                        echo $set_uas;
+                                                    if($set_uas){
+                                                       ?>
+                                                        <div class="col-md-12">
+                                                            <div class="col-md-4">
+                                                                <h5>Tanggal : <?php echo $tanggal_uas;?></h5>
+                                                                <h5>Jam Mulai : <?php echo $jam_mulai_uas;?></h5>
+                                                                <h5>Jam Selesai : <?php echo $jam_selesai_uas;?></h5>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <h5>Ruangan Laboratorium : </h5>
+                                                                <?php
+                                                                if(isset($lab_uas) && $lab_uas){
+                                                                    ?>
+                                                                    <ul>
+                                                                        <?php
+                                                                        foreach ($lab_uas as $ruang_uas) {
+                                                                            ?>
+                                                                        <li><?php echo $ruang_uas['nama_lab']." (".$ruang_uas['lokasi'].")";?></li>
+                                                                            <?php
+                                                                        }
+                                                                        ?>
+                                                                    </ul>
+                                                                    <?php
+                                                                }
+                                                                else{
+                                                                    echo 'Ruangan UTS belum diset oleh Admin!';
+                                                                }
+                                                                ?>
+                                                            </div>
+                                                            <?php
+                                                            if($flag && $this->session->userdata('id_role') == 4){
+                                                                ?>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modalRuangUAS">Add Ruangan UAS</button>
+                                                                <!--Modal Set Ruangan UAS-->
+                                                                <div class="modal inmodal" id="modalRuangUAS" tabindex="-1" role="dialog"  aria-hidden="true">
+                                                                    <div class="modal-dialog">
+                                                                        <div class="modal-content animated fadeIn">
+                                                                            <div class="modal-header">
+                                                                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                                                <h3 class="modal-title">Set Ruangan UAS - <?php echo $nama_matkul;?></h3>
+                                                                            </div>
+                                                                            <?php echo form_open('administrasi_matkul/add_ruang_uas');?>
+                                                                            <div class="modal-body">
+                                                                                <div class="form-group  row" id="data_1">
+                                                                                    <label class="col-sm-4 col-form-label">Tanggal UAS <span style="color: red">*</span> :</label>
+                                                                                    <div class="input-group date">
+                                                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="<?php echo $tanggal_uas;?>" data-mask="9999-99-99" readonly disabled >
+                                                                                    </div>
+
+                                                                                </div>
+                                                                                <div class="form-group row">
+                                                                                    <label class="col-sm-4 col-form-label">Jam Mulai <span style="color: red">*</span> :</label>
+                                                                                    <div class="col-sm-8">
+                                                                                        <input id="waktu_awal_uas" required value="<?php echo $jam_mulai_uas;?>" disabled readonly type="text" placeholder="hh:mm" data-mask="99:99" class="form-control">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group row">
+                                                                                    <label class="col-sm-4 col-form-label">Jam Selesai <span style="color: red">*</span> :</label>
+                                                                                    <div class="col-sm-8">
+                                                                                        <input id="waktu_akhir_uas" required value="<?php echo $jam_selesai_uas;?>" disabled readonly  type="text" placeholder="hh:mm" data-mask="99:99" class="form-control">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group row">
+                                                                                    <label class="col-sm-4 col-form-label">Ruangan Laboratorium <span style="color: red">*</span> :</label>
+                                                                                    <div class="col-sm-8">
+                                                                                        <?php
+                                                                                        if(isset($list_lab_uas) && $list_lab_uas){
+                                                                                            ?>
+                                                                                        <select class="form-control" name="lab" required>
+                                                                                            <option value="" disabled selected>-- Please Select One --</option>
+                                                                                            <?php
+                                                                                            foreach ($list_lab_uas as $lab) {
+                                                                                                ?>
+                                                                                            <option value="<?php echo $lab['0'];?>"><?php echo $lab['1']." (".$lab['2'].")";?></option>
+                                                                                                <?php
+                                                                                            }
+                                                                                            ?>
+                                                                                        </select>
+                                                                                            <?php
+                                                                                        }
+                                                                                        else{
+                                                                                            echo '<span style="color:red;">Tidak ada ruangan laboratorium yang tersedia!</span>';
+                                                                                        }
+                                                                                        ?>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <p style="color: red;" align="center">* Wajib Diisi</p>
+                                                                                <input type="hidden" name="id_matkul" value="<?php echo $_GET['id'];?>">
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                
+                                                                                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                                                                                <button type="submit" class="btn btn-primary">Save Changes </button>
+                                                                            </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!--END MODAL Set Ruang UAS-->
+                                                            </div> 
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                            
+                                                        </div>
+                                                       <?php
                                                     }
                                                     else{
-                                                       if($flag){ ?>
-                                                        <button data-toggle="modal" data-target="#modalUAS" class="btn btn-primary btn-sm" type="submit"><i class="fas fa-clock"></i> Set Tanggal UAS</button>
+                                                       if($flag && ($this->session->userdata('id_role') == 3) ){ ?>
+                                                        <button data-toggle="modal" data-target="#modalUAS" class="btn btn-primary btn-sm" type="submit"><i class="fas fa-clock"></i> Set Jadwal UAS</button>
                                                     <!--Modal Set UAS-->
                                                     <div class="modal inmodal" id="modalUAS" tabindex="-1" role="dialog"  aria-hidden="true">
                                                         <div class="modal-dialog">
@@ -113,6 +339,18 @@
                                                                         </div>
 
                                                                     </div>
+                                                                    <div class="form-group row">
+                                                                        <label class="col-sm-4 col-form-label">Jam Mulai <span style="color: red">*</span> :</label>
+                                                                        <div class="col-sm-8">
+                                                                            <input id="waktu_awal_uas" required type="text" placeholder="hh:mm" data-mask="99:99" class="form-control" name="jam_mulai">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label class="col-sm-4 col-form-label">Jam Selesai <span style="color: red">*</span> :</label>
+                                                                        <div class="col-sm-8">
+                                                                            <input id="waktu_akhir_uas" required type="text" placeholder="hh:mm" data-mask="99:99" class="form-control" name="jam_selesai">
+                                                                        </div>
+                                                                    </div>
                                                                     <p style="color: red;" align="center">* Wajib Diisi</p>
                                                                     <input type="hidden" name="id_matkul" value="<?php echo $_GET['id'];?>">
                                                                 </div>
@@ -128,6 +366,9 @@
                                                     <!--END MODAL Set UAS-->
                                                         <?php
                                                     }
+                                                    else{ 
+                                                        echo '<h5 style="color:red">Jadwal UAS belum diset oleh Tata Usaha!</h5>';
+                                                    }
                                                     }
                                                     ?>
                                                     
@@ -135,7 +376,7 @@
                                                 <li>
                                                     <h4 style="font-weight: bold;">Peserta Mata Kuliah : </h4>
                                                     <?php if(!$set_peserta){
-                                                        if($flag){?>
+                                                        if($flag && $this->session->userdata('id_role') == 3){?>
                                                         <button data-toggle="modal" data-target="#insertMhs" class="btn btn-primary btn-sm" type="submit"><i class="fas fa-group"></i> Insert Mahasiswa Peserta Kuliah</button>
                                                         <!--Modal Set Peserta Matkul-->
                                                         <div class="modal inmodal" id="insertMhs" tabindex="-1" role="dialog"  aria-hidden="true">
@@ -169,7 +410,10 @@
                                                         </div>
                                                         <!--END MODAL Set Peserta Matkul-->
                                                         <?php
-                                                    }
+                                                        }
+                                                        else{
+
+                                                        }
                                                     }
                                                     else{
                                                         ?>
@@ -208,7 +452,7 @@
                                                 <li>
                                                     <h4 style="font-weight: bold;">Jadwal Kelas : </h4>
                                                     <?php
-                                                    if($flag){
+                                                    if($flag && $this->session->userdata('id_role') == 3){
                                                         ?>
                                                     <button id="btn_insert_jadwal" class="btn btn-success btn-sm" type="submit"><i class="fas fa-group"></i> Insert Jadwal Kelas</button>
                                                     <div style="display: none;" id="container_jadwal" class="panel panel-warning">
@@ -299,7 +543,7 @@
                                                 <li>
                                                     <h4 style="font-weight: bold;">Kebutuhan Perangkat Lunak : </h4>
                                                     <?php
-                                                    if($flag){
+                                                    if($flag && $this->session->userdata('id_role') == 2){
                                                         ?>
                                                     <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#insertPL">Tambah Perangkat Lunak</button>
                                                     <!--Modal Add Perangkat Lunak-->
@@ -381,7 +625,7 @@
                                                                             <td><?php echo $pl['LAST_CHECKED'];?></td>
                                                                             <td align="center">
                                                                                 <?php
-                                                                                if($flag){
+                                                                                if($flag && $this->session->userdata('id_role') == 2){
 
                                                                                  echo form_open('administrasi_matkul/perangkat_lunak/delete');?>
                                                                                 
@@ -418,7 +662,7 @@
                                                 <li>
                                                     <h4 style="font-weight: bold;">File Bantuan Ujian : </h4>
                                                     <?php
-                                                    if($flag){
+                                                    if($flag && $this->session->userdata('id_role') == 2){
                                                         ?>
                                                     <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#insertFileBantuan"><i class="fas fa-file-upload"></i> Upload File Bantuan</button>
                                                     <!--Modal ADD FILE BANTUAN-->
@@ -502,7 +746,7 @@
                                                                         <td align="center">
                                                                             <a class="btn btn-sm btn-success" target="_blank" href="<?php echo base_url();?>download/file_bantuan/<?php echo $file['PATH_FILE'];?>"><i class="fas fa-download"></i> Download</a>
                                                                             <?php
-                                                                            if($flag){
+                                                                            if($flag && $this->session->userdata('id_role') == 2){
                                                                                 echo form_open('administrasi_matkul/file_bantuan/remove');?>
                                                                             <input type="hidden" name="id_matkul" value="<?php echo $_GET['id'];?>" required>
                                                                             <input type="hidden" name="id_file_bantuan" value="<?php echo $file['ID'];?>" required>
@@ -530,7 +774,7 @@
                                                 <li>
                                                     <h4 style="font-weight: bold;">Checklist Persiapan Ujian : </h4>
                                                     <?php
-                                                    if($flag){
+                                                    if($flag && $this->session->userdata('id_role') == 2){
                                                         ?>
                                                     <button class="btn btn-sm btn-success" id="btn_checklist"><i class="fas fa-tasks"></i> Checklist Persiapan Ujian</button>
                                                     <div style="display: none;" id="container_checklist" class="panel panel-success">

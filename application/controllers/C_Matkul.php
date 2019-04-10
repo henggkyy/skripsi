@@ -2,9 +2,153 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani Inisiasi dan Administrasi Mata Kuliah.
 class C_Matkul extends CI_Controller{
+	//Method untuk set ruangan UAS
+	function setRuanganUAS(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 4){
+				redirect('/dashboard');
+			}
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
+			$this->form_validation->set_rules('lab', 'ID Lab', 'required');
+			$id_matkul = $this->input->post('id_matkul');
+			if ($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing Required Fields');
+				redirect("/administrasi_matkul_detail?id=$id_matkul");
+			}
+			else{
+				$lab = $this->input->post('lab');
+				$this->load->model('Mata_kuliah');
+				$this->load->model('Periode_akademik');
+				$this->load->model('Jadwal_lab');
+				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
+				$tanggal_uts = $this->Mata_kuliah->getIndividualItem($id_matkul, 'TANGGAL_UAS');
+				$nama_matkul = $this->Mata_kuliah->getIndividualItem($id_matkul, 'NAMA_MATKUL');
+				$kd_matkul = $this->Mata_kuliah->getIndividualItem($id_matkul, 'KD_MATKUL');
+				$checkPeriodeAktif = $this->Periode_akademik->checkIdAktif($id_periode);
+				if(!$checkPeriodeAktif){
+					$this->session->set_flashdata('error', 'Tidak dapat set ruangan UAS karena periode akademik mata kuliah sudah berakhir!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				if($tanggal_uts == NULL){
+					$this->session->set_flashdata('error', 'Tidak dapat set ruangan UAS karena jadwal UTS belum diinput oleh Tata Usaha!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+
+				$jam_mulai = $this->Mata_kuliah->getIndividualItem($id_matkul, 'JAM_MULAI_UAS');
+				$jam_selesai = $this->Mata_kuliah->getIndividualItem($id_matkul, 'JAM_SELESAI_UAS');
+
+				$this->load->model('Ruangan_ujian');
+				$data = array(
+					'ID_MATKUL' => $id_matkul,
+					'ID_LAB' => $lab,
+					'TIPE_UJIAN'=> 'UAS'
+				);
+				$res_ruangan = $this->Ruangan_ujian->insertData($data);
+
+				$title = 'UAS '.$nama_matkul." (".$kd_matkul.")";
+				$start_event = $tanggal_uts." ".$jam_mulai;
+				$end_event = $tanggal_uts." ".$jam_selesai;
+
+				$res_jadwal = $this->Jadwal_lab->insertJadwalPemakaian($title, $lab, $start_event, $end_event);
+
+				if($res_ruangan && $res_jadwal){
+					$this->session->set_flashdata('success', 'Berhasil melakukan set ruangan UAS!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				else{
+					if(!$res_ruangan){
+						$this->session->set_flashdata('error', 'Gagal memasukkan ruangan UAS pada table mata kuliah');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
+					else{
+						$this->session->set_flashdata('error', 'Gagal memasukkan jadwal pemakaian ruangan UAS pada table jadwal lab');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
+					
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
+	//Method untuk set ruangan UTS
+	function setRuanganUTS(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 4){
+				redirect('/dashboard');
+			}
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
+			$this->form_validation->set_rules('lab', 'ID Lab', 'required');
+			$id_matkul = $this->input->post('id_matkul');
+			if ($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing Required Fields');
+				redirect("/administrasi_matkul_detail?id=$id_matkul");
+			}
+			else{
+				$lab = $this->input->post('lab');
+				$this->load->model('Mata_kuliah');
+				$this->load->model('Periode_akademik');
+				$this->load->model('Jadwal_lab');
+				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
+				$tanggal_uts = $this->Mata_kuliah->getIndividualItem($id_matkul, 'TANGGAL_UTS');
+				$nama_matkul = $this->Mata_kuliah->getIndividualItem($id_matkul, 'NAMA_MATKUL');
+				$kd_matkul = $this->Mata_kuliah->getIndividualItem($id_matkul, 'KD_MATKUL');
+				$checkPeriodeAktif = $this->Periode_akademik->checkIdAktif($id_periode);
+				if(!$checkPeriodeAktif){
+					$this->session->set_flashdata('error', 'Tidak dapat set ruangan UTS karena periode akademik mata kuliah sudah berakhir!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				if($tanggal_uts == NULL){
+					$this->session->set_flashdata('error', 'Tidak dapat set ruangan UTS karena jadwal UTS belum diinput oleh Tata Usaha!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+
+				$jam_mulai = $this->Mata_kuliah->getIndividualItem($id_matkul, 'JAM_MULAI_UTS');
+				$jam_selesai = $this->Mata_kuliah->getIndividualItem($id_matkul, 'JAM_SELESAI_UTS');
+				$this->load->model('Ruangan_ujian');
+				$data = array(
+					'ID_MATKUL' => $id_matkul,
+					'ID_LAB' => $lab,
+					'TIPE_UJIAN'=> 'UTS'
+				);
+				$res_ruangan = $this->Ruangan_ujian->insertData($data);
+
+				$title = 'UTS '.$nama_matkul." (".$kd_matkul.")";
+				$start_event = $tanggal_uts." ".$jam_mulai;
+				$end_event = $tanggal_uts." ".$jam_selesai;
+
+				$res_jadwal = $this->Jadwal_lab->insertJadwalPemakaian($title, $lab, $start_event, $end_event);
+
+				if($res_ruangan && $res_jadwal){
+					$this->session->set_flashdata('success', 'Berhasil melakukan set ruangan UTS!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				else{
+					if(!$res_ruangan){
+						$this->session->set_flashdata('error', 'Gagal memasukkan ruangan UTS pada table mata kuliah');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
+					else{
+						$this->session->set_flashdata('error', 'Gagal memasukkan jadwal pemakaian ruangan UTS pada table jadwal lab');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
+					
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
 	//Method untuk memasukkan jadwal kelas setiap mata kuliah
 	function insertJadwalKelas(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 3){
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
 			$this->form_validation->set_rules('hari[]', 'Hari Kelas', 'required');
@@ -106,6 +250,9 @@ class C_Matkul extends CI_Controller{
 	//Method untuk melakukan checklist persiapan ujian
 	function checkListUjian(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 2){
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
 			$this->form_validation->set_rules('tipe_ujian', 'Tipe Ujian', 'required');
@@ -216,6 +363,9 @@ class C_Matkul extends CI_Controller{
 	//Method untuk menghapus file-file bantuan ujian
 	function deleteFileBantuan(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 2){
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_file_bantuan', 'ID File Bantuan', 'required');
 			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
@@ -263,6 +413,9 @@ class C_Matkul extends CI_Controller{
 	//Method untuk memasukkan file-file bantuan ujian
 	function insertFileBantuan(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 2){
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('tipe_ujian', 'Tipe Ujian', 'required');
 			$this->form_validation->set_rules('nama_keterangan', 'Nama/Keterangan File Bantuan', 'required');
@@ -395,6 +548,9 @@ class C_Matkul extends CI_Controller{
 	//Method untuk menghapus kebutuhan perangkat lunak
 	function deletePL(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 2){
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_pl', 'ID Perangkat Lunak', 'required');
 			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
@@ -435,6 +591,9 @@ class C_Matkul extends CI_Controller{
 	//Method untuk memasukkan informasi kebutuhan perangkat lunak suatu mata kuliah
 	function insertPL(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 2){
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
 			$this->form_validation->set_rules('nama_pl', 'Nama Perangkat Lunak', 'required');
@@ -529,6 +688,9 @@ class C_Matkul extends CI_Controller{
 	//Dalam method ini akan dilakukan pembacaan data mahasiswa dari file excel menggunakan PHPSpreadSheet
 	function insertMahasiswa(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 3){
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
 			if ($this->form_validation->run() == FALSE){
@@ -604,7 +766,15 @@ class C_Matkul extends CI_Controller{
 			$this->load->model('Daftar_lab');
 			$this->load->model('Jadwal_matkul');
 			$id_matkul = $_GET['id'];
-
+			if($id_matkul == ""){
+				redirect('/administrasi_matkul');
+			}
+			if($this->session->userdata('id_role') == 2){
+				$milik_dosen = $this->Mata_kuliah->checkMatkulDosen($id_matkul, $this->session->userdata('id'));
+				if(!$milik_dosen){
+					redirect('/administrasi_matkul');
+				}
+			}
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$id_periode_aktif = $this->Periode_akademik->getIDPeriodeAktif();
 			$data['title'] = 'Detail Mata Kuliah | SI Akademik Lab. Komputasi TIF UNPAR';
@@ -618,12 +788,39 @@ class C_Matkul extends CI_Controller{
 			if($id_periode_aktif != $id_periode_matkul){
 				$flag = false;
 			}
-
+			$this->load->model('Ruangan_ujian');
 			$data['flag'] = $flag;
 			$data['nama_matkul'] = $nama_matkul;
 			$data['info_matkul'] = $this->Mata_kuliah->getInformasiBasicMatkul($id_matkul);
-			$data['set_uts'] = $this->Mata_kuliah->cekJadwalUjian($id_matkul, "TANGGAL_UTS");
-			$data['set_uas'] = $this->Mata_kuliah->cekJadwalUjian($id_matkul, "TANGGAL_UAS");
+			$array_data_uts = $this->Mata_kuliah->cekJadwalUjian($id_matkul, "UTS");
+			if($array_data_uts[0]['TANGGAL_UTS'] != NULL){
+
+				$data['set_uts'] = true;
+				$data['tanggal_uts'] = $array_data_uts[0]['TANGGAL_UTS'];
+				$data['jam_mulai_uts'] = $array_data_uts[0]['JAM_MULAI_UTS'];
+				$data['jam_selesai_uts'] = $array_data_uts[0]['JAM_SELESAI_UTS'];
+				$start_event = $data['tanggal_uts']." ".$data['jam_mulai_uts']; 
+				$end_event = $data['tanggal_uts']." ".$data['jam_selesai_uts']; 
+				$data['list_lab_uts'] = $this->gesListLab($start_event, $end_event);
+				$data['lab_uts'] = $this->Ruangan_ujian->getDataRuanganUjian($id_matkul, 'UTS');
+			}
+			else{
+				$data['set_uts'] = false;
+			}
+			$array_data_uas = $this->Mata_kuliah->cekJadwalUjian($id_matkul, "UAS");
+			if($array_data_uas[0]['TANGGAL_UAS'] != NULL){
+				$data['set_uas'] = true;
+				$data['tanggal_uas'] = $array_data_uas[0]['TANGGAL_UAS'];
+				$data['jam_mulai_uas'] = $array_data_uas[0]['JAM_MULAI_UAS'];
+				$data['jam_selesai_uas'] = $array_data_uas[0]['JAM_SELESAI_UAS'];
+				$start_event = $data['tanggal_uas']." ".$data['jam_mulai_uas']; 
+				$end_event = $data['tanggal_uas']." ".$data['jam_mulai_uas']; 
+				$data['list_lab_uas'] = $this->gesListLab($start_event, $end_event);
+				$data['lab_uas'] = $this->Ruangan_ujian->getDataRuanganUjian($id_matkul, 'UAS');
+			}
+			else{
+				$data['set_uas'] = false;
+			}
 			$data['set_peserta'] = $this->Mhs_peserta->checkMhs($id_matkul);
 			$data['daftar_pl'] = $this->Kebutuhan_pl->getPL($id_matkul);
 			$data['file_bantuan'] = $this->File_bantuan_ujian->getFileBantuan($id_matkul);
@@ -648,6 +845,9 @@ class C_Matkul extends CI_Controller{
 	//Method untuk memasukkan tanggal UTS
 	function insertTanggalUTS(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 3){
+				redirect('/administrasi_matkul');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
 			$this->form_validation->set_rules('tgl_uts', 'Tanggal UTS', 'required');
@@ -659,6 +859,8 @@ class C_Matkul extends CI_Controller{
 				$id_matkul = $this->input->post('id_matkul');
 				$tgl_uts = $this->input->post('tgl_uts');
 				$tgl_uts = date("Y-m-d", strtotime($tgl_uts));
+				$jam_mulai = $this->input->post('jam_mulai');
+				$jam_selesai = $this->input->post('jam_selesai');
 				$this->load->model('Mata_kuliah');
 				$this->load->model('Periode_akademik');
 				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
@@ -673,8 +875,16 @@ class C_Matkul extends CI_Controller{
 						$this->session->set_flashdata('error', 'Gagal menambahkan tanggal UTS karena tanggal UTS tidak berada dalam masa UTS periode akademik yg sdg berjalan!');
 						redirect("/administrasi_matkul_detail?id=$id_matkul");
 					}
-
-					$res = $this->Mata_kuliah->insertTanggalUjian($id_matkul, "TANGGAL_UTS", $tgl_uts);
+					if($jam_mulai >  $jam_selesai){
+						$this->session->set_flashdata('error', 'Error! Jam mulai tidak boleh lebih besar dari jam selesai!');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
+					$data = array(
+						'TANGGAL_UTS' => $tgl_uts,
+						'JAM_MULAI_UTS' => $jam_mulai,
+						'JAM_SELESAI_UTS' => $jam_selesai
+					);
+					$res = $this->Mata_kuliah->insertTanggalUjian($id_matkul, $data);
 					if($res){
 						$this->session->set_flashdata('success', 'Berhasil menambahkan tanggal UTS mata kuliah!');
 						redirect("/administrasi_matkul_detail?id=$id_matkul");
@@ -698,6 +908,9 @@ class C_Matkul extends CI_Controller{
 	//Method untuk memasukkan tanggal UAS
 	function insertTanggalUAS(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 3){
+				redirect('/administrasi_matkul');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
 			$this->form_validation->set_rules('tgl_uas', 'Tanggal UAS', 'required');
@@ -709,6 +922,8 @@ class C_Matkul extends CI_Controller{
 				$id_matkul = $this->input->post('id_matkul');
 				$tgl_uas = $this->input->post('tgl_uas');
 				$tgl_uas = date("Y-m-d", strtotime($tgl_uas));
+				$jam_mulai = $this->input->post('jam_mulai');
+				$jam_selesai = $this->input->post('jam_selesai');
 				$this->load->model('Mata_kuliah');
 				$this->load->model('Periode_akademik');
 				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
@@ -723,8 +938,16 @@ class C_Matkul extends CI_Controller{
 						$this->session->set_flashdata('error', 'Gagal menambahkan tanggal UAS karena tanggal UAS tidak berada dalam masa UAS periode akademik yg sdg berjalan!');
 						redirect("/administrasi_matkul_detail?id=$id_matkul");
 					}
-
-					$res = $this->Mata_kuliah->insertTanggalUjian($id_matkul, "TANGGAL_UAS", $tgl_uas);
+					if($jam_mulai >  $jam_selesai){
+						$this->session->set_flashdata('error', 'Error! Jam mulai tidak boleh lebih besar dari jam selesai!');
+						redirect("/administrasi_matkul_detail?id=$id_matkul");
+					}
+					$data = array(
+						'TANGGAL_UAS' => $tgl_uas,
+						'JAM_MULAI_UAS' => $jam_mulai,
+						'JAM_SELESAI_UAS' => $jam_selesai
+					);
+					$res = $this->Mata_kuliah->insertTanggalUjian($id_matkul, $data);
 					if($res){
 						$this->session->set_flashdata('success', 'Berhasil menambahkan tanggal UAS mata kuliah!');
 						redirect("/administrasi_matkul_detail?id=$id_matkul");
@@ -844,6 +1067,44 @@ class C_Matkul extends CI_Controller{
 		}
 		else{
 			return (($user_ts >= $start_ts) && ($user_ts <= $end_ts));
+		}
+	}
+	//Method untuk mendapatkan list lab yang tersedia untuk uts dan uas
+	private function gesListLab($start_event, $end_event){
+		$this->load->model('Daftar_lab');
+		$daftar_lab = $this->Daftar_lab->getListLab();
+		$this->load->model('Jadwal_lab');
+		$lab_terpakai = $this->Jadwal_lab->checkPemakaianLab($start_event, $end_event);
+		$arr_lab_tersedia = array();
+		// print_r($lab_terpakai);
+		// return;
+		foreach ($daftar_lab as $list_lab) {
+			$flag = true;
+			$ID = $list_lab['ID'];
+			$NAMA_LAB = $list_lab['NAMA_LAB'];
+			$LOKASI = $list_lab['LOKASI'];
+			if($lab_terpakai){
+				foreach ($lab_terpakai as $lab_pakai) {
+					$id_lab_pakai = $lab_pakai['ID_LAB_PAKAI'];
+					if($ID == $id_lab_pakai){
+						$flag = false;
+					}
+				}
+			}
+			
+
+			if($flag){
+				$arr_temp = array($ID, $NAMA_LAB, $LOKASI);
+				array_push($arr_lab_tersedia, $arr_temp);
+			}
+		}
+		// print_r($lab_terpakai);
+		// return;
+		if($arr_lab_tersedia){
+			return $arr_lab_tersedia;
+		}
+		else{
+			return false;
 		}
 	}
 	//Method untuk mendapatkan seluruh tanggal berdasarkan tanggal mulai, tanggal akhir dan hari yang dipilih

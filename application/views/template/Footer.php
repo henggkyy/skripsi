@@ -74,6 +74,12 @@
 			<?php
 		}
 		?>
+		$('#waktu_awal_uas').clockpicker({
+			autoclose: true
+		});
+		$('#waktu_akhir_uas').clockpicker({
+			autoclose: true
+		});
 		$('#waktu_awal_2').clockpicker({
 			autoclose: true
 		});
@@ -135,7 +141,7 @@
 	<script src="<?php echo base_url();?>assets/js/plugins/dataTables/datatables.min.js"></script>
 	<script type="text/javascript">
 		$('document').ready(function(){
-
+			
 			var input_text_pl = '<input class="form-control" type="text" required name="nama_pl" placeholder="Contoh: netbeans, spotify, googlechrome"></input>'
 			var button_add_pl = $('#button_add_pl');
 			$(button_add_pl).click(function(e){
