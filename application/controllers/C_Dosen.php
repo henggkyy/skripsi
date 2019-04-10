@@ -6,6 +6,10 @@ class C_Dosen extends CI_Controller{
 	//Method untuk mengaktifkan kembali dosen
 	function activateDosen(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_dosen', 'ID Dosen', 'required');
 			if($this->form_validation->run() == FALSE){
@@ -34,6 +38,10 @@ class C_Dosen extends CI_Controller{
 	//Method untuk menonaktifkan dosen
 	function nonactivateDosen(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_dosen', 'ID Dosen', 'required');
 			if($this->form_validation->run() == FALSE){
@@ -62,6 +70,10 @@ class C_Dosen extends CI_Controller{
 	//Method untuk menambahkan data dosen
 	function addDosen(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('nik', 'NIK Dosen', 'required');
 			$this->form_validation->set_rules('nama', 'Nama Dosen', 'required');

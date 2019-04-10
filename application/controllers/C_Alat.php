@@ -5,6 +5,10 @@ class C_Alat extends CI_Controller{
 	//Method untuk memasukkan alat laboratorium ke dalam database
 	function insertAlat(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('nama', 'Nama Alat', 'required');
 			if($this->form_validation->run() == FALSE){
@@ -36,6 +40,10 @@ class C_Alat extends CI_Controller{
 	//Method untuk menghapus alat laboratorium
 	function deleteAlat(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_alat', 'ID Alat', 'required');
 			if($this->form_validation->run() == FALSE){

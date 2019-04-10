@@ -5,6 +5,9 @@ class C_Main extends CI_Controller{
 	//Method untuk menampilkan daftar pengguna Tata Usaha
 	function loadDaftarTU(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1){
+				redirect('/dashboard');
+			}
 			$data['title'] = 'Daftar Pengguna Tata Usaha | SI Akademik Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$this->load->model('Users');
@@ -116,6 +119,9 @@ class C_Main extends CI_Controller{
 	//Method untuk menampilkan halaman utama dari administrasi admin laboratorium
 	function loadMenuAdmin(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+				redirect('/dashboard');
+			}
 			$data['title'] = 'Administrasi Admin Laboratorium | SI Akademik Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$this->load->model('Users');
@@ -138,6 +144,9 @@ class C_Main extends CI_Controller{
 	//Method untuk menampilkan halaman utama administrasi dosen.
 	function loadMenuDosen(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+				redirect('/dashboard');
+			}
 			$data['title'] = 'Administrasi Dosen | SI Akademik Lab. Komputasi TIF UNPAR';
 			$data['admin_dosen'] = true;
 			$this->load->model('Periode_akademik');
@@ -208,33 +217,7 @@ class C_Main extends CI_Controller{
 		}
 	}
 
-	//Method untuk menampilkan tampilan administrasi user.
-	//Return : View V_User.php
-	function loadMenuUser(){
-		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('id_role') == 1){
-				$data['title'] = 'Administrasi User | SI Akademik Lab. Komputasi TIF UNPAR';
-				$data['user'] = true;
-				$this->load->model('Users');
-				$this->load->model('User_role');
-				$data['role'] = $this->User_role->getUserRole();
-				$data['data_user'] = $this->Users->getUser();
-				$this->load->view('template/Header', $data);
-				$this->load->view('template/Sidebar', $data);
-				$this->load->view('template/Topbar');
-				$this->load->view('template/Notification');
-				$this->load->view('pages_user/V_User', $data);
-				$this->load->view('template/Footer');
-			}
-			else{
-				redirect('/dashboard');
-			}
-		}
-		else{
-			redirect('/');
-		}
-	}
-
+	
 	//Method untuk menampilkan tampilan dashboard setelah pengguna melakukan login ke dalam aplikasi.
 	//Return : View V_Dashboard.php.
 	function loadDashboard(){
@@ -264,7 +247,7 @@ class C_Main extends CI_Controller{
 	//Return : View V_PeriodeAkademik.php
 	function loadPeriodeAkademik(){
 		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('id_role') == 1){
+			if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 3){
 				$data['title'] = 'Periode Akademik | SI Akademik Lab. Komputasi TIF UNPAR';
 				$data['periode'] = true;
 
@@ -293,10 +276,11 @@ class C_Main extends CI_Controller{
 		if($this->session->userdata('logged_in')){
 				$data['title'] = 'Inisiasi & Administrasi Mata Kuliah | SI Akademik Lab. Komputasi TIF UNPAR';
 				$data['matkul'] = true;
-
 				$this->load->model('Mata_kuliah');
 				$this->load->model('Periode_akademik');
 				$this->load->model('Users');
+				
+				
 				$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 				$data['daftar_periode'] = $this->Periode_akademik->getAllPeriode();
 				$id_periode =  $this->Periode_akademik->getIDPeriodeAktif();
@@ -317,8 +301,12 @@ class C_Main extends CI_Controller{
 						$data['id_periode_aktif'] = $id_periode;
 					}
 				}
-
-				$data['matkul'] = $this->Mata_kuliah->getMatkul($data['id_periode_aktif']);
+				if($this->session->userdata('id_role') == 2){
+					$data['matkul'] = $this->Mata_kuliah->getMatkulByDosen($data['id_periode_aktif'], $this->session->userdata('id'));
+				}
+				else{
+					$data['matkul'] = $this->Mata_kuliah->getMatkul($data['id_periode_aktif']);
+				}
 				$this->load->view('template/Header', $data);
 				$this->load->view('template/Sidebar', $data);
 				$this->load->view('template/Topbar');

@@ -5,6 +5,10 @@ class C_Konfigurasi extends CI_Controller {
 	//Method untuk menambahkan konfigurasi gaji baru.
 	function addKonfigurasi(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 3){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('nama', 'Nama Golongan', 'required');
 			$this->form_validation->set_rules('maks_jam', 'Jam Maksimal', 'required');

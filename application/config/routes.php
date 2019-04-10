@@ -123,6 +123,7 @@ $route['admin_lab/jadwal_bertugas'] = 'C_Admin/loadJadwalBertugasAdmin';
 $route['admin_lab/insert_manual_admin'] = 'C_Admin/insertJadwalManualInAdmin';
 $route['admin_lab/insert_auto_admin'] = 'C_Admin/insertJadwalAutoInAdmin';
 
+$route['laporan_gaji'] = 'C_Gaji_Admin/loadDaftarGajiAdmin';
 $route['laporan_gaji/periode'] = 'C_Gaji_Admin/loadSetPeriode';
 $route['laporan_gaji/periode/add'] = 'C_Gaji_Admin/setPeriodeGaji';
 $route['laporan_gaji/periode/nonactivate'] = 'C_Gaji_Admin/nonaktifkanPeriode';
@@ -131,6 +132,7 @@ $route['laporan_gaji/input'] = 'C_Gaji_Admin/insertAbsensi';
 $route['laporan_gaji/proses_input_gaji'] = 'C_Gaji_Admin/prosesInputGaji';
 $route['laporan_gaji/report'] = 'C_Gaji_Admin/loadHalamanLaporan';
 $route['laporan_gaji/cetak'] = 'C_Gaji_Admin/cetakLaporanAdmin';
+$route['laporan_gaji/cetak_laporan'] = 'C_Gaji_Admin/cetakLaporanGajiAdmin';
 $route['laporan_gaji/detail'] = 'C_Gaji_Admin/getDaftarLaporan';
 $route['laporan_gaji/get_laporan'] = 'C_Gaji_Admin/getInputLaporan';
 $route['laporan_gaji/update'] = 'C_Gaji_Admin/editLaporanGaji';

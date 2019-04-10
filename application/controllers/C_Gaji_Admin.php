@@ -2,9 +2,112 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani proses input dan menampilkan halaman yang berhubungan dengan sistem penggajian dan absensi admin
 class C_Gaji_Admin extends CI_Controller {
+	function cetakLaporanGajiAdmin(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 4){
+				redirect('dashboard');
+			}
+			$id_periode = $this->input->get('id_periode');
+			if($id_periode != ""){
+				$id_admin = $this->session->userdata('id');
+				$data['title'] = 'Cetak Laporan Gaji/Absensi Admin | SI Akademik Lab. Komputasi TIF UNPAR';
+				$this->load->model('Periode_gaji');
+				$this->load->model('Laporan_gaji_admin');
+				$this->load->model('Users');
+				$this->load->model('Konfigurasi_gaji');
+				$is_admin = $this->Users->checkUserRole($id_admin, 4);
+				if(!$is_admin){
+					redirect('laporan_gaji/report');
+				}
+				$data['detail_admin'] = $this->Users->getUserById($id_admin);
+				$data['nama_periode'] = $this->Periode_gaji->getIndividualItem($id_periode, 'KETERANGAN');
+				$data['daftar_gaji'] = $this->Laporan_gaji_admin->getDataLaporan($id_periode, $id_admin);
+				$array_data_tarif_jam = $this->Laporan_gaji_admin->getTarifAndJam($id_periode, $id_admin);
+				$data['tarif'] = $array_data_tarif_jam[0]['TARIF_AKTIF'];
+				$data['maks_jam'] = $array_data_tarif_jam[0]['WAKTU_MAKS_AKTIF'];
+				date_default_timezone_set('Asia/Jakarta');
+				$data['now_date'] = date('Y-m-d h:i:sa');
+				$this->load->view('template/Header', $data);
+				$this->load->view('pages_user/V_Cetak_Laporan_Gaji', $data);
+				$this->load->view('template/Footer');
+			}
+			else{
+				redirect('laporan_gaji');
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
+	//Method untuk melakukan load detail laporan gaji apabila admin yang login
+	function loadDaftarGajiAdmin(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 4){
+				redirect('dashboard');
+			}
+			$data['title'] = 'Daftar Laporan Gaji/Absensi Admin | SI Akademik Lab. Komputasi TIF UNPAR';
+			$id_admin = $this->session->userdata('id');
+			$this->load->model('Periode_gaji');
+			$this->load->model('Laporan_gaji_admin');
+			$this->load->model('Users');
+			$this->load->model('Konfigurasi_gaji');
+			$is_admin = $this->Users->checkUserRole($id_admin, 4);
+			if(!$is_admin){
+				redirect('laporan_gaji/report');
+			}
+			$array_gaji_aktif = $this->Periode_gaji->getPeriodeAktif();
+			
+			if(isset($_GET['id_periode'])){
+				$id_periode_selected = $_GET['id_periode'];
+				if($id_periode_selected){
+					$id_periode = $id_periode_selected;
+				}
+				else{
+					$id_periode = $this->Periode_gaji->getLastActiveId();
+				}
+			}
+			else{
+				if($array_gaji_aktif){
+					$id_periode = $array_gaji_aktif[0]['ID'];
+				}
+				else{
+					$id_periode = $this->Periode_gaji->getLastActiveId();
+				}
+			}
+			
+			$data['data_periode'] = $this->Periode_gaji->getAllPeriodeGaji();
+			$data['detail_admin'] = $this->Users->getUserById($id_admin);
+			$data['nama_periode'] = $this->Periode_gaji->getIndividualItem($id_periode, 'KETERANGAN');
+			$data['daftar_gaji'] = $this->Laporan_gaji_admin->getDataLaporan($id_periode, $id_admin);
+			$data['id_periode_aktif'] = $id_periode;
+			$flag = true;
+			$is_periode_aktif = $this->Periode_gaji->checkIDPeriodeAktif($id_periode);
+			if(!$is_periode_aktif){
+				$flag = false;
+			}
+			$data['laporan_gaji_admin'] = true;
+			$data['flag'] = $flag;
+			$data['id_admin'] = $id_admin;
+			$array_data_tarif_jam = $this->Laporan_gaji_admin->getTarifAndJam($id_periode, $id_admin);
+			$data['tarif'] = $array_data_tarif_jam[0]['TARIF_AKTIF'];
+			$data['maks_jam'] = $array_data_tarif_jam[0]['WAKTU_MAKS_AKTIF'];
+			$this->load->view('template/Header', $data);
+			$this->load->view('template/Sidebar', $data);
+			$this->load->view('template/Topbar');
+			$this->load->view('template/Notification');
+			$this->load->view('pages_user/V_Laporan_Gaji_Admin', $data);
+			$this->load->view('template/Footer');
+		}
+		else{
+			redirect('/');
+		}
+	}
 	//Method untuk menghapus laporan gaji admin
 	function hapusLaporanGaji(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 3){
+				redirect('dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('uniq', 'UNIQ ID', 'required');
 			$this->form_validation->set_rules('id_periode', 'ID Periode', 'required');
@@ -43,6 +146,9 @@ class C_Gaji_Admin extends CI_Controller {
 	//Method untuk melakukan edit laporan gaji
 	function editLaporanGaji(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 3){
+				redirect('dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('uniq', 'UNIQ ID', 'required');
 			$this->form_validation->set_rules('tgl_masuk', 'Tanggal Masuk', 'required');
@@ -129,6 +235,9 @@ class C_Gaji_Admin extends CI_Controller {
 	//Method ini dipanggil menggunakan Jquery AJAX.
 	function getInputLaporan(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 3){
+				return;
+			}
 			$uniq = $this->input->get('uniq');
 			if($uniq != ""){
 				$this->load->model('Laporan_gaji_admin');
@@ -154,6 +263,9 @@ class C_Gaji_Admin extends CI_Controller {
 	//Pada menu ini akan disediakan detail untuk edit dan delete laporan gaji
 	function getDaftarLaporan(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 3){
+				redirect('dashboard');
+			}
 			$id_periode = $this->input->get('id_periode');
 			$id_admin = $this->input->get('id_admin');
 			if($id_periode != "" && $id_admin != ""){
@@ -198,6 +310,9 @@ class C_Gaji_Admin extends CI_Controller {
 	//Method untuk menampilkan halaman untuk cetak laporan gaji berdasarkan id periode dan id admin
 	function cetakLaporanAdmin(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 3){
+				redirect('dashboard');
+			}
 			$id_periode = $this->input->get('id_periode');
 			$id_admin = $this->input->get('id_admin');
 			if($id_periode != "" && $id_admin != ""){
@@ -233,6 +348,9 @@ class C_Gaji_Admin extends CI_Controller {
 	//Method untuk menampilkan halaman daftar laporan/absensi admin
 	function loadHalamanLaporan(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 3){
+				redirect('dashboard');
+			}
 			$this->load->model('Periode_gaji');
 			$this->load->model('Laporan_gaji_admin');
 			$this->load->model('Users');
@@ -280,6 +398,9 @@ class C_Gaji_Admin extends CI_Controller {
 	//Method untuk menangani input laporan gaji dari pengguna.
 	function prosesInputGaji(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 3){
+				redirect('dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_periode', 'ID Periode Gaji', 'required');
 			$this->form_validation->set_rules('id_admin', 'ID Periode Gaji', 'required');
@@ -375,6 +496,9 @@ class C_Gaji_Admin extends CI_Controller {
 	//Method untuk memasukkan daftar absensi admin
 	function insertAbsensi(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 3){
+				redirect('dashboard');
+			}
 			$data['title'] = 'Input Gaji/Absensi Admin | SI Akademik Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_gaji');
 			$this->load->model('Users');
@@ -421,6 +545,9 @@ class C_Gaji_Admin extends CI_Controller {
 	//Method ini dipanggil dengan menggunakan Jquery AJAX
 	function editKonfigurasi(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 3){
+				return;
+			}
 			$tarif = $this->input->post('tarif');
 			$jam_max = $this->input->post('jam_max');
 			$id = $this->input->post('id');
@@ -462,6 +589,9 @@ class C_Gaji_Admin extends CI_Controller {
 	//Method untuk menonaktifkan periode gaji
 	function nonaktifkanPeriode(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 3){
+				redirect('dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_periode_gaji', 'ID Periode Gaji', 'required');
 			if ($this->form_validation->run() == FALSE){
@@ -497,6 +627,9 @@ class C_Gaji_Admin extends CI_Controller {
 	//Method untuk melakukan set periode gaji admin
 	function setPeriodeGaji(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 3){
+				redirect('dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('ket_periode', 'Keterangan Periode Gaji', 'required');
 			$this->form_validation->set_rules('start_periode', 'Tanggal Periode Awal', 'required');
@@ -548,6 +681,9 @@ class C_Gaji_Admin extends CI_Controller {
 	//Method untuk melakukan set periode gaji admin
 	function loadSetPeriode(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 3){
+				redirect('dashboard');
+			}
 			$data['title'] = 'Periode Gaji Admin & Konfigurasi | SI Akademik Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_gaji');
 			$this->load->model('Konfigurasi_gaji');

@@ -748,6 +748,10 @@ class C_Matkul extends CI_Controller{
 	//Method ini digunakan untuk memasukkan mata kuliah.
 	function addMatkul(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('kode_matkul', 'Kode Mata Kuliah', 'required');
 			$this->form_validation->set_rules('nama_matkul', 'Nama Mata Kuliah', 'required');

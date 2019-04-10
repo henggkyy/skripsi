@@ -5,7 +5,7 @@ class C_TataUsaha extends CI_Controller {
 	//Method untuk menonaktifkan petugas tata usaha
 	function nonactivateTU(){
 		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') == 1){
 				$this->load->library('form_validation');
 				$this->form_validation->set_rules('id_tu', 'ID Admin', 'required');
 				if($this->form_validation->run() == FALSE){
@@ -38,7 +38,7 @@ class C_TataUsaha extends CI_Controller {
 	//Method untuk mengaktifkan petugas tata usaha
 	function activateTU(){
 		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') == 1){
 				$this->load->library('form_validation');
 				$this->form_validation->set_rules('id_tu', 'ID Admin', 'required');
 				if($this->form_validation->run() == FALSE){
@@ -70,6 +70,10 @@ class C_TataUsaha extends CI_Controller {
 	//Method untuk menambahkan user petugas tata usaha
 	function addTataUsaha(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('nik', 'NIK Admin', 'required');
 			$this->form_validation->set_rules('nama', 'Nama Admin', 'required');

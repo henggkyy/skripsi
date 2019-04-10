@@ -30,9 +30,9 @@
                                 <div class="ibox-content">
                                     <?php
                                     if($periode_aktif){
-                                    ?>
+                                        if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 3){
+                                        ?>
                                     <button type="button" data-toggle="modal" data-target="#modalAddMatkul" class="btn btn-w-m btn-success"><i class="fas fa-plus"></i> Tambah Mata Kuliah</button>
-                                    <a href="<?php echo base_url();?>download/checker" class="btn btn-w-m btn-warning"><i class="fas fa-check"></i> Cek Kebutuhan Perangkat Lunak Mata Kuliah</a>
                                     <!--Modal Add Matkul-->
                                     <div class="modal inmodal" id="modalAddMatkul" tabindex="-1" role="dialog"  aria-hidden="true">
                                         <div class="modal-dialog">
@@ -98,7 +98,13 @@
                                         </div>
                                     </div>
                                     <!--END MODAL ADD Matkul-->
-                                    <?php
+                                        <?php
+                                    }
+                                    if($this->session->userdata('id_role') == 4){
+                                        ?>
+                                    <a href="<?php echo base_url();?>download/checker" class="btn btn-w-m btn-warning"><i class="fas fa-check"></i> Cek Kebutuhan Perangkat Lunak Mata Kuliah</a>
+                                        <?php
+                                    }
                                     }
                                     ?>
                                     <hr>

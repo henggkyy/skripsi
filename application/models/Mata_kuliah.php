@@ -60,7 +60,22 @@ class Mata_kuliah extends CI_Model{
 			return false;
 		}
 	}
-
+	//Method untuk mendapatkan daftar mata kuliah pada periode yang aktif berdasarkan id dosen yang login
+	function getMatkulByDosen($id_periode, $id_dosen){
+		$this->db->select('mata_kuliah.ID as ID, KD_MATKUL, NAMA_MATKUL, TANGGAL_UTS, TANGGAL_UAS, users.NAMA as NAMA_DOSEN, periode_akademik.NAMA as NAMA_PERIODE');
+		$this->db->where('ID_PERIODE', $id_periode);
+		$this->db->where('ID_DOSEN', $id_dosen);
+		$this->db->from('mata_kuliah');
+		$this->db->join('users', 'mata_kuliah.ID_DOSEN = users.ID' , 'left outer');
+		$this->db->join('periode_akademik', 'mata_kuliah.ID_PERIODE = periode_akademik.ID' , 'left outer');
+		$result = $this->db->get();
+		if($result->num_rows() > 0 ){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk mendapatkan daftar mata kuliah pada periode yang sedang aktif
 	function getMatkul($id_periode){
 		$this->db->select('mata_kuliah.ID as ID, KD_MATKUL, NAMA_MATKUL, TANGGAL_UTS, TANGGAL_UAS, users.NAMA as NAMA_DOSEN, periode_akademik.NAMA as NAMA_PERIODE');

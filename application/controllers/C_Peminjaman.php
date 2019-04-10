@@ -46,6 +46,10 @@ class C_Peminjaman extends CI_Controller{
 	//Method untuk menindaklanjuti permintaan peminjaman laboratorium
 	function tindaklanjutiPinjaman(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('tindakan', 'Tindakan', 'required');
 			$this->form_validation->set_rules('keterangan', 'Keterangan', 'required');

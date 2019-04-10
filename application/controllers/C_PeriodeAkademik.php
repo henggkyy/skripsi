@@ -5,7 +5,7 @@ class C_PeriodeAkademik extends CI_Controller{
 	//Method untuk melakukan nonaktif periode akademik
 	function nonaktifkanPeriode(){
 		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('id_role') == 1){
+			if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 3){
 				$this->load->library('form_validation');
 				$this->form_validation->set_rules('id_periode', 'ID Periode Akademik', 'required');
 				if ($this->form_validation->run() == FALSE){
@@ -38,7 +38,7 @@ class C_PeriodeAkademik extends CI_Controller{
 	//Method untuk mengaktifkan periode akademik
 	function aktifkanPeriodeAkademik(){
 		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('id_role') == 1){
+			if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 3){
 				$this->load->library('form_validation');
 				$this->form_validation->set_rules('nama_periode', 'Nama Periode Akademik', 'required');
 				$this->form_validation->set_rules('start_periode', 'Tanggal Periode Awal', 'required');

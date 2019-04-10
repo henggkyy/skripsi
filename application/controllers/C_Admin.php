@@ -337,6 +337,10 @@ class C_Admin extends CI_Controller {
 	function updateJadwalBertugasAdmin(){
 		if($this->session->userdata('logged_in')){
 			$this->load->library('form_validation');
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4 && $this->session->userdata('id_role') != 3){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			if($this->session->userdata('id_role') != 4){
 				$this->form_validation->set_rules('id_admin', 'ID Admin', 'required');
 				$id_admin = $this->input->post('id_admin');
@@ -484,6 +488,10 @@ class C_Admin extends CI_Controller {
 	//Method ini dipanggil dengan menggunakan Jquery AJAX pada footer di menu Detail Admin.
 	function getIndividualJadwalAdmin(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4 && $this->session->userdata('id_role') != 3){
+				echo "You dont have access to this feature!";
+				return;
+			}
 			$id_admin = $this->input->get('id_admin');
 			$id_bertugas = $this->input->get('id_bertugas');
 			if($id_admin != "" && $id_bertugas !=""){
@@ -525,6 +533,10 @@ class C_Admin extends CI_Controller {
 	//Method untuk menghapus jadwal bertugas admin
 	function deleteJadwalAdmin(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4 && $this->session->userdata('id_role') != 3){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 
 			if($this->session->userdata('id_role') != 4){
@@ -615,6 +627,10 @@ class C_Admin extends CI_Controller {
 	//Jadwal bertugas ini diluar jadwal bertugas pada saat uts dan uas
 	function insertJadwalBertugasAuto(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_admin', 'ID Admin', 'required');
 			$this->form_validation->set_rules('hari_bertugas[]', 'Hari Bertugas', 'required');
@@ -753,6 +769,10 @@ class C_Admin extends CI_Controller {
 	//Method untuk menangani input jadwal bertugas admin secara manual (Input tanggal satu per satu)
 	function insertJadwalBertugasManual(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_admin', 'ID Admin', 'required');
 			$this->form_validation->set_rules('tgl_bertugas', 'Tanggal Bertugas', 'required');
@@ -853,6 +873,10 @@ class C_Admin extends CI_Controller {
 	//Method untuk memperbaharui masa kontrak admin
 	function updateMasaKontrak(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_admin', 'ID Admin', 'required');
 			$this->form_validation->set_rules('mulai_kontrak', 'Tanggal Mulai Kontrak', 'required');
@@ -894,6 +918,10 @@ class C_Admin extends CI_Controller {
 	//Method untuk melakukan edit konfigurasi golongan gaji
 	function editKonfigurasiGolonganGaji(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_admin', 'ID Admin', 'required');
 			$this->form_validation->set_rules('id_gol', 'ID Golongan', 'required');
@@ -941,6 +969,10 @@ class C_Admin extends CI_Controller {
 	//Method untuk load halaman detail admin
 	function loadDetailAdmin(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$id_admin = $this->input->get('id_admin');
 
 			if($id_admin != ""){
@@ -1033,6 +1065,10 @@ class C_Admin extends CI_Controller {
 	//Method untuk mengaktifkan kembali admin
 	function activateAdmin(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_admin', 'ID Admin', 'required');
 			if($this->form_validation->run() == FALSE){
@@ -1061,6 +1097,10 @@ class C_Admin extends CI_Controller {
 	//Method untuk menonaktifkan admin
 	function nonactivateAdmin(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_admin', 'ID Admin', 'required');
 			if($this->form_validation->run() == FALSE){
@@ -1088,6 +1128,10 @@ class C_Admin extends CI_Controller {
 	//Method untuk memasukkan data admin
 	function insertAdmin(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('nik', 'NIK Admin', 'required');
 			$this->form_validation->set_rules('nama', 'Nama Admin', 'required');

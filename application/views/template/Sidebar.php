@@ -40,7 +40,7 @@
                     <a href="#"><i class="fas fa-book"></i> <span class="nav-label">Administrasi Perkuliahan </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <?php
-                            if($this->session->userdata('id_role') == 1){
+                            if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 3){
                                 ?>
                             <li <?php if(isset($periode)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>periode_akademik">Periode Akademik</a>
@@ -61,7 +61,7 @@
                     <a href="#"><i class="fas fa-group"></i> <span class="nav-label">Administrasi User </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <?php
-                            if($this->session->userdata('id_role') == 1){
+                            if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 3){
                                 ?>
                             <li <?php if(isset($admin_dosen)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>dosen">Administrasi Dosen</a>
@@ -93,7 +93,9 @@
                     <?php
                 }
                 ?>
-                
+                <?php
+                if($this->session->userdata('id_role') == 3){
+                    ?>
                 <li <?php if(isset($periode_gaji) || isset($input_gaji) || isset($laporan_gaji)){ echo 'class='. '"active"';}?>>
                     <a href="#"><i class="fas fa-user-clock"></i> <span class="nav-label">Laporan Gaji/Absensi Admin </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
@@ -108,6 +110,12 @@
                             </li>
                         </ul>
                 </li>
+                    <?php
+                }
+                ?>
+                <?php
+                if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 4){
+                    ?>
                 <li <?php if(isset($alat_lab) || isset($peminjaman_lab) || isset($peminjaman_alat) || isset($form_peminjaman)){ echo 'class='. '"active"';}?>>
                     <a href="#"><i class="fas fa-building"></i> <span class="nav-label">Peminjaman Lab & Alat </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
@@ -143,6 +151,10 @@
                             </li>
                         </ul>
                 </li>
+                    <?php
+                }
+                ?>
+                
                 <li <?php if(isset($jadwal_lab)){ echo 'class='. '"active"';}?>>
                     <a href="<?php echo base_url();?>jadwal_lab"><i class="fas fa-clock"></i> <span class="nav-label">Jadwal Laboratorium </span></a>
                 </li> 
@@ -155,6 +167,14 @@
                     <?php
                 }
                 ?>   
-                   
+                 <?php
+                if($this->session->userdata('id_role') == 4){
+                    ?>
+                <li <?php if(isset($laporan_gaji_admin)){ echo 'class='. '"active"';}?>>
+                    <a href="<?php echo base_url();?>laporan_gaji"><i class="fas fa-money-bill-wave-alt"></i> <span class="nav-label"> Laporan Gaji </span></a>
+                </li> 
+                    <?php
+                }
+                ?>     
             </div>
     </nav>

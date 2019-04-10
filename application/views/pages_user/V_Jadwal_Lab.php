@@ -21,6 +21,9 @@
                                 </div>
                             </div>
                         </div> 
+                        <?php
+                        if($this->session->userdata('id_role') == 1){
+                            ?>
                         <div class="col-lg-12">
                             <div class="ibox float-e-margins collapsed">
                                 <div class="ibox-title collapse-link">
@@ -80,6 +83,10 @@
                                 </div>
                             </div>
                         </div>
+                            <?php
+                        }
+                        ?>
+                        
                         <div class="col-lg-12">
                             <div class="ibox float-e-margins ">
                                 <div class="ibox-title">
@@ -108,7 +115,9 @@
                                 </div>
                             </div>
                         </div>  
-                        <div class="col-lg-12">
+                        <?php
+                        if($this->session->userdata('id_role') == 1){?>
+                            <div class="col-lg-12">
                             <div class="ibox float-e-margins collapsed">
                                 <div class="ibox-title collapse-link">
                                     <h5>Jadwal Pemakaian Laboratorium (DataTables)</h5>
@@ -162,7 +171,10 @@
                                    </div>
                                 </div>
                             </div>
-                        </div>          
+                        </div>   
+                        <?php
+                        }
+                        ?>    
                     </div>
                 </div>
             </div>

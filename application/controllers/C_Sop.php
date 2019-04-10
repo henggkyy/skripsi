@@ -6,6 +6,10 @@ class C_Sop extends CI_Controller {
 	//Method untuk melakukan update dokumen SOP
 	function updateSop(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('kategori_sop', 'Kategori SOP', 'required');
 			$this->form_validation->set_rules('visibility', 'Visibility SOP', 'required');
@@ -78,6 +82,10 @@ class C_Sop extends CI_Controller {
 	//Method untuk menghapus dokumen SOP
 	function deleteSop(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$id_sop = $this->input->post('id_sop');
 			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
 				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
@@ -119,6 +127,10 @@ class C_Sop extends CI_Controller {
 	//Method untuk menangani input dokumen SOP
 	function inputDokumenSop(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('kategori_sop', 'Kategori SOP', 'required');
 			$this->form_validation->set_rules('visibility', 'Visibility SOP', 'required');

@@ -6,6 +6,10 @@ class C_BukuSaku extends CI_Controller {
 	//Method untuk melakukan update dokumen Buku Saku
 	function updateBukuSaku(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('visibility', 'Visibility Buku Saku', 'required');
 			$this->form_validation->set_rules('judul_saku', 'Judul Buku Saku', 'required');
@@ -76,6 +80,10 @@ class C_BukuSaku extends CI_Controller {
 	//Method untuk menghapus dokumen Buku Saku
 	function deleteBukuSaku(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$id_saku = $this->input->post('id_saku');
 			if($id_saku == ""){
 				$this->session->set_flashdata('error', 'Missing ID Buku Saku!');
@@ -118,6 +126,10 @@ class C_BukuSaku extends CI_Controller {
 	//Method untuk menangani input dokumen Buku Saku
 	function inputBukuSaku(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('visibility', 'Visibility Buku Saku', 'required');
 			$this->form_validation->set_rules('judul_saku', 'Judul Buku Saku', 'required');
