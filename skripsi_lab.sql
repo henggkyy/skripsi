@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 09, 2019 at 03:43 AM
+-- Generation Time: Apr 11, 2019 at 04:28 AM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 5.6.38
 
@@ -162,7 +162,8 @@ CREATE TABLE `detail_user` (
 
 INSERT INTO `detail_user` (`ID`, `ID_USER`, `ANGKATAN`, `AWAL_KONTRAK`, `AKHIR_KONTRAK`, `ID_GAJI`) VALUES
 (2, 5, 2015, '2019-04-29', '2019-04-30', 1),
-(3, 6, 2015, '2019-04-01', '2019-05-31', 2);
+(3, 6, 2015, '2019-04-01', '2019-05-31', 2),
+(4, 1, 2015, '2019-04-10', '2019-08-10', 1);
 
 -- --------------------------------------------------------
 
@@ -211,7 +212,6 @@ CREATE TABLE `jadwal_bertugas_admin` (
 --
 
 INSERT INTO `jadwal_bertugas_admin` (`ID`, `HARI`, `TANGGAL`, `JAM_MULAI`, `JAM_SELESAI`, `TIPE_BERTUGAS`, `ID_PERIODE`, `ID_ADMIN`, `INSERT_DATE`) VALUES
-(1, 'Rabu', '2019-08-21', '12:00', '14:59', 'Masa Perkuliahan', 4, 1, '2019-04-03 08:05:34'),
 (3, 'Selasa', '2019-08-13', '13:00', '14:00', 'Masa Perkuliahan', 4, 5, '2019-04-04 04:24:37pm'),
 (4, 'Kamis', '2019-08-15', '18:00', '19:00', 'Masa Perkuliahan', 4, 5, '2019-04-03 06:41:09pm'),
 (5, 'Senin', '2019-08-19', '07:00', '08:00', 'Masa Perkuliahan', 4, 5, '2019-04-03 06:41:09pm'),
@@ -257,7 +257,35 @@ INSERT INTO `jadwal_bertugas_admin` (`ID`, `HARI`, `TANGGAL`, `JAM_MULAI`, `JAM_
 (45, 'Senin', '2019-12-23', '07:00', '08:00', 'Masa Perkuliahan', 4, 5, '2019-04-03 06:41:09pm'),
 (46, 'Rabu', '2019-09-11', '12:00', '14:00', 'Masa Perkuliahan', 4, 5, '2019-04-04 01:32:39pm'),
 (47, 'Senin', '2019-10-14', '07:00', '08:00', 'Masa UTS', 4, 5, '2019-04-04 01:34:53pm'),
-(48, 'Selasa', '2019-08-20', '08:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-04 04:17:14pm');
+(48, 'Selasa', '2019-08-20', '08:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-04 04:17:14pm'),
+(110, 'Rabu', '2019-08-14', '10:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:19:51pm'),
+(111, 'Senin', '2019-08-19', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(112, 'Rabu', '2019-08-21', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(113, 'Senin', '2019-08-26', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(114, 'Rabu', '2019-08-28', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(115, 'Senin', '2019-09-02', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(116, 'Rabu', '2019-09-04', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(117, 'Senin', '2019-09-09', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(118, 'Rabu', '2019-09-11', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(119, 'Senin', '2019-09-16', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(121, 'Senin', '2019-09-23', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(122, 'Rabu', '2019-09-25', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(123, 'Senin', '2019-09-30', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(124, 'Rabu', '2019-10-02', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(125, 'Senin', '2019-10-07', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(126, 'Rabu', '2019-10-09', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(127, 'Rabu', '2019-10-30', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(128, 'Senin', '2019-11-04', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(129, 'Rabu', '2019-11-06', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(130, 'Senin', '2019-11-11', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(131, 'Rabu', '2019-11-13', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(132, 'Senin', '2019-11-18', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(133, 'Rabu', '2019-11-20', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(134, 'Senin', '2019-11-25', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(135, 'Rabu', '2019-11-27', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(136, 'Rabu', '2019-12-18', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(137, 'Senin', '2019-12-23', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
+(138, 'Selasa', '2019-10-15', '11:00', '13:00', 'Masa UTS', 4, 1, '2019-04-11 08:59:17am');
 
 -- --------------------------------------------------------
 
@@ -286,7 +314,38 @@ INSERT INTO `jadwal_lab` (`ID`, `ID_LAB`, `TITLE`, `START_EVENT`, `END_EVENT`, `
 (5, 1, 'Presentasi 1', '2019-04-08 12:00:00', '2019-04-08 14:00:00', 1),
 (6, 1, 'Presentasi 3', '2019-04-09 12:00:00', '2019-04-09 14:00:00', 1),
 (7, 2, 'Presentasi 4', '2019-04-16 12:00', '2019-04-16 14:00', 1),
-(9, 1, 'Coba cuyyy', '2019-04-24 11:00', '2019-04-24 15:55', 0);
+(9, 1, 'Coba cuyyy', '2019-04-24 11:00', '2019-04-24 15:55', 0),
+(10, 1, 'Kelas Algoritma Data (AIF183346)', '2019-08-13 07:00', '2019-08-13 09:00', 1),
+(11, 1, 'Kelas Algoritma Data (AIF183346)', '2019-08-14 12:00', '2019-08-14 14:00', 1),
+(12, 1, 'Kelas Algoritma Data (AIF183346)', '2019-08-20 07:00', '2019-08-20 09:00', 1),
+(13, 1, 'Kelas Algoritma Data (AIF183346)', '2019-08-21 12:00', '2019-08-21 14:00', 1),
+(14, 1, 'Kelas Algoritma Data (AIF183346)', '2019-08-27 07:00', '2019-08-27 09:00', 1),
+(15, 1, 'Kelas Algoritma Data (AIF183346)', '2019-08-28 12:00', '2019-08-28 14:00', 1),
+(16, 1, 'Kelas Algoritma Data (AIF183346)', '2019-09-03 07:00', '2019-09-03 09:00', 1),
+(17, 1, 'Kelas Algoritma Data (AIF183346)', '2019-09-04 12:00', '2019-09-04 14:00', 1),
+(18, 1, 'Kelas Algoritma Data (AIF183346)', '2019-09-10 07:00', '2019-09-10 09:00', 1),
+(19, 1, 'Kelas Algoritma Data (AIF183346)', '2019-09-11 12:00', '2019-09-11 14:00', 1),
+(20, 1, 'Kelas Algoritma Data (AIF183346)', '2019-09-17 07:00', '2019-09-17 09:00', 1),
+(21, 1, 'Kelas Algoritma Data (AIF183346)', '2019-09-18 12:00', '2019-09-18 14:00', 1),
+(22, 1, 'Kelas Algoritma Data (AIF183346)', '2019-09-24 07:00', '2019-09-24 09:00', 1),
+(23, 1, 'Kelas Algoritma Data (AIF183346)', '2019-09-25 12:00', '2019-09-25 14:00', 1),
+(24, 1, 'Kelas Algoritma Data (AIF183346)', '2019-10-01 07:00', '2019-10-01 09:00', 1),
+(25, 1, 'Kelas Algoritma Data (AIF183346)', '2019-10-02 12:00', '2019-10-02 14:00', 1),
+(26, 1, 'Kelas Algoritma Data (AIF183346)', '2019-10-08 07:00', '2019-10-08 09:00', 1),
+(27, 1, 'Kelas Algoritma Data (AIF183346)', '2019-10-09 12:00', '2019-10-09 14:00', 1),
+(28, 1, 'Kelas Algoritma Data (AIF183346)', '2019-10-29 07:00', '2019-10-29 09:00', 1),
+(29, 1, 'Kelas Algoritma Data (AIF183346)', '2019-10-30 12:00', '2019-10-30 14:00', 1),
+(30, 1, 'Kelas Algoritma Data (AIF183346)', '2019-11-05 07:00', '2019-11-05 09:00', 1),
+(31, 1, 'Kelas Algoritma Data (AIF183346)', '2019-11-06 12:00', '2019-11-06 14:00', 1),
+(32, 1, 'Kelas Algoritma Data (AIF183346)', '2019-11-12 07:00', '2019-11-12 09:00', 1),
+(33, 1, 'Kelas Algoritma Data (AIF183346)', '2019-11-13 12:00', '2019-11-13 14:00', 1),
+(34, 1, 'Kelas Algoritma Data (AIF183346)', '2019-11-19 07:00', '2019-11-19 09:00', 1),
+(35, 1, 'Kelas Algoritma Data (AIF183346)', '2019-11-20 12:00', '2019-11-20 14:00', 1),
+(36, 1, 'Kelas Algoritma Data (AIF183346)', '2019-11-26 07:00', '2019-11-26 09:00', 1),
+(37, 1, 'Kelas Algoritma Data (AIF183346)', '2019-11-27 12:00', '2019-11-27 14:00', 1),
+(40, 1, 'UTS Algoritma Data (AIF183346)', '2019-10-14 08:00', '2019-10-14 12:00', 1),
+(41, 2, 'UAS Algoritma Data (AIF183346)', '2019-12-16 11:00', '2019-12-16 13:00', 1),
+(42, 2, 'UTS Algoritma Data (AIF183346)', '2019-10-14 08:00', '2019-10-14 12:00', 1);
 
 -- --------------------------------------------------------
 
@@ -300,8 +359,17 @@ CREATE TABLE `jadwal_matkul` (
   `HARI` varchar(64) NOT NULL,
   `JAM_MULAI` varchar(64) NOT NULL,
   `JAM_SELESAI` varchar(64) NOT NULL,
-  `KODE_KELAS` varchar(64) NOT NULL
+  `KODE_KELAS` varchar(64) NOT NULL,
+  `ID_LAB` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `jadwal_matkul`
+--
+
+INSERT INTO `jadwal_matkul` (`ID`, `ID_MATKUL`, `HARI`, `JAM_MULAI`, `JAM_SELESAI`, `KODE_KELAS`, `ID_LAB`) VALUES
+(1, 4, 'Rabu', '12:00', '14:00', 'A', 1),
+(2, 4, 'Selasa', '07:00', '09:00', 'A', 1);
 
 -- --------------------------------------------------------
 
@@ -393,7 +461,9 @@ CREATE TABLE `laporan_gaji_admin` (
 --
 
 INSERT INTO `laporan_gaji_admin` (`ID`, `UNIQ`, `ID_PERIODE`, `ID_ADMIN`, `HARI`, `TANGGAL_MASUK`, `JAM_MASUK`, `JAM_KELUAR`, `TOTAL_JAM`, `ISTIRAHAT`, `TARIF_AKTIF`, `WAKTU_MAKS_AKTIF`, `WAKTU_REAL`, `BIAYA`) VALUES
-(5, '46904656', 3, 5, 'Rabu', '2019-06-19', '10:00', '16:00', '6', '1', 9000, 160, '5', '45000');
+(5, '46904656', 3, 5, 'Rabu', '2019-06-19', '10:00', '16:00', '6', '1', 9000, 160, '5', '45000'),
+(6, '35487431', 4, 5, 'Senin', '2019-04-01', '12:00', '17:00', '5', '0', 9000, 150, '5', '45000'),
+(7, '25236334', 4, 5, 'Selasa', '2019-04-02', '07:00', '12:00', '5', '0', 9000, 150, '5', '45000');
 
 -- --------------------------------------------------------
 
@@ -407,7 +477,11 @@ CREATE TABLE `mata_kuliah` (
   `KD_MATKUL` varchar(128) NOT NULL,
   `NAMA_MATKUL` varchar(128) NOT NULL,
   `TANGGAL_UTS` varchar(32) DEFAULT NULL,
+  `JAM_MULAI_UTS` varchar(64) DEFAULT NULL,
+  `JAM_SELESAI_UTS` varchar(64) DEFAULT NULL,
   `TANGGAL_UAS` varchar(32) DEFAULT NULL,
+  `JAM_MULAI_UAS` varchar(64) DEFAULT NULL,
+  `JAM_SELESAI_UAS` varchar(64) DEFAULT NULL,
   `ID_DOSEN` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -415,11 +489,11 @@ CREATE TABLE `mata_kuliah` (
 -- Dumping data for table `mata_kuliah`
 --
 
-INSERT INTO `mata_kuliah` (`ID`, `ID_PERIODE`, `KD_MATKUL`, `NAMA_MATKUL`, `TANGGAL_UTS`, `TANGGAL_UAS`, `ID_DOSEN`) VALUES
-(2, 2, 'AIF183346', 'Topik Khusus Sistem Informasi 2', '03/05/2019', '03/27/2019', 1),
-(3, 2, 'AIF - 111', 'Tester', '03/06/2019', '2019-04-25', 2),
-(4, 4, 'AIF183346', 'Algoritma Data', NULL, NULL, 2),
-(5, 4, 'AIF1111', 'Teknologi Basis Data', NULL, NULL, 2);
+INSERT INTO `mata_kuliah` (`ID`, `ID_PERIODE`, `KD_MATKUL`, `NAMA_MATKUL`, `TANGGAL_UTS`, `JAM_MULAI_UTS`, `JAM_SELESAI_UTS`, `TANGGAL_UAS`, `JAM_MULAI_UAS`, `JAM_SELESAI_UAS`, `ID_DOSEN`) VALUES
+(2, 2, 'AIF183346', 'Topik Khusus Sistem Informasi 2', '03/05/2019', '', '', '03/27/2019', NULL, NULL, 1),
+(3, 2, 'AIF - 111', 'Tester', '03/06/2019', '', '', '2019-04-25', NULL, NULL, 2),
+(4, 4, 'AIF183346', 'Algoritma Data', '2019-10-14', '08:00', '12:00', '2019-12-16', '11:00', '13:00', 2),
+(5, 4, 'AIF1111', 'Teknologi Basis Data', NULL, '', '', NULL, NULL, NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -502,7 +576,7 @@ CREATE TABLE `periode_akademik` (
 
 INSERT INTO `periode_akademik` (`ID`, `NAMA`, `START_PERIODE`, `END_PERIODE`, `START_UTS`, `END_UTS`, `START_UAS`, `END_UAS`, `STATUS`, `CREATED_ON`, `CREATED_BY`) VALUES
 (2, 'Semester Genap 2018/2019', '', '', '', '', '', '', 0, '2019-02-06 07:00:20', 1),
-(4, 'Semester Ganjil 2019/2020', '2019-08-12', '2019-12-23', '2019-10-14', '2019-10-28', '2019-12-02', '2019-12-16', 1, '2019-03-28 07:20:27', 1);
+(4, 'Semester Ganjil 2019/2020', '2019-08-12', '2019-12-23', '2019-10-14', '2019-10-28', '2019-12-02', '2019-12-16', 0, '2019-03-28 07:20:27', 1);
 
 -- --------------------------------------------------------
 
@@ -525,7 +599,30 @@ CREATE TABLE `periode_gaji` (
 INSERT INTO `periode_gaji` (`ID`, `START_PERIODE`, `END_PERIODE`, `KETERANGAN`, `STATUS`) VALUES
 (1, '2019-04-01', '2019-05-01', 'Periode Bulan April - Mei', 0),
 (2, '2019-05-01', '2019-06-13', 'Periode Bulan Mei - Juni', 0),
-(3, '2019-06-05', '2019-07-26', 'Periode Bulan Juni - Juli', 0);
+(3, '2019-06-05', '2019-07-26', 'Periode Bulan Juni - Juli', 0),
+(4, '2019-04-01', '2019-04-30', 'Bulan April ', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ruangan_ujian`
+--
+
+CREATE TABLE `ruangan_ujian` (
+  `ID` int(11) NOT NULL,
+  `ID_MATKUL` int(11) NOT NULL,
+  `ID_LAB` int(11) NOT NULL,
+  `TIPE_UJIAN` varchar(16) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `ruangan_ujian`
+--
+
+INSERT INTO `ruangan_ujian` (`ID`, `ID_MATKUL`, `ID_LAB`, `TIPE_UJIAN`) VALUES
+(1, 4, 1, 'UTS'),
+(2, 4, 2, 'UAS'),
+(3, 4, 2, 'UTS');
 
 -- --------------------------------------------------------
 
@@ -550,7 +647,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`ID`, `ID_ROLE`, `NAMA`, `EMAIL`, `NIK`, `STATUS`, `IS_DOSEN`, `LAST_LOGIN`, `LAST_IP`) VALUES
-(1, 1, 'Hengky Surya', '7315051@student.unpar.ac.id', 0, 1, 1, '2019-04-09 07:41:29am', '::1'),
+(1, 1, 'Hengky Surya', '7315051@student.unpar.ac.id', 0, 1, 1, '2019-04-11 09:09:08am', '::1'),
 (2, 2, 'Pascal Alfadian', 'pascal@unpar.ac.id', 20180014, 1, 1, NULL, NULL),
 (4, 3, 'Pranyoto', 'pranyoto@unpar.ac.id', 2018012, 1, 0, NULL, NULL),
 (5, 4, 'Stephen Senjaya', '7315033@student.unpar.ac.id', 20180014, 1, 0, NULL, NULL),
@@ -664,7 +761,9 @@ ALTER TABLE `jadwal_lab`
 -- Indexes for table `jadwal_matkul`
 --
 ALTER TABLE `jadwal_matkul`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `ID_MATKUL` (`ID_MATKUL`),
+  ADD KEY `ID_LAB` (`ID_LAB`);
 
 --
 -- Indexes for table `kategori_sop`
@@ -731,6 +830,14 @@ ALTER TABLE `periode_gaji`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Indexes for table `ruangan_ujian`
+--
+ALTER TABLE `ruangan_ujian`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `ID_LAB` (`ID_LAB`),
+  ADD KEY `ID_MATKUL` (`ID_MATKUL`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -788,7 +895,7 @@ ALTER TABLE `data_file_sop`
 -- AUTO_INCREMENT for table `detail_user`
 --
 ALTER TABLE `detail_user`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `file_bantuan_ujian`
@@ -800,19 +907,19 @@ ALTER TABLE `file_bantuan_ujian`
 -- AUTO_INCREMENT for table `jadwal_bertugas_admin`
 --
 ALTER TABLE `jadwal_bertugas_admin`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=139;
 
 --
 -- AUTO_INCREMENT for table `jadwal_lab`
 --
 ALTER TABLE `jadwal_lab`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `jadwal_matkul`
 --
 ALTER TABLE `jadwal_matkul`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `kategori_sop`
@@ -836,7 +943,7 @@ ALTER TABLE `konfigurasi_gaji`
 -- AUTO_INCREMENT for table `laporan_gaji_admin`
 --
 ALTER TABLE `laporan_gaji_admin`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `mata_kuliah`
@@ -866,6 +973,12 @@ ALTER TABLE `periode_akademik`
 -- AUTO_INCREMENT for table `periode_gaji`
 --
 ALTER TABLE `periode_gaji`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `ruangan_ujian`
+--
+ALTER TABLE `ruangan_ujian`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
@@ -928,13 +1041,20 @@ ALTER TABLE `file_bantuan_ujian`
 --
 ALTER TABLE `jadwal_bertugas_admin`
   ADD CONSTRAINT `jadwal_bertugas_admin_ibfk_1` FOREIGN KEY (`ID_ADMIN`) REFERENCES `users` (`ID`),
-  ADD CONSTRAINT `jadwal_bertugas_admin_ibfk_2` FOREIGN KEY (`ID_PERIODE`) REFERENCES `peminjaman_lab` (`ID`);
+  ADD CONSTRAINT `jadwal_bertugas_admin_ibfk_2` FOREIGN KEY (`ID_PERIODE`) REFERENCES `periode_akademik` (`ID`);
 
 --
 -- Constraints for table `jadwal_lab`
 --
 ALTER TABLE `jadwal_lab`
   ADD CONSTRAINT `jadwal_lab_ibfk_1` FOREIGN KEY (`ID_LAB`) REFERENCES `daftar_lab` (`ID`);
+
+--
+-- Constraints for table `jadwal_matkul`
+--
+ALTER TABLE `jadwal_matkul`
+  ADD CONSTRAINT `jadwal_matkul_ibfk_1` FOREIGN KEY (`ID_MATKUL`) REFERENCES `mata_kuliah` (`ID`),
+  ADD CONSTRAINT `jadwal_matkul_ibfk_2` FOREIGN KEY (`ID_LAB`) REFERENCES `daftar_lab` (`ID`);
 
 --
 -- Constraints for table `kebutuhan_pl`
@@ -975,6 +1095,13 @@ ALTER TABLE `peminjaman_lab`
 --
 ALTER TABLE `periode_akademik`
   ADD CONSTRAINT `periode_akademik_ibfk_1` FOREIGN KEY (`CREATED_BY`) REFERENCES `users` (`ID`);
+
+--
+-- Constraints for table `ruangan_ujian`
+--
+ALTER TABLE `ruangan_ujian`
+  ADD CONSTRAINT `ruangan_ujian_ibfk_1` FOREIGN KEY (`ID_LAB`) REFERENCES `daftar_lab` (`ID`),
+  ADD CONSTRAINT `ruangan_ujian_ibfk_2` FOREIGN KEY (`ID_MATKUL`) REFERENCES `mata_kuliah` (`ID`);
 
 --
 -- Constraints for table `users`
