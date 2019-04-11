@@ -5,6 +5,7 @@ class Users extends CI_Model{
 	function updateDataLogin($id_user, $data){
 		$this->db->where('ID', $id_user);
 		$res = $this->db->update('users', $data);
+		
 		if($res){
 			return true;
 		}

@@ -76,6 +76,8 @@ class C_Login extends CI_Controller {
 			}
 		}
 		else{
+			// print_r($this->session->all_userdata());
+			// return;
 			if($this->session->userdata('logged_in')){
 				redirect('/dashboard');
 			}
@@ -87,16 +89,26 @@ class C_Login extends CI_Controller {
 
 	//Method untuk melakukan logout dari aplikasi website
 	function logout(){
-		if($this->session->userdata('logged_in')){
+		if($this->session->userdata('logged_in') || $this->session->userdata('logged_in_public')){
 			$this->session->set_flashdata('message', 'Berhasil Logout!');
-			$this->session->unset_userdata('logged_in');
-			$this->session->unset_userdata('logged_in_public');
-			$this->session->unset_userdata('id');
-			$this->session->unset_userdata('id_role');
-			$this->session->unset_userdata('email');
-			$this->session->unset_userdata('nama');
-			$this->google->revokeToken();
+			if($this->session->userdata('logged_in')){
+				$this->session->unset_userdata('logged_in');
+				$this->session->unset_userdata('id');
+				$this->session->unset_userdata('id_role');
+				$this->session->unset_userdata('email');
+				$this->session->unset_userdata('nama');
+				$this->session->unset_userdata('nama_role');
+			}
+			else{
+				$this->session->unset_userdata('logged_in_public');
+				$this->session->unset_userdata('email');
+				$this->session->unset_userdata('name');
+			}
 			
+			
+			$this->google->revokeToken();
+			// print_r($this->session->all_userdata());
+			// return;
 			redirect('/');
 		}
 		else{

@@ -45,12 +45,12 @@
 								</div>
 								<div class="ibox-content collapsed">
 									<div class="table-responsive">
-										<table class="table table-striped table-bordered table-hover <?php if(isset($pengajuan_kuliah) && $pengajuan_kuliah){ echo 'mainDataTable';}?>">
+										<table class="table table-striped table-bordered table-hover">
 											<thead>
 	                                            <tr>
 	                                                <th>#</th>
 	                                                <th>Admin</th>
-	                                                <th>Hari/Tanggal</th>
+	                                                <th>Hari</th>
 	                                                <th>Waktu Bertugas</th>
 	                                                <th>Last Update</th>
 	                                                <th>Action</th>
@@ -65,10 +65,34 @@
                                             		<tr>
                                             			<td><?php echo $iterator;?></td>
                                             			<td><?php echo $pengkul['NAMA'];?></td>	
-                                            			<td><?php echo $pengkul['HARI_TANGGAL'];?></td>	
+                                            			<td><?php echo $pengkul['HARI'];?></td>	
                                             			<td><?php echo $pengkul['JAM_MULAI'].' s/d '.$pengkul['JAM_SELESAI'];?></td>	
                                             			<td><?php echo $pengkul['DATE_SUBMITTED'];?></td>	
-                                            			<td></td>	
+                                            			<td align="center">
+                                                            <?php
+
+                                                                if($pengkul['STATUS'] == 0 && $flag){
+                                                                    echo form_open('admin_lab/accept_pengajuan_kuliah');
+                                                                    ?>
+                                                                <input type="hidden" name="id_pengajuan" value="<?php echo $pengkul['ID'];?>" required>
+                                                                <input type="hidden" name="id_admin" value="<?php echo $pengkul['ID_ADMIN'];?>" required>
+                                                                <input type="hidden" name="method" value="rekap" required>
+                                                                <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-vote-yea"></i> Accept</button>
+                                                                </form>
+                                                                <?php
+                                                                }
+                                                                else if($pengkul['STATUS'] == 1 && $flag){
+                                                                    
+                                                                    echo 'Sudah disetujui';
+                                                                }
+                                                                else if($pengkul['STATUS'] == 1 && !$flag){
+                                                                    echo 'Sudah disetujui';
+                                                                }
+                                                                else{
+                                                                    echo '-';
+                                                                }
+                                                                ?>         
+                                                        </td>	
                                             		</tr>
                                             			
                                             			<?php
@@ -76,7 +100,7 @@
                                             		}
                                             	}
                                             	else{
-                                            		echo "<tr><td colspan='6'>Belum ada dokumen Pengajuan Jadwal Bertugas yang dilakukan oleh Admin pada masa Perkuliahan!</td></tr>";
+                                            		echo "<tr><td colspan='6'>Belum ada Pengajuan Jadwal Bertugas yang dilakukan oleh Admin pada masa Perkuliahan!</td></tr>";
                                             	}
                                             	?>
                                             </tbody>
@@ -97,7 +121,7 @@
 								</div>
 								<div class="ibox-content collapsed">
 									<div class="table-responsive">
-										<table class="table table-striped table-bordered table-hover <?php if(isset($pengajuan_uts) && $pengajuan_uts){ echo 'mainDataTable';}?>">
+										<table class="table table-striped table-bordered table-hover">
 											<thead>
 	                                            <tr>
 	                                                <th>#</th>
@@ -117,10 +141,34 @@
                                             		<tr>
                                             			<td><?php echo $iterator;?></td>
                                             			<td><?php echo $penguts['NAMA'];?></td>	
-                                            			<td><?php echo $penguts['HARI_TANGGAL'];?></td>	
+                                            			<td><?php echo $penguts['HARI']."/".$penguts['TANGGAL'];?></td>	
                                             			<td><?php echo $penguts['JAM_MULAI'].' s/d '.$penguts['JAM_SELESAI'];?></td>	
                                             			<td><?php echo $penguts['DATE_SUBMITTED'];?></td>	
-                                            			<td></td>	
+                                            			<td align="center">
+                                                            <?php
+
+                                                                if($penguts['STATUS'] == 0 && $flag){
+                                                                    echo form_open('admin_lab/accept_pengajuan_ujian');
+                                                                    ?>
+                                                                <input type="hidden" name="id_pengajuan" value="<?php echo $penguts['ID'];?>" required>
+                                                                <input type="hidden" name="id_admin" value="<?php echo $penguts['ID_ADMIN'];?>" required>
+                                                                <input type="hidden" name="method" value="rekap" required>
+                                                                <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-vote-yea"></i> Accept</button>
+                                                                </form>
+                                                                <?php
+                                                                }
+                                                                else if($penguts['STATUS'] == 1 && $flag){
+                                                                    
+                                                                    echo 'Sudah disetujui';
+                                                                }
+                                                                else if($penguts['STATUS'] == 1 && !$flag){
+                                                                    echo 'Sudah disetujui';
+                                                                }
+                                                                else{
+                                                                    echo '-';
+                                                                }
+                                                                ?>         
+                                                        </td>	
                                             		</tr>
                                             			
                                             			<?php
@@ -128,7 +176,7 @@
                                             		}
                                             	}
                                             	else{
-                                            		echo "<tr><td colspan='6'>Belum ada dokumen Pengajuan Jadwal Bertugas yang dilakukan oleh Admin pada masa UTS!</td></tr>";
+                                            		echo "<tr><td colspan='6'>Belum ada Pengajuan Jadwal Bertugas yang dilakukan oleh Admin pada masa UTS!</td></tr>";
                                             	}
                                             	?>
                                             </tbody>
@@ -149,7 +197,7 @@
 								</div>
 								<div class="ibox-content collapsed">
 									<div class="table-responsive">
-										<table class="table table-striped table-bordered table-hover <?php if(isset($pengajuan_uas) && $pengajuan_uas){ echo 'mainDataTable';}?>">
+										<table class="table table-striped table-bordered table-hover">
 											<thead>
 	                                            <tr>
 	                                                <th>#</th>
@@ -169,10 +217,34 @@
                                             		<tr>
                                             			<td><?php echo $iterator;?></td>
                                             			<td><?php echo $penguas['NAMA'];?></td>	
-                                            			<td><?php echo $penguas['HARI_TANGGAL'];?></td>	
+                                            			<td><?php echo $penguas['HARI']."/".$penguas['TANGGAL'];?></td>	
                                             			<td><?php echo $penguas['JAM_MULAI'].' s/d '.$penguas['JAM_SELESAI'];?></td>	
                                             			<td><?php echo $penguas['DATE_SUBMITTED'];?></td>	
-                                            			<td></td>	
+                                            			<td align="center">
+                                                            <?php
+
+                                                                if($penguas['STATUS'] == 0 && $flag){
+                                                                    echo form_open('admin_lab/accept_pengajuan_ujian');
+                                                                    ?>
+                                                                <input type="hidden" name="id_pengajuan" value="<?php echo $penguas['ID'];?>" required>
+                                                                <input type="hidden" name="id_admin" value="<?php echo $penguas['ID_ADMIN'];?>" required>
+                                                                <input type="hidden" name="method" value="rekap" required>
+                                                                <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-vote-yea"></i> Accept</button>
+                                                                </form>
+                                                                <?php
+                                                                }
+                                                                else if($penguas['STATUS'] == 1 && $flag){
+                                                                    
+                                                                    echo 'Sudah disetujui';
+                                                                }
+                                                                else if($penguas['STATUS'] == 1 && !$flag){
+                                                                    echo 'Sudah disetujui';
+                                                                }
+                                                                else{
+                                                                    echo '-';
+                                                                }
+                                                                ?>          
+                                                        </td>	
                                             		</tr>
                                             			
                                             			<?php

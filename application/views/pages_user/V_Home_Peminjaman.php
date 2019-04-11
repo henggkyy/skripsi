@@ -35,12 +35,11 @@
                     <h5>Email : <?php echo $this->session->userdata('email'); ?>.  <a href="<?php echo base_url()?>logout">Logout</a></h5>
                     <hr>
                     <div class="form-group row">
-                        <div class="row">
+                       
                             <div class="alert alert-danger alert-dismissable">
                                 <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
                                 <span style="font-weight: bold;">Peminjaman ruangan laboratorium dapat dilakukan minimal 1 minggu sebelum ruangan laboratorium akan digunakan. Untuk alat-alat, dapat dilakukan minimal 3 hari sebelum alat akan digunakan.</span>
                             </div>
-                        </div>
                         <label class="col-sm-4 col-form-label">Pilih Tipe Peminjaman <span style="color: red">*</span> :</label>
                         <div class="col-sm-6">
                             <select id="choice" name="choice" required class="form-control"> 

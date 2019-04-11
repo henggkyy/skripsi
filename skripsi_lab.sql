@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 11, 2019 at 10:40 AM
--- Server version: 10.1.38-MariaDB
--- PHP Version: 7.3.3
+-- Generation Time: Apr 11, 2019 at 06:17 PM
+-- Server version: 10.1.36-MariaDB
+-- PHP Version: 5.6.38
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -163,7 +163,8 @@ CREATE TABLE `detail_user` (
 INSERT INTO `detail_user` (`ID`, `ID_USER`, `ANGKATAN`, `AWAL_KONTRAK`, `AKHIR_KONTRAK`, `ID_GAJI`) VALUES
 (2, 5, 2015, '2019-04-29', '2019-04-30', 1),
 (3, 6, 2015, '2019-04-01', '2019-05-31', 2),
-(4, 1, 2015, '2019-04-10', '2019-08-10', 1);
+(4, 1, 2015, '2019-04-10', '2019-08-10', 1),
+(5, 7, 2015, '2019-04-01', '2019-04-30', 1);
 
 -- --------------------------------------------------------
 
@@ -212,64 +213,37 @@ CREATE TABLE `jadwal_bertugas_admin` (
 --
 
 INSERT INTO `jadwal_bertugas_admin` (`ID`, `HARI`, `TANGGAL`, `JAM_MULAI`, `JAM_SELESAI`, `TIPE_BERTUGAS`, `ID_PERIODE`, `ID_ADMIN`, `INSERT_DATE`) VALUES
-(110, 'Rabu', '2019-08-14', '10:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:19:51pm'),
-(111, 'Senin', '2019-08-19', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(112, 'Rabu', '2019-08-21', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(113, 'Senin', '2019-08-26', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(114, 'Rabu', '2019-08-28', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(115, 'Senin', '2019-09-02', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(116, 'Rabu', '2019-09-04', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(117, 'Senin', '2019-09-09', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(118, 'Rabu', '2019-09-11', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(119, 'Senin', '2019-09-16', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(121, 'Senin', '2019-09-23', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(122, 'Rabu', '2019-09-25', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(123, 'Senin', '2019-09-30', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(124, 'Rabu', '2019-10-02', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(125, 'Senin', '2019-10-07', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(126, 'Rabu', '2019-10-09', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(127, 'Rabu', '2019-10-30', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(128, 'Senin', '2019-11-04', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(129, 'Rabu', '2019-11-06', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(130, 'Senin', '2019-11-11', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(131, 'Rabu', '2019-11-13', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(132, 'Senin', '2019-11-18', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(133, 'Rabu', '2019-11-20', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(134, 'Senin', '2019-11-25', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(135, 'Rabu', '2019-11-27', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(136, 'Rabu', '2019-12-18', '09:00', '10:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(137, 'Senin', '2019-12-23', '12:00', '14:00', 'Masa Perkuliahan', 4, 1, '2019-04-09 10:02:24pm'),
-(138, 'Selasa', '2019-10-15', '11:00', '13:00', 'Masa UTS', 4, 1, '2019-04-11 08:59:17am'),
-(167, 'Senin', '2019-08-12', '10:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 01:44:33pm'),
-(168, 'Senin', '2019-08-19', '10:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 01:44:33pm'),
-(169, 'Senin', '2019-08-26', '10:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 01:44:33pm'),
-(170, 'Senin', '2019-09-02', '10:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 01:44:33pm'),
-(171, 'Senin', '2019-09-09', '10:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 01:44:33pm'),
-(172, 'Senin', '2019-09-16', '10:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 01:44:33pm'),
-(173, 'Senin', '2019-09-23', '10:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 01:44:33pm'),
-(174, 'Senin', '2019-09-30', '10:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 01:44:33pm'),
-(175, 'Senin', '2019-10-07', '10:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 01:44:33pm'),
-(176, 'Senin', '2019-11-04', '10:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 01:44:33pm'),
-(177, 'Senin', '2019-11-11', '10:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 01:44:33pm'),
-(178, 'Senin', '2019-11-18', '10:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 01:44:33pm'),
-(179, 'Senin', '2019-11-25', '10:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 01:44:33pm'),
-(180, 'Senin', '2019-12-23', '10:00', '13:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 01:44:33pm'),
-(181, 'Rabu', '2019-08-14', '07:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 02:19:08pm'),
-(182, 'Rabu', '2019-08-21', '07:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 02:19:08pm'),
-(183, 'Rabu', '2019-08-28', '07:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 02:19:08pm'),
-(184, 'Rabu', '2019-09-04', '07:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 02:19:08pm'),
-(185, 'Rabu', '2019-09-11', '07:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 02:19:08pm'),
-(186, 'Rabu', '2019-09-18', '07:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 02:19:08pm'),
-(187, 'Rabu', '2019-09-25', '07:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 02:19:08pm'),
-(188, 'Rabu', '2019-10-02', '07:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 02:19:08pm'),
-(189, 'Rabu', '2019-10-09', '07:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 02:19:08pm'),
-(190, 'Rabu', '2019-10-30', '07:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 02:19:08pm'),
-(191, 'Rabu', '2019-11-06', '07:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 02:19:08pm'),
-(192, 'Rabu', '2019-11-13', '07:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 02:19:08pm'),
-(193, 'Rabu', '2019-11-20', '07:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 02:19:08pm'),
-(194, 'Rabu', '2019-11-27', '07:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 02:19:08pm'),
-(195, 'Rabu', '2019-12-18', '07:00', '10:00', 'Masa Perkuliahan', 4, 5, '2019-04-11 02:19:08pm'),
-(196, 'Jumat', '2019-10-18', '10:00', '12:00', 'Masa UTS', 4, 5, '2019-04-11 02:25:55pm');
+(1, 'Senin', '2019-08-12', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
+(2, 'Senin', '2019-08-19', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
+(3, 'Senin', '2019-08-26', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
+(4, 'Senin', '2019-09-02', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
+(5, 'Senin', '2019-09-09', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
+(6, 'Senin', '2019-09-16', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
+(7, 'Senin', '2019-09-23', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
+(8, 'Senin', '2019-09-30', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
+(9, 'Senin', '2019-10-07', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
+(10, 'Senin', '2019-11-04', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
+(11, 'Senin', '2019-11-11', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
+(12, 'Senin', '2019-11-18', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
+(13, 'Senin', '2019-11-25', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
+(14, 'Senin', '2019-12-23', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
+(15, 'Selasa', '2019-10-15', '10:00:00', '14:00:00', 'Masa UTS', 4, 7, '2019-04-11 10:41:30pm'),
+(16, 'Senin', '2019-12-02', '10:00:00', '14:00:00', 'Masa UAS', 4, 7, '2019-04-11 10:41:39pm'),
+(17, 'Selasa', '2019-08-13', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
+(18, 'Selasa', '2019-08-20', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
+(19, 'Selasa', '2019-08-27', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
+(20, 'Selasa', '2019-09-03', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
+(21, 'Selasa', '2019-09-10', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
+(22, 'Selasa', '2019-09-17', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
+(23, 'Selasa', '2019-09-24', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
+(24, 'Selasa', '2019-10-01', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
+(25, 'Selasa', '2019-10-08', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
+(26, 'Selasa', '2019-10-29', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
+(27, 'Selasa', '2019-11-05', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
+(28, 'Selasa', '2019-11-12', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
+(29, 'Selasa', '2019-11-19', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
+(30, 'Selasa', '2019-11-26', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
+(31, 'Selasa', '2019-12-17', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm');
 
 -- --------------------------------------------------------
 
@@ -544,9 +518,11 @@ CREATE TABLE `pengajuan_jadwal_bertugas` (
   `ID` int(11) NOT NULL,
   `ID_ADMIN` int(11) NOT NULL,
   `ID_PERIODE` int(11) NOT NULL,
-  `HARI_TANGGAL` varchar(64) NOT NULL,
-  `JAM_MULAI` varchar(64) NOT NULL,
-  `JAM_SELESAI` varchar(64) NOT NULL,
+  `HARI` varchar(64) NOT NULL,
+  `TANGGAL` date DEFAULT NULL,
+  `NUM_DAY` int(11) NOT NULL,
+  `JAM_MULAI` time NOT NULL,
+  `JAM_SELESAI` time NOT NULL,
   `TIPE_BERTUGAS` int(11) NOT NULL COMMENT '0: Kuliah. 1: UTS. 2: UAS',
   `STATUS` int(11) NOT NULL COMMENT '0: Pending. 1 : Approved',
   `DATE_SUBMITTED` varchar(32) NOT NULL
@@ -556,15 +532,11 @@ CREATE TABLE `pengajuan_jadwal_bertugas` (
 -- Dumping data for table `pengajuan_jadwal_bertugas`
 --
 
-INSERT INTO `pengajuan_jadwal_bertugas` (`ID`, `ID_ADMIN`, `ID_PERIODE`, `HARI_TANGGAL`, `JAM_MULAI`, `JAM_SELESAI`, `TIPE_BERTUGAS`, `STATUS`, `DATE_SUBMITTED`) VALUES
-(1, 1, 4, 'Tuesday', '12:00', '13:00', 0, 1, '2019-04-11 01:43:39pm'),
-(2, 1, 4, 'Thursday', '07:00', '15:00', 0, 1, '2019-04-11 01:43:39pm'),
-(3, 1, 4, '2019-10-15', '11:00', '14:00', 1, 1, '2019-04-11 01:43:39pm'),
-(4, 1, 4, 'Tuesday', '11:00', '13:00', 0, 1, '2019-04-11 01:43:39pm'),
-(5, 5, 4, 'Monday', '10:00', '13:00', 0, 1, '2019-04-11 01:44:33pm'),
-(6, 5, 4, 'Tuesday', '09:00', '11:00', 0, 0, '2019-04-11 01:43:39pm'),
-(7, 5, 4, 'Wednesday', '07:00', '10:00', 0, 1, '2019-04-11 02:19:08pm'),
-(8, 5, 4, '2019-10-18', '10:00', '12:00', 1, 1, '2019-04-11 02:25:55pm');
+INSERT INTO `pengajuan_jadwal_bertugas` (`ID`, `ID_ADMIN`, `ID_PERIODE`, `HARI`, `TANGGAL`, `NUM_DAY`, `JAM_MULAI`, `JAM_SELESAI`, `TIPE_BERTUGAS`, `STATUS`, `DATE_SUBMITTED`) VALUES
+(1, 7, 4, 'Senin', NULL, 1, '12:00:00', '17:00:00', 0, 1, '2019-04-11 10:37:55pm'),
+(2, 7, 4, 'Selasa', NULL, 2, '07:00:00', '13:00:00', 0, 1, '2019-04-11 11:14:19pm'),
+(3, 7, 4, 'Selasa', '2019-10-15', 2, '10:00:00', '14:00:00', 1, 1, '2019-04-11 10:41:30pm'),
+(4, 7, 4, 'Senin', '2019-12-02', 1, '10:00:00', '14:00:00', 2, 1, '2019-04-11 10:41:39pm');
 
 -- --------------------------------------------------------
 
@@ -663,11 +635,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`ID`, `ID_ROLE`, `NAMA`, `EMAIL`, `NIK`, `STATUS`, `IS_DOSEN`, `LAST_LOGIN`, `LAST_IP`) VALUES
-(1, 1, 'Hengky Surya', '7315051@student.unpar.ac.id', 0, 1, 1, '2019-04-11 12:45:25pm', '::1'),
+(1, 1, 'Hengky Surya', '7315051@student.unpar.ac.id', 0, 1, 1, '2019-04-11 10:24:50pm', '::1'),
 (2, 2, 'Pascal Alfadian', 'pascal@unpar.ac.id', 20180014, 1, 1, NULL, NULL),
 (4, 3, 'Pranyoto', 'pranyoto@unpar.ac.id', 2018012, 1, 0, NULL, NULL),
 (5, 4, 'Stephen Senjaya', '7315033@student.unpar.ac.id', 20180014, 1, 0, '2019-04-11 12:44:33pm', '::1'),
-(6, 4, 'Adrian Stefanus', '7315014@student.unpar.ac.id', 20180100, 1, 0, '2019-04-08 12:05:32pm', '::1');
+(6, 4, 'Adrian Stefanus', '7315014@student.unpar.ac.id', 20180100, 1, 0, '2019-04-08 12:05:32pm', '::1'),
+(7, 4, 'Akun Tester', 'suaramahasiswa@unpar.ac.id', 20180012, 1, 0, '2019-04-11 10:03:25pm', '::1');
 
 -- --------------------------------------------------------
 
@@ -919,7 +892,7 @@ ALTER TABLE `data_file_sop`
 -- AUTO_INCREMENT for table `detail_user`
 --
 ALTER TABLE `detail_user`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `file_bantuan_ujian`
@@ -931,7 +904,7 @@ ALTER TABLE `file_bantuan_ujian`
 -- AUTO_INCREMENT for table `jadwal_bertugas_admin`
 --
 ALTER TABLE `jadwal_bertugas_admin`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=197;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `jadwal_lab`
@@ -991,7 +964,7 @@ ALTER TABLE `peminjaman_lab`
 -- AUTO_INCREMENT for table `pengajuan_jadwal_bertugas`
 --
 ALTER TABLE `pengajuan_jadwal_bertugas`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `periode_akademik`
@@ -1015,7 +988,7 @@ ALTER TABLE `ruangan_ujian`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `user_permission`

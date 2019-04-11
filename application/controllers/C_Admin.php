@@ -14,21 +14,30 @@ class C_Admin extends CI_Controller {
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
 			if(isset($_GET['id_periode'])){
-				$id_periode = $_GET['id_periode'];
-				if($id_periode != ""){
-					$data['id_periode_aktif'] = $id_periode;
+				$id_periode_selected = $_GET['id_periode'];
+				if($id_periode_selected != ""){
+					if($id_periode_selected == $id_periode){
+						$data['flag'] = true;
+					}
+					else{
+						$data['flag'] = false;
+					}
+					$data['id_periode_aktif'] = $id_periode_selected;
 				}
 				else{
 					$id_periode = $this->Periode_akademik->getIDPeriodeAktif(); 
 					$data['id_periode_aktif'] = $id_periode;
+					$data['flag'] = true;
 				}
 			}
 			else{
 				if(!$id_periode){
 					$data['id_periode_aktif'] = $this->Periode_akademik->getLastActiveId();
+					$data['flag'] = false;
 				}
 				else{
 					$data['id_periode_aktif'] = $id_periode;
+					$data['flag'] = true;
 				}
 			}
 			$this->load->model('Pengajuan_jadwal_bertugas');
@@ -56,8 +65,15 @@ class C_Admin extends CI_Controller {
 			$this->form_validation->set_rules('id_pengajuan', 'ID Pengajuan', 'required');
 			$this->form_validation->set_rules('id_admin', 'ID Admin', 'required');
 			$id_admin = $this->input->post('id_admin');
+			$rekap = false;
+			if(isset($_POST['method'])){
+				$rekap = true;
+			}
 			if($this->form_validation->run() == FALSE){
 				$this->session->set_flashdata('error', 'Missing required Field!');
+				if($rekap){
+					redirect("rekapitulasi_pengajuan");
+				}
 	            redirect("admin_lab/detail?id_admin=$id_admin");
 			}
 			else{
@@ -65,13 +81,17 @@ class C_Admin extends CI_Controller {
 				$id_pengajuan = $this->input->post('id_pengajuan');
 				$this->load->model('Periode_akademik');
 				$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
+				
 				if($id_periode){
 					$array_data_pengajuan = $this->Pengajuan_jadwal_bertugas->getDataPengajuanById($id_pengajuan, $id_admin, $id_periode);
 					if(!$array_data_pengajuan){
 						$this->session->set_flashdata('error', 'Error! Data Pengajuan tidak ditemukan!');
+						if($rekap){
+							redirect("rekapitulasi_pengajuan");
+						}
 	            		redirect("admin_lab/detail?id_admin=$id_admin");
 					}
-					$tgl_bertugas = $array_data_pengajuan[0]['HARI_TANGGAL'];
+					$tgl_bertugas = $array_data_pengajuan[0]['TANGGAL'];
 					$jam_mulai = $array_data_pengajuan[0]['JAM_MULAI'];
 					$jam_selesai = $array_data_pengajuan[0]['JAM_SELESAI'];
 					//Get data tanggal periode akademik
@@ -94,7 +114,7 @@ class C_Admin extends CI_Controller {
 					}
 					// print_r($check_in_uts);
 					// return;
-					$hari = $this->getDay($tgl_bertugas);
+					$hari = $array_data_pengajuan[0]['HARI'];
 					$date_now = date("Y-m-d h:i:sa");
 					$data = array(
 						'HARI' => $hari,
@@ -115,15 +135,24 @@ class C_Admin extends CI_Controller {
 					$res = $this->Jadwal_bertugas_admin->insertJadwalBertugasManual($data);
 					if($res){
 						$this->session->set_flashdata('success', "Berhasil memasukkan jadwal bertugas admin!");
+						if($rekap){
+							redirect("rekapitulasi_pengajuan");
+						}
 						redirect("admin_lab/detail?id_admin=$id_admin");
 					}
 					else{
 						$this->session->set_flashdata('error', "Gagal memasukkan jadwal bertugas admin!");
+						if($rekap){
+							redirect("rekapitulasi_pengajuan");
+						}
 						redirect("admin_lab/detail?id_admin=$id_admin");
 					}
 				}
 				else{
 					$this->session->set_flashdata('error', 'Tidak dapat memasukkan tanggal bertugas karena tidak terdapat periode akademik yg sedang aktif!');
+					if($rekap){
+						redirect("rekapitulasi_pengajuan");
+					}
 					redirect("admin_lab/detail?id_admin=$id_admin");
 				}
 			}
@@ -142,23 +171,34 @@ class C_Admin extends CI_Controller {
 			$this->form_validation->set_rules('id_pengajuan', 'ID Pengajuan', 'required');
 			$this->form_validation->set_rules('id_admin', 'ID Admin', 'required');
 			$id_admin = $this->input->post('id_admin');
+			if(isset($_POST['method'])){
+				$rekap = true;
+			}
 			if($this->form_validation->run() == FALSE){
 				$this->session->set_flashdata('error', 'Missing required Field!');
+				if($rekap){
+					redirect("rekapitulasi_pengajuan");
+				}
 	            redirect("admin_lab/detail?id_admin=$id_admin");
 			}
 			else{
 				$this->load->model('Pengajuan_jadwal_bertugas');
 				$id_pengajuan = $this->input->post('id_pengajuan');
+				
 				//Cek ada periode aktif atau tidak
 				$this->load->model('Periode_akademik');
 				$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
 				if(!$id_periode){
 					$this->session->set_flashdata('error', 'Tidak dapat memasukkan tanggal bertugas karena tidak terdapat periode akademik yg sedang aktif!');
+					if($rekap){
+						redirect("rekapitulasi_pengajuan");
+					}
 					redirect("admin_lab/detail?id_admin=$id_admin");
 				}
 				$array_data_pengajuan = $this->Pengajuan_jadwal_bertugas->getDataPengajuanById($id_pengajuan, $id_admin, $id_periode);
 				if($array_data_pengajuan){
-					$arr_hari_input = array($array_data_pengajuan[0]['HARI_TANGGAL']);
+					$arr_day_eng = $this->convertDayFromId($array_data_pengajuan[0]['HARI']);
+					$arr_hari_input = array($arr_day_eng[1]);
 					$jam_mulai = $array_data_pengajuan[0]['JAM_MULAI'];
 					$jam_selesai = $array_data_pengajuan[0]['JAM_SELESAI'];
 					
@@ -235,15 +275,24 @@ class C_Admin extends CI_Controller {
 					$res = $this->Jadwal_bertugas_admin->insertJadwalBertugasAuto($arr_res);
 					if($res){
 						$this->session->set_flashdata('success', "Berhasil memasukkan jadwal bertugas admin!");
+						if($rekap){
+							redirect("rekapitulasi_pengajuan");
+						}
 						redirect("admin_lab/detail?id_admin=$id_admin");
 					}
 					else{
 						$this->session->set_flashdata('error', "Gagal memasukkan jadwal bertugas admin!");
+						if($rekap){
+							redirect("rekapitulasi_pengajuan");
+						}
 						redirect("admin_lab/detail?id_admin=$id_admin");
 					}
 				}
 				else{
 					$this->session->set_flashdata('error', 'Error! Data Pengajuan tidak ditemukan!');
+					if($rekap){
+						redirect("rekapitulasi_pengajuan");
+					}
 	            	redirect("admin_lab/detail?id_admin=$id_admin");
 				}
 			}
@@ -302,6 +351,7 @@ class C_Admin extends CI_Controller {
 					$this->session->set_flashdata('error', 'Tidak dapat melakukan pengajuan jadwal bertugas karena status Admin sedang nonaktif!');
 					redirect("admin_lab/jadwal_bertugas");
 				}
+
 				//Cek ada periode aktif atau tidak
 				$this->load->model('Periode_akademik');
 				$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
@@ -315,7 +365,9 @@ class C_Admin extends CI_Controller {
 						$arr_ind = array();
 						$arr_ind['ID_ADMIN'] = $id_admin;
 						$arr_ind['ID_PERIODE'] = $id_periode;
-						$arr_ind['HARI_TANGGAL'] = $hari;
+						$arr_data_hari = $this->convertDayFromEng($hari);
+						$arr_ind['NUM_DAY'] = $arr_data_hari[0];
+						$arr_ind['HARI'] = $arr_data_hari[1];
 						$arr_ind['JAM_MULAI'] = $arr_jam_mulai[$iterator];
 						$arr_ind['JAM_SELESAI'] = $arr_jam_selesai[$iterator];
 						$arr_ind['TIPE_BERTUGAS'] = 0;
@@ -418,10 +470,13 @@ class C_Admin extends CI_Controller {
 					$hari = $this->getDay($tgl_bertugas);
 					date_default_timezone_set('Asia/Jakarta');
 					$date_now = date("Y-m-d h:i:sa");
+					$arr_tgl = $this->convertDayFromId($this->getDay($tgl_bertugas));
 					$data = array(
 						'ID_ADMIN' => $id_admin,
 						'ID_PERIODE' => $id_periode,
-						'HARI_TANGGAL' => $tgl_bertugas,
+						'HARI' => $this->getDay($tgl_bertugas),
+						'NUM_DAY' => $arr_tgl[0],
+						'TANGGAL' => $tgl_bertugas,
 						'JAM_MULAI' => $jam_mulai,
 						'JAM_SELESAI' => $jam_selesai,
 						'TIPE_BERTUGAS' => $tipe_ujian,
@@ -494,6 +549,11 @@ class C_Admin extends CI_Controller {
 				if($id_periode_selected != ""){
 					$data['jadwal_admin'] = $this->Jadwal_bertugas_admin->getJadwalBertugas($data['id_admin'], $id_periode_selected);
 					$data['id_periode_aktif'] = $id_periode_selected;
+					
+					$data['id_periode_aktif'] = $id_periode_selected;
+				}
+				else{
+					$data['id_periode_aktif'] = $this->Periode_akademik->getLastActiveId();
 				}
 				if($id_periode_selected != $id_periode){
 					$flag = false;
@@ -510,7 +570,10 @@ class C_Admin extends CI_Controller {
 					$data['jadwal_admin'] = $this->Jadwal_bertugas_admin->getJadwalBertugas($data['id_admin'], $id_periode);
 				}
 			}
-
+			$this->load->model('Pengajuan_jadwal_bertugas');
+			$data['jadwal_pending_kuliah'] = $this->Pengajuan_jadwal_bertugas->getDataPengajuan($data['id_periode_aktif'], $data['id_admin'], 0);
+			$data['jadwal_pending_uts'] = $this->Pengajuan_jadwal_bertugas->getDataPengajuan($data['id_periode_aktif'], $data['id_admin'], 1);
+			$data['jadwal_pending_uas'] = $this->Pengajuan_jadwal_bertugas->getDataPengajuan($data['id_periode_aktif'], $data['id_admin'], 2);
 			$data['flag_admin'] = $flag_admin; 
 			$data['flag'] = $flag; 
 			$data_json = array();
@@ -1420,7 +1483,56 @@ class C_Admin extends CI_Controller {
 	    
 	    return $dates;
 	}
+	//Method untuk melakukan convert nama hari ke dalam hari bahasa inggris ke bahasa indonesia dan mendapatkan nomor hari
+	private function convertDayFromId($hari){
+		$day_eng = array ( 1 =>    'Monday',
+			'Tuesday',
+			'Wednesday',
+			'Thursday',
+			'Friday',
+			'Saturday',
+			'Monday'
+		);
+		$day_id = array ( 1 =>    'Senin',
+			'Selasa',
+			'Rabu',
+			'Kamis',
+			'Jumat',
+			'Sabtu',
+			'Minggu'
+		);
 
+		$idx_id = array_search($hari, $day_id);
+		$arr_res = array();
+		$arr_res[0] = $idx_id;
+		$arr_res[1] = $day_eng[$idx_id];
+		return $arr_res;
+	}
+	//Method untuk melakukan convert nama hari ke dalam hari bahasa indonesia dan mendapatkan nomor hari
+	private function convertDayFromEng($day){
+		$day_eng = array ( 1 =>    'Monday',
+			'Tuesday',
+			'Wednesday',
+			'Thursday',
+			'Friday',
+			'Saturday',
+			'Monday'
+		);
+		$day_id = array ( 1 =>    'Senin',
+			'Selasa',
+			'Rabu',
+			'Kamis',
+			'Jumat',
+			'Sabtu',
+			'Minggu'
+		);
+
+		$idx_eng = array_search($day, $day_eng);
+		$arr_res = array();
+		$arr_res[0] = $idx_eng;
+		$arr_res[1] = $day_id[$idx_eng];
+		return $arr_res;
+	}
 	//Method untuk mendapatkan nama hari dari tanggal yang dipilih user
 	private function getDay($date){
 		date_default_timezone_set('Asia/Jakarta');

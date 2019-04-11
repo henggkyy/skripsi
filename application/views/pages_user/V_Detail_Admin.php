@@ -312,7 +312,7 @@
                                                         ?>
                                                         <tr>
                                                             <td><?php echo $iterator;?></td>
-                                                            <td><?php echo $pend_kul['HARI_TANGGAL'];?></td>
+                                                            <td><?php echo $pend_kul['HARI'];?></td>
                                                             <td><?php echo $pend_kul['JAM_MULAI']." s/d ". $pend_kul['JAM_SELESAI'];?></td>
                                                             <td><?php echo $pend_kul['DATE_SUBMITTED'];?></td>
                                                             <td align="center">
@@ -385,14 +385,14 @@
                                                         ?>
                                                         <tr>
                                                             <td><?php echo $iterator;?></td>
-                                                            <td><?php echo $pend_uts['HARI_TANGGAL'];?></td>
+                                                            <td><?php echo $pend_uts['HARI']."/".$pend_uts['TANGGAL'];?></td>
                                                             <td><?php echo $pend_uts['JAM_MULAI']." s/d ". $pend_uts['JAM_SELESAI'];?></td>
                                                             <td><?php echo $pend_uts['DATE_SUBMITTED'];?></td>
                                                             <td align="center">
                                                                 <?php
 
                                                                 if($pend_uts['STATUS'] == 0 && $flag){
-                                                                    echo form_open('admin_lab/accept_pengajuan_kuliah');
+                                                                    echo form_open('admin_lab/accept_pengajuan_ujian');
                                                                     ?>
                                                                 <input type="hidden" name="id_pengajuan" value="<?php echo $pend_uts['ID'];?>" required>
                                                                 <input type="hidden" name="id_admin" value="<?php echo $_GET['id_admin'];?>" required>
@@ -458,14 +458,14 @@
                                                         ?>
                                                         <tr>
                                                             <td><?php echo $iterator;?></td>
-                                                            <td><?php echo $pend_uas['HARI_TANGGAL'];?></td>
+                                                            <td><?php echo $pend_uas['HARI']."/".$pend_uas['TANGGAL'];?></td>
                                                             <td><?php echo $pend_uas['JAM_MULAI']." s/d ". $pend_uas['JAM_SELESAI'];?></td>
                                                             <td><?php echo $pend_uas['DATE_SUBMITTED'];?></td>
                                                             <td align="center">
                                                                 <?php
 
                                                                 if($pend_uas['STATUS'] == 0 && $flag){
-                                                                    echo form_open('admin_lab/accept_pengajuan_kuliah');
+                                                                    echo form_open('admin_lab/accept_pengajuan_ujian');
                                                                     ?>
                                                                 <input type="hidden" name="id_pengajuan" value="<?php echo $pend_uas['ID'];?>" required>
                                                                 <input type="hidden" name="id_admin" value="<?php echo $_GET['id_admin'];?>" required>
