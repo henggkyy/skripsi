@@ -2,10 +2,8 @@
                 <div class="p-w-md m-t-sm">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="ibox float-e-margins">
-                                <div class="ibox-title">
-                                    <?php $this->load->view('pages_user/V_Template_Periode_Aktif');?>
-                                </div>
+                            <div class="ibox float-e-margins collapsed">
+                                <?php $this->load->view('pages_user/V_Template_Periode_Aktif');?>
                             </div>
                         </div> 
                         
@@ -319,7 +317,8 @@
                                                             <td><?php echo $pend_kul['DATE_SUBMITTED'];?></td>
                                                             <td align="center">
                                                                 <?php
-                                                                if($pend_kul['STATUS'] == 0){
+
+                                                                if($pend_kul['STATUS'] == 0 && $flag){
                                                                     echo form_open('admin_lab/accept_pengajuan_kuliah');
                                                                     ?>
                                                                 <input type="hidden" name="id_pengajuan" value="<?php echo $pend_kul['ID'];?>" required>
@@ -328,8 +327,15 @@
                                                                 </form>
                                                                     <?php
                                                                 }
-                                                                else{
+                                                                else if($pend_kul['STATUS'] == 1 && $flag){
+                                                                    
                                                                     echo 'Sudah disetujui';
+                                                                }
+                                                                else if($pend_kul['STATUS'] == 1 && !$flag){
+                                                                    echo 'Sudah disetujui';
+                                                                }
+                                                                else{
+                                                                    echo '-';
                                                                 }
                                                                 ?>
                                                             </td>
@@ -384,8 +390,9 @@
                                                             <td><?php echo $pend_uts['DATE_SUBMITTED'];?></td>
                                                             <td align="center">
                                                                 <?php
-                                                                if($pend_uts['STATUS'] == 0){
-                                                                    echo form_open('admin_lab/accept_pengajuan_ujian');
+
+                                                                if($pend_uts['STATUS'] == 0 && $flag){
+                                                                    echo form_open('admin_lab/accept_pengajuan_kuliah');
                                                                     ?>
                                                                 <input type="hidden" name="id_pengajuan" value="<?php echo $pend_uts['ID'];?>" required>
                                                                 <input type="hidden" name="id_admin" value="<?php echo $_GET['id_admin'];?>" required>
@@ -393,8 +400,15 @@
                                                                 </form>
                                                                     <?php
                                                                 }
-                                                                else{
+                                                                else if($pend_uts['STATUS'] == 1 && $flag){
+                                                                    
                                                                     echo 'Sudah disetujui';
+                                                                }
+                                                                else if($pend_uts['STATUS'] == 1 && !$flag){
+                                                                    echo 'Sudah disetujui';
+                                                                }
+                                                                else{
+                                                                    echo '-';
                                                                 }
                                                                 ?>
                                                             </td>
@@ -449,8 +463,9 @@
                                                             <td><?php echo $pend_uas['DATE_SUBMITTED'];?></td>
                                                             <td align="center">
                                                                 <?php
-                                                                if($pend_uas['STATUS'] == 0){
-                                                                    echo form_open('admin_lab/accept_pengajuan_ujian');
+
+                                                                if($pend_uas['STATUS'] == 0 && $flag){
+                                                                    echo form_open('admin_lab/accept_pengajuan_kuliah');
                                                                     ?>
                                                                 <input type="hidden" name="id_pengajuan" value="<?php echo $pend_uas['ID'];?>" required>
                                                                 <input type="hidden" name="id_admin" value="<?php echo $_GET['id_admin'];?>" required>
@@ -458,8 +473,15 @@
                                                                 </form>
                                                                     <?php
                                                                 }
-                                                                else{
+                                                                else if($pend_uas['STATUS'] == 1 && $flag){
+                                                                    
                                                                     echo 'Sudah disetujui';
+                                                                }
+                                                                else if($pend_uas['STATUS'] == 1 && !$flag){
+                                                                    echo 'Sudah disetujui';
+                                                                }
+                                                                else{
+                                                                    echo '-';
                                                                 }
                                                                 ?>
                                                             </td>

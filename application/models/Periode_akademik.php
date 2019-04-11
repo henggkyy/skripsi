@@ -113,13 +113,12 @@ class Periode_akademik extends CI_Model{
 	//Method untuk melakukan pengecekan apakah terdapat periode aktif atau tidak.
 	//Apabila terdapat periode aktif, maka akan kembalikan nama periode yang sedang aktif.
 	function checkPeriodeAktif(){
-		$this->db->select('NAMA');
-		$item = "NAMA";
+		$this->db->select('NAMA, START_PERIODE, END_PERIODE, START_UTS, END_UTS, START_UAS, END_UAS');
 		$this->db->where('STATUS', 1);
 		$this->db->from('periode_akademik');
 		$result = $this->db->get();
 		if($result->num_rows() == 1){
-			return $result->row(0)->$item;
+			return $result->result_array();
 		} 
 		else {
 			return false;

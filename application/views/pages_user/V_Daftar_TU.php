@@ -2,10 +2,8 @@
                 <div class="p-w-md m-t-sm">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="ibox float-e-margins">
-                                <div class="ibox-title">
-                                    <?php $this->load->view('pages_user/V_Template_Periode_Aktif');?>
-                                </div>
+                            <div class="ibox float-e-margins collapsed">
+                                <?php $this->load->view('pages_user/V_Template_Periode_Aktif');?>
                             </div>
                         </div> 
                         <div class="col-lg-12">

@@ -2,10 +2,8 @@
                 <div class="p-w-md m-t-sm">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="ibox float-e-margins">
-                                <div class="ibox-title">
-                                    <?php $this->load->view('pages_user/V_Template_Periode_Aktif');?>
-                                </div>
+                            <div class="ibox float-e-margins collapsed">
+                                <?php $this->load->view('pages_user/V_Template_Periode_Aktif');?>
                             </div>
                         </div> 
                         <div class="col-lg-12">
@@ -15,6 +13,7 @@
                                 </div>
                                 <div class="ibox-content">
                                     <button type="button" data-toggle="modal" data-target="#modalAddAdmin" class="btn btn-w-m btn-success"><i class="fas fa-user-plus"></i> Tambah Admin</button>
+                                    <a href="<?php echo base_url();?>rekapitulasi_pengajuan" class="btn btn-w-m btn-warning"><i class="fas fa-clipboard-list"></i> Rekapitulasi Pengajuan Jadwal Bertugas Admin</a>
                                     <!--Modal Add Dosen-->
                                     <div class="modal inmodal" id="modalAddAdmin" tabindex="-1" role="dialog"  aria-hidden="true">
                                         <div class="modal-dialog">
