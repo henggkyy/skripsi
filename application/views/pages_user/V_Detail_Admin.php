@@ -254,9 +254,238 @@
                             </div>
                         </div> 
                         <div class="col-lg-12">
+                            <div class="ibox float-e-margins collapsed">
+                                <div class="ibox-title collapse-link">
+                                    <h5>Pengajuan Jadwal Bertugas</h5>
+                                    <div class="ibox-tools">
+                                        <a>
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content collapsed">
+                                    <label class="col-sm-4 col-form-label">Periode Akademik:</label>
+                                    <div class="col-sm-8 ">
+                                        <form method="GET" action="<?php echo base_url()."admin_lab/detail?id_admin=".$id_admin;?>">
+                                            <input type="hidden" name="id_admin" required value="<?php echo $id_admin;?>">
+                                            <select name="id_periode" onchange="this.form.submit()" class="form-control">
+                                                <?php
+                                                if(isset($daftar_periode) && $daftar_periode){
+                                                    foreach ($daftar_periode as $list_periode) {
+                                                ?>
+                                                <option value="<?php echo $list_periode['ID'];?>" <?php if($list_periode['ID'] == $id_periode_aktif){ echo 'selected';}?>><?php echo $list_periode['NAMA'];?></option>
+                                                <?php
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+                                        </form>
+                                    </div>
+                                    <hr>
+                                    <label class="col-sm-4 col-form-label">Masa Perkuliahan :</label>
+                                    <div class="col-sm-8 table-responsive">
+                                        <table class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Hari/Tanggal</th>
+                                                    <th>Waktu Bertugas</th>
+                                                    <th>Last Update</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                if(isset($jadwal_pending_kuliah) && $jadwal_pending_kuliah){
+                                                    $iterator = 1;
+                                                    $total_hours = 0;
+                                                    $total_hours_accept = 0;
+                                                    foreach ($jadwal_pending_kuliah as $pend_kul) {
+                                                        if($pend_kul['STATUS'] == 1){
+                                                            $start = explode(':', $pend_kul['JAM_MULAI']);
+                                                            $end = explode(':', $pend_kul['JAM_SELESAI']);
+                                                            $total_hours_accept += $end[0] - $start[0] - ($end[1] < $start[1]);
+                                                        }
+                                                       
+                                                        $start = explode(':', $pend_kul['JAM_MULAI']);
+                                                        $end = explode(':', $pend_kul['JAM_SELESAI']);
+                                                        $total_hours += $end[0] - $start[0] - ($end[1] < $start[1]);
+                                                        
+                                                        ?>
+                                                        <tr>
+                                                            <td><?php echo $iterator;?></td>
+                                                            <td><?php echo $pend_kul['HARI_TANGGAL'];?></td>
+                                                            <td><?php echo $pend_kul['JAM_MULAI']." s/d ". $pend_kul['JAM_SELESAI'];?></td>
+                                                            <td><?php echo $pend_kul['DATE_SUBMITTED'];?></td>
+                                                            <td align="center">
+                                                                <?php
+                                                                if($pend_kul['STATUS'] == 0){
+                                                                    echo form_open('admin_lab/accept_pengajuan_kuliah');
+                                                                    ?>
+                                                                <input type="hidden" name="id_pengajuan" value="<?php echo $pend_kul['ID'];?>" required>
+                                                                <input type="hidden" name="id_admin" value="<?php echo $_GET['id_admin'];?>" required>
+                                                                <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-vote-yea"></i> Accept</button>
+                                                                </form>
+                                                                    <?php
+                                                                }
+                                                                else{
+                                                                    echo 'Sudah disetujui';
+                                                                }
+                                                                ?>
+                                                            </td>
+                                                        </tr>
+                                                        <?php
+                                                        $iterator++;
+                                                    }
+                                                    echo'<tr>
+                                                            <td align="center" colspan="5">Total : '.$total_hours.' jam/minggu<br>Yang disetujui : '.$total_hours_accept.' jam/minggu</td>
+                                                        </tr>' ;
+                                                }
+                                                else{
+                                                    echo'<tr><td colspan="5">Admin belum melakukan pengajuan jadwal bertugas pada masa perkuliahan!</td></tr>' ;
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <label class="col-sm-4 col-form-label">Masa UTS :</label>
+                                    <div class="col-sm-8 table-responsive">
+                                        <table class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Hari/Tanggal</th>
+                                                    <th>Waktu Bertugas</th>
+                                                    <th>Last Update</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                if(isset($jadwal_pending_uts) && $jadwal_pending_uts){
+                                                    $iterator = 1;
+                                                    $total_hours = 0;
+                                                    $total_hours_accept = 0;
+                                                    foreach ($jadwal_pending_uts as $pend_uts) {
+                                                        if($pend_uts['STATUS'] == 1){
+                                                            $start = explode(':', $pend_uts['JAM_MULAI']);
+                                                            $end = explode(':', $pend_uts['JAM_SELESAI']);
+                                                            $total_hours_accept += $end[0] - $start[0] - ($end[1] < $start[1]);
+                                                        }
+                                                       
+                                                        $start = explode(':', $pend_uts['JAM_MULAI']);
+                                                        $end = explode(':', $pend_uts['JAM_SELESAI']);
+                                                        $total_hours += $end[0] - $start[0] - ($end[1] < $start[1]);
+                                                        ?>
+                                                        <tr>
+                                                            <td><?php echo $iterator;?></td>
+                                                            <td><?php echo $pend_uts['HARI_TANGGAL'];?></td>
+                                                            <td><?php echo $pend_uts['JAM_MULAI']." s/d ". $pend_uts['JAM_SELESAI'];?></td>
+                                                            <td><?php echo $pend_uts['DATE_SUBMITTED'];?></td>
+                                                            <td align="center">
+                                                                <?php
+                                                                if($pend_uts['STATUS'] == 0){
+                                                                    echo form_open('admin_lab/accept_pengajuan_ujian');
+                                                                    ?>
+                                                                <input type="hidden" name="id_pengajuan" value="<?php echo $pend_uts['ID'];?>" required>
+                                                                <input type="hidden" name="id_admin" value="<?php echo $_GET['id_admin'];?>" required>
+                                                                <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-vote-yea"></i> Accept</button>
+                                                                </form>
+                                                                    <?php
+                                                                }
+                                                                else{
+                                                                    echo 'Sudah disetujui';
+                                                                }
+                                                                ?>
+                                                            </td>
+                                                        </tr>
+                                                        <?php
+                                                        $iterator++;
+                                                    }
+                                                    echo'<tr>
+                                                            <td align="center" colspan="5">Total : '.$total_hours.' jam/minggu<br>Yang disetujui : '.$total_hours_accept.' jam/minggu</td>
+                                                        </tr>' ;
+                                                }
+                                                else{
+                                                    echo'<tr><td colspan="5">Admin belum melakukan pengajuan jadwal bertugas pada masa UTS!</td></tr>' ;
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <label class="col-sm-4 col-form-label">Masa UAS :</label>
+                                    <div class="col-sm-8 table-responsive">
+                                        <table class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Hari/Tanggal</th>
+                                                    <th>Waktu Bertugas</th>
+                                                    <th>Last Update</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                if(isset($jadwal_pending_uas) && $jadwal_pending_uas){
+                                                    $iterator = 1;
+                                                    $total_hours = 0;
+                                                    $total_hours_accept = 0;
+                                                    foreach ($jadwal_pending_uas as $pend_uas) {
+                                                        if($pend_uas['STATUS'] == 1){
+                                                            $start = explode(':', $pend_uas['JAM_MULAI']);
+                                                            $end = explode(':', $pend_uas['JAM_SELESAI']);
+                                                            $total_hours_accept += $end[0] - $start[0] - ($end[1] < $start[1]);
+                                                        }
+                                                       
+                                                        $start = explode(':', $pend_uas['JAM_MULAI']);
+                                                        $end = explode(':', $pend_uas['JAM_SELESAI']);
+                                                        $total_hours += $end[0] - $start[0] - ($end[1] < $start[1]);
+                                                        ?>
+                                                        <tr>
+                                                            <td><?php echo $iterator;?></td>
+                                                            <td><?php echo $pend_uas['HARI_TANGGAL'];?></td>
+                                                            <td><?php echo $pend_uas['JAM_MULAI']." s/d ". $pend_uas['JAM_SELESAI'];?></td>
+                                                            <td><?php echo $pend_uas['DATE_SUBMITTED'];?></td>
+                                                            <td align="center">
+                                                                <?php
+                                                                if($pend_uas['STATUS'] == 0){
+                                                                    echo form_open('admin_lab/accept_pengajuan_ujian');
+                                                                    ?>
+                                                                <input type="hidden" name="id_pengajuan" value="<?php echo $pend_uas['ID'];?>" required>
+                                                                <input type="hidden" name="id_admin" value="<?php echo $_GET['id_admin'];?>" required>
+                                                                <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-vote-yea"></i> Accept</button>
+                                                                </form>
+                                                                    <?php
+                                                                }
+                                                                else{
+                                                                    echo 'Sudah disetujui';
+                                                                }
+                                                                ?>
+                                                            </td>
+                                                        </tr>
+                                                        <?php
+                                                        $iterator++;
+                                                    }
+                                                    echo'<tr>
+                                                            <td align="center" colspan="5">Total : '.$total_hours.' jam/minggu<br>Yang disetujui : '.$total_hours_accept.' jam/minggu</td>
+                                                        </tr>' ;
+                                                }
+                                                else{
+                                                    echo'<tr><td colspan="5">Admin belum melakukan pengajuan jadwal bertugas pada masa UAS!</td></tr>' ;
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
-                                    <h3>Jadwal Bertugas Admin</h3>
+                                    <h5>Jadwal Bertugas Admin</h5>
+                                    
                                 </div>
                                 <div class="ibox-content">
                                     <label class="col-sm-4 col-form-label">Periode Akademik:</label>

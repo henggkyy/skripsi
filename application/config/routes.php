@@ -122,8 +122,10 @@ $route['admin_lab/get_jadwal_bertugas'] = 'C_Admin/getIndividualJadwalAdmin';
 $route['admin_lab/update_jadwal'] = 'C_Admin/updateJadwalBertugasAdmin';
 $route['admin_lab/update_golongan'] = 'C_Admin/editKonfigurasiGolonganGaji';
 $route['admin_lab/jadwal_bertugas'] = 'C_Admin/loadJadwalBertugasAdmin';
-$route['admin_lab/insert_manual_admin'] = 'C_Admin/insertJadwalManualInAdmin';
-$route['admin_lab/insert_auto_admin'] = 'C_Admin/insertJadwalAutoInAdmin';
+$route['admin_lab/pengajuan_masa_ujian'] = 'C_Admin/pengajuanJadwalMasaUjian';
+$route['admin_lab/pengajuan_masa_kuliah'] = 'C_Admin/pengajuanJadwalMasaKuliah';
+$route['admin_lab/accept_pengajuan_kuliah'] = 'C_Admin/acceptJadwalMasaKuliah';
+$route['admin_lab/accept_pengajuan_ujian'] = 'C_Admin/acceptJadwalMasaUjian';
 
 $route['laporan_gaji'] = 'C_Gaji_Admin/loadDaftarGajiAdmin';
 $route['laporan_gaji/periode'] = 'C_Gaji_Admin/loadSetPeriode';

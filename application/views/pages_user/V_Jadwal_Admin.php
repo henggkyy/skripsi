@@ -51,23 +51,23 @@
                         <div class="col-lg-6">
                             <div class="ibox float-e-margins">
                                  <div class="ibox-title">
-                                    <h3>Insert Jadwal Bertugas Admin</h3>
+                                    <h3>Pengajuan Jadwal Bertugas Admin</h3>
                                 </div>
                                 <div class="ibox-content">               
                                     <?php
                                     if($periode_aktif && $flag_admin){
 
                                     ?>
-                                    <button data-toggle="modal" data-target="#modalJadwalAuto" class="btn btn-md btn-success"><i class="far fa-calendar-alt"></i> Add Jadwal Bertugas (Auto)</button>
-                                    <!--Modal Jadwal (Auto)-->
+                                    <button data-toggle="modal" data-target="#modalJadwalAuto" class="btn btn-md btn-success"><i class="far fa-calendar-alt"></i> Pengajuan Jadwal Bertugas (Masa Perkuliahan)</button>
+                                    <!--Modal Pengajuan Jadwal Bertugas (Masa Kuliah)-->
                                                                 <div class="modal inmodal" id="modalJadwalAuto" tabindex="-1" role="dialog"  aria-hidden="true">
                                                                     <div class="modal-dialog">
                                                                         <div class="modal-content animated fadeIn">
                                                                             <div class="modal-header">
                                                                                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                                                <h4 class="modal-title">Insert Jadwal Bertugas Admin (Auto)</h4>
+                                                                                <h4 class="modal-title">Pengajuan Jadwal Bertugas (Masa Perkuliahan)</h4>
                                                                             </div>
-                                                                            <?php echo form_open('admin_lab/insert_auto_admin');?>
+                                                                            <?php echo form_open('admin_lab/pengajuan_masa_kuliah');?>
                                                                             <div class="modal-body">
                                                                                 <div id="form_bertugas_auto">
                                                                                     <div class="form-group row">
@@ -91,8 +91,7 @@
                                                                                 </div>
                                                                                 <a href="javascript:void(0)" id="add_day" class="btn btn-sm btn-primary">Add Hari</a>
                                                                                
-                                                                                <p align="center" style="font-size: 12px; font-weight: bold;">Form ini akan melakukan generate seluruh tanggal bertugas pada periode akademik yg sdg aktif berdasarkan hari yang dipilih<br>
-                                                                                Tanggal bertugas pada periode UTS/UAS tidak akan masuk dari form ini. Jadwal bertugas UTS/UAS harap input secara manual</p>
+                                                                                <p align="center" style="font-size: 12px; font-weight: bold;">Form ini akan melakukan pengajuan jadwal bertugas kepada Kepala Laboratorium untuk masa Perkuliahan</p>
                                                                                 <p align="center" style="color: red">* Wajib Diisi</p>
                                                                             </div>
                                                                             
@@ -104,17 +103,17 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <!-- END Modal Jadwal (Auto)-->
-                                    <button data-toggle="modal" data-target="#modalJadwalManual" class="btn btn-md btn-success"><i class="far fa-calendar-alt"></i> Add Jadwal Bertugas (Manual)</button>
-                                    <!--Modal Jadwal (Manual)-->
+                                                                <!-- END Modal Pengajuan Jadwal (Masa Kuliah)-->
+                                    <button data-toggle="modal" data-target="#modalJadwalManual" class="btn btn-md btn-success"><i class="far fa-calendar-alt"></i> Pengajuan Jadwal Bertugas (Masa UTS/UAS)</button>
+                                    <!--Modal Pengajuan Jadwal (UJian)-->
                                                                 <div class="modal inmodal" id="modalJadwalManual" tabindex="-1" role="dialog"  aria-hidden="true">
                                                                     <div class="modal-dialog">
                                                                         <div class="modal-content animated fadeIn">
                                                                             <div class="modal-header">
                                                                                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                                                <h4 class="modal-title">Insert Jadwal Bertugas Admin (Manual)</h4>
+                                                                                <h4 class="modal-title">Pengajuan Jadwal Bertugas (Masa UTS/UAS)</h4>
                                                                             </div>
-                                                                            <?php echo form_open('admin_lab/insert_manual_admin');?>
+                                                                            <?php echo form_open('admin_lab/pengajuan_masa_ujian');?>
                                                                             <div class="modal-body">
                                                                                 
                                                                                 <div class="form-group row" id="data_1">
@@ -136,8 +135,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                
-                                                                                <p align="center" style="font-size: 12px; font-weight: bold;">Tanggal bertugas harus berada pada tanggal periode akademik yg sdg aktif<br>
-                                                                                Tanggal bertugas pada periode UTS/UAS akan langsung masuk ke dalam shift bertugas UTS/UAS</p>
+                                                                                <p align="center" style="font-size: 12px; font-weight: bold;">Form ini akan melakukan pengajuan jadwal bertugas kepada Kepala Laboratorium untuk masa Ujian (UTS/UAS)</p>
                                                                                 <p align="center" style="color: red">* Wajib Diisi</p>
                                                                             </div>
                                                                             
@@ -149,12 +147,12 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <!-- END Modal Jadwal (Manual)-->
+                                                                <!-- END Modal Pengajuan Jadwal (Ujian)-->
                                         <?php
                                         }
                                         else{
                                             if(!$periode_aktif){
-                                                echo '<h4 style="color: red;">Tidak dapat menambahkan jadwal bertugas admin karena tidak ada periode akademik yang sedang berjalan!</h4>';
+                                                echo '<h4 style="color: red;">Tidak dapat melakukan pengajuan jadwal bertugas admin karena tidak ada periode akademik yang sedang berjalan!</h4>';
                                             }
                                             if(!$flag_admin){
                                                 echo '<h4 style="color: red;">Tidak dapat menambahkan jadwal bertugas admin karena admin dalam status nonaktif!</h4>';
@@ -203,7 +201,6 @@
                                                     <th>Waktu Bertugas</th>
                                                     <th>Jenis Bertugas</th>
                                                     <th>Last Update</th>
-                                                    <th>Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -218,22 +215,6 @@
                                                         <td><?php echo $jadwal['JAM_MULAI']. ' s/d '. $jadwal['JAM_SELESAI'];?></td>
                                                         <td><?php echo $jadwal['TIPE_BERTUGAS'];?></td>
                                                         <td><?php echo $jadwal['INSERT_DATE'];?></td>
-                                                        <td align="center">
-                                                            <?php
-                                                            if($flag && $flag_admin){
-                                                                ?>
-                                                            <button class="btn btn-primary btn-sm" data-toggle="modal" onclick="getJadwal(<?php echo $jadwal['ID'];?>,<?php echo $id_admin;?>);" data-target="#modalUpdateJadwal"><i class="fas fa-pen"></i> Update</button>
-                                                            <?php echo form_open('admin_lab/delete_jadwal', 'style="margin: 0; padding: 0;"');?>
-                                                            <input type="hidden" name="id_bertugas" required value="<?php echo $jadwal['ID'];?>">
-                                                            <button class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')" type="submit"><i class="far fa-trash-alt"></i> Delete</button>
-                                                            </form>
-                                                                <?php
-                                                            }
-                                                            else{
-                                                                echo '-';
-                                                            }
-                                                            ?>
-                                                        </td>
                                                     </tr>
                                                     <?php
                                                     $iterator++;

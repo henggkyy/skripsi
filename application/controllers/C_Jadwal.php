@@ -5,8 +5,9 @@ class C_Jadwal extends CI_Controller{
 	//Method untuk menampilkan halaman jadwal untuk public
 	function loadJadwalPublic(){
 		$data['title'] = "Jadwal Pemakaian Lab & Jadwal Bertugas Admin | SI Akademik Lab. Komputasi TIF";
-		$type = $_GET['type'];
-		if(isset($type) && $type){
+		
+		if(isset($_GET['type'])){
+			$type = $_GET['type'];
 			if($type == 'lab'){
 				$this->load->model('Jadwal_lab');
 				$data['type'] = 'lab';

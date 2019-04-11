@@ -130,6 +130,7 @@ class Periode_akademik extends CI_Model{
 	function getAllPeriode(){
 		$this->db->select('NAMA, ID, START_PERIODE, END_PERIODE, START_UTS, END_UTS, START_UAS, END_UAS, STATUS');
 		$this->db->from('periode_akademik');
+		$this->db->order_by('ID', 'desc');
 		$result = $this->db->get();
 		if($result->num_rows() > 0){
 			return $result->result_array();
