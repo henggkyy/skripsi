@@ -27,6 +27,22 @@ class Pengajuan_jadwal_bertugas extends CI_Model{
 			return false;
 		}
 	}
+	function getDataPengajuanByPeriode($id_periode, $tipe){
+		$this->db->select('pengajuan_jadwal_bertugas.ID as ID, users.NAMA as NAMA, HARI_TANGGAL, JAM_MULAI, JAM_SELESAI, DATE_SUBMITTED, pengajuan_jadwal_bertugas.STATUS as STATUS');
+		$this->db->where('ID_PERIODE', $id_periode);
+		$this->db->where('TIPE_BERTUGAS', $tipe);
+		$this->db->order_by('HARI_TANGGAL', 'asc');
+		$this->db->order_by('JAM_MULAI', 'asc');
+		$this->db->from('pengajuan_jadwal_bertugas');
+		$this->db->join('users', 'users.ID = pengajuan_jadwal_bertugas.ID_ADMIN', 'left');
+		$result = $this->db->get();
+		if($result->num_rows() > 0){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk mendapatkan pengajuan jadwal bertugas berdasarkan id periode akademik dan id admin
 	function getDataPengajuan($id_periode, $id_admin, $tipe_bertugas){
 		$this->db->select('ID, HARI_TANGGAL, JAM_MULAI, JAM_SELESAI, DATE_SUBMITTED, STATUS');

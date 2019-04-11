@@ -126,6 +126,7 @@ $route['admin_lab/pengajuan_masa_ujian'] = 'C_Admin/pengajuanJadwalMasaUjian';
 $route['admin_lab/pengajuan_masa_kuliah'] = 'C_Admin/pengajuanJadwalMasaKuliah';
 $route['admin_lab/accept_pengajuan_kuliah'] = 'C_Admin/acceptJadwalMasaKuliah';
 $route['admin_lab/accept_pengajuan_ujian'] = 'C_Admin/acceptJadwalMasaUjian';
+$route['rekapitulasi_pengajuan'] = 'C_Admin/loadRekapitulasiPengajuanJadwal';
 
 $route['laporan_gaji'] = 'C_Gaji_Admin/loadDaftarGajiAdmin';
 $route['laporan_gaji/periode'] = 'C_Gaji_Admin/loadSetPeriode';

@@ -2,6 +2,50 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani proses administrasi admin mulai dari proses input, jadwal, dsb.
 class C_Admin extends CI_Controller {
+	//Method untuk melakukan load rekapitulasi jadwal pengajuan yang dilakukan oleh admin
+	function loadRekapitulasiPengajuanJadwal(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role')!= 1){
+				redirect('dashboard');
+			}
+			$data['title'] = 'Rekapitulasi Pengajuan Jadwal Bertugas | SI Operasional Lab. Komputasi TIF UNPAR';
+			$this->load->model('Periode_akademik');
+			$data['daftar_periode'] = $this->Periode_akademik->getAllPeriode();
+			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+			$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
+			if(isset($_GET['id_periode'])){
+				$id_periode = $_GET['id_periode'];
+				if($id_periode != ""){
+					$data['id_periode_aktif'] = $id_periode;
+				}
+				else{
+					$id_periode = $this->Periode_akademik->getIDPeriodeAktif(); 
+					$data['id_periode_aktif'] = $id_periode;
+				}
+			}
+			else{
+				if(!$id_periode){
+					$data['id_periode_aktif'] = $this->Periode_akademik->getLastActiveId();
+				}
+				else{
+					$data['id_periode_aktif'] = $id_periode;
+				}
+			}
+			$this->load->model('Pengajuan_jadwal_bertugas');
+			$data['pengajuan_kuliah'] = $this->Pengajuan_jadwal_bertugas->getDataPengajuanByPeriode($data['id_periode_aktif'] ,0);
+			$data['pengajuan_uts'] = $this->Pengajuan_jadwal_bertugas->getDataPengajuanByPeriode($data['id_periode_aktif'] ,1);
+			$data['pengajuan_uas'] = $this->Pengajuan_jadwal_bertugas->getDataPengajuanByPeriode($data['id_periode_aktif'] ,2);
+			$this->load->view('template/Header', $data);
+			$this->load->view('template/Sidebar', $data);
+			$this->load->view('template/Topbar');
+			$this->load->view('template/Notification');
+			$this->load->view('pages_user/V_Rekapitulasi_Pengajuan_Jadwal', $data);
+			$this->load->view('template/Footer');
+		}
+		else{
+			redirect('/');
+		}
+	}
 	//Method untuk melakukan accept jadwal pengajuan bertugas pada masa ujian
 	function acceptJadwalMasaUjian(){
 		if($this->session->userdata('logged_in')){
