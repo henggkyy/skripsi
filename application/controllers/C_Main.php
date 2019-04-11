@@ -8,7 +8,7 @@ class C_Main extends CI_Controller{
 			if($this->session->userdata('id_role') != 1){
 				redirect('/dashboard');
 			}
-			$data['title'] = 'Daftar Pengguna Tata Usaha | SI Akademik Lab. Komputasi TIF UNPAR';
+			$data['title'] = 'Daftar Pengguna Tata Usaha | SI Operasional Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$this->load->model('Users');
 			$data['tata_usaha'] = true;
@@ -28,7 +28,7 @@ class C_Main extends CI_Controller{
 	//Method untuk menampilkan jadwal pemakaian laboratorium dengan menggunakan library FullCalendar
 	function loadJadwalPemakaianLaboratorium(){
 		if($this->session->userdata('logged_in')){
-			$data['title'] = 'Jadwal Pemakaian Laboratorium | SI Akademik Lab. Komputasi TIF UNPAR';
+			$data['title'] = 'Jadwal Pemakaian Laboratorium | SI Operasional Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$this->load->model('Jadwal_lab');
 			$data['jadwal_lab'] = true;
@@ -52,7 +52,7 @@ class C_Main extends CI_Controller{
 			if($this->session->userdata('id_role') != 1){
 				redirect('/dashboard');
 			}
-			$data['title'] = 'Daftar Peminjaman Alat | SI Akademik Lab. Komputasi TIF UNPAR';
+			$data['title'] = 'Daftar Peminjaman Alat | SI Operasional Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$this->load->model('Peminjaman_lab');
 			$data['peminjaman_alat'] = true;
@@ -76,7 +76,7 @@ class C_Main extends CI_Controller{
 			if($this->session->userdata('id_role') != 1){
 				redirect('/dashboard');
 			}
-			$data['title'] = 'Daftar Peminjaman Laboratorium | SI Akademik Lab. Komputasi TIF UNPAR';
+			$data['title'] = 'Daftar Peminjaman Laboratorium | SI Operasional Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$this->load->model('Peminjaman_lab');
 			$data['peminjaman_lab'] = true;
@@ -99,7 +99,7 @@ class C_Main extends CI_Controller{
 			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
 				redirect('/dashboard');
 			}
-			$data['title'] = 'Alat Laboratorium | SI Akademik Lab. Komputasi TIF UNPAR';
+			$data['title'] = 'Alat Laboratorium | SI Operasional Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$this->load->model('Alat_lab');
 			$data['alat_lab'] = true;
@@ -122,7 +122,7 @@ class C_Main extends CI_Controller{
 			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
 				redirect('/dashboard');
 			}
-			$data['title'] = 'Administrasi Admin Laboratorium | SI Akademik Lab. Komputasi TIF UNPAR';
+			$data['title'] = 'Administrasi Admin Laboratorium | SI Operasional Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$this->load->model('Users');
 			$this->load->model('Konfigurasi_gaji');
@@ -147,7 +147,7 @@ class C_Main extends CI_Controller{
 			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
 				redirect('/dashboard');
 			}
-			$data['title'] = 'Administrasi Dosen | SI Akademik Lab. Komputasi TIF UNPAR';
+			$data['title'] = 'Administrasi Dosen | SI Operasional Lab. Komputasi TIF UNPAR';
 			$data['admin_dosen'] = true;
 			$this->load->model('Periode_akademik');
 			$this->load->model('Users');
@@ -172,7 +172,7 @@ class C_Main extends CI_Controller{
 				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
 				redirect('/dashboard');
 			}
-			$data['title'] = 'Dokumen Buku Saku | SI Akademik Lab. Komputasi TIF UNPAR';
+			$data['title'] = 'Dokumen Buku Saku | SI Operasional Lab. Komputasi TIF UNPAR';
 			$data['dokumen_saku'] = true;
 			$this->load->model('Periode_akademik');
 			$this->load->model('Data_buku_saku');
@@ -197,7 +197,7 @@ class C_Main extends CI_Controller{
 				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
 				redirect('/dashboard');
 			}
-			$data['title'] = 'Dokumen SOP | SI Akademik Lab. Komputasi TIF UNPAR';
+			$data['title'] = 'Dokumen SOP | SI Operasional Lab. Komputasi TIF UNPAR';
 			$data['dokumen_sop'] = true;
 			$this->load->model('Periode_akademik');
 			$this->load->model('Data_file_sop');
@@ -222,7 +222,7 @@ class C_Main extends CI_Controller{
 	//Return : View V_Dashboard.php.
 	function loadDashboard(){
 		if($this->session->userdata('logged_in')){
-			$data['title'] = 'Dashboard | SI Akademik Lab. Komputasi TIF UNPAR';
+			$data['title'] = 'Dashboard | SI Operasional Lab. Komputasi TIF UNPAR';
 			$data['dashboard'] = true;
 			$this->load->model('Periode_akademik');
 			$this->load->model('Users');
@@ -248,7 +248,7 @@ class C_Main extends CI_Controller{
 	function loadPeriodeAkademik(){
 		if($this->session->userdata('logged_in')){
 			if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 3){
-				$data['title'] = 'Periode Akademik | SI Akademik Lab. Komputasi TIF UNPAR';
+				$data['title'] = 'Periode Akademik | SI Operasional Lab. Komputasi TIF UNPAR';
 				$data['periode'] = true;
 
 				$this->load->model('Periode_akademik');

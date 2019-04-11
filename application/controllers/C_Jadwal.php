@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class C_Jadwal extends CI_Controller{
 	//Method untuk menampilkan halaman jadwal untuk public
 	function loadJadwalPublic(){
-		$data['title'] = "Jadwal Pemakaian Lab & Jadwal Bertugas Admin | SI Akademik Lab. Komputasi TIF";
+		$data['title'] = "Jadwal Pemakaian Lab & Jadwal Bertugas Admin | SI Operasional Lab. Komputasi TIF UNPAR";
 		
 		if(isset($_GET['type'])){
 			$type = $_GET['type'];

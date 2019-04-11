@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col-md-12">
                 <img style="width: 60px; height: 60px; display: inline;" src="<?php echo base_url();?>assets/img/unpar.png">
-                <h3 class="font-bold">Administrasi Kegiatan Akademik</h3>
+                <h3 class="font-bold">SI Kegiatan Operasional</h3>
                 <h4 class="font-bold">Lab. Komputasi TIF UNPAR</h4>
                 <div class="ibox-content">
                     <h4>Form Peminjaman Alat/ Ruangan Laboratorium</h4>

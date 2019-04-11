@@ -426,7 +426,7 @@ class C_Admin extends CI_Controller {
 				$this->session->set_flashdata('error', 'Data admin tidak ditemukan!');
 				redirect('/admin_lab');
 			}
-			$data['title'] = 'Jadwal Bertugas Admin Laboratorium | SI Akademik Lab. Komputasi TIF UNPAR';
+			$data['title'] = 'Jadwal Bertugas Admin Laboratorium | SI Operasional Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$this->load->model('Jadwal_bertugas_admin');
 			$this->load->model('Konfigurasi_gaji');
@@ -1152,7 +1152,7 @@ class C_Admin extends CI_Controller {
 					$this->session->set_flashdata('error', 'Data admin tidak ditemukan!');
 					redirect('/admin_lab');
 				}
-				$data['title'] = 'Detail Admin Laboratorium | SI Akademik Lab. Komputasi TIF UNPAR';
+				$data['title'] = 'Detail Admin Laboratorium | SI Operasional Lab. Komputasi TIF UNPAR';
 				$this->load->model('Periode_akademik');
 				$this->load->model('Jadwal_bertugas_admin');
 				$this->load->model('Konfigurasi_gaji');

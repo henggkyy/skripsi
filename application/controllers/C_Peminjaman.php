@@ -10,7 +10,7 @@ class C_Peminjaman extends CI_Controller{
     //Method untuk menampilkan form peminjaman pada halaman admin
     function loadFormPeminjaman(){
     	if($this->session->userdata('logged_in')){
-    		$data['title'] = "Form Peminjaman Alat / Ruangan Laboratorium | SI Akademik Lab. Komputasi TIF";
+    		$data['title'] = "Form Peminjaman Alat / Ruangan Laboratorium | SI Operasional Lab. Komputasi TIF UNPAR";
 			$this->load->model('Alat_lab');
 			$data['form_peminjaman'] = true;
 			$data['daftar_alat'] = $this->Alat_lab->getAllAlat();
@@ -31,7 +31,7 @@ class C_Peminjaman extends CI_Controller{
 	function loadHomePeminjaman(){
 
 		if($this->session->userdata('logged_in_public')){
-			$data['title'] = "Form Peminjaman Alat / Ruangan Laboratorium | SI Akademik Lab. Komputasi TIF";
+			$data['title'] = "Form Peminjaman Alat / Ruangan Laboratorium | SI Operasional Lab. Komputasi TIF UNPAR";
 			$this->load->model('Alat_lab');
 			$data['daftar_alat'] = $this->Alat_lab->getAllAlat();
 			$this->load->model('Daftar_lab');

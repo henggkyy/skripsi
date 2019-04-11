@@ -7,7 +7,7 @@
                     <div class="dropdown profile-element"> <span>
                             <div align="center">
                                 <img alt="image" style="width: 50px; height: 50px;" class="img-circle" src="<?php echo base_url()?>assets/img/unpar.png" />
-                                <h4 style="color: white;">Administrasi Kegiatan Akademik Lab. Komputasi TIF UNPAR</h4>
+                                <h4 style="color: white;">SI Kegiatan Operasional Lab. Komputasi TIF UNPAR</h4>
                             </div>
                             </span>
                     </div>

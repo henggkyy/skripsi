@@ -634,7 +634,7 @@ class C_Matkul extends CI_Controller{
 	//Method untuk menampilkan halaman pilihan mata kuliah yang akan dicek kebutuhan perangkat lunak-nya
 	function loadPageCekPL(){
 		if($this->session->userdata('logged_in')){
-			$data['title'] = 'Periksa Kebutuhan Perangkat Lunak | SI Akademik Lab. Komputasi TIF UNPAR';
+			$data['title'] = 'Periksa Kebutuhan Perangkat Lunak | SI Operasional Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 

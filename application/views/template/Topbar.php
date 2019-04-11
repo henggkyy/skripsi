@@ -7,7 +7,7 @@
         </div>
             <ul class="nav navbar-top-links navbar-right">
                 <li>
-                    <span class="m-r-lg welcome-message"><span style="font-weight: bold;">You're logged in as :</span> <?php echo $this->session->userdata('nama');?> (<?php echo $this->session->userdata('email');?>)</span>
+                    <span class="m-r-lg welcome-message"><span style="font-weight: bold;">You're logged in as :</span> <?php echo $this->session->userdata('nama');?> (<?php echo $this->session->userdata('email');?>) - <span style="text-decoration: underline;"><?php echo $this->session->userdata('nama_role'); ?></span></span>
                 </li>
                 <?php
                 $count = 0;
