@@ -429,6 +429,15 @@ class C_Admin extends CI_Controller {
 						}
 						redirect("admin_lab/detail?id_admin=$id_admin");
 					}
+					$jam_mulai_input_admin = $array_data_pengajuan[0]['JAM_MULAI'];
+					$jam_selesai_input_admin = $array_data_pengajuan[0]['JAM_SELESAI'];
+					if((strtotime($jam_mulai) < strtotime($jam_mulai_input_admin)) || (strtotime($jam_selesai) > strtotime($jam_selesai_input_admin))){
+						$this->session->set_flashdata('error', "Jam mulai/jam selesai yang diinput tidak dalam jam yang diajukan oleh admin!");
+		            	if($rekap){
+							redirect("admin_lab/rekapitulasi_pengajuan");
+						}
+						redirect("admin_lab/detail?id_admin=$id_admin");
+					}
 					//Get data tanggal periode akademik
 					$array_tanggal_akademik = $this->Periode_akademik->getTanggalAkademik($id_periode);
 					$start_uts = $array_tanggal_akademik[0]['START_UTS'];
@@ -569,7 +578,15 @@ class C_Admin extends CI_Controller {
 					}
 					$num_day = $array_data_pengajuan[0]['NUM_DAY'];
 					$tipe_bertugas_int = $array_data_pengajuan[0]['TIPE_BERTUGAS'];
-					
+					$jam_mulai_input_admin = $array_data_pengajuan[0]['JAM_MULAI'];
+					$jam_selesai_input_admin = $array_data_pengajuan[0]['JAM_SELESAI'];
+					if((strtotime($jam_mulai) < strtotime($jam_mulai_input_admin)) || (strtotime($jam_selesai) > strtotime($jam_selesai_input_admin))){
+						$this->session->set_flashdata('error', "Jam mulai/jam selesai yang diinput tidak dalam jam yang diajukan oleh admin!");
+		            	if($rekap){
+							redirect("admin_lab/rekapitulasi_pengajuan");
+						}
+						redirect("admin_lab/detail?id_admin=$id_admin");
+					}
 					$array_tanggal_akademik = $this->Periode_akademik->getTanggalAkademik($id_periode);
 					$tgl_start_periode = $array_tanggal_akademik[0]['START_PERIODE'];
 					$tgl_end_periode = $array_tanggal_akademik[0]['END_PERIODE'];
