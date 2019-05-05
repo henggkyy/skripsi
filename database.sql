@@ -2,10 +2,10 @@
 -- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Apr 11, 2019 at 06:17 PM
--- Server version: 10.1.36-MariaDB
--- PHP Version: 5.6.38
+-- Host: localhost:3306
+-- Generation Time: May 05, 2019 at 12:18 PM
+-- Server version: 10.1.38-MariaDB-cll-lve
+-- PHP Version: 7.2.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `skripsi_lab`
+-- Database: `apayamyid_skripsi_lab`
 --
 
 -- --------------------------------------------------------
@@ -32,13 +32,6 @@ CREATE TABLE `alat_lab` (
   `ID` int(11) NOT NULL,
   `NAMA_ALAT` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `alat_lab`
---
-
-INSERT INTO `alat_lab` (`ID`, `NAMA_ALAT`) VALUES
-(1, 'Tespen');
 
 -- --------------------------------------------------------
 
@@ -63,16 +56,6 @@ CREATE TABLE `checklist_ujian` (
   `LAST_UPDATE` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `checklist_ujian`
---
-
-INSERT INTO `checklist_ujian` (`ID`, `ID_MATKUL`, `TIPE_UJIAN`, `CHECKLIST_01`, `CHECKLIST_02`, `CHECKLIST_03`, `CHECKLIST_04`, `CHECKLIST_05`, `CHECKLIST_06`, `CHECKLIST_07`, `CHECKLIST_08`, `CHECKLIST_09`, `CHECKLIST_10`, `LAST_UPDATE`) VALUES
-(1, 5, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-08 10:46:16am'),
-(2, 5, 0, '1', '1', '1', '1', '1', '1', '1', NULL, '1', '1', '2019-04-08 10:48:00am'),
-(3, 5, 1, NULL, NULL, '1', '1', NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-08 11:08:41am'),
-(4, 5, 1, '1', '1', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-08 11:08:52am');
-
 -- --------------------------------------------------------
 
 --
@@ -86,14 +69,6 @@ CREATE TABLE `daftar_lab` (
   `KAPASITAS` int(11) NOT NULL,
   `BG_COLOR` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `daftar_lab`
---
-
-INSERT INTO `daftar_lab` (`ID`, `NAMA_LAB`, `LOKASI`, `KAPASITAS`, `BG_COLOR`) VALUES
-(1, '9017', 'SB Gedung 9', 40, 'green'),
-(2, '9018', 'SB Gedung 9', 40, 'red');
 
 -- --------------------------------------------------------
 
@@ -109,13 +84,6 @@ CREATE TABLE `data_buku_saku` (
   `LAST_UPDATE` varchar(64) NOT NULL,
   `USER` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `data_buku_saku`
---
-
-INSERT INTO `data_buku_saku` (`ID`, `JUDUL`, `PATH_FILE`, `VISIBILITY`, `LAST_UPDATE`, `USER`) VALUES
-(3, 'Buku Saku Mahasiswa', '95202458253341975615.pdf', 1, '2019-04-01 09:51:03pm', 1);
 
 -- --------------------------------------------------------
 
@@ -133,13 +101,17 @@ CREATE TABLE `data_file_sop` (
   `USER` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `data_file_sop`
+-- Table structure for table `data_software`
 --
 
-INSERT INTO `data_file_sop` (`ID`, `JUDUL`, `PATH_FILE`, `VISIBILITY`, `ID_KATEGORI`, `LAST_UPDATE`, `USER`) VALUES
-(3, 'Test Updatezzz', '49819919080193132214.pdf', 1, 1, '2019-04-07 11:32:52pm', 1),
-(4, 'Cobacoba', '89458368864465340169.pdf', 0, 2, '2019-04-08 09:38:20am', 1);
+CREATE TABLE `data_software` (
+  `ID` int(11) NOT NULL,
+  `DATA_SOFTWARE` longtext,
+  `UNIQ_ID` varchar(128) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -151,20 +123,10 @@ CREATE TABLE `detail_user` (
   `ID` int(11) NOT NULL,
   `ID_USER` int(11) NOT NULL,
   `ANGKATAN` int(11) NOT NULL,
-  `AWAL_KONTRAK` varchar(128) NOT NULL,
-  `AKHIR_KONTRAK` varchar(128) NOT NULL,
+  `AWAL_KONTRAK` date NOT NULL,
+  `AKHIR_KONTRAK` date NOT NULL,
   `ID_GAJI` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `detail_user`
---
-
-INSERT INTO `detail_user` (`ID`, `ID_USER`, `ANGKATAN`, `AWAL_KONTRAK`, `AKHIR_KONTRAK`, `ID_GAJI`) VALUES
-(2, 5, 2015, '2019-04-29', '2019-04-30', 1),
-(3, 6, 2015, '2019-04-01', '2019-05-31', 2),
-(4, 1, 2015, '2019-04-10', '2019-08-10', 1),
-(5, 7, 2015, '2019-04-01', '2019-04-30', 1);
 
 -- --------------------------------------------------------
 
@@ -179,16 +141,9 @@ CREATE TABLE `file_bantuan_ujian` (
   `TIPE_UJIAN` int(11) NOT NULL COMMENT '0 : UTS, 1: UAS',
   `ID_MATKUL` int(11) NOT NULL,
   `LAST_UPDATE` varchar(64) NOT NULL,
-  `USER_UPLOAD` int(11) NOT NULL
+  `USER_UPLOAD` int(11) NOT NULL,
+  `STATUS` int(11) NOT NULL COMMENT '0 : pending, 1 : accept, 2:ditolak'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `file_bantuan_ujian`
---
-
-INSERT INTO `file_bantuan_ujian` (`ID`, `PATH_FILE`, `NAMA_FILE_USER`, `TIPE_UJIAN`, `ID_MATKUL`, `LAST_UPDATE`, `USER_UPLOAD`) VALUES
-(2, '09733464363070198342.pdf', 'File Bantuan UTS 1', 0, 4, '2019-04-01 10:32:43pm', 1),
-(3, '43665355064154905214.pdf', 'File Bantuan UTS 2', 0, 4, '2019-04-01 10:32:54pm', 1);
 
 -- --------------------------------------------------------
 
@@ -199,51 +154,17 @@ INSERT INTO `file_bantuan_ujian` (`ID`, `PATH_FILE`, `NAMA_FILE_USER`, `TIPE_UJI
 CREATE TABLE `jadwal_bertugas_admin` (
   `ID` int(11) NOT NULL,
   `HARI` varchar(32) NOT NULL,
-  `TANGGAL` varchar(16) NOT NULL,
-  `JAM_MULAI` varchar(16) NOT NULL,
-  `JAM_SELESAI` varchar(16) NOT NULL,
+  `TANGGAL` date NOT NULL,
+  `JAM_MULAI` time NOT NULL,
+  `JAM_SELESAI` time NOT NULL,
   `TIPE_BERTUGAS` varchar(32) NOT NULL,
+  `NUM_DAY` int(11) NOT NULL,
+  `TIPE_BERTUGAS_INT` int(11) NOT NULL COMMENT '0 : Masa Perkuliahan, 1 : Masa UTS, 2 : Masa UAS',
   `ID_PERIODE` int(11) NOT NULL,
   `ID_ADMIN` int(11) NOT NULL,
-  `INSERT_DATE` varchar(32) NOT NULL
+  `INSERT_DATE` varchar(32) NOT NULL,
+  `IS_UPDATE` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `jadwal_bertugas_admin`
---
-
-INSERT INTO `jadwal_bertugas_admin` (`ID`, `HARI`, `TANGGAL`, `JAM_MULAI`, `JAM_SELESAI`, `TIPE_BERTUGAS`, `ID_PERIODE`, `ID_ADMIN`, `INSERT_DATE`) VALUES
-(1, 'Senin', '2019-08-12', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
-(2, 'Senin', '2019-08-19', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
-(3, 'Senin', '2019-08-26', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
-(4, 'Senin', '2019-09-02', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
-(5, 'Senin', '2019-09-09', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
-(6, 'Senin', '2019-09-16', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
-(7, 'Senin', '2019-09-23', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
-(8, 'Senin', '2019-09-30', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
-(9, 'Senin', '2019-10-07', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
-(10, 'Senin', '2019-11-04', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
-(11, 'Senin', '2019-11-11', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
-(12, 'Senin', '2019-11-18', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
-(13, 'Senin', '2019-11-25', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
-(14, 'Senin', '2019-12-23', '12:00:00', '17:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 10:37:55pm'),
-(15, 'Selasa', '2019-10-15', '10:00:00', '14:00:00', 'Masa UTS', 4, 7, '2019-04-11 10:41:30pm'),
-(16, 'Senin', '2019-12-02', '10:00:00', '14:00:00', 'Masa UAS', 4, 7, '2019-04-11 10:41:39pm'),
-(17, 'Selasa', '2019-08-13', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
-(18, 'Selasa', '2019-08-20', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
-(19, 'Selasa', '2019-08-27', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
-(20, 'Selasa', '2019-09-03', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
-(21, 'Selasa', '2019-09-10', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
-(22, 'Selasa', '2019-09-17', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
-(23, 'Selasa', '2019-09-24', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
-(24, 'Selasa', '2019-10-01', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
-(25, 'Selasa', '2019-10-08', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
-(26, 'Selasa', '2019-10-29', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
-(27, 'Selasa', '2019-11-05', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
-(28, 'Selasa', '2019-11-12', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
-(29, 'Selasa', '2019-11-19', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
-(30, 'Selasa', '2019-11-26', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm'),
-(31, 'Selasa', '2019-12-17', '07:00:00', '13:00:00', 'Masa Perkuliahan', 4, 7, '2019-04-11 11:14:19pm');
 
 -- --------------------------------------------------------
 
@@ -260,51 +181,6 @@ CREATE TABLE `jadwal_lab` (
   `STATUS` int(11) NOT NULL COMMENT '0 : pending, 1:show'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `jadwal_lab`
---
-
-INSERT INTO `jadwal_lab` (`ID`, `ID_LAB`, `TITLE`, `START_EVENT`, `END_EVENT`, `STATUS`) VALUES
-(1, 1, 'Perkuliahan ASD', '2019-03-28 11:00:00', '2019-03-28 13:00:00', 1),
-(2, 2, 'Perkuliahan DAA', '2019-03-28 11:00:00', '2019-03-28 14:00:00', 1),
-(3, 1, 'Acara Index[1]', '2019-03-22 09:30', '2019-03-22 09:40', 1),
-(4, 1, 'asdasdas', '2019-04-16 12:00:00', '2019-04-16 14:00:00', 1),
-(5, 1, 'Presentasi 1', '2019-04-08 12:00:00', '2019-04-08 14:00:00', 1),
-(6, 1, 'Presentasi 3', '2019-04-09 12:00:00', '2019-04-09 14:00:00', 1),
-(7, 2, 'Presentasi 4', '2019-04-16 12:00', '2019-04-16 14:00', 1),
-(9, 1, 'Coba cuyyy', '2019-04-24 11:00', '2019-04-24 15:55', 0),
-(10, 1, 'Kelas Algoritma Data (AIF183346)', '2019-08-13 07:00', '2019-08-13 09:00', 1),
-(11, 1, 'Kelas Algoritma Data (AIF183346)', '2019-08-14 12:00', '2019-08-14 14:00', 1),
-(12, 1, 'Kelas Algoritma Data (AIF183346)', '2019-08-20 07:00', '2019-08-20 09:00', 1),
-(13, 1, 'Kelas Algoritma Data (AIF183346)', '2019-08-21 12:00', '2019-08-21 14:00', 1),
-(14, 1, 'Kelas Algoritma Data (AIF183346)', '2019-08-27 07:00', '2019-08-27 09:00', 1),
-(15, 1, 'Kelas Algoritma Data (AIF183346)', '2019-08-28 12:00', '2019-08-28 14:00', 1),
-(16, 1, 'Kelas Algoritma Data (AIF183346)', '2019-09-03 07:00', '2019-09-03 09:00', 1),
-(17, 1, 'Kelas Algoritma Data (AIF183346)', '2019-09-04 12:00', '2019-09-04 14:00', 1),
-(18, 1, 'Kelas Algoritma Data (AIF183346)', '2019-09-10 07:00', '2019-09-10 09:00', 1),
-(19, 1, 'Kelas Algoritma Data (AIF183346)', '2019-09-11 12:00', '2019-09-11 14:00', 1),
-(20, 1, 'Kelas Algoritma Data (AIF183346)', '2019-09-17 07:00', '2019-09-17 09:00', 1),
-(21, 1, 'Kelas Algoritma Data (AIF183346)', '2019-09-18 12:00', '2019-09-18 14:00', 1),
-(22, 1, 'Kelas Algoritma Data (AIF183346)', '2019-09-24 07:00', '2019-09-24 09:00', 1),
-(23, 1, 'Kelas Algoritma Data (AIF183346)', '2019-09-25 12:00', '2019-09-25 14:00', 1),
-(24, 1, 'Kelas Algoritma Data (AIF183346)', '2019-10-01 07:00', '2019-10-01 09:00', 1),
-(25, 1, 'Kelas Algoritma Data (AIF183346)', '2019-10-02 12:00', '2019-10-02 14:00', 1),
-(26, 1, 'Kelas Algoritma Data (AIF183346)', '2019-10-08 07:00', '2019-10-08 09:00', 1),
-(27, 1, 'Kelas Algoritma Data (AIF183346)', '2019-10-09 12:00', '2019-10-09 14:00', 1),
-(28, 1, 'Kelas Algoritma Data (AIF183346)', '2019-10-29 07:00', '2019-10-29 09:00', 1),
-(29, 1, 'Kelas Algoritma Data (AIF183346)', '2019-10-30 12:00', '2019-10-30 14:00', 1),
-(30, 1, 'Kelas Algoritma Data (AIF183346)', '2019-11-05 07:00', '2019-11-05 09:00', 1),
-(31, 1, 'Kelas Algoritma Data (AIF183346)', '2019-11-06 12:00', '2019-11-06 14:00', 1),
-(32, 1, 'Kelas Algoritma Data (AIF183346)', '2019-11-12 07:00', '2019-11-12 09:00', 1),
-(33, 1, 'Kelas Algoritma Data (AIF183346)', '2019-11-13 12:00', '2019-11-13 14:00', 1),
-(34, 1, 'Kelas Algoritma Data (AIF183346)', '2019-11-19 07:00', '2019-11-19 09:00', 1),
-(35, 1, 'Kelas Algoritma Data (AIF183346)', '2019-11-20 12:00', '2019-11-20 14:00', 1),
-(36, 1, 'Kelas Algoritma Data (AIF183346)', '2019-11-26 07:00', '2019-11-26 09:00', 1),
-(37, 1, 'Kelas Algoritma Data (AIF183346)', '2019-11-27 12:00', '2019-11-27 14:00', 1),
-(40, 1, 'UTS Algoritma Data (AIF183346)', '2019-10-14 08:00', '2019-10-14 12:00', 1),
-(41, 2, 'UAS Algoritma Data (AIF183346)', '2019-12-16 11:00', '2019-12-16 13:00', 1),
-(42, 2, 'UTS Algoritma Data (AIF183346)', '2019-10-14 08:00', '2019-10-14 12:00', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -315,19 +191,11 @@ CREATE TABLE `jadwal_matkul` (
   `ID` int(11) NOT NULL,
   `ID_MATKUL` int(11) NOT NULL,
   `HARI` varchar(64) NOT NULL,
-  `JAM_MULAI` varchar(64) NOT NULL,
-  `JAM_SELESAI` varchar(64) NOT NULL,
+  `JAM_MULAI` time NOT NULL,
+  `JAM_SELESAI` time NOT NULL,
   `KODE_KELAS` varchar(64) NOT NULL,
   `ID_LAB` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `jadwal_matkul`
---
-
-INSERT INTO `jadwal_matkul` (`ID`, `ID_MATKUL`, `HARI`, `JAM_MULAI`, `JAM_SELESAI`, `KODE_KELAS`, `ID_LAB`) VALUES
-(1, 4, 'Rabu', '12:00', '14:00', 'A', 1),
-(2, 4, 'Selasa', '07:00', '09:00', 'A', 1);
 
 -- --------------------------------------------------------
 
@@ -339,14 +207,6 @@ CREATE TABLE `kategori_sop` (
   `ID` int(11) NOT NULL,
   `NAMA_KATEGORI` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `kategori_sop`
---
-
-INSERT INTO `kategori_sop` (`ID`, `NAMA_KATEGORI`) VALUES
-(1, 'Perkuliahan'),
-(2, 'Ujian');
 
 -- --------------------------------------------------------
 
@@ -362,14 +222,6 @@ CREATE TABLE `kebutuhan_pl` (
   `LAST_CHECKED` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `kebutuhan_pl`
---
-
-INSERT INTO `kebutuhan_pl` (`ID`, `NAMA_PL`, `ID_MATKUL`, `STATUS`, `LAST_CHECKED`) VALUES
-(1, 'netbeans', 5, 2, '2019-04-04 11:44:19am'),
-(2, 'bluej', 5, 2, '2019-04-04 11:44:19am');
-
 -- --------------------------------------------------------
 
 --
@@ -383,14 +235,6 @@ CREATE TABLE `konfigurasi_gaji` (
   `TARIF` varchar(9000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `konfigurasi_gaji`
---
-
-INSERT INTO `konfigurasi_gaji` (`ID`, `NAMA_GOLONGAN`, `JAM_MAX`, `TARIF`) VALUES
-(1, 'Golongan 1A', '150', '9000'),
-(2, 'Golongan IIA', '150', '7000');
-
 -- --------------------------------------------------------
 
 --
@@ -403,9 +247,9 @@ CREATE TABLE `laporan_gaji_admin` (
   `ID_PERIODE` int(11) NOT NULL,
   `ID_ADMIN` int(11) NOT NULL,
   `HARI` varchar(64) NOT NULL,
-  `TANGGAL_MASUK` varchar(32) NOT NULL,
-  `JAM_MASUK` varchar(32) NOT NULL,
-  `JAM_KELUAR` varchar(32) NOT NULL,
+  `TANGGAL_MASUK` date NOT NULL,
+  `JAM_MASUK` time NOT NULL,
+  `JAM_KELUAR` time NOT NULL,
   `TOTAL_JAM` varchar(5) NOT NULL,
   `ISTIRAHAT` varchar(5) NOT NULL,
   `TARIF_AKTIF` int(11) NOT NULL,
@@ -414,14 +258,17 @@ CREATE TABLE `laporan_gaji_admin` (
   `BIAYA` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `laporan_gaji_admin`
+-- Table structure for table `list_mata_kuliah`
 --
 
-INSERT INTO `laporan_gaji_admin` (`ID`, `UNIQ`, `ID_PERIODE`, `ID_ADMIN`, `HARI`, `TANGGAL_MASUK`, `JAM_MASUK`, `JAM_KELUAR`, `TOTAL_JAM`, `ISTIRAHAT`, `TARIF_AKTIF`, `WAKTU_MAKS_AKTIF`, `WAKTU_REAL`, `BIAYA`) VALUES
-(5, '46904656', 3, 5, 'Rabu', '2019-06-19', '10:00', '16:00', '6', '1', 9000, 160, '5', '45000'),
-(6, '35487431', 4, 5, 'Senin', '2019-04-01', '12:00', '17:00', '5', '0', 9000, 150, '5', '45000'),
-(7, '25236334', 4, 5, 'Selasa', '2019-04-02', '07:00', '12:00', '5', '0', 9000, 150, '5', '45000');
+CREATE TABLE `list_mata_kuliah` (
+  `ID` int(11) NOT NULL,
+  `KODE_MATKUL` varchar(128) NOT NULL,
+  `NAMA_MATKUL` varchar(128) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -443,16 +290,6 @@ CREATE TABLE `mata_kuliah` (
   `ID_DOSEN` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `mata_kuliah`
---
-
-INSERT INTO `mata_kuliah` (`ID`, `ID_PERIODE`, `KD_MATKUL`, `NAMA_MATKUL`, `TANGGAL_UTS`, `JAM_MULAI_UTS`, `JAM_SELESAI_UTS`, `TANGGAL_UAS`, `JAM_MULAI_UAS`, `JAM_SELESAI_UAS`, `ID_DOSEN`) VALUES
-(2, 2, 'AIF183346', 'Topik Khusus Sistem Informasi 2', '03/05/2019', '', '', '03/27/2019', NULL, NULL, 1),
-(3, 2, 'AIF - 111', 'Tester', '03/06/2019', '', '', '2019-04-25', NULL, NULL, 2),
-(4, 4, 'AIF183346', 'Algoritma Data', '2019-10-14', '08:00', '12:00', '2019-12-16', '11:00', '13:00', 2),
-(5, 4, 'AIF1111', 'Teknologi Basis Data', NULL, '', '', NULL, NULL, NULL, 2);
-
 -- --------------------------------------------------------
 
 --
@@ -468,14 +305,6 @@ CREATE TABLE `mhs_peserta` (
   `RUANG_UAS` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `mhs_peserta`
---
-
-INSERT INTO `mhs_peserta` (`ID`, `ID_MATKUL`, `NPM_MHS`, `NAMA_MHS`, `RUANG_UTS`, `RUANG_UAS`) VALUES
-(1, 3, 2015730051, 'Hengky', NULL, NULL),
-(2, 3, 2014730073, 'Kevin Pratama', NULL, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -489,24 +318,15 @@ CREATE TABLE `peminjaman_lab` (
   `KEPERLUAN` varchar(256) NOT NULL,
   `LAB` int(11) DEFAULT NULL,
   `ID_ALAT` int(11) DEFAULT NULL,
-  `TANGGAL_PINJAM` varchar(128) NOT NULL,
-  `JAM_MULAI` varchar(128) NOT NULL,
-  `JAM_SELESAI` varchar(128) NOT NULL,
+  `TANGGAL_PINJAM` date NOT NULL,
+  `JAM_MULAI` time NOT NULL,
+  `JAM_SELESAI` time NOT NULL,
   `KETERANGAN_PEMINJAM` varchar(1024) NOT NULL,
   `DISETUJUI` int(11) NOT NULL COMMENT '1 : Disetujui, 0 : Pending, 2 : Ditolak',
   `KETERANGAN_KALAB` varchar(1024) NOT NULL,
-  `TANGGAL_REQUEST` varchar(64) NOT NULL,
+  `TANGGAL_REQUEST` datetime NOT NULL,
   `ID_JADWAL` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `peminjaman_lab`
---
-
-INSERT INTO `peminjaman_lab` (`ID`, `EMAIL_PEMINJAM`, `NAMA_PEMINJAM`, `KEPERLUAN`, `LAB`, `ID_ALAT`, `TANGGAL_PINJAM`, `JAM_MULAI`, `JAM_SELESAI`, `KETERANGAN_PEMINJAM`, `DISETUJUI`, `KETERANGAN_KALAB`, `TANGGAL_REQUEST`, `ID_JADWAL`) VALUES
-(1, '7315051@student.unpar.ac.id', 'Hengky Surya', 'Presentasi 4', 2, NULL, '2019-04-16', '12:00', '14:00', '-', 1, 'Okay', '2019-04-09 07:57:49am', 7),
-(2, '7315051@student.unpar.ac.id', 'Hengky Surya', 'Coba cuy', 2, NULL, '2019-04-23', '12:00', '15:55', '-', 2, '-', '2019-04-09 08:25:13am', NULL),
-(3, '7315051@student.unpar.ac.id', 'Hengky Surya', 'Coba cuyyy', 1, NULL, '2019-04-24', '11:00', '15:55', '-', 2, '-', '2019-04-09 08:31:16am', NULL);
 
 -- --------------------------------------------------------
 
@@ -523,20 +343,12 @@ CREATE TABLE `pengajuan_jadwal_bertugas` (
   `NUM_DAY` int(11) NOT NULL,
   `JAM_MULAI` time NOT NULL,
   `JAM_SELESAI` time NOT NULL,
+  `JAM_MULAI_DISETUJUI` time DEFAULT NULL,
+  `JAM_SELESAI_DISETUJUI` time DEFAULT NULL,
   `TIPE_BERTUGAS` int(11) NOT NULL COMMENT '0: Kuliah. 1: UTS. 2: UAS',
-  `STATUS` int(11) NOT NULL COMMENT '0: Pending. 1 : Approved',
+  `STATUS` int(11) NOT NULL COMMENT '0: Pending. 1 : Approved, 2: Reject',
   `DATE_SUBMITTED` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `pengajuan_jadwal_bertugas`
---
-
-INSERT INTO `pengajuan_jadwal_bertugas` (`ID`, `ID_ADMIN`, `ID_PERIODE`, `HARI`, `TANGGAL`, `NUM_DAY`, `JAM_MULAI`, `JAM_SELESAI`, `TIPE_BERTUGAS`, `STATUS`, `DATE_SUBMITTED`) VALUES
-(1, 7, 4, 'Senin', NULL, 1, '12:00:00', '17:00:00', 0, 1, '2019-04-11 10:37:55pm'),
-(2, 7, 4, 'Selasa', NULL, 2, '07:00:00', '13:00:00', 0, 1, '2019-04-11 11:14:19pm'),
-(3, 7, 4, 'Selasa', '2019-10-15', 2, '10:00:00', '14:00:00', 1, 1, '2019-04-11 10:41:30pm'),
-(4, 7, 4, 'Senin', '2019-12-02', 1, '10:00:00', '14:00:00', 2, 1, '2019-04-11 10:41:39pm');
 
 -- --------------------------------------------------------
 
@@ -558,14 +370,6 @@ CREATE TABLE `periode_akademik` (
   `CREATED_BY` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `periode_akademik`
---
-
-INSERT INTO `periode_akademik` (`ID`, `NAMA`, `START_PERIODE`, `END_PERIODE`, `START_UTS`, `END_UTS`, `START_UAS`, `END_UAS`, `STATUS`, `CREATED_ON`, `CREATED_BY`) VALUES
-(2, 'Semester Genap 2018/2019', '', '', '', '', '', '', 0, '2019-02-06 07:00:20', 1),
-(4, 'Semester Ganjil 2019/2020', '2019-08-12', '2019-12-23', '2019-10-14', '2019-10-28', '2019-12-02', '2019-12-16', 1, '2019-03-28 07:20:27', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -580,16 +384,6 @@ CREATE TABLE `periode_gaji` (
   `STATUS` int(11) NOT NULL COMMENT '1: Aktif. 0 : Nonaktif'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `periode_gaji`
---
-
-INSERT INTO `periode_gaji` (`ID`, `START_PERIODE`, `END_PERIODE`, `KETERANGAN`, `STATUS`) VALUES
-(1, '2019-04-01', '2019-05-01', 'Periode Bulan April - Mei', 0),
-(2, '2019-05-01', '2019-06-13', 'Periode Bulan Mei - Juni', 0),
-(3, '2019-06-05', '2019-07-26', 'Periode Bulan Juni - Juli', 0),
-(4, '2019-04-01', '2019-04-30', 'Bulan April ', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -603,14 +397,19 @@ CREATE TABLE `ruangan_ujian` (
   `TIPE_UJIAN` varchar(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `ruangan_ujian`
+-- Table structure for table `surat_tugas_admin`
 --
 
-INSERT INTO `ruangan_ujian` (`ID`, `ID_MATKUL`, `ID_LAB`, `TIPE_UJIAN`) VALUES
-(1, 4, 1, 'UTS'),
-(2, 4, 2, 'UAS'),
-(3, 4, 2, 'UTS');
+CREATE TABLE `surat_tugas_admin` (
+  `ID` int(11) NOT NULL,
+  `ID_ADMIN` int(11) NOT NULL,
+  `AWAL_KONTRAK` date NOT NULL,
+  `AKHIR_KONTRAK` date NOT NULL,
+  `PATH_FILE` varchar(512) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -622,36 +421,14 @@ CREATE TABLE `users` (
   `ID` int(10) NOT NULL,
   `ID_ROLE` int(10) NOT NULL,
   `NAMA` varchar(128) NOT NULL,
+  `INISIAL` varchar(64) DEFAULT NULL,
+  `COLOR` varchar(128) DEFAULT NULL,
   `EMAIL` varchar(128) NOT NULL,
   `NIK` int(11) NOT NULL,
   `STATUS` int(11) NOT NULL COMMENT 'Status Aktivitas. 1 : Aktif. 2 : Nonaktif',
   `IS_DOSEN` int(11) NOT NULL COMMENT '1 : Dosen. 2 : Non Dosen',
   `LAST_LOGIN` varchar(64) DEFAULT NULL,
   `LAST_IP` varchar(64) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`ID`, `ID_ROLE`, `NAMA`, `EMAIL`, `NIK`, `STATUS`, `IS_DOSEN`, `LAST_LOGIN`, `LAST_IP`) VALUES
-(1, 1, 'Hengky Surya', '7315051@student.unpar.ac.id', 0, 1, 1, '2019-04-11 10:24:50pm', '::1'),
-(2, 2, 'Pascal Alfadian', 'pascal@unpar.ac.id', 20180014, 1, 1, NULL, NULL),
-(4, 3, 'Pranyoto', 'pranyoto@unpar.ac.id', 2018012, 1, 0, NULL, NULL),
-(5, 4, 'Stephen Senjaya', '7315033@student.unpar.ac.id', 20180014, 1, 0, '2019-04-11 12:44:33pm', '::1'),
-(6, 4, 'Adrian Stefanus', '7315014@student.unpar.ac.id', 20180100, 1, 0, '2019-04-08 12:05:32pm', '::1'),
-(7, 4, 'Akun Tester', 'suaramahasiswa@unpar.ac.id', 20180012, 1, 0, '2019-04-11 10:03:25pm', '::1');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user_permission`
---
-
-CREATE TABLE `user_permission` (
-  `ID` int(11) NOT NULL,
-  `ID_ROLE` int(11) NOT NULL,
-  `PERMISSION_LINK` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -664,18 +441,6 @@ CREATE TABLE `user_role` (
   `ID` int(11) NOT NULL,
   `NAMA_ROLE` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `user_role`
---
-
-INSERT INTO `user_role` (`ID`, `NAMA_ROLE`) VALUES
-(1, 'Kepala Laboratorium'),
-(2, 'Dosen'),
-(3, 'Tata Usaha'),
-(4, 'Admin'),
-(5, 'Mahasiswa'),
-(6, 'Staff');
 
 --
 -- Indexes for dumped tables
@@ -714,6 +479,12 @@ ALTER TABLE `data_file_sop`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `ID_KATEGORI` (`ID_KATEGORI`),
   ADD KEY `USER` (`USER`);
+
+--
+-- Indexes for table `data_software`
+--
+ALTER TABLE `data_software`
+  ADD PRIMARY KEY (`ID`);
 
 --
 -- Indexes for table `detail_user`
@@ -782,6 +553,12 @@ ALTER TABLE `laporan_gaji_admin`
   ADD KEY `ID_ADMIN` (`ID_ADMIN`);
 
 --
+-- Indexes for table `list_mata_kuliah`
+--
+ALTER TABLE `list_mata_kuliah`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Indexes for table `mata_kuliah`
 --
 ALTER TABLE `mata_kuliah`
@@ -835,16 +612,16 @@ ALTER TABLE `ruangan_ujian`
   ADD KEY `ID_MATKUL` (`ID_MATKUL`);
 
 --
+-- Indexes for table `surat_tugas_admin`
+--
+ALTER TABLE `surat_tugas_admin`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `ID_ADMIN` (`ID_ADMIN`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `ID_ROLE` (`ID_ROLE`);
-
---
--- Indexes for table `user_permission`
---
-ALTER TABLE `user_permission`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `ID_ROLE` (`ID_ROLE`);
 
@@ -862,145 +639,157 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT for table `alat_lab`
 --
 ALTER TABLE `alat_lab`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `checklist_ujian`
 --
 ALTER TABLE `checklist_ujian`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `daftar_lab`
 --
 ALTER TABLE `daftar_lab`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `data_buku_saku`
 --
 ALTER TABLE `data_buku_saku`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `data_file_sop`
 --
 ALTER TABLE `data_file_sop`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `data_software`
+--
+ALTER TABLE `data_software`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `detail_user`
 --
 ALTER TABLE `detail_user`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `file_bantuan_ujian`
 --
 ALTER TABLE `file_bantuan_ujian`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `jadwal_bertugas_admin`
 --
 ALTER TABLE `jadwal_bertugas_admin`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `jadwal_lab`
 --
 ALTER TABLE `jadwal_lab`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `jadwal_matkul`
 --
 ALTER TABLE `jadwal_matkul`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `kategori_sop`
 --
 ALTER TABLE `kategori_sop`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `kebutuhan_pl`
 --
 ALTER TABLE `kebutuhan_pl`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `konfigurasi_gaji`
 --
 ALTER TABLE `konfigurasi_gaji`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `laporan_gaji_admin`
 --
 ALTER TABLE `laporan_gaji_admin`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `list_mata_kuliah`
+--
+ALTER TABLE `list_mata_kuliah`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `mata_kuliah`
 --
 ALTER TABLE `mata_kuliah`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `mhs_peserta`
 --
 ALTER TABLE `mhs_peserta`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `peminjaman_lab`
 --
 ALTER TABLE `peminjaman_lab`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `pengajuan_jadwal_bertugas`
 --
 ALTER TABLE `pengajuan_jadwal_bertugas`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `periode_akademik`
 --
 ALTER TABLE `periode_akademik`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `periode_gaji`
 --
 ALTER TABLE `periode_gaji`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `ruangan_ujian`
 --
 ALTER TABLE `ruangan_ujian`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `surat_tugas_admin`
+--
+ALTER TABLE `surat_tugas_admin`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `user_permission`
---
-ALTER TABLE `user_permission`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user_role`
 --
 ALTER TABLE `user_role`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -1114,16 +903,16 @@ ALTER TABLE `ruangan_ujian`
   ADD CONSTRAINT `ruangan_ujian_ibfk_2` FOREIGN KEY (`ID_MATKUL`) REFERENCES `mata_kuliah` (`ID`);
 
 --
+-- Constraints for table `surat_tugas_admin`
+--
+ALTER TABLE `surat_tugas_admin`
+  ADD CONSTRAINT `surat_tugas_admin_ibfk_1` FOREIGN KEY (`ID_ADMIN`) REFERENCES `users` (`ID`);
+
+--
 -- Constraints for table `users`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`ID_ROLE`) REFERENCES `user_role` (`ID`);
-
---
--- Constraints for table `user_permission`
---
-ALTER TABLE `user_permission`
-  ADD CONSTRAINT `user_permission_ibfk_1` FOREIGN KEY (`ID_ROLE`) REFERENCES `user_role` (`ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
