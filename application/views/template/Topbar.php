@@ -18,6 +18,9 @@
                     $count++;
                 }
                 ?>
+                <?php
+                if($this->session->userdata('id_role') == 1){
+                	?>
                 <li class="dropdown">
                     <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                         <i class="fa fa-bell"></i>  <span class="label label-primary"><?php echo $count;?></span>
@@ -50,6 +53,10 @@
                         
                     </ul>
                 </li>
+                	<?php
+                }
+                ?>
+                
                 <li>
                     <a href="<?php echo base_url();?>logout">
                         <i class="fas fa-sign-out-alt"></i> Log out

@@ -10,6 +10,10 @@ class C_Peminjaman extends CI_Controller{
     //Method untuk menampilkan form peminjaman pada halaman admin
     function loadFormPeminjaman(){
     	if($this->session->userdata('logged_in')){
+    		if($this->session->userdata('id_role') == 1){
+    			$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+    		}
     		$data['title'] = "Form Peminjaman Alat / Ruangan Laboratorium | SI Operasional Lab. Komputasi TIF UNPAR";
 			$this->load->model('Alat_lab');
 			$data['form_peminjaman'] = true;
@@ -72,6 +76,11 @@ class C_Peminjaman extends CI_Controller{
 					redirect('/peminjaman_lab');
 				}
 				$id_alat = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, "ID_ALAT");
+				$email = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, "EMAIL_PEMINJAM");
+				$keperluan = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, "KEPERLUAN");
+				$tgl_pinjam = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, "TANGGAL_PINJAM");
+				$jam_mulai = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, "JAM_MULAI");
+				$jam_selesai = $this->Peminjaman_lab->getIndividualItem($id_pinjaman, "JAM_SELESAI");
 				$res = $this->Peminjaman_lab->tindaklanjutiPermintaanLab($id_pinjaman, $tindakan, $keterangan);
 				if($res){
 					if($id_alat == NULL){
@@ -82,6 +91,24 @@ class C_Peminjaman extends CI_Controller{
 							$res_insert_jadwal = $this->Jadwal_lab->updateJadwalBookingAccepted($id_jadwal);
 							if($res_insert_jadwal){
 								$this->session->set_flashdata('success', 'Berhasil menindaklanjuti permintaan peminjaman ruangan laboratorium');
+								$subject = "Status Permintaan Peminjaman Ruangan Laboratorium";
+								$message = "Hello, <b>$email!</b> <br> 
+									Terimakasih telah menggunakan <i>website</i> <a href = \"\">Kegiatan Operasional Lab. Komputasi TIF UNPAR</a><br>
+									<p>Permintaan peminjaman ruangan laboratorium Anda telah ditindaklanjuti oleh Kepala Laboratorium.</p>
+									<br>
+									<p><b>STATUS PEMINJAMAN : DISETUJUI</b></p>
+									<p><b>Keterangan Kepala Lab </b>: $keterangan</p>
+									<p>Silahkan Anda menunjukkan email ini kepada Kepala Laboratorium sebelum ruangan lab akan digunakan.</p>
+									<br>
+									<b>Data peminjaman : </b><br> 
+									<p style= \"margin-left : 25px;\"><b>Acara/Keperluan</b> : $keperluan</p> 
+									<p style= \"margin-left : 25px;\"><b>Tanggal Pinjam</b> : $tgl_pinjam</p>
+									<p style= \"margin-left : 25px;\"><b>Jam Mulai</b> : $jam_mulai</p>
+									<p style= \"margin-left : 25px;\"><b>Jam Selesai</b> : $jam_selesai</p>
+									
+							        	Terimakasih
+									";
+								$this->sendMail($email, $subject, $message, 'action');
 								redirect("/peminjaman_lab");
 							}
 							else{
@@ -95,10 +122,66 @@ class C_Peminjaman extends CI_Controller{
 							$res_set_jadwal_null = $this->Peminjaman_lab->setJadwalToNull($id_pinjaman);
 							$res_delete_jadwal = $this->Jadwal_lab->deleteJadwalBooking($id_jadwal);
 							$this->session->set_flashdata('success', 'Berhasil menindaklanjuti permintaan peminjaman ruangan laboratorium');
+							$subject = "Status Permintaan Peminjaman Ruangan Laboratorium";
+							$message = "Hello, <b>$email!</b> <br> 
+									Terimakasih telah menggunakan <i>website</i> <a href = \"\">Kegiatan Operasional Lab. Komputasi TIF UNPAR</a><br>
+									<p>Permintaan peminjaman ruangan laboratorium Anda telah ditindaklanjuti oleh Kepala Laboratorium.</p>
+									<br>
+									<p><b>STATUS PEMINJAMAN : TIDAK DISETUJUI</b></p>
+									<p><b>Keterangan Kepala Lab </b>: $keterangan</p>
+									<br>
+									<b>Data peminjaman : </b><br> 
+									<p style= \"margin-left : 25px;\"><b>Acara/Keperluan</b> : $keperluan</p> 
+									<p style= \"margin-left : 25px;\"><b>Tanggal Pinjam</b> : $tgl_pinjam</p>
+									<p style= \"margin-left : 25px;\"><b>Jam Mulai</b> : $jam_mulai</p>
+									<p style= \"margin-left : 25px;\"><b>Jam Selesai</b> : $jam_selesai</p>
+									
+							        	Terimakasih
+									";
+							$this->sendMail($email, $subject, $message,  'action');
 							redirect("/peminjaman_lab");
 						}
 					}
 					else{
+						if($tindakan == 1){
+							$subject = "Status Permintaan Peminjaman Alat Laboratorium";
+							$message = "Hello, <b>$email!</b> <br> 
+									Terimakasih telah menggunakan <i>website</i> <a href = \"\">Kegiatan Operasional Lab. Komputasi TIF UNPAR</a><br>
+									<p>Permintaan peminjaman alat laboratorium Anda telah ditindaklanjuti oleh Kepala Laboratorium.</p>
+									<br>
+									<p><b>STATUS PEMINJAMAN : DISETUJUI</b></p>
+									<p><b>Keterangan Kepala Lab </b>: $keterangan</p>
+									<p>Silahkan Anda menunjukkan email ini kepada Kepala Laboratorium sebelum alat lab akan digunakan.</p>
+									<br>
+									<b>Data peminjaman : </b><br> 
+									<p style= \"margin-left : 25px;\"><b>Acara/Keperluan</b> : $keperluan</p> 
+									<p style= \"margin-left : 25px;\"><b>Tanggal Pinjam</b> : $tgl_pinjam</p>
+									<p style= \"margin-left : 25px;\"><b>Jam Mulai</b> : $jam_mulai</p>
+									<p style= \"margin-left : 25px;\"><b>Jam Selesai</b> : $jam_selesai</p>
+									
+							        	Terimakasih
+									";
+							$this->sendMail($email, $subject, $message,  'action');
+						}
+						else{
+							$subject = "Status Permintaan Peminjaman Alat Laboratorium";
+							$message = "Hello, <b>$email!</b> <br> 
+									Terimakasih telah menggunakan <i>website</i> <a href = \"\">Kegiatan Operasional Lab. Komputasi TIF UNPAR</a><br>
+									<p>Permintaan peminjaman alat laboratorium Anda telah ditindaklanjuti oleh Kepala Laboratorium.</p>
+									<br>
+									<p><b>STATUS PEMINJAMAN : TIDAK DISETUJUI</b></p>
+									<p><b>Keterangan Kepala Lab </b>: $keterangan</p>
+									<br>
+									<b>Data peminjaman : </b><br> 
+									<p style= \"margin-left : 25px;\"><b>Acara/Keperluan</b> : $keperluan</p> 
+									<p style= \"margin-left : 25px;\"><b>Tanggal Pinjam</b> : $tgl_pinjam</p>
+									<p style= \"margin-left : 25px;\"><b>Jam Mulai</b> : $jam_mulai</p>
+									<p style= \"margin-left : 25px;\"><b>Jam Selesai</b> : $jam_selesai</p>
+									
+							        	Terimakasih
+									";
+							$this->sendMail($email, $subject, $message,  'action');
+						}
 						$this->session->set_flashdata('success', 'Berhasil menindaklanjuti permintaan peminjaman alat');
 						redirect("/peminjaman_alat");
 					}
@@ -151,7 +234,18 @@ class C_Peminjaman extends CI_Controller{
 				$jam_mulai = $this->input->post('jam_mulai');
 				$jam_selesai = $this->input->post('jam_selesai');
 				if($jam_mulai > $jam_selesai){
-					$this->session->set_flashdata('success', 'Tidak dapat melakukan permintaan peminjaman. Jam mulai tidak boleh lebih besar dari jam selesai peminjaman!');
+					$this->session->set_flashdata('error', 'Tidak dapat melakukan permintaan peminjaman. Jam mulai tidak boleh lebih besar dari jam selesai peminjaman!');
+					redirect("/peminjaman/form");
+				}
+				$validate_time_mulai = $this->validate_time($jam_mulai);
+				$validate_time_selesai = $this->validate_time($jam_selesai);
+				if(!$validate_time_mulai || !$validate_time_selesai){
+					if(!$validate_time_mulai){
+						$this->session->set_flashdata('error', "Error! Jam mulai peminjaman bukan format waktu yang benar! ($jam_mulai)");
+					}
+					else{
+						$this->session->set_flashdata('error', "Error! Jam selesai peminjaman bukan format waktu yang benar! ($jam_selesai)");
+					}
 					redirect("/peminjaman/form");
 				}
 				date_default_timezone_set('Asia/Jakarta');
@@ -200,7 +294,31 @@ class C_Peminjaman extends CI_Controller{
 				}
 				$res = $this->Peminjaman_lab->addPeminjaman($email_peminjam, $nama_peminjam, $tipe_lab, $alat, $tgl_pinjam, $jam_mulai, $jam_selesai, $keterangan, $keperluan, $id_jadwal);
 				if($res){
-					$this->session->set_flashdata('success', 'Berhasil melakukan permintaan peminjaman alat/ruangan laboratorium. Silahkan tunggu notifikasi selanjutnya pada Email UNPAR Anda');
+					if($mode == 'lab'){
+						$subject = "Permintaan Peminjaman Ruangan Laboratorium Komputasi TIF UNPAR";
+						$nama_tipe_email = "ruangan";
+						$this->session->set_flashdata('success', 'Berhasil melakukan permintaan peminjaman ruangan laboratorium. Silahkan tunggu notifikasi selanjutnya pada Email UNPAR Anda');
+					}
+					else{
+						$subject = "Permintaan Peminjaman Alat Laboratorium Komputasi TIF UNPAR";
+						$nama_tipe_email = "alat";
+						$this->session->set_flashdata('success', 'Berhasil melakukan permintaan peminjaman alat laboratorium. Silahkan tunggu notifikasi selanjutnya pada Email UNPAR Anda');
+					}
+
+					$message = "Hello, <b>$email_peminjam!</b> <br> 
+						Terimakasih telah menggunakan <i>website</i> <a href = \"\">Kegiatan Operasional Lab. Komputasi TIF UNPAR</a><br>
+						<p>Permintaan peminjaman $nama_tipe_email laboratorium Anda akan ditindaklanjuti oleh Kepala Laboratorium Komputasi TIF UNPAR. Mohon menunggu proses dan notifikasi selanjutnya melalui e-mail Anda.</p>
+						<br>
+						<b>Data peminjaman : </b><br> 
+						<p style= \"margin-left : 25px;\"><b>Acara/Keperluan</b> : $keperluan</p> 
+						<p style= \"margin-left : 25px;\"><b>Tanggal Pinjam</b> : $tgl_pinjam</p>
+						<p style= \"margin-left : 25px;\"><b>Jam Mulai</b> : $jam_mulai</p>
+						<p style= \"margin-left : 25px;\"><b>Jam Selesai</b> : $jam_selesai</p>
+						<p style= \"margin-left : 25px;\"><b>Keterangan</b> : $keterangan</p>
+						
+				        	Terimakasih
+						";
+					$this->sendMail($email_peminjam, $subject, $message,  'new');
 					redirect("/peminjaman/form");
 				}
 				else{
@@ -245,7 +363,18 @@ class C_Peminjaman extends CI_Controller{
 				$jam_mulai = $this->input->post('jam_mulai');
 				$jam_selesai = $this->input->post('jam_selesai');
 				if($jam_mulai > $jam_selesai){
-					$this->session->set_flashdata('success', 'Tidak dapat melakukan permintaan peminjaman. Jam mulai tidak boleh lebih besar dari jam selesai peminjaman!');
+					$this->session->set_flashdata('error', 'Tidak dapat melakukan permintaan peminjaman. Jam mulai tidak boleh lebih besar dari jam selesai peminjaman!');
+					redirect("/peminjaman");
+				}
+				$validate_time_mulai = $this->validate_time($jam_mulai);
+				$validate_time_selesai = $this->validate_time($jam_selesai);
+				if(!$validate_time_mulai || !$validate_time_selesai){
+					if(!$validate_time_mulai){
+						$this->session->set_flashdata('error', "Error! Jam mulai peminjaman bukan format waktu yang benar! ($jam_mulai)");
+					}
+					else{
+						$this->session->set_flashdata('error', "Error! Jam selesai peminjaman bukan format waktu yang benar! ($jam_selesai)");
+					}
 					redirect("/peminjaman");
 				}
 				date_default_timezone_set('Asia/Jakarta');
@@ -288,9 +417,38 @@ class C_Peminjaman extends CI_Controller{
 					);
 					$id_jadwal = $this->Jadwal_lab->insertJadwalBooking($data);
 				}
+				else{
+					$id_jadwal = NULL;
+				}
 				$res = $this->Peminjaman_lab->addPeminjaman($email_peminjam, $nama_peminjam, $tipe_lab, $alat, $tgl_pinjam, $jam_mulai, $jam_selesai, $keterangan, $keperluan, $id_jadwal);
 				if($res){
-					$this->session->set_flashdata('success', 'Berhasil melakukan permintaan peminjaman alat/ruangan laboratorium. Silahkan tunggu notifikasi selanjutnya pada Email UNPAR Anda');
+					if($mode == 'lab'){
+						$subject = "Permintaan Peminjaman Ruangan Laboratorium Komputasi TIF UNPAR";
+						$nama_tipe_email = "ruangan";
+						$this->session->set_flashdata('success', 'Berhasil melakukan permintaan peminjaman ruangan laboratorium. Silahkan tunggu notifikasi selanjutnya pada Email UNPAR Anda');
+					}
+					else{
+						$subject = "Permintaan Peminjaman Alat Laboratorium Komputasi TIF UNPAR";
+						$nama_tipe_email = "alat";
+						$this->session->set_flashdata('success', 'Berhasil melakukan permintaan peminjaman alat laboratorium. Silahkan tunggu notifikasi selanjutnya pada Email UNPAR Anda');
+					}
+
+					$message = "Hello, <b>$email_peminjam!</b> <br> 
+						Terimakasih telah menggunakan <i>website</i> <a href = \"\">Kegiatan Operasional Lab. Komputasi TIF UNPAR</a><br>
+						<p>Permintaan peminjaman $nama_tipe_email laboratorium Anda akan ditindaklanjuti oleh Kepala Laboratorium Komputasi TIF UNPAR. Mohon menunggu proses dan notifikasi selanjutnya melalui e-mail Anda.</p>
+						<br>
+						<b>Data peminjaman : </b><br> 
+						<p style= \"margin-left : 25px;\"><b>Acara/Keperluan</b> : $keperluan</p> 
+						<p style= \"margin-left : 25px;\"><b>Tanggal Pinjam</b> : $tgl_pinjam</p>
+						<p style= \"margin-left : 25px;\"><b>Jam Mulai</b> : $jam_mulai</p>
+						<p style= \"margin-left : 25px;\"><b>Jam Selesai</b> : $jam_selesai</p>
+						<p style= \"margin-left : 25px;\"><b>Keterangan</b> : $keterangan</p>
+						
+				        	Terimakasih
+						";
+					$debug = $this->sendMail($email_peminjam, $subject, $message, 'new');
+					// print_r($debug);
+					// return;
 					redirect("/peminjaman");
 				}
 				else{
@@ -303,7 +461,56 @@ class C_Peminjaman extends CI_Controller{
 			redirect('/');
 		}
 	}
-
+	//Method untuk melakukan validasi waktu yang diinput pengguna
+	public function validate_time($str){
+		$array_jam = explode(':', $str);
+		$hh = $array_jam[0];
+		$mm = $array_jam[1];
+		if (!is_numeric($hh) || !is_numeric($mm)){
+			return FALSE;
+		}
+		else if ((int) $hh > 24 || (int) $mm > 59){
+		    return FALSE;
+		}
+		else if (mktime((int) $hh, (int) $mm) === FALSE){
+		    return FALSE;
+		}
+		return TRUE;
+	}
+	//Method untuk mengirimkan email ke pengguna
+	private function sendMail($email, $subject, $body, $tipe){
+		$this->load->model('Users');
+		$this->load->library('email');
+		$email_kalab = $this->Users->getEmailKalab();
+		$config['protocol']    = 'smtp';
+		$config['smtp_host']    = 'ssl://smtp.gmail.com';
+		$config['smtp_port']    = '465';
+		$config['smtp_timeout'] = '20';
+		$config['smtp_user']    = '*user_email*';
+		$config['smtp_pass']    = '*user_pass*';
+		$config['charset']    = 'iso-8859-1';
+		$config['newline']    = "\r\n";
+		$config['mailtype'] = 'html'; // or html
+		$config['validation'] = TRUE; // bool whether to validate email or not      
+		$this->email->initialize($config);
+		$this->email->set_newline("\r\n");
+		$this->email->set_mailtype("html");
+		$this->email->from('henggkyy@gmail.com', 'Hengky Surya');
+		if($tipe == 'new'){
+			$this->email->to($email, $email_kalab); 
+		}
+    	else{
+    		$this->email->to($email);
+    	}
+    	$this->email->subject($subject);
+    	$this->email->message($body);  
+		if(!$this->email->send()){
+	        $debug_email = $this->email->print_debugger();
+	        return $debug_email;
+	    }
+		//$result = $this->email->send();
+	}
+	//Method untuk mengecek ketersediaan lab pada jam mulai dan jam selesai yang diinput oleh user.
 	private function cekKetersediaanLab($start_event, $end_event){
 		$daftar_lab = $this->getAllListLab();
 
@@ -332,6 +539,7 @@ class C_Peminjaman extends CI_Controller{
 		}
 		return $arr_lab_tersedia;
 	}
+	//Method untuk mendapatkan daftar seluruh laboratorium
 	private function getAllListLab(){
 		$this->load->model('Daftar_lab');
 		$daftar_lab = $this->Daftar_lab->getListLab();

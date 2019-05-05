@@ -14,7 +14,7 @@
     <link href="<?php echo base_url();?>assets/css/animate.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/css/style.css" rel="stylesheet">
     <script src="<?php echo base_url();?>assets/js/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/fontawesome_new/css/all.css">
 </head>
 
 <body class="gray-bg">
@@ -22,7 +22,7 @@
         <div class="row">
             <div class="col-md-12">
                 <img style="width: 60px; height: 60px; display: inline;" src="<?php echo base_url();?>assets/img/unpar.png">
-                <h3 class="font-bold">Administrasi Kegiatan Akademik</h3>
+                <h3 class="font-bold">SI Kegiatan Operasional</h3>
                 <h4 class="font-bold">Lab. Komputasi TIF UNPAR</h4>
                 <div class="ibox-content">
                     <h3>Dokumen Laboratorium Komputasi TIF UNPAR</h3>
@@ -76,7 +76,7 @@
                     </div>
                     <div>
                         <br>
-                        <a href="<?php echo base_url();?>" class="btn btn-white btn-lg"> < Back</a>
+                        <a href="<?php echo base_url();?>" class="btn btn-primary btn-lg"><i class="fas fa-arrow-left"></i> Back</a>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,35 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Jadwal_lab extends CI_Model{
+	//Method untuk mendapatkan data pemakaian laboratorium untuk dicetak
+	function getDataPemakaianForPrint(){
+		$this->db->select('daftar_lab.LOKASI as lokasi, daftar_lab.NAMA_LAB as nama_lab, jadwal_lab.TITLE as title, jadwal_lab.START_EVENT as start, jadwal_lab.END_EVENT as end, daftar_lab.BG_COLOR as backgroundColor');
+		$this->db->where('STATUS', 1);
+		$string = " YEAR(START_EVENT) = YEAR(CURRENT_DATE()) AND MONTH(START_EVENT) = MONTH(CURRENT_DATE())";
+		$this->db->where($string, NULL, FALSE);
+		$this->db->from('jadwal_lab');
+		$this->db->join('daftar_lab', 'jadwal_lab.ID_LAB = daftar_lab.ID' , 'left outer');
+		$result = $this->db->get();
+		if($result->num_rows() > 0 ){
+			return $result->result_array();
+		} 
+		else {
+			return false;
+		}
+	}
+	//Method untuk mendapatkan individual item
+	function getIndividualItem($id, $item){
+		$this->db->select($item);
+		$this->db->where('ID', $id);
+		$this->db->from('jadwal_lab');
+		$result = $this->db->get();
+		if($result->num_rows() == 1){
+			return $result->row(0)->$item;
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk bulk insert jadwal pemakaian lab
 	function bulkInsertJadwal($data){
 		$res = $this->db->insert_batch('jadwal_lab', $data);
@@ -119,9 +148,11 @@ class Jadwal_lab extends CI_Model{
 	//Data yang didapatkan merupakan jadwal yang lebih dari hari ini dan menampilkan status pemakaian
 	function getJadwalPemakaianLabDataTables(){
 		date_default_timezone_set('Asia/Jakarta');
-		$date_time = date('Y-m-d h:i');
+		$date_time = date('Y-m-d H:i');
 		$this->db->select('jadwal_lab.ID as id, daftar_lab.NAMA_LAB as nama_lab, jadwal_lab.TITLE as title, jadwal_lab.START_EVENT as start, jadwal_lab.END_EVENT as end, daftar_lab.BG_COLOR as backgroundColor, jadwal_lab.STATUS as status');
 		$this->db->where('START_EVENT >=', $date_time);
+		$this->db->order_by('START_EVENT', 'asc');
+		$this->db->where('STATUS', 1);
 		$this->db->from('jadwal_lab');
 		$this->db->join('daftar_lab', 'jadwal_lab.ID_LAB = daftar_lab.ID' , 'left outer');
 		$result = $this->db->get();
@@ -137,8 +168,8 @@ class Jadwal_lab extends CI_Model{
 	//Data yang didapatkan dari method ini merupakan data yang sudah terverifikasi
 	function getJadwalPemakaianLab(){
 		date_default_timezone_set('Asia/Jakarta');
-		$date_time = date('Y-m-d h:i');
-		$this->db->select('jadwal_lab.ID as id, daftar_lab.NAMA_LAB as nama_lab, jadwal_lab.TITLE as title, jadwal_lab.START_EVENT as start, jadwal_lab.END_EVENT as end, daftar_lab.BG_COLOR as backgroundColor');
+		$date_time = date('Y-m-d H:i');
+		$this->db->select('jadwal_lab.ID as id, daftar_lab.LOKASI as lokasi, daftar_lab.NAMA_LAB as nama_lab, jadwal_lab.TITLE as title, jadwal_lab.START_EVENT as start, jadwal_lab.END_EVENT as end, daftar_lab.BG_COLOR as backgroundColor');
 		$this->db->where('STATUS', 1);
 		$this->db->from('jadwal_lab');
 		$this->db->join('daftar_lab', 'jadwal_lab.ID_LAB = daftar_lab.ID' , 'left outer');

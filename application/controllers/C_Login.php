@@ -39,25 +39,37 @@ class C_Login extends CI_Controller {
 						$nama = $data['NAMA'];
 						$nama_role = $data['NAMA_ROLE'];
 					}
-					$userdata = array(
-						'logged_in' => true,
-						'id' => $id,
-						'id_role' => $id_role,
-						'email' => $email,
-						'nama' => $nama,
-						'nama_role' => $nama_role
-					);
-					$this->load->model('Users');
-					date_default_timezone_set('Asia/Jakarta');
-					$date_time = date("Y-m-d h:i:sa");
-					$ip = $this->input->ip_address();
-					$data = array(
-						'LAST_LOGIN' => $date_time,
-						'LAST_IP' => $ip
-					);
-					$res = $this->Users->updateDataLogin($id, $data);
-					$this->session->set_userdata($userdata);
-					redirect('/dashboard');
+					$is_aktif = $this->Users->getStatus($id);
+					if($is_aktif == 1){
+						$userdata = array(
+							'logged_in' => true,
+							'id' => $id,
+							'id_role' => $id_role,
+							'email' => $email,
+							'nama' => $nama,
+							'nama_role' => $nama_role
+						);
+						$this->load->model('Users');
+						date_default_timezone_set('Asia/Jakarta');
+						$date_time = date("Y-m-d H:i:s");
+						$ip = $this->input->ip_address();
+						$data = array(
+							'LAST_LOGIN' => $date_time,
+							'LAST_IP' => $ip
+						);
+						$res = $this->Users->updateDataLogin($id, $data);
+						$this->session->set_userdata($userdata);
+						redirect('/dashboard');
+					}
+					else{
+						$userdata = array(
+							'logged_in_public' => true,
+							'name' => $google_data['name'],
+							'email' => $google_data['email']
+						);
+						$this->session->set_userdata($userdata);
+						redirect('/peminjaman');
+					}
 				}
 				else{
 					$userdata = array(

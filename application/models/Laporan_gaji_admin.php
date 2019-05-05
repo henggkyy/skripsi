@@ -70,7 +70,8 @@ class Laporan_gaji_admin extends CI_Model{
 	}
 	//Method untuk melakukan count terhadap jumlah laporan gaji berdasarkan user
 	function countJumlahMasuk($id_admin, $id_periode){
-		$this->db->select('ID');
+		$this->db->distinct();
+		$this->db->select('TANGGAL_MASUK');
 		$this->db->where('ID_ADMIN', $id_admin);
 		$this->db->where('ID_PERIODE', $id_periode);
 		$this->db->from('laporan_gaji_admin');

@@ -1,0 +1,12 @@
+[14-Apr-2019 07:53:53 UTC] PHP Fatal error:  Call to a member function post() on null in /home/apayamyid/public_html/skripsi/application/controllers/C_Api.php on line 13
+[15-Apr-2019 09:14:37 UTC] PHP Fatal error:  Call to a member function getIndividualItem() on null in /home/apayamyid/public_html/skripsi/application/controllers/C_Matkul.php on line 430
+[15-Apr-2019 09:22:14 UTC] PHP Parse error:  syntax error, unexpected '}', expecting ',' or ';' in /home/apayamyid/public_html/skripsi/application/views/pages_user/V_Detail_Matkul.php on line 617
+[15-Apr-2019 09:22:51 UTC] PHP Parse error:  syntax error, unexpected '}', expecting ',' or ';' in /home/apayamyid/public_html/skripsi/application/views/pages_user/V_Detail_Matkul.php on line 617
+[01-May-2019 15:50:48 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/apayamyid/public_html/skripsi/system/libraries/Session/drivers/Session_files_driver.php on line 212
+[01-May-2019 15:51:18 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/apayamyid/public_html/skripsi/system/libraries/Session/drivers/Session_files_driver.php on line 212
+[01-May-2019 15:52:34 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/apayamyid/public_html/skripsi/system/libraries/Session/drivers/Session_files_driver.php on line 212
+[01-May-2019 15:53:05 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/apayamyid/public_html/skripsi/system/libraries/Session/drivers/Session_files_driver.php on line 212
+[01-May-2019 15:56:35 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/apayamyid/public_html/skripsi/system/libraries/Session/drivers/Session_files_driver.php on line 212
+[01-May-2019 15:58:19 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/apayamyid/public_html/skripsi/system/libraries/Session/drivers/Session_files_driver.php on line 212
+[01-May-2019 15:58:55 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/apayamyid/public_html/skripsi/system/libraries/Session/drivers/Session_files_driver.php on line 212
+[01-May-2019 15:59:25 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/apayamyid/public_html/skripsi/system/libraries/Session/drivers/Session_files_driver.php on line 212

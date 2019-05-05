@@ -2,6 +2,32 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani menu utama dari aplikasi.
 class C_Main extends CI_Controller{
+	//Method untuk menampilkan halaman administrasi kepala laboratorium
+	function loadPageAdministrasiKalab(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1){
+				redirect('/dashboard');
+			}
+			$data['admin_kalab'] = true;
+			$data['title'] = 'Administrasi Kepala Laboratorium | SI Operasional Lab. Komputasi TIF UNPAR';
+			$this->load->model('Users');
+			$this->load->model('Peminjaman_lab');
+			$this->load->model('Periode_akademik');
+			$data['count_lab'] = $this->Peminjaman_lab->countPeminjamanLabPending();
+			$data['count_alat'] = $this->Peminjaman_lab->countPeminjamanAlatPending();
+			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+			$data['data_dosen'] = $this->Users->getAllDosen();
+			$this->load->view('template/Header', $data);
+			$this->load->view('template/Sidebar', $data);
+			$this->load->view('template/Topbar');
+			$this->load->view('template/Notification');
+			$this->load->view('pages_user/V_Administrasi_Kalab', $data);
+			$this->load->view('template/Footer');
+		}
+		else{
+			redirect('/');
+		}
+	}
 	//Method untuk menampilkan daftar pengguna Tata Usaha
 	function loadDaftarTU(){
 		if($this->session->userdata('logged_in')){
@@ -11,6 +37,9 @@ class C_Main extends CI_Controller{
 			$data['title'] = 'Daftar Pengguna Tata Usaha | SI Operasional Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$this->load->model('Users');
+			$this->load->model('Peminjaman_lab');
+			$data['count_lab'] = $this->Peminjaman_lab->countPeminjamanLabPending();
+			$data['count_alat'] = $this->Peminjaman_lab->countPeminjamanAlatPending();
 			$data['tata_usaha'] = true;
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$data['data_tu'] = $this->Users->getAllUserByRole(3);
@@ -28,11 +57,16 @@ class C_Main extends CI_Controller{
 	//Method untuk menampilkan jadwal pemakaian laboratorium dengan menggunakan library FullCalendar
 	function loadJadwalPemakaianLaboratorium(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1){
+				redirect('/dashboard');
+			}
 			$data['title'] = 'Jadwal Pemakaian Laboratorium | SI Operasional Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$this->load->model('Jadwal_lab');
+			$this->load->model('Peminjaman_lab');
+			$data['count_lab'] = $this->Peminjaman_lab->countPeminjamanLabPending();
+			$data['count_alat'] = $this->Peminjaman_lab->countPeminjamanAlatPending();
 			$data['jadwal_lab'] = true;
-			$data['jadwal'] = json_encode($this->Jadwal_lab->getJadwalPemakaianLab());
 			$data['pemakaian_lab'] = $this->Jadwal_lab->getJadwalPemakaianLabDataTables();
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$this->load->view('template/Header', $data);
@@ -56,6 +90,8 @@ class C_Main extends CI_Controller{
 			$this->load->model('Periode_akademik');
 			$this->load->model('Peminjaman_lab');
 			$data['peminjaman_alat'] = true;
+			$data['count_lab'] = $this->Peminjaman_lab->countPeminjamanLabPending();
+			$data['count_alat'] = $this->Peminjaman_lab->countPeminjamanAlatPending();
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$data['daftar_peminjaman'] = $this->Peminjaman_lab->getAllDataPeminjamanAlat();
 			$this->load->view('template/Header', $data);
@@ -80,6 +116,8 @@ class C_Main extends CI_Controller{
 			$this->load->model('Periode_akademik');
 			$this->load->model('Peminjaman_lab');
 			$data['peminjaman_lab'] = true;
+			$data['count_lab'] = $this->Peminjaman_lab->countPeminjamanLabPending();
+			$data['count_alat'] = $this->Peminjaman_lab->countPeminjamanAlatPending();
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$data['daftar_peminjaman'] = $this->Peminjaman_lab->getAllDataPeminjamanLab();
 			$this->load->view('template/Header', $data);
@@ -103,6 +141,9 @@ class C_Main extends CI_Controller{
 			$this->load->model('Periode_akademik');
 			$this->load->model('Alat_lab');
 			$data['alat_lab'] = true;
+			$this->load->model('Peminjaman_lab');
+			$data['count_lab'] = $this->Peminjaman_lab->countPeminjamanLabPending();
+			$data['count_alat'] = $this->Peminjaman_lab->countPeminjamanAlatPending();
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$data['data_alat'] = $this->Alat_lab->getAllAlat();
 			$this->load->view('template/Header', $data);
@@ -126,6 +167,9 @@ class C_Main extends CI_Controller{
 			$this->load->model('Periode_akademik');
 			$this->load->model('Users');
 			$this->load->model('Konfigurasi_gaji');
+			$this->load->model('Peminjaman_lab');
+			$data['count_lab'] = $this->Peminjaman_lab->countPeminjamanLabPending();
+			$data['count_alat'] = $this->Peminjaman_lab->countPeminjamanAlatPending();
 			$data['admin_lab'] = true;
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$data['data_admin'] = $this->Users->getAllUserByRole(4);
@@ -151,6 +195,9 @@ class C_Main extends CI_Controller{
 			$data['admin_dosen'] = true;
 			$this->load->model('Periode_akademik');
 			$this->load->model('Users');
+			$this->load->model('Peminjaman_lab');
+			$data['count_lab'] = $this->Peminjaman_lab->countPeminjamanLabPending();
+			$data['count_alat'] = $this->Peminjaman_lab->countPeminjamanAlatPending();
 			$data['data_dosen'] = $this->Users->getAllDosen();
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$this->load->view('template/Header', $data);
@@ -174,6 +221,9 @@ class C_Main extends CI_Controller{
 			}
 			$data['title'] = 'Dokumen Buku Saku | SI Operasional Lab. Komputasi TIF UNPAR';
 			$data['dokumen_saku'] = true;
+			$this->load->model('Peminjaman_lab');
+			$data['count_lab'] = $this->Peminjaman_lab->countPeminjamanLabPending();
+			$data['count_alat'] = $this->Peminjaman_lab->countPeminjamanAlatPending();
 			$this->load->model('Periode_akademik');
 			$this->load->model('Data_buku_saku');
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
@@ -199,6 +249,9 @@ class C_Main extends CI_Controller{
 			}
 			$data['title'] = 'Dokumen SOP | SI Operasional Lab. Komputasi TIF UNPAR';
 			$data['dokumen_sop'] = true;
+			$this->load->model('Peminjaman_lab');
+			$data['count_lab'] = $this->Peminjaman_lab->countPeminjamanLabPending();
+			$data['count_alat'] = $this->Peminjaman_lab->countPeminjamanAlatPending();
 			$this->load->model('Periode_akademik');
 			$this->load->model('Data_file_sop');
 			$this->load->model('Kategori_sop');
@@ -250,7 +303,9 @@ class C_Main extends CI_Controller{
 			if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 3){
 				$data['title'] = 'Periode Akademik | SI Operasional Lab. Komputasi TIF UNPAR';
 				$data['periode'] = true;
-
+				$this->load->model('Peminjaman_lab');
+				$data['count_lab'] = $this->Peminjaman_lab->countPeminjamanLabPending();
+				$data['count_alat'] = $this->Peminjaman_lab->countPeminjamanAlatPending();
 				$this->load->model('Periode_akademik');
 				$data['info_periode'] = $this->Periode_akademik->getPeriodeAktif();
 				$data['data_periode'] = $this->Periode_akademik->getAllPeriode();
@@ -274,45 +329,48 @@ class C_Main extends CI_Controller{
 	//Return : View V_InisiasisMatkul.php
 	function loadViewAdministrasiMatkul(){
 		if($this->session->userdata('logged_in')){
-				$data['title'] = 'Inisiasi & Administrasi Mata Kuliah | SI Akademik Lab. Komputasi TIF UNPAR';
-				$data['matkul'] = true;
-				$this->load->model('Mata_kuliah');
-				$this->load->model('Periode_akademik');
-				$this->load->model('Users');
+			$data['title'] = 'Inisiasi & Administrasi Mata Kuliah | SI Akademik Lab. Komputasi TIF UNPAR';
+			$data['matkul'] = true;
+			$this->load->model('Mata_kuliah');
+			$this->load->model('Periode_akademik');
+			$this->load->model('Users');
+			$this->load->model('Peminjaman_lab');
+			$this->load->model('List_mata_kuliah');
+			$data['count_lab'] = $this->Peminjaman_lab->countPeminjamanLabPending();
+			$data['count_alat'] = $this->Peminjaman_lab->countPeminjamanAlatPending();
+			$data['list_matkul'] = $this->List_mata_kuliah->getAllMatkul();
+			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+			$data['daftar_periode'] = $this->Periode_akademik->getAllPeriode();
+			$id_periode =  $this->Periode_akademik->getIDPeriodeAktif();
+			$data['data_dosen'] = $this->Users->getDosenAktif();
 				
-				
-				$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
-				$data['daftar_periode'] = $this->Periode_akademik->getAllPeriode();
-				$id_periode =  $this->Periode_akademik->getIDPeriodeAktif();
-				$data['data_dosen'] = $this->Users->getDosenAktif();
-				
-				$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
-				if(isset($_GET['id_periode'])){
-					$id_periode = $_GET['id_periode'];
-					if($id_periode != ""){
-						$data['id_periode_aktif'] = $id_periode;
-					}
+			$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
+			if(isset($_GET['id_periode'])){
+				$id_periode = $_GET['id_periode'];
+				if($id_periode != ""){
+					$data['id_periode_aktif'] = $id_periode;
+				}
+			}
+			else{
+				if(!$id_periode){
+					$data['id_periode_aktif'] = $this->Periode_akademik->getLastActiveId();
 				}
 				else{
-					if(!$id_periode){
-						$data['id_periode_aktif'] = $this->Periode_akademik->getLastActiveId();
-					}
-					else{
-						$data['id_periode_aktif'] = $id_periode;
-					}
+					$data['id_periode_aktif'] = $id_periode;
 				}
-				if($this->session->userdata('id_role') == 2){
-					$data['matkul'] = $this->Mata_kuliah->getMatkulByDosen($data['id_periode_aktif'], $this->session->userdata('id'));
-				}
-				else{
-					$data['matkul'] = $this->Mata_kuliah->getMatkul($data['id_periode_aktif']);
-				}
-				$this->load->view('template/Header', $data);
-				$this->load->view('template/Sidebar', $data);
-				$this->load->view('template/Topbar');
-				$this->load->view('template/Notification');
-				$this->load->view('pages_user/V_InisiasiMatkul', $data);
-				$this->load->view('template/Footer');
+			}
+			if($this->session->userdata('id_role') == 2){
+				$data['matkul'] = $this->Mata_kuliah->getMatkulByDosen($data['id_periode_aktif'], $this->session->userdata('id'));
+			}
+			else{
+				$data['matkul'] = $this->Mata_kuliah->getMatkul($data['id_periode_aktif']);
+			}
+			$this->load->view('template/Header', $data);
+			$this->load->view('template/Sidebar', $data);
+			$this->load->view('template/Topbar');
+			$this->load->view('template/Notification');
+			$this->load->view('pages_user/V_InisiasiMatkul', $data);
+			$this->load->view('template/Footer');
 		}
 		else{
 			redirect('/');

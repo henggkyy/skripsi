@@ -13,7 +13,7 @@
                             <div class="ibox float-e-margins collapsed">
                                 <div class="ibox-title collapse-link">
                                      <h5>Add Jadwal Pemakaian Laboratorium</h5>
-                                     <div class="ibox-tools">
+                                     <div class="ibox-tools" style="float:left;">
                                         <a>
                                             <i class="fa fa-chevron-up"></i>
                                         </a>
@@ -73,30 +73,23 @@
                         ?>
                         
                         <div class="col-lg-12">
-                            <div class="ibox float-e-margins ">
-                                <div class="ibox-title">
+                            <div class="ibox float-e-margins collapsed">
+                                <div class="ibox-title collapse-link">
                                     <h5>Jadwal Pemakaian Laboratorium (CalendarView)</h5>
-                                    
-                                </div>
-                                <div class="ibox-content ">
-                                   <div id="calendar"></div>
-                                </div>
-                            </div>
-                            <div class="modal inmodal" id="modal_event" tabindex="-1" role="dialog"  aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content animated fadeIn"> 
-                                        <div class="modal-body">
-                                            <h2 id="judul_event" align="center"></h2>
-                                            <hr>
-                                            <h3>Nama Event : <span style="font-weight: normal;" id="event"></span></h3>
-                                            <h3>Waktu Mulai : <span style="font-weight: normal;" id="start"></span></h3>
-                                            <h3>Waktu Selesai : <span style="font-weight: normal;" id="end"></span></h3>
-                                            <h3>Lokasi : <span style="font-weight: normal;" id="lokasi_event"></span></h3>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
-                                        </div>
+                                    <div class="ibox-tools" style="float:left;">
+                                        <a>
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
                                     </div>
+                                </div>
+                                <div class="ibox-content collapsed">
+                                    <a target="_blank" class="btn btn-sm btn-success" href="<?php echo base_url();?>jadwal_lab/cetak"><i class="fas fa-print"></i> Cetak</a>
+                                    <p style="color:red;font-size:10px;">Jadwal pemakaian laboratorium yang dicetak merupakan jadwal pada bulan yang sedang berjalan!</p>
+                                    <div class="row">
+                                        <div class="tiva-timetable" data-url="<?php echo base_url();?>" data-source="all_ruangan" data-view="month">   
+                                    </div> 
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>  
@@ -106,13 +99,15 @@
                             <div class="ibox float-e-margins collapsed">
                                 <div class="ibox-title collapse-link">
                                     <h5>Jadwal Pemakaian Laboratorium (DataTables)</h5>
-                                    <div class="ibox-tools">
+                                    <div class="ibox-tools" style="float:left;">
                                         <a>
                                             <i class="fa fa-chevron-up"></i>
                                         </a>
                                     </div>
                                 </div>
                                 <div class="ibox-content collapsed">
+                                    <a target="_blank" class="btn btn-sm btn-success" href="<?php echo base_url();?>jadwal_lab/cetak"><i class="fas fa-print"></i> Cetak</a>
+                                    <p style="color:red;font-size:10px;">Jadwal pemakaian laboratorium yang dicetak merupakan jadwal pada bulan yang sedang berjalan!</p>
                                    <div class="table-responsive">
                                         <table class="table table-striped table-bordered table-hover <?php if(isset($pemakaian_lab) && $pemakaian_lab){ echo 'mainDataTable';}?>">
                                             <thead>
@@ -163,7 +158,7 @@
                     </div>
                 </div>
             </div>
-            <!--START MODAL UPDATE LAPORAN GAJI-->
+            <!--START MODAL UPDATE Jadwal Pemakaian Lab-->
             <div class="modal inmodal" id="modalUpdateJadwalLab" tabindex="-1" role="dialog"  aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content animated fadeIn">
@@ -177,7 +172,7 @@
                     </div>
                 </div>
             </div>
-            <!--END MODAL UPDATE LAPORAN GAJI-->
+            <!--END MODAL UPDATE adwal Pemakaian Lab-->
             <script type="text/javascript">
                 var loader = '<img style="display: block; margin:auto;" src="<?php echo base_url();?>assets/img/loader.gif">';
                 function getDataJadwal(id){

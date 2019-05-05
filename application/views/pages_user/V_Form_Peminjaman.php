@@ -92,7 +92,7 @@
 			                    <p id="notif" style="color: red; font-weight: bold;" align="center"></p>
 			                    <div class="form-group row">
 			                        <div class="col-sm-12">
-			                            <button class="btn btn-primary btn-lg" type="submit" id="button_submit">Ajukan Peminjaman</button>
+			                            <button class="btn btn-primary btn-lg" style="display: block; margin: 0 auto;" type="submit" id="button_submit">Ajukan Peminjaman</button>
 			                        </div>
 			                    </div>
 			                    </form>
@@ -103,13 +103,16 @@
             </div>
             <script type="text/javascript">
             	var loader = '<img style="display: block; margin:auto;" src="<?php echo base_url();?>assets/img/loader.gif">';
+            	$('#form_peminjaman').submit(function(){
+				    $('#button_submit').prop('disabled', true);
+				    $("#notif").html(loader);
+				});
             	function checkLab(){
             		var date_today = new Date();
             		var tanggal_data = $("#tgl_pinjam").val();
+            		var jam_mulai_data = $("#waktu_awal_2").val();
+			        var jam_selesai_data = $("#waktu_akhir_2").val();
 					if($("#choice").val() == 'lab'){
-			           	
-			            var jam_mulai_data = $("#waktu_awal_2").val();
-			            var jam_selesai_data = $("#waktu_akhir_2").val();
 			            var date_input = new Date(tanggal_data);
 			            date_next_week = date_today.setDate(date_today.getDate()+6);
 			            if(date_input < date_next_week){
@@ -161,6 +164,11 @@
 					else{
 						var date_input = new Date(tanggal_data);
 			            date_next_week = date_today.setDate(date_today.getDate()+2);
+			            if(jam_selesai_data < jam_mulai_data){
+			                $("#notif").html('<span style="color:red;">Jam mulai tidak boleh melebihi jam selesai!</span>');
+			                $('#button_submit').prop('disabled', true);
+			                return;
+			            }
 			            if(date_input < date_next_week){
 			            	$('#notif').html('Tanggal peminjaman minimal harus H+3 dari tanggal hari ini!');
 			            	$('#button_submit').prop('disabled', true);

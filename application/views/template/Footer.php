@@ -12,20 +12,20 @@
                                                                 }
                                                             }?>
 	<!-- Mainly scripts -->
-	<script type="text/javascript" src='https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js'></script>
-    <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js'></script>
-	<link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.24/themes/start/jquery-ui.css" type="text/css" />
-	<script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.24/jquery-ui.min.js" type="text/javascript"></script>
 	<script src="<?php echo base_url();?>assets/js/bootstrap.min.js"></script>
+	
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/css/jquery-ui.css" type="text/css" />
+	<script src="<?php echo base_url();?>assets/js/jquery-ui.min.js" type="text/javascript"></script>
+
 	<script src="<?php echo base_url();?>assets/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/clockpicker/clockpicker.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/datapicker/bootstrap-datepicker.js"></script>
-	<script src="<?php echo base_url();?>assets/js/plugins/fullcalendar/moment.min.js"></script>
-	<script src="<?php echo base_url();?>assets/js/plugins/fullcalendar/fullcalendar.min.js"></script>
+	<script src="<?php echo base_url();?>assets/js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/jasny/jasny-bootstrap.min.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/iCheck/icheck.min.js"></script>
 	<script type="text/javascript">
+		$('.color_picker').colorpicker();
 		var mem = $('#data_1 .input-group.date').datepicker({
 			todayBtn: "linked",
 			keyboardNavigation: false,
@@ -142,11 +142,11 @@
 	<script type="text/javascript">
 		$('document').ready(function(){
 			
-			var input_text_pl = '<input class="form-control" type="text" required name="nama_pl" placeholder="Contoh: netbeans, spotify, googlechrome"></input>'
+			var input_text_pl = '<input class="form-control" type="text" required name="nama_pl" placeholder="Contoh: netbeans, spotify, googlechrome"></input><p style="color:red;font-size:10px;">Tulis nama software tanpa menggunakan spasi!</p>'
 			var button_add_pl = $('#button_add_pl');
 			$(button_add_pl).click(function(e){
 		        $('#input_pl').html(input_text_pl);
-
+		        $('#manual_add_pl').hide();
 		    });
 			
 			$('.clockpicker').clockpicker();
@@ -190,66 +190,26 @@
                 autoclose: true
             });
 
-			<?php if(isset($jadwal) && $jadwal){
-				?>
-				$('#calendar').fullCalendar({
-		            header: {
-		                left: 'prev,next today',
-		                center: 'title',
-		                right: 'month,agendaWeek,agendaDay'
-		            },
-		            events: <?php echo $jadwal;?>,
-		            eventClick: function(event, jsEvent, view) {
-
-					    $('#modal_event').modal('show');
-					    $('#judul_event').text(event.title);
-					    $('#event').text(event.title);
-					    $('#start').text(event.start);
-					    $('#end').text(event.end);
-					    $('#lokasi_event').text(event.nama_lab);
-					  }
-		        });
-				<?php
-			}
-			?>
-	        <?php if(isset($jadwal_admin) && $jadwal_admin){
-				?>
-				$('#calendar').fullCalendar({
-		            header: {
-		                left: 'prev,next today',
-		                center: 'title',
-		                right: 'month,agendaWeek,agendaDay'
-		            },
-		            events: <?php echo $jadwal_json;?>,
-		            eventClick: function(event, jsEvent, view) {
-
-					    $('#modal_event').modal('show');
-					    $('#judul_event').text(event.title);
-					    $('#event').text(event.title);
-					    $('#start').text(event.start);
-					    $('#end').text(event.end);
-					  }
-		        });
-
-				<?php
-			}
-			?>
-
 		});
 		<?php
 			if(isset($data_software_cek) && $data_software_cek){
 				?>
 				function periksaSoftware(id_matkul){
+					var loader = '<img style="display: block; margin:auto;" src="<?php echo base_url();?>assets/img/loader.gif">';
+					
 					var data_software_res = '<?php echo $data_software_cek;?>';
+					$('#modal_checker').modal('show');
+					$('#modal_checker').html(loader);
 					console.log(id_matkul);
 					 $.ajax({
 	                    //Ganti URL nanti kl udah dipindah server
 		                url: "<?php echo base_url();?>" + "administrasi_matkul/perangkat_lunak/checker",
-		                method: "GET",
+		                method: "POST",
+		                type:"POST",
 		                data: {data_software : data_software_res , id_matkul_cek : id_matkul},
 		                success: function(data) { 
 		                    $('#modal_checker').html(data);
-		                    $('#modal_checker').modal('show');
+		                    
 		                }
 		            }); 
 				}
@@ -257,39 +217,55 @@
 			}
 			?>
 		$(".input_pdf").change(function(e){
-			var file = e.target.files[0]
+			var file = e.target.files[0];
 			var filesize = e.target.files[0].size;
 			var name = e.target.files[0].name;
+			name = name.toLowerCase();
 			var extension = name.substr( (name.lastIndexOf('.') +1) );
 			switch(extension) {
 				case 'pdf':
+
 				break;
 				default:
 				$( this ).val('');
 				   	alert('Ektensi file tidak sesuai! Ekstensi harus .pdf');
 				    return false;
 				}
-				if (filesize > 4142880) {
+				if (filesize > 2140000) {
 				    $( this ).val('');
-					alert('Ukuran File '+ name +' tidak boleh melebihi 5 MB. File ini berukuran ' + filesize/1024/1024+' MB');
+					alert('Ukuran File '+ name +' tidak boleh melebihi 2 MB. File ini berukuran ' + filesize/1024/1024+' MB');
+				    return false;
+				}
+		});
+		$(".input_custom_file").change(function(e){
+			var file = e.target.files[0];
+			var filesize = e.target.files[0].size;
+			var name = e.target.files[0].name;
+			name = name.toLowerCase();
+			var extension = name.substr( (name.lastIndexOf('.') +1) );
+			switch(extension) {
+				case 'pdf':
+				case 'zip':
+				case 'docx':
+				break;
+				default:
+				$( this ).val('');
+				   	alert('Ektensi file tidak sesuai! Ekstensi harus .pdf/.zip/.docx');
+				    return false;
+				}
+				if (filesize > 2140000) {
+				    $( this ).val('');
+					alert('Ukuran File '+ name +' tidak boleh melebihi 2 MB. File ini berukuran ' + filesize/1024/1024+' MB');
 				    return false;
 				}
 		});
 		
 	</script>
-	
-
-	<!-- Flot -->
-	<script src="<?php echo base_url();?>assets/js/plugins/flot/jquery.flot.js"></script>
-	<script src="<?php echo base_url();?>assets/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-	<script src="<?php echo base_url();?>assets/js/plugins/flot/jquery.flot.spline.js"></script>
-	<script src="<?php echo base_url();?>assets/js/plugins/flot/jquery.flot.resize.js"></script>
-	<script src="<?php echo base_url();?>assets/js/plugins/flot/jquery.flot.pie.js"></script>
-	<script src="<?php echo base_url();?>assets/js/plugins/flot/jquery.flot.symbol.js"></script>
-	<script src="<?php echo base_url();?>assets/js/plugins/flot/jquery.flot.time.js"></script>
-
 	<!-- Custom and plugin javascript -->
 	<script src="<?php echo base_url();?>assets/js/inspinia.js"></script>
+	<script src="<?php echo base_url();?>assets/js/jquery.magnific-popup.js"></script>
+	<script src="<?php echo base_url();?>assets/js/timetable.js"></script>
 	<script src="<?php echo base_url();?>assets/js/plugins/pace/pace.min.js"></script>
+
 </body>
 </html>

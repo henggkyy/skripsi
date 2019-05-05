@@ -1,6 +1,6 @@
 <div class="ibox-title collapse-link">
     <h5>Status & Informasi Periode Akademik</h5>
-    <div class="ibox-tools">
+    <div style="float:left;" class="ibox-tools">
         <a>
             <i class="fa fa-chevron-up"></i>
         </a>

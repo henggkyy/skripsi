@@ -36,9 +36,9 @@
                                                 ?>
                                             <tr>
                                                 <td><?php echo $iterator;?></td>
-                                                <td><?php echo $login['NAMA']."/".$login['EMAIL'];?></td>
+                                                <td><?php echo $login['NAMA']." / ".$login['EMAIL'];?></td>
                                                 <td><?php echo $login['NAMA_ROLE'];?></td>
-                                                <td><?php echo $login['LAST_LOGIN']."/".$login['LAST_IP'];?></td>
+                                                <td><?php echo $login['LAST_LOGIN']." / IP : ".$login['LAST_IP'];?></td>
                                             </tr>
                                                 <?php
                                                 $iterator++;

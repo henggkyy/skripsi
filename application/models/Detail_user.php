@@ -31,13 +31,13 @@ class Detail_user extends CI_Model{
 		}
 	}
 	//Method untuk update periode kontrak admin
-	function updateKontrakAdmin($id_user, $tgl_awal, $tgl_akhir){
+	function updateKontrakAdmin($id_admin, $tgl_awal, $tgl_akhir){
 		$data = array(
 		    'AWAL_KONTRAK' => $tgl_awal,
 		    'AKHIR_KONTRAK' => $tgl_akhir
 		);
 
-		$this->db->where('ID_USER', $id_user);
+		$this->db->where('ID_USER', $id_admin);
 		$res = $this->db->update('detail_user', $data);
 		if($res){
 			return true;
@@ -48,12 +48,12 @@ class Detail_user extends CI_Model{
 	}
 
 	//Method untuk mendapatkan data admin
-	function getDataAdmin($id_user){
+	function getDataAdmin($id_admin){
 		$this->db->select('detail_user.ANGKATAN as ANGKATAN, detail_user.AWAL_KONTRAK as AWAL_KONTRAK, detail_user.AKHIR_KONTRAK as AKHIR_KONTRAK, users.NAMA as NAMA, users.EMAIL as EMAIL, users.NIK as NIK,detail_user.ID_GAJI as ID_GOL, konfigurasi_gaji.NAMA_GOLONGAN as NAMA_GOLONGAN, konfigurasi_gaji.TARIF as TARIF');
 		$this->db->from('detail_user');
 		$this->db->join('users', 'users.ID = detail_user.ID_USER', 'left');
 		$this->db->join('konfigurasi_gaji', 'konfigurasi_gaji.ID = detail_user.ID_GAJI', 'left');
-		$this->db->where('detail_user.ID_USER', $id_user);
+		$this->db->where('detail_user.ID_USER', $id_admin);
 		$result = $this->db->get();
 		if($result->num_rows() == 1){
 			return $result->result_array();
@@ -63,9 +63,9 @@ class Detail_user extends CI_Model{
 		}
 	}
 	//Method untuk memasukkan data detail admin
-	function insertDetailUser($id_user, $angkatan, $awal_kontrak, $akhir_kontrak, $id_gol){
+	function insertDetailUser($id_admin, $angkatan, $awal_kontrak, $akhir_kontrak, $id_gol){
 		$data = array(
-		    'ID_USER' => $id_user,
+		    'ID_USER' => $id_admin,
 		    'ANGKATAN' => $angkatan,
 		    'AWAL_KONTRAK' => $awal_kontrak,
 		    'AKHIR_KONTRAK' => $akhir_kontrak,

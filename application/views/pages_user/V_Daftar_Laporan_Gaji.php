@@ -19,7 +19,7 @@
                                 	}
                                 	?>
                                 	<h4 style="display: inline;"><span style="font-weight: bold;">Periode Absensi/Gaji : </span><?php echo $nama_periode;?></h4>
-                                	<a style="float: right;" target="_blank" href="<?php echo base_url();?>laporan_gaji/cetak?id_periode=<?php echo $id_periode_aktif;?>&id_admin=<?php echo $admin['ID'];?>" class="btn btn-md btn-success"><i class="fas fa-print"></i>Print</a>
+                                	<a style="float: right;" target="_blank" href="<?php echo base_url();?>laporan_gaji/cetak?id_periode=<?php echo $id_periode_aktif;?>&id_admin=<?php echo $admin['ID'];?>" class="btn btn-md btn-success"><i class="fas fa-print"></i> Print</a>
                                 	<?php
 										$total_jam = 0;
 										$jumlah_gaji = 0;

@@ -57,14 +57,14 @@
                 <?php
                 if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 3){
                     ?>
-                <li <?php if(isset($admin_dosen) || isset($admin_lab) || isset($tata_usaha)){ echo 'class='. '"active"';}?>>
+                <li <?php if(isset($admin_dosen) || isset($admin_kalab) || isset($admin_lab) || isset($tata_usaha)){ echo 'class='. '"active"';}?>>
                     <a href="#"><i class="fas fa-group"></i> <span class="nav-label">Administrasi User </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <?php
-                            if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 3){
+                            if($this->session->userdata('id_role') == 1){
                                 ?>
-                            <li <?php if(isset($admin_dosen)){ echo 'class='. '"active"';}?>>
-                                <a href="<?php echo base_url();?>dosen">Administrasi Dosen</a>
+                            <li <?php if(isset($admin_kalab)){ echo 'class='. '"active"';}?>>
+                                <a href="<?php echo base_url();?>kalab">Administrasi Kepala Laboratorium</a>
                             </li>
                                 <?php
                             }
@@ -72,8 +72,8 @@
                             <?php
                             if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 3){
                                 ?>
-                            <li <?php if(isset($admin_lab)){ echo 'class='. '"active"';}?>>
-                                <a href="<?php echo base_url();?>admin_lab">Administrasi Admin Laboratorium</a>
+                            <li <?php if(isset($admin_dosen)){ echo 'class='. '"active"';}?>>
+                                <a href="<?php echo base_url();?>dosen">Administrasi Dosen</a>
                             </li>
                                 <?php
                             }
@@ -87,7 +87,15 @@
                                 <?php
                             }
                             ?>
-                            
+                            <?php
+                            if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 3){
+                                ?>
+                            <li <?php if(isset($admin_lab)){ echo 'class='. '"active"';}?>>
+                                <a href="<?php echo base_url();?>admin_lab">Administrasi Admin Laboratorium</a>
+                            </li>
+                                <?php
+                            }
+                            ?>
                         </ul>
                 </li>
                     <?php
@@ -113,9 +121,6 @@
                     <?php
                 }
                 ?>
-                <?php
-                if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 4){
-                    ?>
                 <li <?php if(isset($alat_lab) || isset($peminjaman_lab) || isset($peminjaman_alat) || isset($form_peminjaman)){ echo 'class='. '"active"';}?>>
                     <a href="#"><i class="fas fa-building"></i> <span class="nav-label">Peminjaman Lab & Alat </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
@@ -145,24 +150,30 @@
                             </li>
                                 <?php
                             }
+                            if($this->session->userdata('id_role') != 1){
                             ?>
                             <li <?php if(isset($form_peminjaman)){ echo 'class='. '"active"';}?>>
                                 <a href="<?php echo base_url();?>peminjaman/form">Form Peminjaman</a>
                             </li>
+                            <?php
+                            }
+                            ?>
                         </ul>
                 </li>
-                    <?php
-                }
-                ?>
-                
+                <?php
+                if($this->session->userdata('id_role') == 1){
+                    ?>
                 <li <?php if(isset($jadwal_lab)){ echo 'class='. '"active"';}?>>
                     <a href="<?php echo base_url();?>jadwal_lab"><i class="fas fa-clock"></i> <span class="nav-label">Jadwal Laboratorium </span></a>
                 </li> 
+                    <?php
+                }
+                ?>
                 <?php
                 if($this->session->userdata('id_role') == 4){
                     ?>
                 <li <?php if(isset($jadwal_admin_flag)){ echo 'class='. '"active"';}?>>
-                    <a href="<?php echo base_url();?>admin_lab/jadwal_bertugas"><i class="fas fa-calendar-alt"></i> <span class="nav-label">Jadwal Bertugas Admin </span></a>
+                    <a href="<?php echo base_url();?>admin_lab/jadwal_bertugas"><i class="fas fa-calendar-alt"></i> <span class="nav-label">Detail & Jadwal Bertugas </span></a>
                 </li> 
                     <?php
                 }

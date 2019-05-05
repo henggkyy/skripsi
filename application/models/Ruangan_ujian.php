@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Ruangan_ujian extends CI_Model{
+	//Method untuk mendapatkan data ruangan ujian
 	function getDataRuanganUjian($id_matkul, $tipe_ujian){
 		$this->db->select('daftar_lab.NAMA_LAB as nama_lab, daftar_lab.LOKASI as lokasi');
 		$this->db->where('ID_MATKUL', $id_matkul);

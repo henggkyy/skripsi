@@ -10,8 +10,8 @@
                             <div class="ibox float-e-margins collapsed">
                                 <div class="ibox-title collapse-link">
                                     <h5>Tambah Dokumen Buku Saku</h5>
-                                    <div class="ibox-tools">
-                                        <a class="collapse-link">
+                                    <div style="float:left;" class="ibox-tools">
+                                        <a>
                                             <i class="fa fa-chevron-up"></i>
                                         </a>
                                     </div>
@@ -35,7 +35,7 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
+                                                    <div class="form-group  row">
                                                         <label class="col-sm-4 col-form-label">Judul Dokumen Buku Saku <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
                                                             <input type="text" required name="judul_saku" placeholder="Contoh : Buku Saku Mahasiswa" class="form-control">
@@ -48,8 +48,8 @@
                                                             ?>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                        <label class="col-sm-4 col-form-label">Dokumen Buku Saku (.pdf maks. 4MB) <span style="color: red">*</span> :</label>
+                                                    <div class="form-group  row">
+                                                        <label class="col-sm-4 col-form-label">Dokumen Buku Saku (.pdf maks. 2MB) <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
                                                             <input class="input_pdf" type="file" required name="dokumen" class="form-control">
                                                             <?php
@@ -127,7 +127,7 @@
                                                                             <?php echo form_open_multipart('dokumen_saku/update');?>
                                                                             <div class="modal-body">
                                                                                 
-                                                                                <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
+                                                                                <div class="form-group  row">
                                                                                     <label class="col-sm-4 col-form-label">Visibility Dokumen Buku Saku <span style="color: red">*</span> :</label>
                                                                                     <div class="col-sm-8">
                                                                                         <select required class="form-control" name="visibility">
@@ -137,7 +137,7 @@
                                                                                         </select>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
+                                                                                <div class="form-group  row">
                                                                                     <label class="col-sm-4 col-form-label">Judul Dokumen Buku Saku <span style="color: red">*</span> :</label>
                                                                                     <div class="col-sm-8">
                                                                                         <input type="text" value="<?php echo $saku['judul'];?>" required name="judul_saku" placeholder="Contoh : SOP Pengadaan Ujian" class="form-control">
@@ -151,7 +151,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 
-                                                                                <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
+                                                                                <div class="form-group  row">
                                                                                     <label class="col-sm-4 col-form-label">Dokumen Buku Saku (.pdf maks. 4MB) :</label>
                                                                                     <div class="col-sm-8">
                                                                                         <p align="left">Dokumen Buku Saku saat ini : <a target="_blank" href="<?php echo base_url();?>uploads/buku_saku/<?php echo $saku['path'];?>"><?php echo $saku['judul'];?></a></p>

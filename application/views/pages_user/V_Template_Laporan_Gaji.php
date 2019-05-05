@@ -2,6 +2,8 @@
 if(isset($daftar_gaji) && $daftar_gaji){
 	foreach ($daftar_gaji as $gaji) {
         $tanggal = date("m/d/Y", strtotime($gaji['TANGGAL_MASUK']));
+        $jam_mulai = date('H:i', strtotime($gaji['JAM_MASUK']));
+            $jam_selesai = date('H:i', strtotime($gaji['JAM_KELUAR']));
 		?>
 <div class="form-group row">
     <label class="col-sm-6 col-form-label">Tanggal Masuk <span style="color: red">*</span> :</label>
@@ -12,13 +14,13 @@ if(isset($daftar_gaji) && $daftar_gaji){
 <div class="form-group row">
     <label class="col-sm-6 col-form-label">Jam Masuk <span style="color: red">*</span> :</label>
     <div class="col-sm-6">
-         <input class="form-control" type="text" id="tanggal_modal" name="jam_mulai" required placeholder="hh:mm" data-mask="99:99" value="<?php echo $gaji['JAM_MASUK'];?>">
+         <input class="form-control" type="text" id="waktu_awal_modal" name="jam_mulai" required placeholder="hh:mm" data-mask="99:99" value="<?php echo $jam_mulai;?>">
     </div>
 </div>
 <div class="form-group row">
     <label class="col-sm-6 col-form-label">Jam Keluar <span style="color: red">*</span> :</label>
     <div class="col-sm-6">
-        <input class="form-control" type="text" id="waktu_akhir_modal" name="jam_selesai" required placeholder="hh:mm" data-mask="99:99" value="<?php echo $gaji['JAM_KELUAR'];?>">
+        <input class="form-control" type="text" id="waktu_akhir_modal" name="jam_selesai" required placeholder="hh:mm" data-mask="99:99" value="<?php echo $jam_selesai;?>">
     </div>
 </div>
 <div class="form-group row">

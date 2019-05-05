@@ -9,9 +9,83 @@
                         <div class="col-lg-12">
                             <div class="ibox float-e-margins collapsed">
                                 <div class="ibox-title collapse-link">
+                                    <h5>Kategori Dokumen SOP</h5>
+                                    <div style="float:left;" class="ibox-tools">
+                                        <a>
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <button type="button" data-toggle="modal" data-target="#modalAddKategori" class="btn btn-md btn-success"><i class="fas fa-plus"></i> Add Kategori</button>
+                                            <!--Modal Add Kategori-->
+                                            <div class="modal inmodal" id="modalAddKategori" tabindex="-1" role="dialog"  aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content animated fadeIn">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                            <h4 class="modal-title">Tambah Kategori Dokumen SOP</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <?php echo form_open('dokumen_sop/add_kategori');?>
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-4 col-form-label">Nama Kategori <span style="color: red">*</span> :</label>
+                                                                <div class="col-sm-8">
+                                                                    <input type="text" required name="nama_kategori" placeholder="Contoh : Perkuliahan" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                            <p style="color: red;" align="center">* Wajib Diisi</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary">Tambah Kategori</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Nama Kategori</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php
+                                                        if(isset($kategori_sop) && $kategori_sop){
+                                                            $iterator = 1;
+                                                            foreach ($kategori_sop as $cat ) {
+                                                                ?>
+                                                        <tr>
+                                                            <td><?php echo $iterator;?></td>
+                                                            <td><?php echo $cat['NAMA_KATEGORI'];?></td>
+                                                        </tr>
+                                                                <?php
+                                                                $iterator++;
+                                                            }
+                                                        }
+                                                        else{
+                                                            echo "<tr><td colspan='2'>Belum ada kategori dokumen SOP</td></tr>";
+                                                        }
+                                                        ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins collapsed">
+                                <div class="ibox-title collapse-link">
                                     <h5>Tambah Dokumen SOP</h5>
-                                    <div class="ibox-tools">
-                                        <a class="collapse-link">
+                                    <div class="ibox-tools" style="float:left;">
+                                        <a>
                                             <i class="fa fa-chevron-up"></i>
                                         </a>
                                     </div>
@@ -25,7 +99,7 @@
                                                 </div>
                                                 <?php echo form_open_multipart('/dokumen_sop/add'); ?>
                                                 <div class="panel-body">
-                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
+                                                    <div class="form-group  row">
                                                         <label class="col-sm-4 col-form-label">Kategori Dokumen SOP<span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
                                                             <select required class="form-control" name="kategori_sop">
@@ -42,7 +116,7 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
+                                                    <div class="form-group  row">
                                                         <label class="col-sm-4 col-form-label">Visibility Dokumen SOP : <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
                                                             <select required class="form-control" name="visibility">
@@ -52,7 +126,7 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
+                                                    <div class="form-group  row">
                                                         <label class="col-sm-4 col-form-label">Judul Dokumen SOP <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
                                                             <input type="text" required name="judul_sop" placeholder="Contoh : SOP Pengadaan Ujian" class="form-control">
@@ -65,8 +139,8 @@
                                                             ?>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                        <label class="col-sm-4 col-form-label">Dokumen SOP (.pdf maks. 4MB) <span style="color: red">*</span> :</label>
+                                                    <div class="form-group  row">
+                                                        <label class="col-sm-4 col-form-label">Dokumen SOP (.pdf maks. 2MB) <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
                                                             <input class="input_pdf" type="file" required name="dokumen" class="form-control">
                                                             <?php
@@ -190,7 +264,7 @@
                                                                                 </div>
                                                                                 
                                                                                 <div class="form-group row">
-                                                                                    <label class="col-sm-4 col-form-label">Dokumen SOP (.pdf maks. 4MB) :</label>
+                                                                                    <label class="col-sm-4 col-form-label">Dokumen SOP (.pdf maks. 2MB) :</label>
                                                                                     <div class="col-sm-8">
                                                                                         <p align="left">Dokumen SOP saat ini : <a target="_blank" href="<?php echo base_url();?>uploads/sop/<?php echo $sop['path'];?>"><?php echo $sop['judul'];?></a></p>
                                                                                         <p align="left" style="color: red; font-size: 10px;">Apabila ingin update dokumen pdf, silahkan upload kembali. Jika tidak terdapat update pada dokumen pdf, maka kosongkan input file</p>

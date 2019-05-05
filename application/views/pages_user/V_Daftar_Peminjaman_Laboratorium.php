@@ -61,8 +61,11 @@
                                                                  
                                                                     <?php
                                                                 }
+                                                                else if($peminjam['STATUS'] == 2){
+                                                                    echo 'Sudah dtindaklanjuti';
+                                                                }
                                                                 else{
-                                                                    echo 'Sudah Ditindaklanjuti';
+                                                                    echo 'Jadwal peminjaman dihapus oleh Kalab dari jadwal lab';
                                                                 }
                                                                 ?>
                                                             </td>
@@ -76,7 +79,7 @@
                                                                             </div>
                                                                             <?php echo form_open('/peminjaman/tindakan'); ?>
                                                                             <div class="modal-body">
-                                                                                <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
+                                                                                <div class="form-group row">
                                                                                     <label class="col-sm-4 col-form-label">Tindakan <span style="color: red">*</span> :</label>
                                                                                     <div class="col-sm-8">
                                                                                         <select name="tindakan" class="form-control" required>
@@ -86,7 +89,7 @@
                                                                                         </select>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
+                                                                                <div class="form-group row">
                                                                                     <label class="col-sm-4 col-form-label">Keterangan <span style="color: red">*</span> :</label>
                                                                                     <div class="col-sm-8">
                                                                                         <textarea style="height: 100px;" required name="keterangan" placeholder="Dapat diisi dengan alasan penolakan, langkah-langkah setelah disetujui, dsb." class="form-control"></textarea>

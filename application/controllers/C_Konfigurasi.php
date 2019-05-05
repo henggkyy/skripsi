@@ -11,8 +11,8 @@ class C_Konfigurasi extends CI_Controller {
 			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('nama', 'Nama Golongan', 'required');
-			$this->form_validation->set_rules('maks_jam', 'Jam Maksimal', 'required');
-			$this->form_validation->set_rules('tarif', 'Tarif per Jam', 'required');
+			$this->form_validation->set_rules('maks_jam', 'Jam Maksimal', 'required|numeric');
+			$this->form_validation->set_rules('tarif', 'Tarif per Jam', 'required|numeric');
 			if($this->form_validation->run() == FALSE){
 				$this->session->set_flashdata('error', 'Missing required Field!');
 	            redirect("laporan_gaji/periode");

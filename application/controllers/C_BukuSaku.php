@@ -15,7 +15,7 @@ class C_BukuSaku extends CI_Controller {
 			$this->form_validation->set_rules('judul_saku', 'Judul Buku Saku', 'required');
 			$this->form_validation->set_rules('id_saku', 'ID Buku Saku', 'required');
 			if($this->form_validation->run() == FALSE){
-				$this->session->set_flashdata('error_message', 'Missing required Field!');
+				$this->session->set_flashdata('error', 'Missing required Field!');
 	            redirect('/dokumen_saku');
 			}
 			else{
@@ -138,7 +138,7 @@ class C_BukuSaku extends CI_Controller {
 				redirect('/dashboard');
 			}
 			if(empty($_FILES['dokumen']['name'])){
-				$this->session->set_flashdata('error_message', 'File dokumen Buku Saku belum dilampirkan!');
+				$this->session->set_flashdata('error', 'File dokumen Buku Saku belum dilampirkan!');
 	            redirect('/dokumen_saku');
 			}
 			if ($this->form_validation->run() == FALSE){
@@ -193,7 +193,7 @@ class C_BukuSaku extends CI_Controller {
 		$config['upload_path']          = './uploads/buku_saku/';
 		$config['allowed_types']        = 'pdf';
 		$config['detect_mime']        	= 'TRUE';
-		$config['max_size']             = 4056;
+		$config['max_size']             = 2056;
 		$this->load->library('upload', $config);
 		$this->upload->initialize($config);
 				
@@ -205,6 +205,7 @@ class C_BukuSaku extends CI_Controller {
 			return $sNewFileName;
 		}
 	}
+	//Method untuk generate hash
 	private function generateHash($jmlh_char){
 		$sListKarakter = "12345678901234567890123456";
  		$sPanjangKarakter = strlen($sListKarakter);

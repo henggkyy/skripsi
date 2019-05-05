@@ -2,7 +2,40 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani proses input, update, dan delete mengenai dokumen SOP
 class C_Sop extends CI_Controller {
-
+	//Method untuk memasukkan kategori dokumen SOP
+	function addKategori(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 4){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
+				redirect('/dashboard');
+			}
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('nama_kategori', 'Nama Kategori SOP', 'required');
+			if($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing required Field!');
+	            redirect('/dokumen_sop');
+			}
+			else{
+				$nama_kategori = $this->input->post('nama_kategori');
+				$this->load->model('Kategori_sop');
+				$data = array(
+					'NAMA_KATEGORI' => $nama_kategori
+				);
+				$res = $this->Kategori_sop->addKategori($data);
+				if($res){
+					$this->session->set_flashdata('success', 'Berhasil menambahkan kategori dokumen SOP!');
+					redirect('/dokumen_sop');
+				}
+				else{
+					$this->session->set_flashdata('error', 'Gagal menambahkan kategori dokumen SOP!');
+					redirect('/dokumen_sop');
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
 	//Method untuk melakukan update dokumen SOP
 	function updateSop(){
 		if($this->session->userdata('logged_in')){
@@ -20,7 +53,7 @@ class C_Sop extends CI_Controller {
 				redirect('/dashboard');
 			}
 			if($this->form_validation->run() == FALSE){
-				$this->session->set_flashdata('error_message', 'Missing required Field!');
+				$this->session->set_flashdata('error', 'Missing required Field!');
 	            redirect('/dokumen_sop');
 			}
 			else{
@@ -140,7 +173,7 @@ class C_Sop extends CI_Controller {
 				redirect('/dashboard');
 			}
 			if(empty($_FILES['dokumen']['name'])){
-				$this->session->set_flashdata('error_message', 'File dokumen SOP belum dilampirkan!');
+				$this->session->set_flashdata('error', 'File dokumen SOP belum dilampirkan!');
 	            redirect('/dokumen_sop');
 			}
 			if ($this->form_validation->run() == FALSE){
@@ -194,7 +227,7 @@ class C_Sop extends CI_Controller {
 		$config['upload_path']          = './uploads/sop/';
 		$config['allowed_types']        = 'pdf';
 		$config['detect_mime']        	= 'TRUE';
-		$config['max_size']             = 4056;
+		$config['max_size']             = 2056;
 		$this->load->library('upload', $config);
 		$this->upload->initialize($config);
 				

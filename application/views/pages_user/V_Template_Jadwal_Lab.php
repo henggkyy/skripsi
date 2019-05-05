@@ -5,7 +5,9 @@ if(isset($data_pemakaian) && $data_pemakaian){
         $end = $pemakaian['end'];
         $tanggal = substr($start, 0, strpos($start, ' '));
         $jam_mulai = substr($start, strpos($start, ' '), (strlen($start)-1));
+        $jam_mulai = date('H:i', strtotime($jam_mulai));
         $jam_selesai =  substr($end, strpos($end, ' '), (strlen($end)-1));
+        $jam_selesai = date('H:i', strtotime($jam_selesai));
         $tanggal = date("m/d/Y", strtotime($tanggal));
 		?>
 <div class="form-group row">

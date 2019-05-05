@@ -28,33 +28,24 @@
                                                 </div>
                                                 <?php echo form_open('/administrasi_matkul/tambah'); ?>
                                                 <div class="modal-body">
-                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                        <label class="col-sm-4 col-form-label">Kode Mata Kuliah <span style="color: red">*</span> :</label>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label">Mata Kuliah <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" required name="kode_matkul" placeholder="Contoh : AIF - 183012" class="form-control">
-                                                            <?php
-                                                                if(isset($error_form) && $error_form){
+                                                            <select class="form-control" required name="matkul">
+                                                                <option disabled selected value="">-- Please Select One --</option>
+                                                                <?php
+                                                                if(isset($list_matkul) && $list_matkul){
+                                                                    foreach ($list_matkul as $lst_matkul) {
                                                                         ?>
-                                                                    <span class="form-text m-b-none" style="color: red;"><?php echo $error_form;?></span>
+                                                                <option value="<?php echo $lst_matkul['ID'];?>"><?php echo $lst_matkul['KODE_MATKUL']." / ".$lst_matkul['NAMA_MATKUL'];?></option>
                                                                         <?php
+                                                                    }
                                                                 }
-                                                            ?>
+                                                                ?>
+                                                            </select>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
-                                                        <label class="col-sm-4 col-form-label">Nama Mata Kuliah <span style="color: red">*</span> :</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="text" required name="nama_matkul" placeholder="Contoh : Algoritma Data" class="form-control">
-                                                            <?php
-                                                                if(isset($error_form) && $error_form){
-                                                                        ?>
-                                                                    <span class="form-text m-b-none" style="color: red;"><?php echo $error_form;?></span>
-                                                                        <?php
-                                                                }
-                                                            ?>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group  row <?php if(isset($error_form) && $error_form){ echo 'has-error';}?>">
+                                                    <div class="form-group  row">
                                                         <label class="col-sm-4 col-form-label">Dosen Koordinator <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
                                                             <select class="form-control" name="dosen_koor" required>
@@ -87,7 +78,25 @@
                                     }
                                     if($this->session->userdata('id_role') == 4){
                                         ?>
-                                    <a href="<?php echo base_url();?>download/checker" class="btn btn-w-m btn-warning"><i class="fas fa-check"></i> Cek Kebutuhan Perangkat Lunak Mata Kuliah</a>
+                                    <button type="button" data-toggle="modal" data-target="#modalInfoChecker" class="btn btn-md btn-warning"><i class="fas fa-check"></i> Cek Kebutuhan Software</button>
+                                    <div class="modal inmodal" id="modalInfoChecker" tabindex="-1" role="dialog"  aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content animated fadeIn">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                    <h4 class="modal-title" style="color: red;">Informasi</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h4 align="center">Setelah menekan button dibawah, sistem akan secara otomatis mengunduh JAR untuk melakukan pengecekan perangkat lunak. <br> Silahkan Anda buka JAR tersebut dan tunggu hingga JAR membuka tab browser baru untuk melakukan pengecekan perangkat lunak!</h4>
+                                                    <h4 align="center" style="color: red;">JAR hanya dapat mendeteksi perangkat lunak yang terpasang pada OS Windows saja!<br>Untuk melakukan pengecekan perangkat lunak, harap Anda membuka SI ini dengan menggunakan default browser yang terpasang pada komputer Anda</h4>
+                                                    <a style="display: block; margin: 0 auto;" href="<?php echo base_url();?>download/checker" class="btn btn-w-m btn-success"><i class="fas fa-download"></i> Download JAR</a>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                         <?php
                                     }
                                     }
@@ -113,41 +122,43 @@
                                     <br>
                                     <hr>
                                     <h3>Daftar Mata Kuliah</h3>
-                                    <table class="table table-bordered">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Kode Mata Kuliah</th>
-                                            <th>Nama Mata Kuliah</th>
-                                            <th>Dosen Koordinator</th>
-                                            <th>Periode Akademik</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                        if(isset($matkul) && $matkul){
-                                            $iterator = 1;
-                                            foreach ($matkul as $mtk) {
-                                                ?>
-                                                <tr>
-                                                    <td><?php echo $iterator;?></td>
-                                                    <td><?php echo $mtk['KD_MATKUL'];?></td>
-                                                    <td><?php echo $mtk['NAMA_MATKUL'];?></td>
-                                                    <td><?php echo $mtk['NAMA_DOSEN'];?></td>
-                                                    <td><?php echo $mtk['NAMA_PERIODE'];?></td>
-                                                    <td><a href="<?php echo base_url().'administrasi_matkul_detail?id='.$mtk['ID'];?>" class="btn btn-primary btn-sm"><i class="fas fa-info"></i> Detail</button></a>
-                                                </tr>
-                                                <?php
-                                                $iterator++;
-                                            }
-                                        }   
-                                        else{
-                                            echo "<tr><td colspan='6'>Belum ada mata kuliah</td></tr>";
-                                        }
-                                        ?>
-                                        </tbody>
-                                    </table>
+                                    <div class="table-responsive">
+                                    	<table class="table table-bordered">
+	                                        <thead>
+	                                        <tr>
+	                                            <th>#</th>
+	                                            <th>Kode Mata Kuliah</th>
+	                                            <th>Nama Mata Kuliah</th>
+	                                            <th>Dosen Koordinator</th>
+	                                            <th>Periode Akademik</th>
+	                                            <th>Action</th>
+	                                        </tr>
+	                                        </thead>
+	                                        <tbody>
+	                                        <?php
+	                                        if(isset($matkul) && $matkul){
+	                                            $iterator = 1;
+	                                            foreach ($matkul as $mtk) {
+	                                                ?>
+	                                                <tr>
+	                                                    <td><?php echo $iterator;?></td>
+	                                                    <td><?php echo $mtk['KD_MATKUL'];?></td>
+	                                                    <td><?php echo $mtk['NAMA_MATKUL'];?></td>
+	                                                    <td><?php echo $mtk['NAMA_DOSEN'];?></td>
+	                                                    <td><?php echo $mtk['NAMA_PERIODE'];?></td>
+	                                                    <td><a href="<?php echo base_url().'administrasi_matkul_detail?id='.$mtk['ID'];?>" class="btn btn-primary btn-sm"><i class="fas fa-info"></i> Detail</button></a>
+	                                                </tr>
+	                                                <?php
+	                                                $iterator++;
+	                                            }
+	                                        }   
+	                                        else{
+	                                            echo "<tr><td colspan='6'>Belum ada mata kuliah</td></tr>";
+	                                        }
+	                                        ?>
+	                                        </tbody>
+	                                    </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>            

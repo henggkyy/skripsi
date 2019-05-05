@@ -26,19 +26,19 @@
                                                     <div class="form-group  row">
                                                         <label class="col-sm-4 col-form-label">NIK Petugas <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" name="nik" class="form-control" required>
+                                                            <input type="text" name="nik" class="form-control" placeholder="20170014 (Numeric only)" data-mask="99999999" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group  row">
                                                         <label class="col-sm-4 col-form-label">Nama Petugas <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" name="nama" class="form-control" required>
+                                                            <input type="text" name="nama" class="form-control" placeholder="Contoh : Hengky Surya" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group  row">
                                                         <label class="col-sm-4 col-form-label">Email Petugas <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
-                                                            <input type="email" name="email" class="form-control" required>
+                                                            <input type="email" placeholder="Contoh : 7315051@student.unpar.ac.id" name="email" class="form-control" required>
                                                         </div>
                                                     </div>
                                                     <p style="color: red;" align="center">* Wajib Diisi</p>

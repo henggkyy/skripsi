@@ -1,6 +1,21 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Pengajuan_jadwal_bertugas extends CI_Model{
+	//Method untuk melakukan pengecekan id admin dan id pengajuan
+	function checkIdPeminjaman($id_admin, $id_pengajuan, $id_periode){
+		$this->db->select('ID');
+		$this->db->where('ID_ADMIN', $id_admin);
+		$this->db->where('ID', $id_pengajuan);
+		$this->db->where('ID_PERIODE', $id_periode);
+		$this->db->from('pengajuan_jadwal_bertugas');
+		$result = $this->db->get();
+		if($result->num_rows() == 1){
+			return true;
+		} 
+		else {
+			return false;
+		}
+	}
 	//Method untuk melakukan update status dan last update
 	function updateStatus($id_pengajuan, $data){
 		$this->db->where('ID', $id_pengajuan);
@@ -14,7 +29,7 @@ class Pengajuan_jadwal_bertugas extends CI_Model{
 	}
 	//Method untuk mendapatkan data pengajuan jadwal bertugas berdasarkan id pengajuan
 	function getDataPengajuanById($id_pengajuan, $id_admin, $id_periode){
-		$this->db->select('ID, HARI, TANGGAL, JAM_MULAI, JAM_SELESAI, DATE_SUBMITTED, STATUS');
+		$this->db->select('ID, HARI, TANGGAL, NUM_DAY, TIPE_BERTUGAS, JAM_MULAI, JAM_SELESAI, JAM_MULAI_DISETUJUI, JAM_SELESAI_DISETUJUI, DATE_SUBMITTED, STATUS');
 		$this->db->where('ID', $id_pengajuan);
 		$this->db->where('ID_ADMIN', $id_admin);
 		$this->db->where('ID_PERIODE', $id_periode);
@@ -27,10 +42,13 @@ class Pengajuan_jadwal_bertugas extends CI_Model{
 			return false;
 		}
 	}
-	function getDataPengajuanByPeriode($id_periode, $tipe){
-		$this->db->select('pengajuan_jadwal_bertugas.ID as ID, pengajuan_jadwal_bertugas.ID_ADMIN as ID_ADMIN, users.NAMA as NAMA, HARI, TANGGAL, JAM_MULAI, JAM_SELESAI, DATE_SUBMITTED, pengajuan_jadwal_bertugas.STATUS as STATUS');
+	function getDataPengajuanByPeriode($id_periode, $tipe, $day){
+		$this->db->select('pengajuan_jadwal_bertugas.ID as ID, pengajuan_jadwal_bertugas.ID_ADMIN as ID_ADMIN, users.NAMA as NAMA, HARI, TANGGAL, JAM_MULAI, JAM_SELESAI, JAM_MULAI_DISETUJUI, JAM_SELESAI_DISETUJUI, DATE_SUBMITTED, pengajuan_jadwal_bertugas.STATUS as STATUS');
 		$this->db->where('ID_PERIODE', $id_periode);
 		$this->db->where('TIPE_BERTUGAS', $tipe);
+		if($day != 99){
+			$this->db->where('NUM_DAY', $day);
+		}
 		$this->db->order_by('TANGGAL', 'asc');
 		$this->db->order_by('NUM_DAY', 'asc');
 		$this->db->order_by('JAM_MULAI', 'asc');
@@ -46,7 +64,7 @@ class Pengajuan_jadwal_bertugas extends CI_Model{
 	}
 	//Method untuk mendapatkan pengajuan jadwal bertugas berdasarkan id periode akademik dan id admin
 	function getDataPengajuan($id_periode, $id_admin, $tipe_bertugas){
-		$this->db->select('ID, HARI, TANGGAL, JAM_MULAI, JAM_SELESAI, DATE_SUBMITTED, STATUS');
+		$this->db->select('ID, HARI, TANGGAL, JAM_MULAI, JAM_SELESAI, JAM_MULAI_DISETUJUI, JAM_SELESAI_DISETUJUI, DATE_SUBMITTED, STATUS');
 		$this->db->where('ID_PERIODE', $id_periode);
 		$this->db->where('ID_ADMIN', $id_admin);
 		$this->db->where('TIPE_BERTUGAS', $tipe_bertugas);

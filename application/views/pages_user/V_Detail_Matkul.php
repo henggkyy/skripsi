@@ -371,80 +371,6 @@
                                                     ?>
                                                     
                                                 </li>
-                                                <li>
-                                                    <h4 style="font-weight: bold;">Peserta Mata Kuliah : </h4>
-                                                    <?php if(!$set_peserta){
-                                                        if($flag && $this->session->userdata('id_role') == 3){?>
-                                                        <button data-toggle="modal" data-target="#insertMhs" class="btn btn-primary btn-sm" type="submit"><i class="fas fa-group"></i> Insert Mahasiswa Peserta Kuliah</button>
-                                                        <!--Modal Set Peserta Matkul-->
-                                                        <div class="modal inmodal" id="insertMhs" tabindex="-1" role="dialog"  aria-hidden="true">
-                                                            <div class="modal-dialog">
-                                                                <div class="modal-content animated fadeIn">
-                                                                    <div class="modal-header">
-                                                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                                        <h3 class="modal-title">Insert Peserta Mata Kuliah - <?php echo $nama_matkul;?></h3>
-                                                                    </div>
-                                                                    <?php echo form_open_multipart('administrasi_matkul/insert_mhs');?>
-                                                                    <div class="modal-body">
-                                                                        <a class="btn btn-success" target="_blank" href="<?php echo base_url();?>download/template_insertMhs"><i class="fas fa-download"></i> Download Template </a>
-                                                                        <br>
-                                                                        <div class="form-group  row" id="data_1">
-                                                                            <label class="col-sm-4 col-form-label">Upload Excel Mhs <span style="color: red">*</span> :</label>
-                                                                            <div class="col-sm-8">
-                                                                                <input class="form-control" type="file" name="excel_mhs">
-                                                                            </div>
-                                                                            <input type="hidden" name="id_matkul" value="<?php echo $_GET['id'];?>" required>
-                                                                        </div>
-                                                                        <p style="color: red;" align="center">* Wajib Diisi</p>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        
-                                                                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                                                                        <button type="submit" class="btn btn-primary">Save Changes </button>
-                                                                    </div>
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!--END MODAL Set Peserta Matkul-->
-                                                        <?php
-                                                        }
-                                                        else{
-
-                                                        }
-                                                    }
-                                                    else{
-                                                        ?>
-                                                        <div class="table-responsive">
-                                                            <table class="table table-striped table-bordered table-hover">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>#</th>
-                                                                        <th>NPM Mahasiswa</th>
-                                                                        <th>Nama Mahasiswa</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <?php
-                                                                    $iterator = 1;
-                                                                    foreach ($set_peserta as $peserta ) {
-                                                                        ?>
-                                                                        <tr>
-                                                                            <td><?php echo $iterator;?></td>
-                                                                            <td><?php echo $peserta['NPM_MHS'];?></td>
-                                                                            <td><?php echo $peserta['NAMA_MHS'];?></td>
-                                                                        </tr>
-                                                                        <?php
-                                                                        $iterator++;
-                                                                    }
-                                                                    ?>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                        <?php
-                                                    } ?>
-                                                    
-                                                </li>
 
                                                 <!--MENU JADWAL KELAS-->
                                                 <li>
@@ -452,10 +378,10 @@
                                                     <?php
                                                     if($flag && $this->session->userdata('id_role') == 3){
                                                         ?>
-                                                    <button id="btn_insert_jadwal" class="btn btn-success btn-sm" type="submit"><i class="fas fa-group"></i> Insert Jadwal Kelas</button>
+                                                    <button id="btn_insert_jadwal" class="btn btn-success btn-sm" type="submit"><i class="fas fa-group"></i> Insert Jadwal Perkuliahan</button>
                                                     <div style="display: none;" id="container_jadwal" class="panel panel-warning">
                                                         <div class="panel-heading">
-                                                            Insert Jadwal Kelas
+                                                            Insert Jadwal Perkuliahan
                                                         </div>
                                                         <div class="panel-body">
                                                             <?php
@@ -468,7 +394,7 @@
                                                             echo form_open_multipart('administrasi_matkul/insert_kelas');?>
                                                             
                                                             <div class="form-group  row">
-                                                                <label class="col-sm-4 col-form-label">Jadwal Kelas <span style="color: red">*</span> :</label>
+                                                                <label class="col-sm-4 col-form-label">Jadwal Perkuliahan <span style="color: red">*</span> :</label>
                                                                 <div class="col-sm-8"> 
                                                                     <h5>Pertemuan Ke - 1</h5>       
                                                                     <label>Hari :</label><select id="select_0" name="hari[]" class="form-control col-md-4" required><option value="" selected disabled>-- Please Select One --</option><option value="1">Senin</option><option value="2" >Selasa</option><option value="3" >Rabu</option><option value="4" >Kamis</option><option value="5" >Jumat</option><option value="6" >Sabtu</option></select>  
@@ -537,11 +463,14 @@
                                                         </table>
                                                     </div>
                                                 </li>
+                                                <?php
+                                                if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 2 ||$this->session->userdata('id_role') == 4 ){
+                                                	?>
                                                 <!--Menu Kebutuhan Perangkat Lunak-->
                                                 <li>
                                                     <h4 style="font-weight: bold;">Kebutuhan Perangkat Lunak : </h4>
                                                     <?php
-                                                    if($flag && $this->session->userdata('id_role') == 2){
+                                                    if(($flag && $this->session->userdata('id_role') == 2) || ($flag && $this->session->userdata('id_role') == 1 && $rangkap_dosen)){
                                                         ?>
                                                     <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#insertPL">Tambah Perangkat Lunak</button>
                                                     <!--Modal Add Perangkat Lunak-->
@@ -568,7 +497,7 @@
                                                                                     <option value="xampp">XAMPP</option>
                                                                                 </select> 
                                                                             </div>
-                                                                            <div class="col-sm-8">
+                                                                            <div class="col-sm-8" id="manual_add_pl">
                                                                                 <p>Perangkat lunak tidak ada dalam list? <a id="button_add_pl" href="javascript:void(0)">Klik disini.</a></p>
                                                                             </div>
                                                                         </div>
@@ -610,20 +539,20 @@
                                                                             <td>
                                                                                 <?php
                                                                                 if($pl['STATUS'] == 1){
-                                                                                    echo 'Sudah Terinstall';
+                                                                                    echo '<span class="badge badge-success"><i class="fas fa-check"></i> Sudah Terinstall</span>';
                                                                                 }
                                                                                 else if($pl['STATUS'] == 2){
-                                                                                    echo 'Belum Terinstall';
+                                                                                    echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Belum Terinstall</span>';
                                                                                 }
                                                                                 else{
-                                                                                    echo 'Belum diperiksa';
+                                                                                    echo '<span class="badge badge-warning"><i class="fas fa-clock"></i> Belum Diperiksa</span>';
                                                                                 }
                                                                                 ?>
                                                                             </td>
                                                                             <td><?php echo $pl['LAST_CHECKED'];?></td>
                                                                             <td align="center">
                                                                                 <?php
-                                                                                if($flag && $this->session->userdata('id_role') == 2){
+                                                                                if(($flag && $this->session->userdata('id_role') == 2) || ($flag && $this->session->userdata('id_role') == 1 && $rangkap_dosen)){
 
                                                                                  echo form_open('administrasi_matkul/perangkat_lunak/delete');?>
                                                                                 
@@ -660,7 +589,7 @@
                                                 <li>
                                                     <h4 style="font-weight: bold;">File Bantuan Ujian : </h4>
                                                     <?php
-                                                    if($flag && $this->session->userdata('id_role') == 2){
+                                                    if(($flag && $this->session->userdata('id_role') == 2) || ($flag && $this->session->userdata('id_role') == 1 && $rangkap_dosen)){
                                                         ?>
                                                     <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#insertFileBantuan"><i class="fas fa-file-upload"></i> Upload File Bantuan</button>
                                                     <!--Modal ADD FILE BANTUAN-->
@@ -692,7 +621,7 @@
                                                                         <div class="form-group  row">
                                                                             <label class="col-sm-4 col-form-label">Upload File (.zip, .pdf, .docx. Max 2MB) <span style="color: red">*</span> :</label>
                                                                             <div class="col-sm-8">
-                                                                                <input class="form-control" type="file" name="file_bantuan">
+                                                                                <input class="input_custom_file" class="form-control" type="file" name="file_bantuan">
                                                                             </div>
                                                                         </div>
                                                                         <input type="hidden" name="id_matkul" value="<?php echo $_GET['id'];?>" required>
@@ -720,6 +649,7 @@
                                                                     <th>Tipe Ujian</th>
                                                                     <th>Waktu Upload</th>
                                                                     <th>Uploader</th>
+                                                                    <th>Status</th>
                                                                     <th>Aksi</th>
                                                                 </tr>
                                                             </thead>
@@ -741,10 +671,54 @@
                                                                         ?></td>
                                                                         <td><?php echo $file['LAST_UPDATE'];?></td>
                                                                         <td><?php echo $file['USER_UPLOAD'];?></td>
+                                                                        <td>
+                                                                            <?php 
+                                                                            if($file['STATUS'] == 0){
+                                                                                echo '<span class="badge badge-warning"><i class="fas fa-clock"></i> Menunggu Persetujuan Kalab</span>';
+                                                                            }
+                                                                            else if($file['STATUS'] == 1){
+                                                                                echo '<span class="badge badge-success"><i class="fas fa-check"></i> Telah Disetujui Kalab</span>';
+                                                                            }
+                                                                            else{
+                                                                                echo '<span class="badge badge-danger"><i class="fas fa-times"></i> Tidak Disetujui Kalab</span>';
+                                                                            }
+                                                                            ?>
+                                                                        </td>
                                                                         <td align="center">
-                                                                            <a class="btn btn-sm btn-success" target="_blank" href="<?php echo base_url();?>download/file_bantuan/<?php echo $file['PATH_FILE'];?>"><i class="fas fa-download"></i> Download</a>
                                                                             <?php
-                                                                            if($flag && $this->session->userdata('id_role') == 2){
+                                                                            if($this->session->userdata('id_role') == 4 && $file['STATUS'] == 1){
+                                                                                ?>
+                                                                                <a class="btn btn-sm btn-success" target="_blank" href="<?php echo base_url();?>download/file_bantuan/<?php echo $file['PATH_FILE'];?>"><i class="fas fa-download"></i> Download</a>
+                                                                                <?php
+                                                                            }
+                                                                            else if($this->session->userdata('id_role') != 4){
+                                                                                ?>
+                                                                                <a class="btn btn-sm btn-success" target="_blank" href="<?php echo base_url();?>download/file_bantuan/<?php echo $file['PATH_FILE'];?>"><i class="fas fa-download"></i> Download</a>
+                                                                                <?php
+                                                                            }
+                                                                            else{
+                                                                                echo "-";
+                                                                            }
+                                                                            ?>
+                                                                            <?php
+                                                                            if($flag && $this->session->userdata('id_role') == 1){
+                                                                                if($file['STATUS'] == 0){
+                                                                                    echo form_open('administrasi_matkul/file_bantuan/accept');?>
+                                                                                    <input type="hidden" name="id_matkul" value="<?php echo $_GET['id'];?>" required>
+                                                                                    <input type="hidden" name="id_file_bantuan" value="<?php echo $file['ID'];?>" required>
+                                                                                    <button type="submit" class="btn btn-sm btn-primary" ><i class="fas fa-vote-yea"></i> Setujui</button>
+                                                                                    </form>
+                                                                                    <?php echo form_open('administrasi_matkul/file_bantuan/reject');?>
+                                                                                    <input type="hidden" name="id_matkul" value="<?php echo $_GET['id'];?>" required>
+                                                                                    <input type="hidden" name="id_file_bantuan" value="<?php echo $file['ID'];?>" required>
+                                                                                    <button type="submit" class="btn btn-sm btn-danger" ><i class="fas fa-times"></i> Tolak</button>
+                                                                                    </form>
+                                                                                    <?php
+                                                                                }
+                                                                            }
+                                                                            ?>
+                                                                            <?php
+                                                                            if($flag && $this->session->userdata('id_role') == 2 && ($file['STATUS'] == 0 || $file['STATUS'] == 2)){
                                                                                 echo form_open('administrasi_matkul/file_bantuan/remove');?>
                                                                             <input type="hidden" name="id_matkul" value="<?php echo $_GET['id'];?>" required>
                                                                             <input type="hidden" name="id_file_bantuan" value="<?php echo $file['ID'];?>" required>
@@ -760,7 +734,7 @@
                                                                     }
                                                                 }
                                                                 else{
-                                                                    echo '<tr><td colspan="6">Belum ada file bantuan!</td></tr>';
+                                                                    echo '<tr><td colspan="7">Belum ada file bantuan!</td></tr>';
                                                                 }
                                                                 ?>
                                                             </tbody>
@@ -772,7 +746,7 @@
                                                 <li>
                                                     <h4 style="font-weight: bold;">Checklist Persiapan Ujian : </h4>
                                                     <?php
-                                                    if($flag && $this->session->userdata('id_role') == 2){
+                                                    if(($flag && $this->session->userdata('id_role') == 2) || ($flag && $this->session->userdata('id_role') == 1 && $rangkap_dosen)){
                                                         ?>
                                                     <button class="btn btn-sm btn-success" id="btn_checklist"><i class="fas fa-tasks"></i> Checklist Persiapan Ujian</button>
                                                     <div style="display: none;" id="container_checklist" class="panel panel-success">
@@ -1168,12 +1142,19 @@
                                                     </div>
                                                 </li> 
                                                 <!--END MENU CHECKLIST PERSIAPAN UJIAN-->
+                                                	<?php
+                                                }
+                                                ?>
+                                                
                                             </ul>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
-                        </div>            
+                        </div>   
+                        <div class="col-lg-4">
+                            <a class="btn btn-md btn-primary" href="<?php echo base_url();?>administrasi_matkul"><i class="fas fa-arrow-left"></i> Back</a>
+                        </div>          
                     </div>
                 </div>
             </div>

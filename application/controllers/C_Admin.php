@@ -2,14 +2,87 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani proses administrasi admin mulai dari proses input, jadwal, dsb.
 class C_Admin extends CI_Controller {
-	//Method untuk melakukan load rekapitulasi jadwal pengajuan yang dilakukan oleh admin
-	function loadRekapitulasiPengajuanJadwal(){
+	//Method untuk mencetak jadwal bertugas admin pada bulan yang sedang berjalan
+	function cetakJadwalAdmin(){
 		if($this->session->userdata('logged_in')){
 			if($this->session->userdata('id_role')!= 1){
 				redirect('dashboard');
 			}
-			$data['title'] = 'Rekapitulasi Pengajuan Jadwal Bertugas | SI Operasional Lab. Komputasi TIF UNPAR';
+			$data['title']= "Cetak Bertugas Admin Laboratorium | SI Kegiatan Operasional Lab. Komputasi TIF UNPAR";
+			$data['nama_bulan'] = $this->getNamaBulan(date('n'));
+			date_default_timezone_set('Asia/Jakarta');
+			$data['now_date'] = date("Y-m-d H:i:s");
+			$this->load->model('Jadwal_bertugas_admin');
+			$data['jadwal_admin'] = $this->Jadwal_bertugas_admin->getJadwalByMonth();
+			$this->load->view('template/Header', $data);
+			$this->load->view('pages_user/V_Cetak_Jadwal_Admin', $data);
+			$this->load->view('template/Footer');
+		}
+		else{
+			redirect('/');
+		}
+	}
+	//Method ini bertujuan untuk menampilkan data pengajuan yang sudah dilakukan oleh admin
+	//Method ini dipanggil menggunakan jquery ajax pada footer rekapitulasi pengajuan jadwal dan detail admin
+	function loadDataPengajuan(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role')!= 1){
+				echo "Anda tidak memiliki akses";
+				return;
+			}
+			$id_pengajuan = $this->input->get('id');
+			$id_admin = $this->input->get('id_admin');
+			$tipe_bertugas = $this->input->get('tipe_bertugas');
+			$method = $this->input->get('method');
+			$this->load->model('Pengajuan_jadwal_bertugas');
 			$this->load->model('Periode_akademik');
+			if($tipe_bertugas == 0){
+				$data['form'] = 'admin_lab/accept_pengajuan_kuliah';
+			}
+			else if($tipe_bertugas == 1 || $tipe_bertugas == 2){
+				$data['form'] = 'admin_lab/accept_pengajuan_ujian';
+			}
+			else{
+				echo "Error! tipe bertugas tidak sesuai!";
+				return;
+			}
+			$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
+			if($id_periode){
+				$data['data_pengajuan'] = $this->Pengajuan_jadwal_bertugas->getDataPengajuanById($id_pengajuan, $id_admin, $id_periode);
+				if($data['data_pengajuan']){
+					$data['id_admin'] = $id_admin;
+					$data['id_pengajuan'] = $id_pengajuan;
+					$data['method'] = $method;
+					$string =  $this->load->view('pages_user/V_Template_Data_Pengajuan', $data, TRUE);
+					echo $string;
+					return;
+				}
+				else{
+					echo "Tidak dapat mendapatkan data pengajuan!";
+					return;
+				}
+			}
+			else{
+				echo "Tidak terdapat periode akademik yang sedang aktif!";
+				return;
+			}
+			
+		}
+		else{
+			echo "Anda belum login ke dalam sistem";
+		}
+	}
+	//Method untuk menampilkan halaman rekapitulasi jadwal bertugas admin.
+	function loadRekapitulasiJadwalBertugas(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role')!= 1){
+				redirect('dashboard');
+			}
+			$data['title'] = 'Rekapitulasi Jadwal Bertugas Admin | SI Operasional Lab. Komputasi TIF UNPAR';
+			$this->load->model('Periode_akademik');
+			$this->load->model('Peminjaman_lab');
+			$data['count_lab'] = $this->Peminjaman_lab->countPeminjamanLabPending();
+			$data['count_alat'] = $this->Peminjaman_lab->countPeminjamanAlatPending();
 			$data['daftar_periode'] = $this->Periode_akademik->getAllPeriode();
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
@@ -40,10 +113,86 @@ class C_Admin extends CI_Controller {
 					$data['flag'] = true;
 				}
 			}
+			$this->load->model('Jadwal_bertugas_admin');
+			$this->load->view('template/Header', $data);
+			$this->load->view('template/Sidebar', $data);
+			$this->load->view('template/Topbar');
+			$this->load->view('template/Notification');
+			$this->load->view('pages_user/V_Rekapitulasi_Jadwal_Admin', $data);
+			$this->load->view('template/Footer');
+		}
+		else{
+			redirect('/');
+		}
+	}
+	//Method untuk melakukan load rekapitulasi jadwal pengajuan yang dilakukan oleh admin
+	function loadRekapitulasiPengajuanJadwal(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role')!= 1){
+				redirect('dashboard');
+			}
+			$data['title'] = 'Rekapitulasi Pengajuan Jadwal Bertugas Admin | SI Operasional Lab. Komputasi TIF UNPAR';
+			$this->load->model('Periode_akademik');
+			$this->load->model('Peminjaman_lab');
+			$this->load->model('Users');
+			$data['count_lab'] = $this->Peminjaman_lab->countPeminjamanLabPending();
+			$data['count_alat'] = $this->Peminjaman_lab->countPeminjamanAlatPending();
+			$data['daftar_periode'] = $this->Periode_akademik->getAllPeriode();
+			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
+			$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
+			if(isset($_GET['id_periode'])){
+				$id_periode_selected = $_GET['id_periode'];
+				if($id_periode_selected != ""){
+					if($id_periode_selected == $id_periode){
+						$data['flag'] = true;
+					}
+					else{
+						$data['flag'] = false;
+					}
+					$data['id_periode_aktif'] = $id_periode_selected;
+				}
+				else{
+					$id_periode = $this->Periode_akademik->getIDPeriodeAktif(); 
+					$data['id_periode_aktif'] = $id_periode;
+					$data['flag'] = true;
+				}
+			}
+			else{
+				if(!$id_periode){
+					$data['id_periode_aktif'] = $this->Periode_akademik->getLastActiveId();
+					$data['flag'] = false;
+				}
+				else{
+					$data['id_periode_aktif'] = $id_periode;
+					$data['flag'] = true;
+				}
+			}
+			if(isset($_GET['day'])){
+				$day = $_GET['day'];
+				if($day == ""){
+					$day = 99;
+				}
+				else if($day <= 1 && $day >= 7){
+					$day = 99;
+				}
+			}
+			else{
+				$day = 99;
+			}
+			$data['day'] = $day;
 			$this->load->model('Pengajuan_jadwal_bertugas');
-			$data['pengajuan_kuliah'] = $this->Pengajuan_jadwal_bertugas->getDataPengajuanByPeriode($data['id_periode_aktif'] ,0);
-			$data['pengajuan_uts'] = $this->Pengajuan_jadwal_bertugas->getDataPengajuanByPeriode($data['id_periode_aktif'] ,1);
-			$data['pengajuan_uas'] = $this->Pengajuan_jadwal_bertugas->getDataPengajuanByPeriode($data['id_periode_aktif'] ,2);
+			$data['pengajuan_kuliah'] = $this->Pengajuan_jadwal_bertugas->getDataPengajuanByPeriode($data['id_periode_aktif'] ,0, $day);
+			$data['pengajuan_uts'] = $this->Pengajuan_jadwal_bertugas->getDataPengajuanByPeriode($data['id_periode_aktif'] ,1, $day);
+			$data['pengajuan_uas'] = $this->Pengajuan_jadwal_bertugas->getDataPengajuanByPeriode($data['id_periode_aktif'] ,2, $day);
+			$arr_data_admin = $this->Users->getDataAdminAktif();
+			$names = array();
+			if($arr_data_admin){
+				foreach ($arr_data_admin as $data_admin) {
+					$name = $data_admin['INISIAL'];
+					array_push($names, $name);
+				}
+			}
+			$data['inisial_admin'] = json_encode($names);
 			$this->load->view('template/Header', $data);
 			$this->load->view('template/Sidebar', $data);
 			$this->load->view('template/Topbar');
@@ -55,8 +204,96 @@ class C_Admin extends CI_Controller {
 			redirect('/');
 		}
 	}
-	//Method untuk melakukan accept jadwal pengajuan bertugas pada masa ujian
-	function acceptJadwalMasaUjian(){
+	//Method untuk mendapatkan data json berdasarkan id admin yang dipilih atau id admin yang login dan ditampilkan pada library tiva timetable
+	function getDataBertugasByIdAdminForTimeTables(){
+		if($this->session->userdata('logged_in')){
+			$id_admin = $this->input->get('id_admin');
+			$id_periode = $this->input->get('id_periode');
+			if(!$id_periode){
+				echo "ID Periode Tidak Ditemukan";
+				return;
+			}
+			if(!$id_admin){
+				echo "ID Admin Tidak Ditemukan";
+				return;
+			}
+			$this->load->model('Jadwal_bertugas_admin');
+			$array_jadwal_admin = $this->Jadwal_bertugas_admin->getJadwalBertugas($id_admin, $id_periode);
+			$arr_json = array();
+			if($array_jadwal_admin){
+				foreach ($array_jadwal_admin as $jadwal) {
+					$timetable = new stdClass();
+					$timetable->name = $jadwal['INISIAL'];
+					$timetable->image = "";
+					$timetable->date = date('j', strtotime($jadwal['TANGGAL'])); // date : type DATE. For example: 2016-09-07
+					$timetable->month = date('n', strtotime($jadwal['TANGGAL']));
+					$timetable->year = date('Y', strtotime($jadwal['TANGGAL']));
+					$timetable->day = $this->getDayFromNum($jadwal['NUM_DAY']);
+					$timetable->start_time = $jadwal['JAM_MULAI'] ? date('H:i', strtotime($jadwal['JAM_MULAI'])) : ''; // start_time : Must be 24 hour format. For example: 18:00
+					$timetable->end_time = $jadwal['JAM_SELESAI'] ? date('H:i', strtotime($jadwal['JAM_SELESAI'])) : ''; // end_time : Must be 24 hour format. For example: 20:30
+					$timetable->color = $jadwal['COLOR'];
+					$timetable->description = "Nama Admin : <b>". $jadwal['NAMA']." (".$jadwal['INISIAL'].") </b>"."<br> Jam Bertugas : <b>".$jadwal['JAM_MULAI']." s/d ".$jadwal['JAM_SELESAI']."</b><br>Tipe Bertugas : <b>".$jadwal['TIPE_BERTUGAS']."</b>";
+					array_push($arr_json, $timetable);
+				}
+			}
+			echo json_encode($arr_json);
+		}
+		else{
+			echo "Youre not logged in!";
+		}
+	}
+	//Method untuk mendapatkan data json yang akan ditampilkan pada library tiva timetable
+	function getDataBertugasAdminForTimeTables(){
+		if($this->session->userdata('logged_in')){
+			$id_periode = $this->input->get('id_periode');
+			$mode = $this->input->get('mode_bertugas');
+			if(!$id_periode){
+				echo "ID Periode Tidak Ditemukan";
+				return;
+			}
+			if(!$mode){
+				echo "Mode Bertugas Tidak Ditemukan";
+				return;
+			}
+			$mode = $mode -1;
+			$this->load->model('Jadwal_bertugas_admin');
+			if($mode == 0){
+				$mode_char = "Masa Perkuliahan";
+			}
+			else if($mode == 1){
+				$mode_char = "Masa Ujian Tengah Semester (UTS)";
+			}
+			else{
+				$mode_char = "Masa Ujian Akhir Semester (UAS)";
+			}
+			$array_jadwal = $this->Jadwal_bertugas_admin->getJadwalByPeriode($id_periode, $mode, 99);
+			$arr_json = array();
+			if($array_jadwal){
+				foreach ($array_jadwal as $jadwal) {
+					$timetable = new stdClass();
+					$timetable->name = $jadwal['INISIAL'];
+					$timetable->image = "";
+					if($mode == 1 || $mode == 2){
+						$timetable->date = date('j', strtotime($jadwal['TANGGAL'])); // date : type DATE. For example: 2016-09-07
+						$timetable->month = date('n', strtotime($jadwal['TANGGAL']));
+						$timetable->year = date('Y', strtotime($jadwal['TANGGAL']));
+					}
+					$timetable->day = $this->getDayFromNum($jadwal['NUM_DAY']);
+					$timetable->start_time = $jadwal['JAM_MULAI'] ? date('H:i', strtotime($jadwal['JAM_MULAI'])) : ''; // start_time : Must be 24 hour format. For example: 18:00
+					$timetable->end_time = $jadwal['JAM_SELESAI'] ? date('H:i', strtotime($jadwal['JAM_SELESAI'])) : ''; // end_time : Must be 24 hour format. For example: 20:30
+					$timetable->color =  $jadwal['COLOR'];
+					$timetable->description = "Nama Admin : <b>". $jadwal['NAMA']." (".$jadwal['INISIAL'].") </b>"."<br> Jam Bertugas : <b>".$jadwal['JAM_MULAI']." s/d ".$jadwal['JAM_SELESAI']."</b><br>Tipe Bertugas : <b>".$mode_char."</b>";
+					array_push($arr_json, $timetable);
+				}
+			}
+			echo json_encode($arr_json);
+		}
+		else{
+			echo "You're not logged in";
+		}
+	}
+	//Method untuk menolak jadwal pengajuan bertugas pada masa ujian
+	function rejectPengajuanJadwal(){
 		if($this->session->userdata('logged_in')){
 			if($this->session->userdata('id_role')!= 1){
 				redirect('dashboard');
@@ -72,7 +309,7 @@ class C_Admin extends CI_Controller {
 			if($this->form_validation->run() == FALSE){
 				$this->session->set_flashdata('error', 'Missing required Field!');
 				if($rekap){
-					redirect("rekapitulasi_pengajuan");
+					redirect("admin_lab/rekapitulasi_pengajuan");
 				}
 	            redirect("admin_lab/detail?id_admin=$id_admin");
 			}
@@ -87,13 +324,111 @@ class C_Admin extends CI_Controller {
 					if(!$array_data_pengajuan){
 						$this->session->set_flashdata('error', 'Error! Data Pengajuan tidak ditemukan!');
 						if($rekap){
-							redirect("rekapitulasi_pengajuan");
+							redirect("admin_lab/rekapitulasi_pengajuan");
 						}
 	            		redirect("admin_lab/detail?id_admin=$id_admin");
 					}
+					date_default_timezone_set('Asia/Jakarta');
+					$date_now = date("Y-m-d H:i:s");
+					$data_update = array(
+						'STATUS' => 2,
+						'DATE_SUBMITTED' => $date_now
+					);
+					$res = $this->Pengajuan_jadwal_bertugas->updateStatus($id_pengajuan, $data_update);
+					if($res){
+						$this->session->set_flashdata('success', 'Berhasil menolak pengajuan jadwal bertugas admin!');
+						if($rekap){
+							redirect("admin_lab/rekapitulasi_pengajuan");
+						}
+						redirect("admin_lab/detail?id_admin=$id_admin");
+					}
+					else{
+						$this->session->set_flashdata('error', 'Gagal menolak pengajuan jadwal bertugas admin!');
+						if($rekap){
+							redirect("admin_lab/rekapitulasi_pengajuan");
+						}
+						redirect("admin_lab/detail?id_admin=$id_admin");
+					}
+				}
+				else{
+					$this->session->set_flashdata('error', 'Tidak dapat menolak pengajuan jadwal bertugas karena tidak terdapat periode akademik yg sedang aktif!');
+					if($rekap){
+						redirect("admin_lab/rekapitulasi_pengajuan");
+					}
+					redirect("admin_lab/detail?id_admin=$id_admin");
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
+	//Method untuk melakukan accept jadwal pengajuan bertugas pada masa ujian
+	function acceptJadwalMasaUjian(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role')!= 1){
+				redirect('dashboard');
+			}
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('id_pengajuan', 'ID Pengajuan', 'required');
+			$this->form_validation->set_rules('id_admin', 'ID Admin', 'required');
+			$this->form_validation->set_rules('jam_mulai', 'Jam Mulai Bertugas', 'required');
+			$this->form_validation->set_rules('jam_selesai', 'Jam Selesai Bertugas', 'required');
+			$id_admin = $this->input->post('id_admin');
+			$rekap = false;
+			if(isset($_POST['method']) && $_POST['method'] ==  'rekap'){
+				$rekap = true;
+			}
+			if($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing required Field!');
+				if($rekap){
+					redirect("admin_lab/rekapitulasi_pengajuan");
+				}
+	            redirect("admin_lab/detail?id_admin=$id_admin");
+			}
+			else{
+				$this->load->model('Pengajuan_jadwal_bertugas');
+				$id_pengajuan = $this->input->post('id_pengajuan');
+				$this->load->model('Periode_akademik');
+				$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
+				
+				if($id_periode){
+
+					$array_data_pengajuan = $this->Pengajuan_jadwal_bertugas->getDataPengajuanById($id_pengajuan, $id_admin, $id_periode);
+					if(!$array_data_pengajuan){
+						$this->session->set_flashdata('error', 'Error! Data Pengajuan tidak ditemukan!');
+						if($rekap){
+							redirect("admin_lab/rekapitulasi_pengajuan");
+						}
+	            		redirect("admin_lab/detail?id_admin=$id_admin");
+					}
+
 					$tgl_bertugas = $array_data_pengajuan[0]['TANGGAL'];
-					$jam_mulai = $array_data_pengajuan[0]['JAM_MULAI'];
-					$jam_selesai = $array_data_pengajuan[0]['JAM_SELESAI'];
+					$jam_mulai = $this->input->post('jam_mulai');
+					$jam_selesai = $this->input->post('jam_selesai');
+					if($jam_mulai > $jam_selesai){
+						$this->session->set_flashdata('error', 'Jam mulai bertugas tidak boleh lebih besar daripada jam selesai bertugas');
+						if($rekap){
+							redirect("admin_lab/rekapitulasi_pengajuan");
+						}
+						redirect("admin_lab/detail?id_admin=$id_admin");
+					}
+					$validate_jam_mulai = $this->validate_time($jam_mulai);
+					$validate_jam_selesai = $this->validate_time($jam_selesai);
+					if(!$validate_jam_mulai){
+						$this->session->set_flashdata('error', "Jam mulai bertugas bukan merupakan format waktu yang benar! ($jam_mulai)");
+		            	if($rekap){
+							redirect("admin_lab/rekapitulasi_pengajuan");
+						}
+						redirect("admin_lab/detail?id_admin=$id_admin");
+					}
+					if(!$validate_jam_selesai){
+						$this->session->set_flashdata('error', "Jam selesai bertugas bukan merupakan format waktu yang benar! ($jam_selesai)");
+		            	if($rekap){
+							redirect("admin_lab/rekapitulasi_pengajuan");
+						}
+						redirect("admin_lab/detail?id_admin=$id_admin");
+					}
 					//Get data tanggal periode akademik
 					$array_tanggal_akademik = $this->Periode_akademik->getTanggalAkademik($id_periode);
 					$start_uts = $array_tanggal_akademik[0]['START_UTS'];
@@ -115,13 +450,17 @@ class C_Admin extends CI_Controller {
 					// print_r($check_in_uts);
 					// return;
 					$hari = $array_data_pengajuan[0]['HARI'];
-					$date_now = date("Y-m-d h:i:sa");
+					$num_day = $array_data_pengajuan[0]['NUM_DAY'];
+					$tipe_bertugas_int = $array_data_pengajuan[0]['TIPE_BERTUGAS'];
+					$date_now = date("Y-m-d H:i:s");
 					$data = array(
 						'HARI' => $hari,
 						'TANGGAL' => $tgl_bertugas,
 						'JAM_MULAI' => $jam_mulai,
 						'JAM_SELESAI' => $jam_selesai,
 						'TIPE_BERTUGAS' => $status,
+						'NUM_DAY' => $num_day,
+						'TIPE_BERTUGAS_INT' => $tipe_bertugas_int,
 						'ID_PERIODE' => $id_periode,
 						'ID_ADMIN' => $id_admin,
 						'INSERT_DATE' => $date_now
@@ -129,6 +468,8 @@ class C_Admin extends CI_Controller {
 					$this->load->model('Jadwal_bertugas_admin');
 					$data_update = array(
 						'STATUS' => 1,
+						'JAM_MULAI_DISETUJUI' => $jam_mulai,
+						'JAM_SELESAI_DISETUJUI' => $jam_selesai,
 						'DATE_SUBMITTED' => $date_now
 					);
 					$res_update = $this->Pengajuan_jadwal_bertugas->updateStatus($id_pengajuan, $data_update);
@@ -136,14 +477,14 @@ class C_Admin extends CI_Controller {
 					if($res){
 						$this->session->set_flashdata('success', "Berhasil memasukkan jadwal bertugas admin!");
 						if($rekap){
-							redirect("rekapitulasi_pengajuan");
+							redirect("admin_lab/rekapitulasi_pengajuan");
 						}
 						redirect("admin_lab/detail?id_admin=$id_admin");
 					}
 					else{
 						$this->session->set_flashdata('error', "Gagal memasukkan jadwal bertugas admin!");
 						if($rekap){
-							redirect("rekapitulasi_pengajuan");
+							redirect("admin_lab/rekapitulasi_pengajuan");
 						}
 						redirect("admin_lab/detail?id_admin=$id_admin");
 					}
@@ -151,7 +492,7 @@ class C_Admin extends CI_Controller {
 				else{
 					$this->session->set_flashdata('error', 'Tidak dapat memasukkan tanggal bertugas karena tidak terdapat periode akademik yg sedang aktif!');
 					if($rekap){
-						redirect("rekapitulasi_pengajuan");
+						redirect("admin_lab/rekapitulasi_pengajuan");
 					}
 					redirect("admin_lab/detail?id_admin=$id_admin");
 				}
@@ -170,14 +511,16 @@ class C_Admin extends CI_Controller {
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_pengajuan', 'ID Pengajuan', 'required');
 			$this->form_validation->set_rules('id_admin', 'ID Admin', 'required');
+			$this->form_validation->set_rules('jam_mulai', 'Jam Mulai Bertugas', 'required');
+			$this->form_validation->set_rules('jam_selesai', 'Jam Selesai Bertugas', 'required');
 			$id_admin = $this->input->post('id_admin');
-			if(isset($_POST['method'])){
+			if(isset($_POST['method']) && $_POST['method'] ==  'rekap'){
 				$rekap = true;
 			}
 			if($this->form_validation->run() == FALSE){
 				$this->session->set_flashdata('error', 'Missing required Field!');
 				if($rekap){
-					redirect("rekapitulasi_pengajuan");
+					redirect("admin_lab/rekapitulasi_pengajuan");
 				}
 	            redirect("admin_lab/detail?id_admin=$id_admin");
 			}
@@ -191,7 +534,7 @@ class C_Admin extends CI_Controller {
 				if(!$id_periode){
 					$this->session->set_flashdata('error', 'Tidak dapat memasukkan tanggal bertugas karena tidak terdapat periode akademik yg sedang aktif!');
 					if($rekap){
-						redirect("rekapitulasi_pengajuan");
+						redirect("admin_lab/rekapitulasi_pengajuan");
 					}
 					redirect("admin_lab/detail?id_admin=$id_admin");
 				}
@@ -199,8 +542,33 @@ class C_Admin extends CI_Controller {
 				if($array_data_pengajuan){
 					$arr_day_eng = $this->convertDayFromId($array_data_pengajuan[0]['HARI']);
 					$arr_hari_input = array($arr_day_eng[1]);
-					$jam_mulai = $array_data_pengajuan[0]['JAM_MULAI'];
-					$jam_selesai = $array_data_pengajuan[0]['JAM_SELESAI'];
+					$jam_mulai = $this->input->post('jam_mulai');
+					$jam_selesai = $this->input->post('jam_selesai');
+					if($jam_mulai > $jam_selesai){
+						$this->session->set_flashdata('error', 'Jam mulai bertugas tidak boleh lebih besar daripada jam selesai bertugas');
+						if($rekap){
+							redirect("admin_lab/rekapitulasi_pengajuan");
+						}
+						redirect("admin_lab/detail?id_admin=$id_admin");
+					}
+					$validate_jam_mulai = $this->validate_time($jam_mulai);
+					$validate_jam_selesai = $this->validate_time($jam_selesai);
+					if(!$validate_jam_mulai){
+						$this->session->set_flashdata('error', "Jam mulai bertugas bukan merupakan format waktu yang benar! ($jam_mulai)");
+		            	if($rekap){
+							redirect("admin_lab/rekapitulasi_pengajuan");
+						}
+						redirect("admin_lab/detail?id_admin=$id_admin");
+					}
+					if(!$validate_jam_selesai){
+						$this->session->set_flashdata('error', "Jam selesai bertugas bukan merupakan format waktu yang benar! ($jam_selesai)");
+		            	if($rekap){
+							redirect("admin_lab/rekapitulasi_pengajuan");
+						}
+						redirect("admin_lab/detail?id_admin=$id_admin");
+					}
+					$num_day = $array_data_pengajuan[0]['NUM_DAY'];
+					$tipe_bertugas_int = $array_data_pengajuan[0]['TIPE_BERTUGAS'];
 					
 					$array_tanggal_akademik = $this->Periode_akademik->getTanggalAkademik($id_periode);
 					$tgl_start_periode = $array_tanggal_akademik[0]['START_PERIODE'];
@@ -214,7 +582,7 @@ class C_Admin extends CI_Controller {
 					$all_date_after_uts = $this->getAllDate($end_uts, $start_uas, $arr_hari_input, 'left_outer', 'after_uts');
 					$all_date_after_uas = $this->getAllDate($end_uas, $tgl_end_periode, $arr_hari_input, 'left_inner', 'after_uas');
 					date_default_timezone_set('Asia/Jakarta');
-					$date_now = date("Y-m-d h:i:sa");
+					$date_now = date("Y-m-d H:i:s");
 					$arr_res = array();
 					foreach ($all_date_before_uts as $date_uts) {
 						$arr_ind = array();
@@ -226,6 +594,8 @@ class C_Admin extends CI_Controller {
 						$arr_ind['JAM_MULAI'] = $jam_mulai;
 						$arr_ind['JAM_SELESAI'] = $jam_selesai;
 						$arr_ind['TIPE_BERTUGAS'] = "Masa Perkuliahan";
+						$arr_ind['NUM_DAY'] = $num_day;
+						$arr_ind['TIPE_BERTUGAS_INT'] = $tipe_bertugas_int;
 						$arr_ind['ID_PERIODE'] = $id_periode;
 						$arr_ind['ID_ADMIN'] = $id_admin;
 						$arr_ind['INSERT_DATE'] = $date_now;
@@ -242,6 +612,8 @@ class C_Admin extends CI_Controller {
 						$arr_ind['JAM_MULAI'] = $jam_mulai;
 						$arr_ind['JAM_SELESAI'] = $jam_selesai;
 						$arr_ind['TIPE_BERTUGAS'] = "Masa Perkuliahan";
+						$arr_ind['NUM_DAY'] = $num_day;
+						$arr_ind['TIPE_BERTUGAS_INT'] = $tipe_bertugas_int;
 						$arr_ind['ID_PERIODE'] = $id_periode;
 						$arr_ind['ID_ADMIN'] = $id_admin;
 						$arr_ind['INSERT_DATE'] = $date_now;
@@ -258,6 +630,8 @@ class C_Admin extends CI_Controller {
 						$arr_ind['JAM_MULAI'] = $jam_mulai;
 						$arr_ind['JAM_SELESAI'] = $jam_selesai;
 						$arr_ind['TIPE_BERTUGAS'] = "Masa Perkuliahan";
+						$arr_ind['NUM_DAY'] = $num_day;
+						$arr_ind['TIPE_BERTUGAS_INT'] = $tipe_bertugas_int;
 						$arr_ind['ID_PERIODE'] = $id_periode;
 						$arr_ind['ID_ADMIN'] = $id_admin;
 						$arr_ind['INSERT_DATE'] = $date_now;
@@ -266,9 +640,11 @@ class C_Admin extends CI_Controller {
 					}
 					$this->load->model('Jadwal_bertugas_admin');
 					date_default_timezone_set('Asia/Jakarta');
-					$date_now = date("Y-m-d h:i:sa");
+					$date_now = date("Y-m-d H:i:s");
 					$data_update = array(
 						'STATUS' => 1,
+						'JAM_MULAI_DISETUJUI' => $jam_mulai,
+						'JAM_SELESAI_DISETUJUI' => $jam_selesai,
 						'DATE_SUBMITTED' => $date_now
 					);
 					$res_update = $this->Pengajuan_jadwal_bertugas->updateStatus($id_pengajuan, $data_update);
@@ -276,14 +652,14 @@ class C_Admin extends CI_Controller {
 					if($res){
 						$this->session->set_flashdata('success', "Berhasil memasukkan jadwal bertugas admin!");
 						if($rekap){
-							redirect("rekapitulasi_pengajuan");
+							redirect("admin_lab/rekapitulasi_pengajuan");
 						}
 						redirect("admin_lab/detail?id_admin=$id_admin");
 					}
 					else{
 						$this->session->set_flashdata('error', "Gagal memasukkan jadwal bertugas admin!");
 						if($rekap){
-							redirect("rekapitulasi_pengajuan");
+							redirect("admin_lab/rekapitulasi_pengajuan");
 						}
 						redirect("admin_lab/detail?id_admin=$id_admin");
 					}
@@ -291,7 +667,7 @@ class C_Admin extends CI_Controller {
 				else{
 					$this->session->set_flashdata('error', 'Error! Data Pengajuan tidak ditemukan!');
 					if($rekap){
-						redirect("rekapitulasi_pengajuan");
+						redirect("admin_lab/rekapitulasi_pengajuan");
 					}
 	            	redirect("admin_lab/detail?id_admin=$id_admin");
 				}
@@ -322,7 +698,9 @@ class C_Admin extends CI_Controller {
 				$arr_hari_input = $this->input->post('hari_bertugas');
 				$arr_jam_mulai = $this->input->post('jam_mulai');
 				$arr_jam_selesai = $this->input->post('jam_selesai');
-
+				// print_r($arr_jam_mulai);
+				// print_r($arr_jam_selesai);
+				// return;
 				$iterator = 0;
 				$flag_input_error = false;
 				$output_error_input = "Error!<br>";
@@ -332,6 +710,17 @@ class C_Admin extends CI_Controller {
 						$jam_selesai_error = $arr_jam_selesai[$iterator];
 						$hari_error = $arr_hari_input[$iterator];
 						$output_error_input .= "Jam mulai lebih kecil daripada jam selesai! $hari_error $jam_mulai (Jam Mulai)  s/d $jam_selesai_error (Jam Selesai)<br>";
+					}
+					$validate_time_mulai = $this->validate_time($jam_mulai);
+					$validate_time_selesai = $this->validate_time($arr_jam_selesai[$iterator]);
+					if(!$validate_time_mulai){
+						$flag_input_error = true;
+						$output_error_input .= "Jam mulai bukan merupakan format waktu yang benar! ($jam_mulai)";
+					}	
+					if(!$validate_time_selesai){
+						$flag_input_error = true;
+						$jam_selesai_error_2 = $arr_jam_selesai[$iterator];
+						$output_error_input .= "Jam selesai bukan merupakan format waktu yang benar! ($jam_selesai_error_2)";
 					}
 					$iterator++;
 				}
@@ -360,7 +749,7 @@ class C_Admin extends CI_Controller {
 					$array_pengajuan_jadwal = array();
 					$iterator = 0;
 					date_default_timezone_set('Asia/Jakarta');
-					$date_now = date("Y-m-d h:i:sa");
+					$date_now = date("Y-m-d H:i:s");
 					foreach ($arr_hari_input as $hari) {
 						$arr_ind = array();
 						$arr_ind['ID_ADMIN'] = $id_admin;
@@ -425,6 +814,16 @@ class C_Admin extends CI_Controller {
 					$this->session->set_flashdata('error', 'Jam mulai bertugas tidak boleh lebih besar dari jam selesai bertugas!');
 	            	redirect("admin_lab/jadwal_bertugas");
 				}
+				$validate_jam_mulai = $this->validate_time($jam_mulai);
+				$validate_jam_selesai = $this->validate_time($jam_selesai);
+				if(!$validate_jam_mulai){
+					$this->session->set_flashdata('error', "Jam mulai bertugas bukan merupakan format waktu yang benar! ($jam_mulai)");
+	            	redirect("admin_lab/jadwal_bertugas");
+				}
+				if(!$validate_jam_selesai){
+					$this->session->set_flashdata('error', "Jam selesai bertugas bukan merupakan format waktu yang benar! ($jam_selesai)");
+	            	redirect("admin_lab/jadwal_bertugas");
+				}
 				$this->load->model('Users');
 				$is_admin = $this->Users->checkUserRole($id_admin, 4);
 				if(!$is_admin){
@@ -469,7 +868,7 @@ class C_Admin extends CI_Controller {
 
 					$hari = $this->getDay($tgl_bertugas);
 					date_default_timezone_set('Asia/Jakarta');
-					$date_now = date("Y-m-d h:i:sa");
+					$date_now = date("Y-m-d H:i:s");
 					$arr_tgl = $this->convertDayFromId($this->getDay($tgl_bertugas));
 					$data = array(
 						'ID_ADMIN' => $id_admin,
@@ -507,12 +906,14 @@ class C_Admin extends CI_Controller {
 	//Method untuk melakukan load jadwal bertugas admin ketika admin yang login
 	function loadJadwalBertugasAdmin(){
 		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('id_role')!= 4){
+			if($this->session->userdata('id_role') != 4 ){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke fitur ini!');
 				redirect('dashboard');
 			}
 			$this->load->model('Detail_user');
 			$this->load->model('Users');
 			$this->load->model('Periode_gaji');
+			$this->load->model('Surat_tugas_admin');
 			$flag_gaji = true;
 			$is_periode_gaji_aktif = $this->Periode_gaji->checkPeriodeAktif();
 			if(!$is_periode_gaji_aktif){
@@ -530,11 +931,13 @@ class C_Admin extends CI_Controller {
 			$this->load->model('Jadwal_bertugas_admin');
 			$this->load->model('Konfigurasi_gaji');
 			$data['jadwal_admin_flag'] = true;
+			$data['surat_tugas'] = $this->Surat_tugas_admin->getSuratTugas($id_admin);
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$data['daftar_periode'] = $this->Periode_akademik->getAllPeriode();
 			$data['data_admin'] = $this->Detail_user->getDataAdmin($id_admin);
 			$data['id_gol'] = $data['data_admin'][0]['ID_GOL'];
 			$data['nama_admin'] = $this->Users->getIndividualItem($id_admin, 'NAMA');
+			$data['inisial'] = $this->Users->getIndividualItem($id_admin, 'INISIAL');
 			$data['id_admin'] = $id_admin;
 			$data['konfigurasi_gaji'] = $this->Konfigurasi_gaji->getKonfigurasi();
 			$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
@@ -550,7 +953,6 @@ class C_Admin extends CI_Controller {
 					$data['jadwal_admin'] = $this->Jadwal_bertugas_admin->getJadwalBertugas($data['id_admin'], $id_periode_selected);
 					$data['id_periode_aktif'] = $id_periode_selected;
 					
-					$data['id_periode_aktif'] = $id_periode_selected;
 				}
 				else{
 					$data['id_periode_aktif'] = $this->Periode_akademik->getLastActiveId();
@@ -576,19 +978,7 @@ class C_Admin extends CI_Controller {
 			$data['jadwal_pending_uas'] = $this->Pengajuan_jadwal_bertugas->getDataPengajuan($data['id_periode_aktif'], $data['id_admin'], 2);
 			$data['flag_admin'] = $flag_admin; 
 			$data['flag'] = $flag; 
-			$data_json = array();
-			if(isset($data['jadwal_admin']) && $data['jadwal_admin']){
-				foreach ($data['jadwal_admin'] as $jadwal) {
-					$arr_ind = array();
-					$arr_ind['start'] = $jadwal['TANGGAL']." ". $jadwal['JAM_MULAI'];
-					$arr_ind['end'] = $jadwal['TANGGAL']." ". $jadwal['JAM_SELESAI'];
-					$arr_ind['title'] = "Bertugas (".$jadwal['TIPE_BERTUGAS'].")";
-					$arr_ind['backgroundColor'] = 'blue';
-					array_push($data_json, $arr_ind);
-				}
-			}
-				
-			$data['jadwal_json'] = json_encode($data_json);
+			
 			$this->load->view('template/Header', $data);
 			$this->load->view('template/Sidebar', $data);
 			$this->load->view('template/Topbar');
@@ -645,6 +1035,17 @@ class C_Admin extends CI_Controller {
 		        		redirect("admin_lab/jadwal_bertugas");
 		        	}
 				}
+				$validate_time_mulai = $this->validate_time($jam_mulai);
+				$validate_time_selesai = $this->validate_time($jam_selesai);
+				if(!$validate_time_mulai || !$validate_time_selesai){
+					if(!$validate_time_mulai){
+						$this->session->set_flashdata('error', "Error! Jam mulai bukan format waktu yang benar! ($jam_mulai)");
+					}
+					else{
+						$this->session->set_flashdata('error', "Error! Jam selesai bukan format waktu yang benar! ($jam_selesai)");
+					}
+					redirect("admin_lab/detail?id_admin=$id_admin");
+				}
 				$id_periode_aktif = $this->Periode_akademik->getIDPeriodeAktif();
 				if($id_periode_aktif){
 					$check_belongs_to_periode = $this->Jadwal_bertugas_admin->checkJadwalBertugas($id_bertugas, 'ID_PERIODE', $id_periode_aktif);
@@ -700,23 +1101,30 @@ class C_Admin extends CI_Controller {
 					$check_perkuliahan_after_uas =  $this->check_in_range($end_uts, $tgl_end_periode, $tgl_bertugas, 'full_kanan');
 					if(!$check_in_uts && !$check_in_uas){
 						$status = "Masa Perkuliahan";
+						$tipe_bertugas_int = 0;
 					}
 					else if($check_in_uts){
 						$status = "Masa UTS";
+						$tipe_bertugas_int = 1;
 					}
 					else if($check_in_uas){
 						$status = "Masa UAS";
+						$tipe_bertugas_int = 2;
 					}
 
 					$hari = $this->getDay($tgl_bertugas);
-					$date_now = date("Y-m-d h:i:sa");
+					$num_day = date('N', strtotime($tgl_bertugas)); 
+					$date_now = date("Y-m-d H:i:s");
 					$data = array(
 						'HARI' => $hari,
 						'TANGGAL' => $tgl_bertugas,
 						'JAM_MULAI' => $jam_mulai,
 						'JAM_SELESAI' => $jam_selesai,
 						'TIPE_BERTUGAS' => $status,
-						'INSERT_DATE' => $date_now
+						'NUM_DAY' => $num_day,
+						'TIPE_BERTUGAS_INT' => $tipe_bertugas_int,
+						'INSERT_DATE' => $date_now,
+						'IS_UPDATE' => 1
 					);
 					$this->load->model('Jadwal_bertugas_admin');
 					$res = $this->Jadwal_bertugas_admin->updateJadwalBertugas($id_bertugas, $id_admin, $data);
@@ -924,6 +1332,17 @@ class C_Admin extends CI_Controller {
 						$hari_error = $arr_hari_input[$iterator];
 						$output_error_input .= "Jam mulai lebih kecil daripada jam selesai! $hari_error $jam_mulai (Jam Mulai)  s/d $jam_selesai_error (Jam Selesai)<br>";
 					}
+					$validate_time_mulai = $this->validate_time($jam_mulai);
+					$validate_time_selesai = $this->validate_time($arr_jam_selesai[$iterator]);
+					if(!$validate_time_mulai){
+						$flag_input_error = true;
+						$output_error_input .= "Jam mulai bukan merupakan format waktu yang benar! ($jam_mulai)";
+					}	
+					if(!$validate_time_selesai){
+						$flag_input_error = true;
+						$jam_selesai_error_2 = $arr_jam_selesai[$iterator];
+						$output_error_input .= "Jam selesai bukan merupakan format waktu yang benar! ($jam_selesai_error_2)";
+					}
 					$iterator++;
 				}
 				if($flag_input_error){
@@ -959,11 +1378,12 @@ class C_Admin extends CI_Controller {
 					$all_date_after_uts = $this->getAllDate($end_uts, $start_uas, $arr_hari_input, 'left_outer', 'after_uts');
 					$all_date_after_uas = $this->getAllDate($end_uas, $tgl_end_periode, $arr_hari_input, 'left_inner', 'after_uas');
 					date_default_timezone_set('Asia/Jakarta');
-					$date_now = date("Y-m-d h:i:sa");
+					$date_now = date("Y-m-d H:i:s");
 					$arr_res = array();
 					foreach ($all_date_before_uts as $date_uts) {
 						$arr_ind = array();
 						$arr_ind['HARI'] = $this->getDay($date_uts);
+						$arr_ind['NUM_DAY'] = date('N', strtotime($date_uts)); 
 						$arr_ind['TANGGAL'] = $date_uts;
 						$timestamp_date = strtotime($date_uts);
 						$day = date('l', $timestamp_date);
@@ -972,6 +1392,7 @@ class C_Admin extends CI_Controller {
 						$arr_ind['JAM_MULAI'] = $arr_jam_mulai[$index];
 						$arr_ind['JAM_SELESAI'] = $arr_jam_selesai[$index];
 						$arr_ind['TIPE_BERTUGAS'] = "Masa Perkuliahan";
+						$arr_ind['TIPE_BERTUGAS_INT'] = 0;
 						$arr_ind['ID_PERIODE'] = $id_periode;
 						$arr_ind['ID_ADMIN'] = $id_admin;
 						$arr_ind['INSERT_DATE'] = $date_now;
@@ -981,6 +1402,7 @@ class C_Admin extends CI_Controller {
 					foreach ($all_date_after_uts as $after_uts) {
 						$arr_ind = array();
 						$arr_ind['HARI'] = $this->getDay($after_uts);
+						$arr_ind['NUM_DAY'] = date('N', strtotime($date_uts)); 
 						$arr_ind['TANGGAL'] = $after_uts;
 						$timestamp_date = strtotime($after_uts);
 						$day = date('l', $timestamp_date);
@@ -989,6 +1411,7 @@ class C_Admin extends CI_Controller {
 						$arr_ind['JAM_MULAI'] = $arr_jam_mulai[$index];
 						$arr_ind['JAM_SELESAI'] = $arr_jam_selesai[$index];
 						$arr_ind['TIPE_BERTUGAS'] = "Masa Perkuliahan";
+						$arr_ind['TIPE_BERTUGAS_INT'] = 0;
 						$arr_ind['ID_PERIODE'] = $id_periode;
 						$arr_ind['ID_ADMIN'] = $id_admin;
 						$arr_ind['INSERT_DATE'] = $date_now;
@@ -998,6 +1421,7 @@ class C_Admin extends CI_Controller {
 					foreach ($all_date_after_uas as $after_uas) {
 						$arr_ind = array();
 						$arr_ind['HARI'] = $this->getDay($after_uas);
+						$arr_ind['NUM_DAY'] = date('N', strtotime($date_uts)); 
 						$arr_ind['TANGGAL'] = $after_uas;
 						$timestamp_date = strtotime($after_uas);
 						$day = date('l', $timestamp_date);
@@ -1006,6 +1430,7 @@ class C_Admin extends CI_Controller {
 						$arr_ind['JAM_MULAI'] = $arr_jam_mulai[$index];
 						$arr_ind['JAM_SELESAI'] = $arr_jam_selesai[$index];
 						$arr_ind['TIPE_BERTUGAS'] = "Masa Perkuliahan";
+						$arr_ind['TIPE_BERTUGAS_INT'] = 0;
 						$arr_ind['ID_PERIODE'] = $id_periode;
 						$arr_ind['ID_ADMIN'] = $id_admin;
 						$arr_ind['INSERT_DATE'] = $date_now;
@@ -1059,6 +1484,17 @@ class C_Admin extends CI_Controller {
 					$this->session->set_flashdata('error', 'Jam mulai bertugas tidak boleh lebih besar dari jam selesai bertugas!');
 	            	redirect("admin_lab/detail?id_admin=$id_admin");
 				}
+				$validate_time_mulai = $this->validate_time($jam_mulai);
+				$validate_time_selesai = $this->validate_time($jam_selesai);
+				if(!$validate_time_mulai || !$validate_time_selesai){
+					if(!$validate_time_mulai){
+						$this->session->set_flashdata('error', "Error! Jam mulai bukan format waktu yang benar! ($jam_mulai)");
+					}
+					else{
+						$this->session->set_flashdata('error', "Error! Jam selesai bukan format waktu yang benar! ($jam_selesai)");
+					}
+					redirect("admin_lab/detail?id_admin=$id_admin");
+				}
 				$this->load->model('Users');
 				$is_admin = $this->Users->checkUserRole($id_admin, 4);
 				if(!$is_admin){
@@ -1096,22 +1532,28 @@ class C_Admin extends CI_Controller {
 					$check_perkuliahan_after_uas =  $this->check_in_range($end_uts, $tgl_end_periode, $tgl_bertugas, 'full_kanan');
 					if(!$check_in_uts && !$check_in_uas){
 						$status = "Masa Perkuliahan";
+						$tipe_bertugas_int = 0;
 					}
 					else if($check_in_uts){
 						$status = "Masa UTS";
+						$tipe_bertugas_int = 1;
 					}
 					else if($check_in_uas){
 						$status = "Masa UAS";
+						$tipe_bertugas_int = 2;
 					}
 
 					$hari = $this->getDay($tgl_bertugas);
-					$date_now = date("Y-m-d h:i:sa");
+					$num_day = date('N', strtotime($tgl_bertugas)); 
+					$date_now = date("Y-m-d H:i:s");
 					$data = array(
 						'HARI' => $hari,
 						'TANGGAL' => $tgl_bertugas,
 						'JAM_MULAI' => $jam_mulai,
 						'JAM_SELESAI' => $jam_selesai,
 						'TIPE_BERTUGAS' => $status,
+						'NUM_DAY' => $num_day,
+						'TIPE_BERTUGAS_INT' => $tipe_bertugas_int,
 						'ID_PERIODE' => $id_periode,
 						'ID_ADMIN' => $id_admin,
 						'INSERT_DATE' => $date_now
@@ -1140,7 +1582,7 @@ class C_Admin extends CI_Controller {
 	//Method untuk memperbaharui masa kontrak admin
 	function updateMasaKontrak(){
 		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+			if($this->session->userdata('id_role') != 1){
 				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
 				redirect('/dashboard');
 			}
@@ -1149,6 +1591,10 @@ class C_Admin extends CI_Controller {
 			$this->form_validation->set_rules('mulai_kontrak', 'Tanggal Mulai Kontrak', 'required');
 			$this->form_validation->set_rules('akhir_kontrak', 'Tanggal Berakhir Kontrak', 'required');
 			$id_admin = $this->input->post('id_admin');
+			if(empty($_FILES['dokumen']['name'])){
+				$this->session->set_flashdata('error', 'File dokumen surat tugas belum dilampirkan!');
+	            redirect("admin_lab/detail?id_admin=$id_admin");
+			}
 			if($this->form_validation->run() == FALSE){
 				$this->session->set_flashdata('error', 'Missing required Field!');
 	            redirect("admin_lab/detail?id_admin=$id_admin");
@@ -1167,6 +1613,24 @@ class C_Admin extends CI_Controller {
 	            	redirect("admin_lab/detail?id_admin=$id_admin");
 				}
 				$this->load->model('Detail_user');
+				$this->load->model('Surat_tugas_admin');
+				$nama_file_real = $_FILES['dokumen']['name'];
+				$ext = pathinfo($nama_file_real, PATHINFO_EXTENSION);
+				$namaFileHash = $this->generateHash(20).'.'.$ext;
+				$exists = $this->Surat_tugas_admin->checkHash($namaFileHash);
+				while ($exists) {
+					$namaFileHash = $this->generateHash(20).'.'.$ext;
+					$exists = $this->Surat_tugas_admin->checkHash($namaFileHash);
+				}
+
+				$res_upload = $this->uploadFile($namaFileHash);
+				$data = array(
+					'ID_ADMIN' => $id_admin,
+					'AWAL_KONTRAK' => $tgl_awal,
+					'AKHIR_KONTRAK' => $tgl_akhir,
+					'PATH_FILE' => $namaFileHash
+				);
+				$insert_st = $this->Surat_tugas_admin->insertSuratTugas($data);
 				$res = $this->Detail_user->updateKontrakAdmin($id_admin, $tgl_awal, $tgl_akhir);
 				if($res){
 					$this->session->set_flashdata('success', 'Berhasil memperbaharui periode kontrak!');
@@ -1185,7 +1649,7 @@ class C_Admin extends CI_Controller {
 	//Method untuk melakukan edit konfigurasi golongan gaji
 	function editKonfigurasiGolonganGaji(){
 		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+			if($this->session->userdata('id_role') != 3){
 				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
 				redirect('/dashboard');
 			}
@@ -1243,11 +1707,14 @@ class C_Admin extends CI_Controller {
 			$id_admin = $this->input->get('id_admin');
 
 			if($id_admin != ""){
-
 				$this->load->model('Detail_user');
 				$this->load->model('Users');
 				$this->load->model('Periode_gaji');
 				$this->load->model('Pengajuan_jadwal_bertugas');
+				$this->load->model('Surat_tugas_admin');
+				$this->load->model('Peminjaman_lab');
+				$data['count_lab'] = $this->Peminjaman_lab->countPeminjamanLabPending();
+				$data['count_alat'] = $this->Peminjaman_lab->countPeminjamanAlatPending();
 				$flag_gaji = true;
 				$is_periode_gaji_aktif = $this->Periode_gaji->checkPeriodeAktif();
 				if(!$is_periode_gaji_aktif){
@@ -1267,9 +1734,11 @@ class C_Admin extends CI_Controller {
 				$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 				$data['daftar_periode'] = $this->Periode_akademik->getAllPeriode();
 				$data['data_admin'] = $this->Detail_user->getDataAdmin($id_admin);
+				$data['surat_tugas'] = $this->Surat_tugas_admin->getSuratTugas($id_admin);
 				$data['id_gol'] = $data['data_admin'][0]['ID_GOL'];
 				$data['nama_admin'] = $this->Users->getIndividualItem($id_admin, 'NAMA');
 				$data['id_admin'] = $this->Users->getIndividualItem($id_admin, 'ID');
+				$data['inisial'] = $this->Users->getIndividualItem($id_admin, 'INISIAL');
 				$data['konfigurasi_gaji'] = $this->Konfigurasi_gaji->getKonfigurasi();
 				$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
 				$flag = true;
@@ -1311,19 +1780,7 @@ class C_Admin extends CI_Controller {
 
 				$data['flag_admin'] = $flag_admin; 
 				$data['flag'] = $flag; 
-				$data_json = array();
-				if(isset($data['jadwal_admin']) && $data['jadwal_admin']){
-					foreach ($data['jadwal_admin'] as $jadwal) {
-						$arr_ind = array();
-						$arr_ind['start'] = $jadwal['TANGGAL']." ". $jadwal['JAM_MULAI'];
-						$arr_ind['end'] = $jadwal['TANGGAL']." ". $jadwal['JAM_SELESAI'];
-						$arr_ind['title'] = "Bertugas (".$jadwal['TIPE_BERTUGAS'].")";
-						$arr_ind['backgroundColor'] = 'blue';
-						array_push($data_json, $arr_ind);
-					}
-				}
 				
-				$data['jadwal_json'] = json_encode($data_json);
 				$this->load->view('template/Header', $data);
 				$this->load->view('template/Sidebar', $data);
 				$this->load->view('template/Topbar');
@@ -1342,7 +1799,7 @@ class C_Admin extends CI_Controller {
 	//Method untuk mengaktifkan kembali admin
 	function activateAdmin(){
 		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+			if($this->session->userdata('id_role') != 1){
 				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
 				redirect('/dashboard');
 			}
@@ -1374,7 +1831,7 @@ class C_Admin extends CI_Controller {
 	//Method untuk menonaktifkan admin
 	function nonactivateAdmin(){
 		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+			if($this->session->userdata('id_role') != 1 ){
 				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
 				redirect('/dashboard');
 			}
@@ -1405,20 +1862,25 @@ class C_Admin extends CI_Controller {
 	//Method untuk memasukkan data admin
 	function insertAdmin(){
 		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('id_role') != 1 && $this->session->userdata('id_role') != 3){
+			if($this->session->userdata('id_role') != 1){
 				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke menu ini!');
 				redirect('/dashboard');
 			}
 			$this->load->library('form_validation');
-			$this->form_validation->set_rules('nik', 'NIK Admin', 'required');
+			$this->form_validation->set_rules('nik', 'NIK Admin', 'required|numeric');
 			$this->form_validation->set_rules('nama', 'Nama Admin', 'required');
-			$this->form_validation->set_rules('email', 'Email Admin', 'required');
-			$this->form_validation->set_rules('angkatan', 'Angkatan Admin', 'required');
+			$this->form_validation->set_rules('email', 'Email Admin', 'required|valid_email');
+			$this->form_validation->set_rules('angkatan', 'Angkatan Admin', 'required|numeric');
 			$this->form_validation->set_rules('awal_kontrak', 'Awal Kontrak Admin', 'required');
 			$this->form_validation->set_rules('akhir_kontrak', 'Akhir Kontrak Admin', 'required');
-			$this->form_validation->set_rules('id_gol', 'ID Golongan', 'required');
+			$this->form_validation->set_rules('inisial', 'Inisial Admin', 'required');
+			$this->form_validation->set_rules('id_gol', 'ID Golongan', 'required|numeric');
+			if(empty($_FILES['dokumen']['name'])){
+				$this->session->set_flashdata('error', 'File dokumen surat tugas belum dilampirkan!');
+	            redirect('/admin_lab');
+			}
 			if($this->form_validation->run() == FALSE){
-				$this->session->set_flashdata('error_message', 'Missing required Field!');
+				$this->session->set_flashdata('error', 'Missing required Field!');
 	            redirect('/admin_lab');
 			}
 			else{
@@ -1430,12 +1892,58 @@ class C_Admin extends CI_Controller {
 				$akhir_kontrak = $this->input->post('akhir_kontrak');
 				$awal_kontrak = date("Y-m-d", strtotime($awal_kontrak));
 				$akhir_kontrak = date("Y-m-d", strtotime($akhir_kontrak));
+				if($awal_kontrak >= $akhir_kontrak){
+					$this->session->set_flashdata('error', 'Error! Tanggal mulai kontrak tidak boleh lebih besar dari tanggal berakhir kontrak');
+	            	redirect("/admin_lab");
+				}
+				$inisial = $this->input->post('inisial');
 				$id_gol = $this->input->post('id_gol');
+				$email_domain = substr($email, strpos($email, "@") + 1);
+				if($email_domain != 'student.unpar.ac.id' && $email_domain != 'unpar.ac.id'){
+					$this->session->set_flashdata('error', 'Gagal menambahkan Admin Laboratorium! Email Admin harus merupakan email UNPAR!');
+					redirect('/admin_lab');
+				}
 				$this->load->model('Users');
-				$inserted_id = $this->Users->addUser(4, $nama, $email, $nik, 0);
+				$user_exist = $this->Users->checkNik($nik);
+				if($user_exist){
+					$this->session->set_flashdata('error', 'Gagal menambahkan Admin Laboratorium! NIK Admin telah terdaftar');
+					redirect('/admin_lab');
+				}
+				$email_exist = $this->Users->checkUser($email);
+				if($email_exist){
+					$this->session->set_flashdata('error', 'Gagal menambahkan Admin Laboratorium! Email Admin telah terdaftar');
+					redirect('/admin_lab');
+				}
+				$last_color = $this->Users->getLastAdminColor();
+				$last_color = $last_color[0]['COLOR'];
+				if($last_color >= 4){
+					$color = 1;
+				}
+				else{
+					$color = $last_color + 1;
+				}
+				$inserted_id = $this->Users->addUser(4, $nama, $email, $nik, 0, $inisial, $color);
 				if($inserted_id){
 					$this->load->model('Detail_user');
+					$this->load->model('Surat_tugas_admin');
 					$insert_detail = $this->Detail_user->insertDetailUser($inserted_id, $angkatan, $awal_kontrak, $akhir_kontrak, $id_gol);
+					$nama_file_real = $_FILES['dokumen']['name'];
+					$ext = pathinfo($nama_file_real, PATHINFO_EXTENSION);
+					$namaFileHash = $this->generateHash(20).'.'.$ext;
+					$exists = $this->Surat_tugas_admin->checkHash($namaFileHash);
+					while ($exists) {
+						$namaFileHash = $this->generateHash(20).'.'.$ext;
+						$exists = $this->Surat_tugas_admin->checkHash($namaFileHash);
+					}
+
+					$res_upload = $this->uploadFile($namaFileHash);
+					$data = array(
+						'ID_ADMIN' => $inserted_id,
+						'AWAL_KONTRAK' => $awal_kontrak,
+						'AKHIR_KONTRAK' => $akhir_kontrak,
+						'PATH_FILE' => $namaFileHash
+					);
+					$insert_st = $this->Surat_tugas_admin->insertSuratTugas($data);
 					if($insert_detail){
 						$this->session->set_flashdata('success', 'Berhasil memasukkan data admin laboratorium!');
 						redirect('/admin_lab');
@@ -1453,6 +1961,60 @@ class C_Admin extends CI_Controller {
 		}
 		else{
 			redirect('/');
+		}
+	}
+	//Method untuk mendapatkan nama bulan berdasarkan nomor bulan
+	private function getNamaBulan($num_month){
+		$arr_bulan = array(
+			1 => 'Januari',
+			2 => 'Februari',
+			3 => 'Maret',
+			4 => 'April',
+			5 => 'Mei',
+			6 => 'Juni',
+			7 => 'Juli',
+			8 => 'Agustus',
+			9 => 'September',
+			10 => 'Oktober',
+			11 => 'November',
+			12 => 'Desember',
+		);
+		return $arr_bulan[$num_month];
+	}
+	//Method untuk melakukan validasi waktu yang diinput pengguna
+	public function validate_time($str){
+		$array_jam = explode(':', $str);
+		$hh = $array_jam[0];
+		$mm = $array_jam[1];
+		if (!is_numeric($hh) || !is_numeric($mm)){
+			return FALSE;
+		}
+		else if ((int) $hh > 24 || (int) $mm > 59){
+		    return FALSE;
+		}
+		else if (mktime((int) $hh, (int) $mm) === FALSE){
+		    return FALSE;
+		}
+		return TRUE;
+	}
+
+	//Method untuk upload file surat tugas
+	private function uploadFile($fileName){
+		$sNewFileName 				= $fileName;
+		$config['file_name'] 			= $sNewFileName;
+		$config['upload_path']          = './uploads/surat_tugas/';
+		$config['allowed_types']        = 'pdf';
+		$config['detect_mime']        	= 'TRUE';
+		$config['max_size']             = 2056;
+		$this->load->library('upload', $config);
+		$this->upload->initialize($config);
+				
+		if ( ! $this->upload->do_upload('dokumen')){
+			$error = array('error' => $this->upload->display_errors());
+			return false;
+		}
+		else{
+			return $sNewFileName;
 		}
 	}
 	//Method untuk melakukan generate seluruh tanggal berdasarkan hari yang dipilih oleh user
@@ -1533,6 +2095,18 @@ class C_Admin extends CI_Controller {
 		$arr_res[1] = $day_id[$idx_eng];
 		return $arr_res;
 	}
+	//Method untuk mendapatkan nama hari
+	private function getDayFromNum($num_day){
+		$day_eng = array ( 1 =>    'monday',
+			'tuesday',
+			'wednesday',
+			'thursday',
+			'friday',
+			'saturday',
+			'sunday'
+		);
+		return $day_eng[$num_day];
+	}
 	//Method untuk mendapatkan nama hari dari tanggal yang dipilih user
 	private function getDay($date){
 		date_default_timezone_set('Asia/Jakarta');
@@ -1567,6 +2141,17 @@ class C_Admin extends CI_Controller {
 		else{
 			return (($user_ts >= $start_ts) && ($user_ts <= $end_ts));
 		}
+	}
+
+	//Method untuk generate hash
+	private function generateHash($jmlh_char){
+		$sListKarakter = "12345678901234567890123456";
+ 		$sPanjangKarakter = strlen($sListKarakter);
+  		$number = "";
+  		for($i=0;$i<$jmlh_char;$i++){
+    		$number .= $sListKarakter[rand(0,$sPanjangKarakter-1)];
+  		}
+  		return "$number";
 	}
 }
 ?>

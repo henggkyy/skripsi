@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani proses input dan menampilkan halaman yang berhubungan dengan sistem penggajian dan absensi admin
 class C_Gaji_Admin extends CI_Controller {
+	//Method untuk mencetak laporan gaji admin
 	function cetakLaporanGajiAdmin(){
 		if($this->session->userdata('logged_in')){
 			if($this->session->userdata('id_role') != 4){
@@ -173,6 +174,17 @@ class C_Gaji_Admin extends CI_Controller {
 					$this->session->set_flashdata('error', 'Error! Jam masuk tidak boleh melebihi jam keluar');
 					redirect("laporan_gaji/detail?id_periode=$id_periode&id_admin=$id_admin");
 				}
+				$validate_time_mulai = $this->validate_time($jam_mulai);
+				$validate_time_selesai = $this->validate_time($jam_selesai);
+				if(!$validate_time_mulai || !$validate_time_selesai){
+					if(!$validate_time_mulai){
+						$this->session->set_flashdata('error', "Error! Jam mulai peminjaman bukan format waktu yang benar! ($jam_mulai)");
+					}
+					else{
+						$this->session->set_flashdata('error', "Error! Jam selesai peminjaman bukan format waktu yang benar! ($jam_selesai)");
+					}
+					redirect("laporan_gaji/detail?id_periode=$id_periode&id_admin=$id_admin");
+				}
 				$istirahat = $this->input->post('istirahat');
 				if($istirahat < 0){
 					$this->session->set_flashdata('error', 'Jumlah jam istirahat tidak boleh lebih kecil dari 0!');
@@ -287,6 +299,7 @@ class C_Gaji_Admin extends CI_Controller {
 				if(!$is_periode_aktif){
 					$flag = false;
 				}
+
 				$data['flag'] = $flag;
 				$data['id_admin'] = $id_admin;
 				$array_data_tarif_jam = $this->Laporan_gaji_admin->getTarifAndJam($id_periode, $id_admin);
@@ -332,7 +345,7 @@ class C_Gaji_Admin extends CI_Controller {
 				$data['tarif'] = $array_data_tarif_jam[0]['TARIF_AKTIF'];
 				$data['maks_jam'] = $array_data_tarif_jam[0]['WAKTU_MAKS_AKTIF'];
 				date_default_timezone_set('Asia/Jakarta');
-				$data['now_date'] = date('Y-m-d h:i:sa');
+				$data['now_date'] = date('Y-m-d H:i:s');
 				$this->load->view('template/Header', $data);
 				$this->load->view('pages_user/V_Cetak_Laporan_Gaji', $data);
 				$this->load->view('template/Footer');
@@ -365,8 +378,7 @@ class C_Gaji_Admin extends CI_Controller {
 			else{
 				$data['id_periode_aktif'] = $this->Periode_gaji->getLastActiveId();
 			}
-			// print_r($data['id_periode_aktif']);
-			// return;
+			$data['laporan_gaji'] = true;
 			$id_periode_selected = $this->input->get('id_periode');
 			if($id_periode_selected){
 				$data['id_periode_aktif'] = $id_periode_selected;
@@ -426,6 +438,17 @@ class C_Gaji_Admin extends CI_Controller {
 				$istirahat = $this->input->post('istirahat');
 				if($jam_mulai > $jam_selesai){
 					$this->session->set_flashdata('error', 'Error! Jam masuk tidak boleh melebihi jam keluar');
+					redirect("laporan_gaji/input?id_periode=$id_periode&id_admin=$id_admin");
+				}
+				$validate_time_mulai = $this->validate_time($jam_mulai);
+				$validate_time_selesai = $this->validate_time($jam_selesai);
+				if(!$validate_time_mulai || !$validate_time_selesai){
+					if(!$validate_time_mulai){
+						$this->session->set_flashdata('error', "Error! Jam mulai peminjaman bukan format waktu yang benar! ($jam_mulai)");
+					}
+					else{
+						$this->session->set_flashdata('error', "Error! Jam selesai peminjaman bukan format waktu yang benar! ($jam_selesai)");
+					}
 					redirect("laporan_gaji/input?id_periode=$id_periode&id_admin=$id_admin");
 				}
 				if($istirahat < 0){
@@ -546,6 +569,13 @@ class C_Gaji_Admin extends CI_Controller {
 	function editKonfigurasi(){
 		if($this->session->userdata('logged_in')){
 			if($this->session->userdata('id_role') != 3){
+				return;
+			}
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('tarif', 'Tarif', 'required|numeric');
+			$this->form_validation->set_rules('jam_max', 'Maksimal Jam', 'required|numeric');
+			if ($this->form_validation->run() == FALSE){
+				echo "Gagal melakukan edit! Tarif dan jam maksimal harus numerik!";
 				return;
 			}
 			$tarif = $this->input->post('tarif');
@@ -702,6 +732,22 @@ class C_Gaji_Admin extends CI_Controller {
 		else{
 			redirect('/');
 		}
+	}
+	//Method untuk melakukan validasi waktu yang diinput pengguna
+	public function validate_time($str){
+		$array_jam = explode(':', $str);
+		$hh = $array_jam[0];
+		$mm = $array_jam[1];
+		if (!is_numeric($hh) || !is_numeric($mm)){
+			return FALSE;
+		}
+		else if ((int) $hh > 24 || (int) $mm > 59){
+		    return FALSE;
+		}
+		else if (mktime((int) $hh, (int) $mm) === FALSE){
+		    return FALSE;
+		}
+		return TRUE;
 	}
 	//Method untuk mendapatkan nama hari dari tanggal yang dipilih user
 	private function getDay($date){

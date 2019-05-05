@@ -26,7 +26,7 @@ class C_Public extends CI_Controller{
 				$data['daftar_file'] = $this->Data_buku_saku->getSakuPublic();
 				$data['jenis_dokumen'] = 'Buku_saku';
 			}
-			$string =  $this->load->view('pages_user/V_Template_SelecteD_Dok_Public', $data, TRUE);
+			$string =  $this->load->view('pages_user/V_Template_Selected_Dok_Public', $data, TRUE);
 			echo $string;
 		}
 	}

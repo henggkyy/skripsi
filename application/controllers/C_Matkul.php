@@ -22,7 +22,7 @@ class C_Matkul extends CI_Controller{
 				$this->load->model('Periode_akademik');
 				$this->load->model('Jadwal_lab');
 				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
-				$tanggal_uts = $this->Mata_kuliah->getIndividualItem($id_matkul, 'TANGGAL_UAS');
+				$tanggal_uas = $this->Mata_kuliah->getIndividualItem($id_matkul, 'TANGGAL_UAS');
 				$nama_matkul = $this->Mata_kuliah->getIndividualItem($id_matkul, 'NAMA_MATKUL');
 				$kd_matkul = $this->Mata_kuliah->getIndividualItem($id_matkul, 'KD_MATKUL');
 				$checkPeriodeAktif = $this->Periode_akademik->checkIdAktif($id_periode);
@@ -30,7 +30,7 @@ class C_Matkul extends CI_Controller{
 					$this->session->set_flashdata('error', 'Tidak dapat set ruangan UAS karena periode akademik mata kuliah sudah berakhir!');
 					redirect("/administrasi_matkul_detail?id=$id_matkul");
 				}
-				if($tanggal_uts == NULL){
+				if($tanggal_uas == NULL){
 					$this->session->set_flashdata('error', 'Tidak dapat set ruangan UAS karena jadwal UTS belum diinput oleh Tata Usaha!');
 					redirect("/administrasi_matkul_detail?id=$id_matkul");
 				}
@@ -47,8 +47,8 @@ class C_Matkul extends CI_Controller{
 				$res_ruangan = $this->Ruangan_ujian->insertData($data);
 
 				$title = 'UAS '.$nama_matkul." (".$kd_matkul.")";
-				$start_event = $tanggal_uts." ".$jam_mulai;
-				$end_event = $tanggal_uts." ".$jam_selesai;
+				$start_event = $tanggal_uas." ".$jam_mulai;
+				$end_event = $tanggal_uas." ".$jam_selesai;
 
 				$res_jadwal = $this->Jadwal_lab->insertJadwalPemakaian($title, $lab, $start_event, $end_event);
 
@@ -250,9 +250,19 @@ class C_Matkul extends CI_Controller{
 	//Method untuk melakukan checklist persiapan ujian
 	function checkListUjian(){
 		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('id_role') != 2){
+			if($this->session->userdata('id_role') != 2 && $this->session->userdata('id_role') != 1){
 				redirect('/dashboard');
 			}
+
+			if($this->session->userdata('id_role') == 1){
+				$this->load->model('Users');
+				$rangkap_dosen = $this->Users->checkUserIsDosen($this->session->userdata('id'));
+				if(!$rangkap_dosen){
+					$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke fitur ini');
+					redirect('/dashboard');
+				}
+			}
+
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
 			$this->form_validation->set_rules('tipe_ujian', 'Tipe Ujian', 'required');
@@ -263,6 +273,13 @@ class C_Matkul extends CI_Controller{
 			}
 			else{
 				$this->load->model('Mata_kuliah');
+
+				$milik_dosen = $this->Mata_kuliah->checkMatkulDosen($id_matkul, $this->session->userdata('id'));
+				if(!$milik_dosen){
+					$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke mata kuliah ini');
+					redirect('/dashboard');
+				}
+				
 				$tipe_ujian = $this->input->post('tipe_ujian');
 				if($tipe_ujian != 0 && $tipe_ujian != 1){
 					$this->session->set_flashdata('error', 'Error Tipe Ujian!');
@@ -322,7 +339,7 @@ class C_Matkul extends CI_Controller{
 					}
 				}
 				date_default_timezone_set('Asia/Jakarta');
-				$date_time = date("Y-m-d h:i:sa");
+				$date_time = date("Y-m-d H:i:s");
 				$data = array(
 					'ID_MATKUL' => $id_matkul,
 					'TIPE_UJIAN' => $tipe_ujian,
@@ -363,9 +380,19 @@ class C_Matkul extends CI_Controller{
 	//Method untuk menghapus file-file bantuan ujian
 	function deleteFileBantuan(){
 		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('id_role') != 2){
+			if($this->session->userdata('id_role') != 2 && $this->session->userdata('id_role') != 1){
 				redirect('/dashboard');
 			}
+
+			if($this->session->userdata('id_role') == 1){
+				$this->load->model('Users');
+				$rangkap_dosen = $this->Users->checkUserIsDosen($this->session->userdata('id'));
+				if(!$rangkap_dosen){
+					$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke fitur ini');
+					redirect('/dashboard');
+				}
+			}
+
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_file_bantuan', 'ID File Bantuan', 'required');
 			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
@@ -376,6 +403,12 @@ class C_Matkul extends CI_Controller{
 			}
 			else{
 				$this->load->model('Periode_akademik');
+				$this->load->model('Mata_kuliah');
+				$milik_dosen = $this->Mata_kuliah->checkMatkulDosen($id_matkul, $this->session->userdata('id'));
+				if(!$milik_dosen){
+					$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke mata kuliah ini');
+					redirect('/dashboard');
+				}
 				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
 				$checkPeriodeAktif = $this->Periode_akademik->checkIdAktif($id_periode);
 				if(!$checkPeriodeAktif){
@@ -410,12 +443,120 @@ class C_Matkul extends CI_Controller{
 			redirect('/');
 		}
 	}
+	//Method untuk menerima file bantuan ujian yang dikirimkan oleh dosen koordinator
+	function acceptFileBantuan(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1){
+				redirect('/dashboard');
+			}
+
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('id_file_bantuan', 'ID File Bantuan', 'required');
+			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
+			$id_matkul = $this->input->post('id_matkul');
+			if ($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing Required Fields');
+				redirect("/administrasi_matkul_detail?id=$id_matkul");
+			}
+			else{
+				$this->load->model('Periode_akademik');
+				$this->load->model('Mata_kuliah');
+				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
+				$checkPeriodeAktif = $this->Periode_akademik->checkIdAktif($id_periode);
+				if(!$checkPeriodeAktif){
+					$this->session->set_flashdata('error', 'Tidak dapat memasukkan file bantuan karena periode akademik mata kuliah sudah selesai!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				$id_file_bantuan = $this->input->post('id_file_bantuan');
+				$this->load->model('File_bantuan_ujian');
+				$status = $this->File_bantuan_ujian->getIndividualItem($id_file_bantuan, 'STATUS');
+				if($status == 1 || $status == 2){
+					$this->session->set_flashdata('error', 'Gagal menindaklanjuti file bantuan ujian karena telah ditidindaklanjuti!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				$data = array(
+					'STATUS' => 1
+				);
+				$res = $this->File_bantuan_ujian->acceptFileBantuan($id_file_bantuan, $data);
+				if($res){
+					$this->session->set_flashdata('success', 'Berhasil menyetujui file bantuan ujian!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				else{
+					$this->session->set_flashdata('error', 'Gagal menyetujui file bantuan ujian!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
+	//Method untuk menolak file bantuan ujian yang dikirimkan oleh dosen koordinator
+	function rejectFileBantuan(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1){
+				redirect('/dashboard');
+			}
+
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('id_file_bantuan', 'ID File Bantuan', 'required');
+			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
+			$id_matkul = $this->input->post('id_matkul');
+			if ($this->form_validation->run() == FALSE){
+				$this->session->set_flashdata('error', 'Missing Required Fields');
+				redirect("/administrasi_matkul_detail?id=$id_matkul");
+			}
+			else{
+				$this->load->model('Periode_akademik');
+				$this->load->model('Mata_kuliah');
+				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
+				$checkPeriodeAktif = $this->Periode_akademik->checkIdAktif($id_periode);
+				if(!$checkPeriodeAktif){
+					$this->session->set_flashdata('error', 'Tidak dapat memasukkan file bantuan karena periode akademik mata kuliah sudah selesai!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				$id_file_bantuan = $this->input->post('id_file_bantuan');
+				$this->load->model('File_bantuan_ujian');
+				$status = $this->File_bantuan_ujian->getIndividualItem($id_file_bantuan, 'STATUS');
+				if($status == 1 || $status == 2){
+					$this->session->set_flashdata('error', 'Gagal menindaklanjuti file bantuan ujian karena telah ditidindaklanjuti!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				$data = array(
+					'STATUS' => 2
+				);
+				$res = $this->File_bantuan_ujian->rejectFileBantuan($id_file_bantuan, $data);
+				if($res){
+					$this->session->set_flashdata('success', 'Berhasil menolak file bantuan ujian!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+				else{
+					$this->session->set_flashdata('error', 'Gagal menyetujui file bantuan ujian!');
+					redirect("/administrasi_matkul_detail?id=$id_matkul");
+				}
+			}
+		}
+		else{
+			redirect('/');
+		}
+	}
 	//Method untuk memasukkan file-file bantuan ujian
 	function insertFileBantuan(){
 		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('id_role') != 2){
+			if($this->session->userdata('id_role') != 2 && $this->session->userdata('id_role') != 1){
 				redirect('/dashboard');
 			}
+
+			if($this->session->userdata('id_role') == 1){
+				$this->load->model('Users');
+				$rangkap_dosen = $this->Users->checkUserIsDosen($this->session->userdata('id'));
+				if(!$rangkap_dosen){
+					$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke fitur ini');
+					redirect('/dashboard');
+				}
+			}
+
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('tipe_ujian', 'Tipe Ujian', 'required');
 			$this->form_validation->set_rules('nama_keterangan', 'Nama/Keterangan File Bantuan', 'required');
@@ -431,6 +572,12 @@ class C_Matkul extends CI_Controller{
 			}
 			else{
 				$this->load->model('Periode_akademik');
+				$this->load->model('Mata_kuliah');
+				$milik_dosen = $this->Mata_kuliah->checkMatkulDosen($id_matkul, $this->session->userdata('id'));
+				if(!$milik_dosen){
+					$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke mata kuliah ini');
+					redirect('/dashboard');
+				}
 				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
 				$checkPeriodeAktif = $this->Periode_akademik->checkIdAktif($id_periode);
 				if(!$checkPeriodeAktif){
@@ -455,13 +602,15 @@ class C_Matkul extends CI_Controller{
 
 					$res_upload = $this->uploadFile($namaFileHash);
 					date_default_timezone_set("Asia/Jakarta");
-					$tanggal_insert = date("Y-m-d h:i:sa");
+					$tanggal_insert = date("Y-m-d H:i:s");
 					$data = array(
 						'NAMA_FILE_USER' => $nama_keterangan,
 						'PATH_FILE' => $namaFileHash,
 						'TIPE_UJIAN' => $tipe_ujian,
 						'ID_MATKUL' => $id_matkul,
-						'LAST_UPDATE'=> $tanggal_insert
+						'LAST_UPDATE'=> $tanggal_insert,
+						'USER_UPLOAD' => $this->session->userdata('id'),
+						'STATUS' => 0
 					);
 					$res_db = $this->File_bantuan_ujian->insertFileBantuan($data);
 
@@ -495,72 +644,84 @@ class C_Matkul extends CI_Controller{
 	//Method untuk menangani proses pengecekan perangkat lunak yang sudah terpasang 
 	//Method ini dipanggil menggunakan Jquery AJAX pada Footer.php
 	function periksaPL(){
-		// if($this->session->userdata('logged_in')){
-			// $this->load->library('form_validation');
-			// $this->form_validation->set_rules('data_software', 'Data Perangkat Lunak', 'required');
-			// $this->form_validation->set_rules('id_matkul_cek', 'ID Mata Kuliah', 'required');
-			// if ($this->form_validation->run() == FALSE){
-			// 	echo $this->input->post('data_software');
-			// 	echo $this->input->post('id_matkul_cek');
-			// 	return;
-			// }
-			// else{
-				$data_sofware = $this->input->get('data_software');
-				$data_sofware = strtolower($data_sofware);
-				$id_matkul = $this->input->get('id_matkul_cek');
-				date_default_timezone_set("Asia/Jakarta");
-				$tanggal_checked = date("Y-m-d h:i:sa");
-				$this->load->model('Kebutuhan_pl');
-				$this->load->model('Mata_kuliah');
-				$data_pl = $this->Kebutuhan_pl->getPL($id_matkul);
-				$arr_res = array();
-				$data['nama_matkul'] = $this->Mata_kuliah->getIndividualItem($id_matkul, 'NAMA_MATKUL');
-				if(isset($data_pl) && $data_pl){
-					foreach ($data_pl as $pl) {
-						$tanggal_checked = date("Y-m-d h:i:sa");
-						$arr_res_ind = array();
-						if(strpos($data_sofware, $pl['NAMA_PL']) !== false){
-							array_push($arr_res_ind, 1);
-							array_push($arr_res_ind, $pl['NAMA_PL']);
-							$this->Kebutuhan_pl->updateStatusPL($pl['ID'], 1, $tanggal_checked);
-				            array_push($arr_res, $arr_res_ind);
-				        }
-				        else{
-				        	array_push($arr_res_ind, 2);
-				        	array_push($arr_res_ind, $pl['NAMA_PL']);
-				        	$this->Kebutuhan_pl->updateStatusPL($pl['ID'], 2, $tanggal_checked);
-				            array_push($arr_res, $arr_res_ind);
-				        }
-					}
+		if(!$this->session->userdata('logged_in')){
+			echo "You must login first!";
+			return;
+		}
+		if($this->session->userdata('id_role') != 4){
+			echo "Anda tidak memiliki akses ke fitur ini!";
+			return;
+		}
+		$data_software = $this->input->post('data_software');
+		$data_software = strtolower($data_software);
+		$id_matkul = $this->input->post('id_matkul_cek');
+		date_default_timezone_set("Asia/Jakarta");
+		$tanggal_checked = date("Y-m-d H:i:s");
+		$this->load->model('Kebutuhan_pl');
+		$this->load->model('Mata_kuliah');
+		$data_pl = $this->Kebutuhan_pl->getPL($id_matkul);
+		$arr_res = array();
+		$data['nama_matkul'] = $this->Mata_kuliah->getIndividualItem($id_matkul, 'NAMA_MATKUL');
+		if(isset($data_pl) && $data_pl){
+			foreach ($data_pl as $pl) {
+				$tanggal_checked = date("Y-m-d H:i:s");
+				$arr_res_ind = array();
+				if(strpos($data_software, strtolower($pl['NAMA_PL'])) !== false){
+					array_push($arr_res_ind, 1);
+					array_push($arr_res_ind, $pl['NAMA_PL']);
+					$this->Kebutuhan_pl->updateStatusPL($pl['ID'], 1, $tanggal_checked);
+				    array_push($arr_res, $arr_res_ind);
 				}
-
-				$data['hasil_checker'] = $arr_res;
-				$string =  $this->load->view('pages_user/V_Hasil_Checker_PL', $data, TRUE);
-				echo $string;
-				return;
-			// }
-		// }
-		// else{
-		// 	redirect('/');
-		// }
+				else{
+				    array_push($arr_res_ind, 2);
+				    array_push($arr_res_ind, $pl['NAMA_PL']);
+				    $this->Kebutuhan_pl->updateStatusPL($pl['ID'], 2, $tanggal_checked);
+				    array_push($arr_res, $arr_res_ind);
+				}
+			}
+		}
+		$data['data_software'] = $data_software;
+		$data['hasil_checker'] = $arr_res;
+		// $data['data_software'] = $data_software;
+		$string =  $this->load->view('pages_user/V_Hasil_Checker_PL', $data, TRUE);
+		echo $string;
+		return;
+			
 	}
 
 	//Method untuk menghapus kebutuhan perangkat lunak
 	function deletePL(){
 		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('id_role') != 2){
+			if($this->session->userdata('id_role') != 2 && $this->session->userdata('id_role') != 1){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke fitur ini');
 				redirect('/dashboard');
 			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_pl', 'ID Perangkat Lunak', 'required');
 			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
+
+			if($this->session->userdata('id_role') == 1){
+				$this->load->model('Users');
+				$rangkap_dosen = $this->Users->checkUserIsDosen($this->session->userdata('id'));
+				if(!$rangkap_dosen){
+					$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke fitur ini');
+					redirect('/dashboard');
+				}
+			}
+
+			$id_matkul = $this->input->post('id_matkul');
 			if ($this->form_validation->run() == FALSE){
 				$this->session->set_flashdata('error', 'Missing Required Fields');
 				redirect("/administrasi_matkul_detail?id=$id_matkul");
 			}
 			else{
 				$id_pl = $this->input->post('id_pl');
-				$id_matkul = $this->input->post('id_matkul');
+				$this->load->model('Mata_kuliah');
+				$milik_dosen = $this->Mata_kuliah->checkMatkulDosen($id_matkul, $this->session->userdata('id'));
+				if(!$milik_dosen){
+					$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke mata kuliah ini');
+					redirect('/dashboard');
+				}
 				$this->load->model('Kebutuhan_pl');
 				$this->load->model('Periode_akademik');
 				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
@@ -592,19 +753,35 @@ class C_Matkul extends CI_Controller{
 	function insertPL(){
 		if($this->session->userdata('logged_in')){
 			if($this->session->userdata('id_role') != 2){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke fitur ini');
 				redirect('/dashboard');
 			}
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
 			$this->form_validation->set_rules('nama_pl', 'Nama Perangkat Lunak', 'required');
-
+			$id_matkul = $this->input->post('id_matkul');
+			if($this->session->userdata('id_role') == 1){
+				$this->load->model('Users');
+				$rangkap_dosen = $this->Users->checkUserIsDosen($this->session->userdata('id'));
+				if(!$rangkap_dosen){
+					$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke fitur ini');
+					redirect('/dashboard');
+				}
+			}
 			if ($this->form_validation->run() == FALSE){
 				$this->session->set_flashdata('error', 'Missing Required Fields');
 				redirect("/administrasi_matkul_detail?id=$id_matkul");
 			}
 			else{
 				$id_matkul = $this->input->post('id_matkul');
+				$this->load->model('Mata_kuliah');
+				$milik_dosen = $this->Mata_kuliah->checkMatkulDosen($id_matkul, $this->session->userdata('id'));
+				if(!$milik_dosen){
+					$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke mata kuliah ini');
+					redirect('/dashboard');
+				}
 				$nama_pl = $this->input->post('nama_pl');
+				$nama_pl = str_replace(" ","",$nama_pl);
 				$this->load->model('Kebutuhan_pl');
 				$this->load->model('Periode_akademik');
 				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
@@ -634,137 +811,73 @@ class C_Matkul extends CI_Controller{
 	//Method untuk menampilkan halaman pilihan mata kuliah yang akan dicek kebutuhan perangkat lunak-nya
 	function loadPageCekPL(){
 		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 4){
+				$this->session->set_flashdata('error', 'Anda tidak memiliki akses ke fitur ini!');
+				redirect("/dashboard");
+			}
 			$data['title'] = 'Periksa Kebutuhan Perangkat Lunak | SI Operasional Lab. Komputasi TIF UNPAR';
 			$this->load->model('Periode_akademik');
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 
 			$id_periode_aktif = $this->Periode_akademik->getIDPeriodeAktif();
 			if($id_periode_aktif){
-				$data['data_software_cek'] = $this->input->get('data_software');
-				// print_r($this->input->get('data_software'));
+				$uniq = $this->input->get('ref');
+				$this->load->model('Data_software');
+				$exists = $this->Data_software->checkLink($uniq);
+				// print_r($exists);
 				// return;
-				$data['data_software_cek'] = str_replace("-","",$data['data_software_cek']);
-				$data['data_software_cek'] = str_replace(".","",$data['data_software_cek']);
-				$data['data_software_cek'] = str_replace("(","",$data['data_software_cek']);
-				$data['data_software_cek'] = str_replace(")","",$data['data_software_cek']);
-				$data['data_software_cek'] = str_replace(" ","",$data['data_software_cek']);
-				$data['data_software_cek'] = str_replace(",","",$data['data_software_cek']);
-				$data['data_software_cek'] = str_replace("+","",$data['data_software_cek']);
-				$data['data_software_cek'] = str_replace("/","",$data['data_software_cek']);
-				$data['data_software_cek'] = htmlspecialchars($data['data_software_cek']);
-				$this->load->model('Mata_kuliah');
-				$data['list_matkul'] = $this->Mata_kuliah->getMatkul($id_periode_aktif);
-				$this->load->view('template/Header', $data);
-				$this->load->view('template/Sidebar', $data);
-				$this->load->view('template/Topbar');
-				$this->load->view('template/Notification');
-				$this->load->view('pages_user/V_Kebutuhan_PL', $data);
-				$this->load->view('template/Footer');
+				if($exists){
+					$data_sofware = $this->Data_software->getDataSoftware($uniq);
+					$data['data_software_cek'] = $data_sofware[0]['DATA_SOFTWARE'];
+					// print_r($data['data_software_cek']);
+					// return;
+					$this->Data_software->deleteLink($uniq);
+					$data['data_software_cek'] = str_replace("-","",$data['data_software_cek']);
+					$data['data_software_cek'] = str_replace(".","",$data['data_software_cek']);
+					$data['data_software_cek'] = str_replace("(","",$data['data_software_cek']);
+					$data['data_software_cek'] = str_replace(")","",$data['data_software_cek']);
+					$data['data_software_cek'] = str_replace(" ","",$data['data_software_cek']);
+					$data['data_software_cek'] = str_replace(",","",$data['data_software_cek']);
+					$data['data_software_cek'] = str_replace("+","",$data['data_software_cek']);
+					$data['data_software_cek'] = str_replace("/","",$data['data_software_cek']);
+					$data['data_software_cek'] = htmlspecialchars($data['data_software_cek']);
+					
+					$this->load->model('Mata_kuliah');
+					$data['list_matkul'] = $this->Mata_kuliah->getMatkul($id_periode_aktif);
+					$this->load->view('template/Header', $data);
+					$this->load->view('template/Sidebar', $data);
+					$this->load->view('template/Topbar');
+					$this->load->view('template/Notification');
+					$this->load->view('pages_user/V_Kebutuhan_PL', $data);
+					$this->load->view('template/Footer', $data);
+				}
+				else{
+					$this->session->set_flashdata('error', 'Link tidak valid!');
+					redirect('/dashboard');
+				}
 			}
 			else{
 				$this->session->set_flashdata('error', 'Tidak dapat melakukan pemeriksaan kebutuhan perangkat lunak karena tidak ada periode akademik yg sedang aktif!');
-				redirect('/administrasi_matkul');
-			}
-		}
-		else{
-			redirect('/');
-		}
-	}
-
-	//Method untuk memasukkan jadwal perkuliahan ke dalam tabel jadwal pemakaian laboratorium
-	function insertJadwalPerkuliahan(){
-		if($this->session->userdata('logged_in')){
-			$hari     =  array('Monday');
-			$tanggal = $this->getAllDate('2019-03-28', '2019-04-28', $hari);
-			print_r($tanggal);
-			return;
-		}
-		else{
-			redirect('/');
-		}
-	}
-
-	//Method untuk memasukkan mahasiswa peserta suatu mata kuliah
-	//Dalam method ini akan dilakukan pembacaan data mahasiswa dari file excel menggunakan PHPSpreadSheet
-	function insertMahasiswa(){
-		if($this->session->userdata('logged_in')){
-			if($this->session->userdata('id_role') != 3){
 				redirect('/dashboard');
 			}
-			$this->load->library('form_validation');
-			$this->form_validation->set_rules('id_matkul', 'ID Mata Kuliah', 'required');
-			if ($this->form_validation->run() == FALSE){
-				$this->session->set_flashdata('error', 'Missing Required Fields');
-				redirect('/administrasi_matkul');
-			}
-			else{
-				$id_matkul = $this->input->post('id_matkul');
-				if(empty($_FILES['excel_mhs']['name'])){
-					$this->session->set_flashdata('error', 'Missing Required Fields');
-					redirect("/administrasi_matkul_detail?id=$id_matkul");
-				}
-
-				$this->load->model('Mata_kuliah');
-				$this->load->model('Periode_akademik');
-				$this->load->model('Mhs_peserta');
-
-				$id_periode = $this->Mata_kuliah->getIndividualItem($id_matkul, 'ID_PERIODE');
-				$checkPeriodeAktif = $this->Periode_akademik->checkIdAktif($id_periode);
-				if($checkPeriodeAktif){
-					$this->load->library('MyReadFilter');
-					$filterSubset = new MyReadFilter();
-					$inputFileType = 'Xlsx';
-					$reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
-					$reader->setReadDataOnly(true);
-					$reader->setReadFilter($filterSubset);
-					$spreadsheet = $reader->load($_FILES['excel_mhs']['tmp_name']);
-		     
-				    $sheetData = $spreadsheet->getActiveSheet()->toArray();
-				    
-				    $data_mhs_arr = array();
-				    $iterator = 0;
-				    foreach ($sheetData as $data_mhs) {
-				    	if($data_mhs[0] != ""){
-				    		$data_mhs_arr[$iterator]['NPM_MHS'] = $data_mhs[0]; 
-				    		$data_mhs_arr[$iterator]['NAMA_MHS'] = $data_mhs[1]; 
-				    		$data_mhs_arr[$iterator]['ID_MATKUL'] = $id_matkul; 
-				    		$iterator++;
-				    	}
-				    }
-
-				    $res_upload_db = $this->Mhs_peserta->insertMhs($data_mhs_arr);
-				    if($res_upload_db){
-				    	$this->session->set_flashdata('success', 'Berhasil memasukkan peserta mata kuliah!');
-						redirect("/administrasi_matkul_detail?id=$id_matkul");
-				    }
-				    else{
-				    	$this->session->set_flashdata('error', 'Gagal memasukkan peserta mata kuliah!');
-						redirect("/administrasi_matkul_detail?id=$id_matkul");
-				    }
-				    
-				}
-				else{
-					$this->session->set_flashdata('error', 'Tidak dapat memasukkan peserta mata kuliah karena periode akademik mata kuliah sudah selesai!');
-					redirect("/administrasi_matkul_detail?id=$id_matkul");
-				}
-			}
 		}
 		else{
 			redirect('/');
 		}
 	}
+
 
 	//Method untuk melakukan load halaman detail mata kuliah
 	function getDetailMataKuliah(){
 		if($this->session->userdata('logged_in')){
 			$this->load->model('Mata_kuliah');
 			$this->load->model('Periode_akademik');
-			$this->load->model('Mhs_peserta');
 			$this->load->model('Kebutuhan_pl');
 			$this->load->model('File_bantuan_ujian');
 			$this->load->model('Checklist_ujian');
 			$this->load->model('Daftar_lab');
 			$this->load->model('Jadwal_matkul');
+			$this->load->model('Users');
 			$id_matkul = $_GET['id'];
 			if($id_matkul == ""){
 				redirect('/administrasi_matkul');
@@ -775,6 +888,21 @@ class C_Matkul extends CI_Controller{
 					redirect('/administrasi_matkul');
 				}
 			}
+			$this->load->model('Peminjaman_lab');
+			$data['count_lab'] = $this->Peminjaman_lab->countPeminjamanLabPending();
+			$data['count_alat'] = $this->Peminjaman_lab->countPeminjamanAlatPending();
+			//Method untuk cek apakah kalab bertindak sebagai dosen suatu mata kuliah
+			$data['rangkap_dosen'] = false;
+			if($this->session->userdata('id_role') == 1){
+				$is_dosen = $this->Users->checkUserIsDosen($this->session->userdata('id'));
+				if($is_dosen){
+					$milik_dosen = $this->Mata_kuliah->checkMatkulDosen($id_matkul, $this->session->userdata('id'));
+					if($milik_dosen){
+						$data['rangkap_dosen'] = true;
+					}
+				}
+			}
+			
 			$data['periode_aktif'] = $this->Periode_akademik->checkPeriodeAktif();
 			$id_periode_aktif = $this->Periode_akademik->getIDPeriodeAktif();
 			$data['title'] = 'Detail Mata Kuliah | SI Akademik Lab. Komputasi TIF UNPAR';
@@ -821,7 +949,6 @@ class C_Matkul extends CI_Controller{
 			else{
 				$data['set_uas'] = false;
 			}
-			$data['set_peserta'] = $this->Mhs_peserta->checkMhs($id_matkul);
 			$data['daftar_pl'] = $this->Kebutuhan_pl->getPL($id_matkul);
 			$data['file_bantuan'] = $this->File_bantuan_ujian->getFileBantuan($id_matkul);
 			$data['checklist_uts'] = $this->Checklist_ujian->getChecklist($id_matkul, 0);
@@ -976,21 +1103,31 @@ class C_Matkul extends CI_Controller{
 				redirect('/dashboard');
 			}
 			$this->load->library('form_validation');
-			$this->form_validation->set_rules('kode_matkul', 'Kode Mata Kuliah', 'required');
-			$this->form_validation->set_rules('nama_matkul', 'Nama Mata Kuliah', 'required');
+			$this->form_validation->set_rules('matkul', 'Mata Kuliah', 'required');
+			// $this->form_validation->set_rules('kode_matkul', 'Kode Mata Kuliah', 'required');
+			// $this->form_validation->set_rules('nama_matkul', 'Nama Mata Kuliah', 'required');
 			$this->form_validation->set_rules('dosen_koor', 'Dosen Koordinator', 'required');
 			if ($this->form_validation->run() == FALSE){
 				$this->session->set_flashdata('error', 'Kode & Nama Mata Kuliah & Dosen Koordinator tidak ditemukan!');
 				redirect('/administrasi_matkul');
 			}
 			else{
-				$kode_matkul = $this->input->post('kode_matkul');
-				$nama_matkul = $this->input->post('nama_matkul');
+				$matkul = $this->input->post('matkul');
+				// $kode_matkul = $this->input->post('kode_matkul');
+				// $nama_matkul = $this->input->post('nama_matkul');
 				$dosen_koor = $this->input->post('dosen_koor');
 				$this->load->model('Periode_akademik');
 				$id_periode = $this->Periode_akademik->getIDPeriodeAktif();
 				if($id_periode){
 					$this->load->model('Mata_kuliah');
+					$this->load->model('List_mata_kuliah');
+					$arr_matkul = $this->List_mata_kuliah->getDataMatkulById($matkul);
+					if(!$arr_matkul){
+						$this->session->set_flashdata('error', 'Error! Data mata kuliah tidak ditemukan');
+						redirect('/administrasi_matkul');
+					}
+					$kode_matkul = $arr_matkul[0]['KODE_MATKUL'];
+					$nama_matkul = $arr_matkul[0]['NAMA_MATKUL'];
 					$res = $this->Mata_kuliah->insertMatkul($id_periode, $kode_matkul, $nama_matkul, $dosen_koor);
 					if($res){
 						$this->session->set_flashdata('success', 'Berhasil menambahkan mata kuliah!');

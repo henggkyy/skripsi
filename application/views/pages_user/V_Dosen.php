@@ -26,19 +26,19 @@
                                                     <div class="form-group  row">
                                                         <label class="col-sm-4 col-form-label">NIK Dosen <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" name="nik" class="form-control" required>
+                                                            <input type="text" data-mask="99999999" placeholder="Contoh : 20190014" name="nik" class="form-control" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group  row">
                                                         <label class="col-sm-4 col-form-label">Nama Dosen <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" name="nama" class="form-control" required>
+                                                            <input type="text" name="nama" placeholder="Contoh : Hengky Surya" class="form-control" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group  row">
                                                         <label class="col-sm-4 col-form-label">Email Dosen <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
-                                                            <input type="email" name="email" class="form-control" required>
+                                                            <input type="email" name="email" placeholder="Contoh : 7315051@student.unpar.ac.id" class="form-control" required>
                                                         </div>
                                                     </div>
                                                     <p style="color: red;" align="center">* Wajib Diisi</p>

@@ -12,7 +12,8 @@
 	},
 	"require": {
 		"php": ">=5.3.7",
-		"phpoffice/phpspreadsheet": "^1.6"
+		"phpoffice/phpspreadsheet": "^1.6",
+		"chriskacerguis/codeigniter-restserver": "^3.0"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

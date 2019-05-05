@@ -56,6 +56,7 @@ $route['translate_uri_dashes'] = FALSE;
 $route['proses_login'] = 'C_Login/prosesLogin';
 $route['logout'] = 'C_Login/logout';
 
+$route['debug_tiva'] = 'C_Jadwal/loadDebug';
 $route['dashboard'] = 'C_Main/loadDashboard';
 $route['periode_akademik'] = 'C_Main/loadPeriodeAkademik';
 
@@ -64,12 +65,10 @@ $route['periode_akademik/nonaktif'] = 'C_PeriodeAkademik/nonaktifkanPeriode';
 
 $route['administrasi_matkul'] = 'C_Main/loadViewAdministrasiMatkul';
 $route['administrasi_matkul/tambah'] = 'C_Matkul/addMatkul';
-$route['administrasi_matkul/set_jadwal'] = 'C_Matkul/insertUjian';
 $route['administrasi_matkul_detail'] = 'C_Matkul/getDetailMataKuliah';
 $route['administrasi_matkul/set_uts'] = 'C_Matkul/insertTanggalUTS';
 $route['administrasi_matkul/set_uas'] = 'C_Matkul/insertTanggalUAS';
 $route['administrasi_matkul/insert_mhs'] = 'C_Matkul/insertMahasiswa';
-$route['administrasi_matkul/insert_jadwal'] = 'C_Matkul/insertJadwalPerkuliahan';
 $route['administrasi_matkul/insert_kelas'] = 'C_Matkul/insertJadwalKelas';
 $route['administrasi_matkul/checker'] = 'C_Matkul/loadPageCekPL';
 $route['administrasi_matkul/perangkat_lunak/add'] = 'C_Matkul/insertPL';
@@ -77,19 +76,21 @@ $route['administrasi_matkul/perangkat_lunak/delete'] = 'C_Matkul/deletePL';
 $route['administrasi_matkul/perangkat_lunak/checker'] = 'C_Matkul/periksaPL';
 $route['administrasi_matkul/insert_file_bantuan'] = 'C_Matkul/insertFileBantuan';
 $route['administrasi_matkul/file_bantuan/remove'] = 'C_Matkul/deleteFileBantuan';
+$route['administrasi_matkul/file_bantuan/accept'] = 'C_Matkul/acceptFileBantuan';
+$route['administrasi_matkul/file_bantuan/reject'] = 'C_Matkul/rejectFileBantuan';
 $route['administrasi_matkul/checklist_ujian'] = 'C_Matkul/checkListUjian';
 $route['administrasi_matkul/add_ruang_uts'] = 'C_Matkul/setRuanganUTS';
 $route['administrasi_matkul/add_ruang_uas'] = 'C_Matkul/setRuanganUAS';
 
-$route['user'] = 'C_Main/loadMenuUser';
-$route['user/tambah_user'] = 'C_User/addUser';
-$route['user/change_status'] = 'C_User/changeStatus';
+$route['kalab'] = 'C_Main/loadPageAdministrasiKalab';
+$route['kalab/change'] = 'C_Kalab/changeKalab';
 
 $route['dokumen'] = 'C_Public/loadViewDokumen';
 $route['get_dokumen'] = 'C_Public/getSelectedDokumen';
 
 $route['dokumen_sop'] = 'C_Main/loadMenuSOP';
 $route['dokumen_sop/add'] = 'C_Sop/inputDokumenSop';
+$route['dokumen_sop/add_kategori'] = 'C_Sop/addKategori';
 $route['dokumen_sop/delete'] = 'C_Sop/deleteSop';
 $route['dokumen_sop/update'] = 'C_Sop/updateSop';
 
@@ -126,7 +127,11 @@ $route['admin_lab/pengajuan_masa_ujian'] = 'C_Admin/pengajuanJadwalMasaUjian';
 $route['admin_lab/pengajuan_masa_kuliah'] = 'C_Admin/pengajuanJadwalMasaKuliah';
 $route['admin_lab/accept_pengajuan_kuliah'] = 'C_Admin/acceptJadwalMasaKuliah';
 $route['admin_lab/accept_pengajuan_ujian'] = 'C_Admin/acceptJadwalMasaUjian';
-$route['rekapitulasi_pengajuan'] = 'C_Admin/loadRekapitulasiPengajuanJadwal';
+$route['admin_lab/reject_pengajuan'] = 'C_Admin/rejectPengajuanJadwal';
+$route['admin_lab/rekapitulasi_pengajuan'] = 'C_Admin/loadRekapitulasiPengajuanJadwal';
+$route['admin_lab/rekapitulasi_jadwal'] = 'C_Admin/loadRekapitulasiJadwalBertugas';
+$route['admin_lab/get_pengajuan'] = 'C_Admin/loadDataPengajuan';
+$route['admin_lab/jadwal/cetak'] = 'C_Admin/cetakJadwalAdmin';
 
 $route['laporan_gaji'] = 'C_Gaji_Admin/loadDaftarGajiAdmin';
 $route['laporan_gaji/periode'] = 'C_Gaji_Admin/loadSetPeriode';
@@ -160,15 +165,22 @@ $route['peminjaman_lab'] = 'C_Main/loadDaftarPeminjamanLaboratorium';
 $route['peminjaman_alat'] = 'C_Main/loadDaftarPeminjamanAlat';
 
 $route['jadwal'] = 'C_Jadwal/loadJadwalPublic';
+$route['insert_data_software'] = 'C_Api/insertDataSoftware';
 
 $route['jadwal_lab'] = 'C_Main/loadJadwalPemakaianLaboratorium';
 $route['jadwal_lab/add'] = 'C_Jadwal_Lab/insertJadwalPemakaian';
 $route['jadwal_lab/get_data'] = 'C_Jadwal_Lab/loadDataPemakaian';
 $route['jadwal_lab/updatePemakaian'] = 'C_Jadwal_Lab/updateJadwalPemakaian';
 $route['jadwal_lab/delete'] = 'C_Jadwal_Lab/deleteJadwalPemakaian';
+$route['jadwal_lab/cetak'] = 'C_Jadwal_Lab/cetakJadwalLab';
 
 $route['download/template_insertMhs'] = 'C_Download/downloadTemplateInsertMhs';
 $route['download/checker'] = 'C_Download/downloadChecker';
 $route['download/file_bantuan/(:any)'] = 'C_Download/downloadFileBantuan/$1';
 
 $route['ketersediaan_lab'] = 'C_Jadwal_Lab/checkKetersediaanPeminjaman';
+
+$route['jadwal/json_all_admin'] = 'C_Jadwal/getJadwalAllAdmin';
+$route['jadwal/json_all_ruangan'] = 'C_Jadwal/getAllJadwalRuangan';
+$route['jadwal/json_jadwal_bertugas'] = 'C_Admin/getDataBertugasAdminForTimeTables';
+$route['jadwal/json_individual_admin'] = 'C_Admin/getDataBertugasByIdAdminForTimeTables';

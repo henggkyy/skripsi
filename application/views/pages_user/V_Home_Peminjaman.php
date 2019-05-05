@@ -15,7 +15,7 @@
     <link href="<?php echo base_url();?>assets/css/style.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/css/plugins/clockpicker/clockpicker.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/fontawesome_new/css/all.css">
 </head>
 
 <body class="gray-bg">
@@ -29,7 +29,9 @@
                     <h4>Form Peminjaman Alat/ Ruangan Laboratorium</h4>
 
                     <hr>
-                    <?php echo form_open('peminjaman/add');?>
+                    <?php
+                    $attributes = array('id' => 'form_peminjaman');
+                    echo form_open('peminjaman/add', $attributes);?>
                     <?php $this->load->view('template/Notification');?>
                     <h5>Nama : <?php echo $this->session->userdata('name'); ?></h5>
                     <h5>Email : <?php echo $this->session->userdata('email'); ?>.  <a href="<?php echo base_url()?>logout">Logout</a></h5>
@@ -112,10 +114,11 @@
                             <textarea style="height: 80px;" placeholder="Dapat diisi dengan keperluan peminjaman lab, kebutuhan, dsb." name="keterangan" class="form-control" required></textarea>
                         </div>
                     </div>
+                    <p id="notif" style="color: red;" align="center"></p>
                     <p style="color: red;" align="center">* Wajib Diisi</p>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <a href="<?php echo base_url();?>" class="btn btn-white btn-lg"> < Back</a>
+                            <a href="<?php echo base_url();?>logout" class="btn btn-primary btn-lg"><i class="fas fa-arrow-left"></i> Back</a>
                             <button class="btn btn-primary btn-lg" type="submit" id="button_submit">Ajukan Peminjaman</button>
                         </div>
                     </div>
@@ -136,15 +139,18 @@
 <script src="<?php echo base_url();?>assets/js/plugins/datapicker/bootstrap-datepicker.js"></script>
 <script type="text/javascript">
     var loader = '<img style="display: block; margin:auto;" src="<?php echo base_url();?>assets/img/loader.gif">';
+    $('#form_peminjaman').submit(function(){
+        $('#button_submit').prop('disabled', true);
+        $("#notif").html(loader);
+    });
     function checkLab(){
         
         var date_today = new Date();
         var tanggal_data = $("#tgl_pinjam").val();
+        var jam_mulai_data = $("#jam_awal").val();
+        var jam_selesai_data = $("#jam_berakhir").val();
         if($("#choice").val() == 'lab'){
             $("#select_lab").html(loader);
-            var tanggal_data = $("#tgl_pinjam").val();
-            var jam_mulai_data = $("#jam_awal").val();
-            var jam_selesai_data = $("#jam_berakhir").val();
             var date_input = new Date(tanggal_data);
             date_next_week = date_today.setDate(date_today.getDate()+6);
             if(date_input < date_next_week){
@@ -186,6 +192,11 @@
             }); 
         }
         else{
+            if(jam_selesai_data < jam_mulai_data){
+                $("#notif").html('<span style="color:red;">Jam mulai tidak boleh melebihi jam selesai!</span>');
+                $('#button_submit').prop('disabled', true);
+                return;
+            }
             var date_input = new Date(tanggal_data);
             date_next_week = date_today.setDate(date_today.getDate()+2);
             if(date_input < date_next_week){

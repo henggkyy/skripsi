@@ -2,6 +2,26 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Class ini dibuat untuk menangani penjadwalan pemakaian laboratorium
 class C_Jadwal_Lab extends CI_Controller{
+	//Method untuk mencetak jadwal pemakaian laboratorium
+	function cetakJadwalLab(){
+		if($this->session->userdata('logged_in')){
+			if($this->session->userdata('id_role') != 1){
+				redirect('/dashboard');
+			}
+			$data['title']= "Cetak Jadwal Pemakaian Laboratorium | SI Kegiatan Operasional Lab. Komputasi TIF UNPAR";
+			$data['nama_bulan'] = $this->getNamaBulan(date('n'));
+			date_default_timezone_set('Asia/Jakarta');
+			$data['now_date'] = date("Y-m-d H:i:s");
+			$this->load->model('Jadwal_lab');
+			$data['jadwal_lab'] = $this->Jadwal_lab->getDataPemakaianForPrint();
+			$this->load->view('template/Header', $data);
+			$this->load->view('pages_user/V_Cetak_Jadwal_Lab', $data);
+			$this->load->view('template/Footer');
+		}
+		else{
+			redirect('/');
+		}
+	}
 	//Method untuk menghapus jadwal pemakaian laboratorium
 	function deleteJadwalPemakaian(){
 		if($this->session->userdata('logged_in')){
@@ -17,6 +37,12 @@ class C_Jadwal_Lab extends CI_Controller{
 			else{
 				$id_pemakaian = $this->input->post('id_pemakaian');
 				$this->load->model('Jadwal_lab');
+				$this->load->model('Peminjaman_lab');
+				$id_pinjaman = $this->Peminjaman_lab->getIDPinjamanByIdJadwal($id_pemakaian, 'ID');
+				if($id_pinjaman){
+					$this->Peminjaman_lab->setJadwalToNull($id_pinjaman);
+					$this->Peminjaman_lab->setStatusToCancelled($id_pinjaman);
+				}
 				$res = $this->Jadwal_lab->deleteJadwalPemakaian($id_pemakaian);
 				if($res){
 					$this->session->set_flashdata('success', 'Berhasil menghapus jadwal pemakaian laboratorium!');
@@ -82,8 +108,20 @@ class C_Jadwal_Lab extends CI_Controller{
 				$tgl_pemakaian = date("Y-m-d", strtotime($tgl_pemakaian));
 				$jam_mulai = $this->input->post('jam_mulai');
 				$jam_selesai = $this->input->post('jam_selesai');
+
 				if($jam_mulai > $jam_selesai){
 					$this->session->set_flashdata('error', 'Jam Mulai tidak boleh lebih besar daripada jam selesai!');
+					redirect("jadwal_lab");
+				}
+				$validate_time_mulai = $this->validate_time($jam_mulai);
+				$validate_time_selesai = $this->validate_time($jam_selesai);
+				if(!$validate_time_mulai || !$validate_time_selesai){
+					if(!$validate_time_mulai){
+						$this->session->set_flashdata('error', "Error! Jam mulai bukan format waktu yang benar! ($jam_mulai)");
+					}
+					else{
+						$this->session->set_flashdata('error', "Error! Jam selesai bukan format waktu yang benar! ($jam_selesai)");
+					}
 					redirect("jadwal_lab");
 				}
 				$lab = $this->input->post('lab');
@@ -140,6 +178,17 @@ class C_Jadwal_Lab extends CI_Controller{
 				$jam_selesai = $this->input->post('jam_selesai');
 				if($jam_mulai > $jam_selesai){
 					$this->session->set_flashdata('error', 'Jam Mulai tidak boleh lebih besar daripada jam selesai!');
+					redirect("jadwal_lab");
+				}
+				$validate_time_mulai = $this->validate_time($jam_mulai);
+				$validate_time_selesai = $this->validate_time($jam_selesai);
+				if(!$validate_time_mulai || !$validate_time_selesai){
+					if(!$validate_time_mulai){
+						$this->session->set_flashdata('error', "Error! Jam mulai bukan format waktu yang benar! ($jam_mulai)");
+					}
+					else{
+						$this->session->set_flashdata('error', "Error! Jam selesai bukan format waktu yang benar! ($jam_selesai)");
+					}
 					redirect("jadwal_lab");
 				}
 				$lab = $this->input->post('lab');
@@ -242,63 +291,39 @@ class C_Jadwal_Lab extends CI_Controller{
 		}
 	}
 
-	function checkKetersediaan(){
-		$hari = $this->input->get('hari');
-		$jam_mulai = $this->input->get('jam_mulai');
-		$jam_selesai = $this->input->get('jam_selesai');
-		$this->load->model('Periode_akademik');
-		$periode_aktif = $this->Periode_akademik->getIDPeriodeAktif();
-		if($periode_aktif){
-			//Get Tanggal Periode Akadeim Aktif
-			$start_periode = $this->Periode_akademik->getIndividualItem($periode_aktif, 'START_PERIODE');
-			$end_periode = $this->Periode_akademik->getIndividualItem($periode_aktif, 'END_PERIODE');
-			$start_uts = $this->Periode_akademik->getIndividualItem($periode_aktif, 'START_UTS');
-			$end_uts = $this->Periode_akademik->getIndividualItem($periode_aktif, 'END_UTS');
-			$start_uas = $this->Periode_akademik->getIndividualItem($periode_aktif, 'START_UAS');
-			$start_uts = date('Y-m-d', strtotime('-1 day', strtotime($start_uts)));
-			$start_uas = date('Y-m-d', strtotime('-1 day', strtotime($start_uas)));
-			$hari = array($hari);
-			//Get seluruh tanggal sebelum uts dan setelah uts
-			$arr_tgl_sebelum_uts = $this->getAllDate($start_periode, $start_uts, $hari);
-			$arr_tgl_setelah_uts = $this->getAllDate($end_uts, $start_uas, $hari);
-			//Nyatuin array tanggal sebelum uts dna setelah uts
-			$array_merge = array_merge($arr_tgl_sebelum_uts, $arr_tgl_setelah_uts);
-			//Masukkin data event (start event sama end event) ke dalam satu array
-			$array_event = array();
-			for ($i=0; $i < sizeof($array_merge); $i++) { 
-				$start_event = $array_merge[$i]." ".$jam_mulai;
-				$end_event = $array_merge[$i]." ".$jam_selesai;
-				$array_ind = array($start_event, $end_event);
-				array_push($array_event, $array_ind);
-			}
-			$arr_lab_tersedia = array();
-			//Method untuk mendapatkan seluruh list lab
-			$daftar_lab = $this->getAllListLab();
-			$flag = true;
-			foreach ($array_event as $event) {
-				$start_event = $event[0];
-				$end_event = $event[1];
-				$this->load->model('Jadwal_lab');
-				$lab_terpakai = $this->Jadwal_lab->checkPemakaianLab($start_event, $end_event);
-			}
-			//Method untuk mendapatkan jadwal pemakaian laboratorium
-			
-			
-			//Method untuk mendapatkan seluruh daftar lab
-			
-			print_r($array_event);
-			return;
+	//Method untuk melakukan validasi waktu yang diinput pengguna
+	public function validate_time($str){
+		$array_jam = explode(':', $str);
+		$hh = $array_jam[0];
+		$mm = $array_jam[1];
+		if (!is_numeric($hh) || !is_numeric($mm)){
+			return FALSE;
 		}
-		else{
-			redirect('/dashboard');
+		else if ((int) $hh > 24 || (int) $mm > 59){
+		    return FALSE;
 		}
-
-		print_r($arr_hari);
-		return;
-		
-		$daftar_lab = $this->getAllListLab();
+		else if (mktime((int) $hh, (int) $mm) === FALSE){
+		    return FALSE;
+		}
+		return TRUE;
 	}
-
+	private function getNamaBulan($num_month){
+		$arr_bulan = array(
+			1 => 'Januari',
+			2 => 'Februari',
+			3 => 'Maret',
+			4 => 'April',
+			5 => 'Mei',
+			6 => 'Juni',
+			7 => 'Juli',
+			8 => 'Agustus',
+			9 => 'September',
+			10 => 'Oktober',
+			11 => 'November',
+			12 => 'Desember',
+		);
+		return $arr_bulan[$num_month];
+	}
 	private function getAllListLab(){
 		$this->load->model('Daftar_lab');
 		$daftar_lab = $this->Daftar_lab->getListLab();
@@ -308,9 +333,6 @@ class C_Jadwal_Lab extends CI_Controller{
 		else{
 			return false;
 		}
-	}
-	private function checkLabTersedia($tgl_awal, $tanggal_akhir){
-
 	}
 	private function getAllDate($date_start, $date_end, $day){
 		$date_start_time = strtotime($date_start);

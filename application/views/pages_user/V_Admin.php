@@ -12,9 +12,13 @@
                                     <h5>Administrasi Admin Laboratorium</h5>
                                 </div>
                                 <div class="ibox-content">
-                                    <button type="button" data-toggle="modal" data-target="#modalAddAdmin" class="btn btn-w-m btn-success"><i class="fas fa-user-plus"></i> Tambah Admin</button>
-                                    <a href="<?php echo base_url();?>rekapitulasi_pengajuan" class="btn btn-w-m btn-warning"><i class="fas fa-clipboard-list"></i> Rekapitulasi Pengajuan Jadwal Bertugas Admin</a>
-                                    <!--Modal Add Dosen-->
+                                	<?php 
+                                	if($this->session->userdata('id_role') == 1){
+                                		?>
+                                	<button type="button" data-toggle="modal" data-target="#modalAddAdmin" class="btn btn-w-m btn-success"><i class="fas fa-user-plus"></i> Tambah Admin</button>
+                                    <a href="<?php echo base_url();?>admin_lab/rekapitulasi_pengajuan" class="btn btn-w-m btn-warning"><i class="fas fa-clipboard-list"></i> Rekapitulasi Pengajuan Jadwal Bertugas Admin</a>
+                                    <a href="<?php echo base_url();?>admin_lab/rekapitulasi_jadwal" class="btn btn-w-m btn-primary"><i class="fas fa-calendar-alt"></i> Rekapitulasi Jadwal Bertugas Admin</a>
+                                    <!--Modal Add ADMIN-->
                                     <div class="modal inmodal" id="modalAddAdmin" tabindex="-1" role="dialog"  aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content animated fadeIn">
@@ -22,30 +26,36 @@
                                                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                                                     <h4 class="modal-title">Tambah Admin</h4>
                                                 </div>
-                                                <?php echo form_open('admin_lab/add');?>
+                                                <?php echo form_open_multipart('admin_lab/add');?>
                                                 <div class="modal-body">
                                                     <div class="form-group  row">
                                                         <label class="col-sm-4 col-form-label">NIK Admin <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" name="nik" class="form-control" data-mask="99999999" required>
+                                                            <input type="text" placeholder="NIK Admin" name="nik" class="form-control" data-mask="99999999" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group  row">
                                                         <label class="col-sm-4 col-form-label">Nama Admin <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" name="nama" class="form-control" required>
+                                                            <input type="text" placeholder="Nama Admin" name="nama" class="form-control" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group  row">
+                                                        <label class="col-sm-4 col-form-label">Inisial Admin <span style="color: red">*</span> :</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" name="inisial" class="form-control" placeholder="3 digit char inisial" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group  row">
                                                         <label class="col-sm-4 col-form-label">Email Admin <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
-                                                            <input type="email" name="email" class="form-control" required>
+                                                            <input type="email" placeholder="Email Admin" name="email" class="form-control" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group  row">
                                                         <label class="col-sm-4 col-form-label">Angkatan <span style="color: red">*</span> :</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" name="angkatan" class="form-control" data-mask="9999" required>
+                                                            <input type="text" placeholder="Angkatan admin" name="angkatan" class="form-control" data-mask="9999" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row" id="data_1">
@@ -77,6 +87,12 @@
                                                             </select>
                                                         </div>
                                                     </div>
+                                                    <div class="form-group  row">
+                                                        <label class="col-sm-4 col-form-label">Surat Tugas (.pdf maks. 2MB) <span style="color: red">*</span> :</label>
+                                                        <div class="col-sm-8">
+                                                            <input class="input_pdf" type="file" required name="dokumen" class="form-control">
+                                                        </div>
+                                                    </div>
                                                     <p style="color: red;" align="center">* Wajib Diisi</p>
                                                 </div>
                                                 <div class="modal-footer">
@@ -88,8 +104,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!--END MODAL ADD DOSEN-->
                                     <hr>
+                                    <!--END MODAL ADD ADMIN-->
+                                		<?php
+                                	}
+                                	?>
+                                    
+                                   
                                     <h3>Data Admin</h3>
                                     <div class="table-responsive">
                                         <table class="table table-striped table-bordered table-hover <?php
@@ -126,7 +147,9 @@
                                                         </td>
                                                         <td align="center">
                                                             <a href="<?php echo base_url().'admin_lab/detail?id_admin='.$admin['ID'];?>" class="btn btn-primary btn-sm"><i class="fas fa-info"></i> Detail</button></a>
-                                                            <?php if($admin['STATUS'] == 1){
+                                                            <?php
+                                                            if($this->session->userdata('id_role') == 1){
+                                                            	if($admin['STATUS'] == 1){
                                                                 echo form_open('admin_lab/nonactivate');?>
                                                                 <input type="hidden" name="id_admin" value="<?php echo $admin['ID'];?>" required>
                                                                 <button onclick="return confirm('Apakah Anda yakin ingin menonaktifkan admin ini?')" class="btn btn-danger btn-sm" type="submit">Nonaktifkan</button>
@@ -140,7 +163,9 @@
                                                                 </form>
                                                                 <?php
                                                             }
+                                                            }
                                                             ?>
+                                                            
                                                         </td>
                                                     </tr>
                                                     <?php  

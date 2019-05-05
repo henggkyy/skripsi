@@ -29,6 +29,20 @@ class Peminjaman_lab extends CI_Model{
 			return false;
 		}
 	}
+	//Method untuk mengubah status jadwal ditolak/dihapus ketika jadwal pemakaian lab yang dipinjam dihapus oleh Kalab
+	function setStatusToCancelled($id_pinjaman){
+		$data = array(
+			'DISETUJUI' => 3
+		);
+		$this->db->where('ID', $id_pinjaman);
+		$res = $this->db->update('peminjaman_lab', $data);
+		if($res){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 	//Method untuk melakukan update status permintaan peminjaman laboratorium kedalam database.
 	function tindaklanjutiPermintaanLab($id_pinjaman, $tindakan, $keterangan){
 		$data = array(
@@ -48,7 +62,7 @@ class Peminjaman_lab extends CI_Model{
 	//Method untuk memasukkan data permintaan peminjaman laboratorium ke dalam database 
 	function addPeminjaman($email_peminjam, $nama_peminjam, $lab, $id_alat, $tgl_pinjam, $jam_mulai, $jam_selesai, $keterangan, $keperluan, $id_jadwal){
 		date_default_timezone_set("Asia/Jakarta");
-		$tanggal_request = date("Y-m-d h:i:sa");
+		$tanggal_request = date("Y-m-d H:i:s");
 		$tgl_pinjam = date("Y-m-d", strtotime($tgl_pinjam));
 		$data = array(
 		    'EMAIL_PEMINJAM' => $email_peminjam,
@@ -69,6 +83,19 @@ class Peminjaman_lab extends CI_Model{
 			return true;
 		}
 		else{
+			return false;
+		}
+	}
+	//Method untuk mendapatkan id peminjaman berdasarkan id jadwal
+	function getIDPinjamanByIdJadwal($id_jadwal, $item){
+		$this->db->select($item);
+		$this->db->where('ID_JADWAL', $id_jadwal);
+		$this->db->from('peminjaman_lab');
+		$result = $this->db->get();
+		if($result->num_rows() == 1){
+			return $result->row(0)->$item;
+		} 
+		else {
 			return false;
 		}
 	}

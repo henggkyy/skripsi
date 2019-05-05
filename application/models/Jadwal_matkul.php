@@ -8,7 +8,7 @@ class Jadwal_matkul extends CI_Model{
 		$this->db->join('daftar_lab', 'daftar_lab.ID = jadwal_matkul.ID_LAB', 'left');
 		$this->db->join('mata_kuliah', 'mata_kuliah.ID = jadwal_matkul.ID_MATKUL', 'left');
 		$this->db->order_by('jadwal_matkul.HARI', 'desc');
-		$this->db->order_by('jadwal_matkul.KODE_KELAS', 'desc');
+		$this->db->order_by('jadwal_matkul.KODE_KELAS', 'asc');
 		$this->db->where('jadwal_matkul.ID_MATKUL', $id_matkul);
 		$result = $this->db->get();
 		if($result->num_rows() > 0){

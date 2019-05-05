@@ -75,9 +75,9 @@ class C_TataUsaha extends CI_Controller {
 				redirect('/dashboard');
 			}
 			$this->load->library('form_validation');
-			$this->form_validation->set_rules('nik', 'NIK Admin', 'required');
+			$this->form_validation->set_rules('nik', 'NIK Admin', 'required|numeric');
 			$this->form_validation->set_rules('nama', 'Nama Admin', 'required');
-			$this->form_validation->set_rules('email', 'Email Admin', 'required');
+			$this->form_validation->set_rules('email', 'Email Admin', 'required|valid_email');
 			if($this->form_validation->run() == FALSE){
 				$this->session->set_flashdata('error', 'Missing required Field!');
 	            redirect('/tata_usaha');
@@ -86,10 +86,25 @@ class C_TataUsaha extends CI_Controller {
 				$nik = $this->input->post('nik');
 				$nama = $this->input->post('nama');
 				$email = $this->input->post('email');
-
+				$email_domain = substr($email, strpos($email, "@") + 1);
+				if($email_domain != 'student.unpar.ac.id' && $email_domain != 'unpar.ac.id'){
+					$this->session->set_flashdata('error', 'Gagal menambahkan petugas Tata Usaha! Email petugas Tata Usaha harus merupakan email UNPAR!');
+					redirect('/tata_usaha');
+				}
 				$this->load->model('Users');
-
-				$inserted_id = $this->Users->addUser(3, $nama, $email, $nik, 0);
+				$user_exist = $this->Users->checkNik($nik);
+				if($user_exist){
+					$this->session->set_flashdata('error', 'Gagal menambahkan petugas Tata Usaha! NIK Tata Usaha telah terdaftar');
+					redirect('/tata_usaha');
+				}
+				$email_exist = $this->Users->checkUser($email);
+				if($email_exist){
+					$this->session->set_flashdata('error', 'Gagal menambahkan petugas Tata Usaha! Email petugas Tata Usaha telah terdaftar');
+					redirect('/tata_usaha');
+				}
+				$inisial = NULL;
+				$color = NULL;
+				$inserted_id = $this->Users->addUser(3, $nama, $email, $nik, 0, $inisial, $color);
 				if($inserted_id){
 					$this->session->set_flashdata('success', 'Berhasil memasukkan data petugas tata usaha!');
 					redirect('/tata_usaha');

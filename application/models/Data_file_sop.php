@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Data_file_sop extends CI_Model{
 	function updateSop($id,$judul, $path_file, $visibility, $kategori){
 		date_default_timezone_set('Asia/Jakarta');
-		$date_time = date("Y-m-d h:i:sa");
+		$date_time = date("Y-m-d H:i:s");
 		if($path_file != NULL){
 			$data = array(
 			    'JUDUL' => $judul,
@@ -70,7 +70,7 @@ class Data_file_sop extends CI_Model{
 	}
 	function inputDokumenSop($judul, $kategori, $visibility, $path){
 		date_default_timezone_set('Asia/Jakarta');
-		$date_time = date("Y-m-d h:i:sa");
+		$date_time = date("Y-m-d H:i:s");
 		$data = array(
 		    'JUDUL' => $judul,
 		    'PATH_FILE' => $path,
