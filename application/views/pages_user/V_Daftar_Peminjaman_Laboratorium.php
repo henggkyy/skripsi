@@ -61,7 +61,7 @@
                                                                  
                                                                     <?php
                                                                 }
-                                                                else if($peminjam['STATUS'] == 2){
+                                                                else if($peminjam['STATUS'] == 1){
                                                                     echo 'Sudah dtindaklanjuti';
                                                                 }
                                                                 else{
