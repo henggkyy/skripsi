@@ -14,5 +14,5 @@ public class BuildConfig {
         //Required empty constructors
     }
     
-    public static final String SERVER_URL = "https://apaya.my.id/skripsi/insert_data_software"; //TODO change accordingly
+    public static final String SERVER_URL = "*Isi dengan alamat base URL server*" + "/insert_data_software"; 
 }
